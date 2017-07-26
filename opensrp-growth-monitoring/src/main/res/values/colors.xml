@@ -3,4 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="z_score_0">#227532</color>
+    <color name="z_score_2">#b1312c</color>
+    <color name="z_score_3">#222539</color>
 </resources>
