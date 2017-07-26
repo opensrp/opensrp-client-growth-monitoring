@@ -35,10 +35,10 @@ subprojects {
         maven { url "http://repo.maven.apache.org/maven2" }
         maven { url "http://cloudant.github.io/cloudant-sync-eap/repository" }
         maven {
-            url "${projectDir}/android-json-form-wizard/../libs/"
+            url "${projectDir}/opensrp-growth-monitoring/../libs/"
         }
         maven {
-            url "${projectDir}/android-json-form-wizard-it/../libs/"
+            url "${projectDir}/opensrp-growth-monitoring-it/../libs/"
         }
         mavenLocal()
     }
