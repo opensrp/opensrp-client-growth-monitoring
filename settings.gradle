@@ -1,0 +1,2 @@
+rootProject.name = 'opensrp-client-growth-monitoring'
+include ':opensrp-growth-monitoring'
