@@ -57,7 +57,7 @@ public class WeightRepository extends BaseRepository {
         super(repository);
     }
 
-    protected static void createTable(SQLiteDatabase database) {
+    public static void createTable(SQLiteDatabase database) {
         database.execSQL(WEIGHT_SQL);
         database.execSQL(BASE_ENTITY_ID_INDEX);
         database.execSQL(SYNC_STATUS_INDEX);

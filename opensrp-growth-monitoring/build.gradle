@@ -39,7 +39,7 @@ android {
     lintOptions {
         abortOnError false
     }
-    
+
     // avoid errors with message 'Duplicate files copied in APK ...'
     packagingOptions {
         exclude 'LICENSE.txt'

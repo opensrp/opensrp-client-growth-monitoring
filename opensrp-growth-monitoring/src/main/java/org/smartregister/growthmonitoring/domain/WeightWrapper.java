@@ -1,6 +1,7 @@
 package org.smartregister.growthmonitoring.domain;
 
 import org.joda.time.DateTime;
+import org.smartregister.domain.Photo;
 
 import java.io.Serializable;
 
