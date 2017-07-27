@@ -1,8 +1,8 @@
 package org.smartregister.growthmonitoring.domain;
 
 import org.opensrp.api.constants.Gender;
+import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.R;
-import org.smartregister.growthmonitoring.application.GrowthMonitoringApplication;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -90,7 +90,7 @@ public class ZScore {
     public static Double calculate(Gender gender, Date dateOfBirth, Date weighingDate, double weight) {
         if (dateOfBirth != null && gender != null && weighingDate != null) {
             int ageInMonths = (int) Math.round(getAgeInMonths(dateOfBirth, weighingDate));
-            List<ZScore> zScores = GrowthMonitoringApplication.getInstance().zScoreRepository().findByGender(gender);
+            List<ZScore> zScores = GrowthMonitoringLibrary.getInstance().zScoreRepository().findByGender(gender);
 
             ZScore zScoreToUse = null;
             for (ZScore curZScore : zScores) {
@@ -118,7 +118,7 @@ public class ZScore {
      */
     public static Double reverse(Gender gender, double ageInMonthsDouble, Double z) {
         int ageInMonths = (int) Math.round(ageInMonthsDouble);
-        List<ZScore> zScores = GrowthMonitoringApplication.getInstance().zScoreRepository().findByGender(gender);
+        List<ZScore> zScores = GrowthMonitoringLibrary.getInstance().zScoreRepository().findByGender(gender);
 
         ZScore zScoreToUse = null;
         for (ZScore curZScore : zScores) {

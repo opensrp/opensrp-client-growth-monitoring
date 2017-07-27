@@ -6,7 +6,7 @@ import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.smartregister.growthmonitoring.application.GrowthMonitoringApplication;
+import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.util.GMConstants;
@@ -64,7 +64,7 @@ public class WeightIntentService extends IntentService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        weightRepository = GrowthMonitoringApplication.getInstance().weightRepository();
+        weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
         return super.onStartCommand(intent, flags, startId);
     }
 }

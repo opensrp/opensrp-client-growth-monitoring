@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-
     <color name="z_score_0">#227532</color>
     <color name="z_score_2">#b1312c</color>
     <color name="z_score_3">#222539</color>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="client_list_grey">#737373</color>
+    <color name="light_grey">#CCCCCC</color>
+    <color name="dark_grey">#999999</color>
+
+    <color name="record_weight_blue_bg_stk">#267ea5</color>
+    <color name="record_weight_blue_bg_st">#389cc8</color>
+    <color name="record_weight_blue_bg_end">#3495bf</color>
+
+    <color name="record_weight_grey_bg_stk">#d8d8d8</color>
+    <color name="record_weight_grey_bg_st">#f4f4f4</color>
+    <color name="record_weight_grey_bg_end">#ebebeb</color>
+
+    <color name="growth_today_color">#008be6</color>
+
 </resources>

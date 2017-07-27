@@ -7,10 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartregister.clientandeventmodel.Event;
-import org.smartregister.growthmonitoring.R;
-import org.smartregister.growthmonitoring.application.GrowthMonitoringApplication;
+import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.domain.Weight;
-import org.smartregister.repository.Repository;
+import org.smartregister.repository.EventClientRepository;
 
 import java.util.Date;
 
@@ -20,8 +19,7 @@ import java.util.Date;
 public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
     public static void createWeightEvent(Context context, Weight weight, String eventType, String entityType, JSONArray fields) {
         try {
-            //FIXME split_growth_Monitoring: Add database
-            Repository db = (Repository) GrowthMonitoringApplication.getInstance().getRepository();
+            EventClientRepository db = GrowthMonitoringLibrary.getInstance().eventClientRepository();
 
             Event event = (Event) new Event()
                     .withBaseEntityId(weight.getBaseEntityId())
@@ -51,14 +49,12 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
 
                 //check if an event already exists and update instead
                 if (weight.getEventId() != null) {
-                    //FIXME split_growth_Monitoring: Add database
-                  /* JSONObject existingEvent = db.getEventsByEventId(weight.getEventId());
-                   eventJson = merge(existingEvent, eventJson); */
+                    JSONObject existingEvent = db.getEventsByEventId(weight.getEventId());
+                    eventJson = merge(existingEvent, eventJson);
                 }
 
                 //merge if event exists
-                //FIXME split_growth_Monitoring: Add database
-                //db.addEvent(event.getBaseEntityId(), eventJson);
+                db.addEvent(event.getBaseEntityId(), eventJson);
 
             }
         } catch (Exception e) {

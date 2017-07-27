@@ -7,6 +7,7 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.domain.ZScore;
+import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.Repository;
 
 import java.util.ArrayList;

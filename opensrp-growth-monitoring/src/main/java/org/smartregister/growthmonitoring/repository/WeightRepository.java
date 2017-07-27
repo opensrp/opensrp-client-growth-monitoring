@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.domain.ZScore;
+import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.Repository;
 
 import java.util.ArrayList;

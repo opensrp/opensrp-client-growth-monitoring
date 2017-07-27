@@ -13,8 +13,8 @@ import org.opensrp.api.constants.Gender;
 import org.smartregister.Context;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.domain.Weight;
-import org.smartregister.growthmonitoring.application.GrowthMonitoringApplication;
 import org.smartregister.growthmonitoring.domain.ZScore;
 import org.smartregister.growthmonitoring.repository.ZScoreRepository;
 import org.smartregister.growthmonitoring.util.GMConstants;
@@ -83,7 +83,7 @@ public class ZScoreRefreshIntentService extends IntentService {
         calculateChildZScores();
 
         //FIXME split-growth-monitoring:Calling hia2Service after calculating zscore
-        //Intent hia2Intent = new Intent(GrowthMonitoringApplication.getInstance(), HIA2IntentService.class);
+        //Intent hia2Intent = new Intent(GrowthMonitoringLibrary.getInstance(), HIA2IntentService.class);
         //startService(hia2Intent);
     }
 
@@ -147,7 +147,7 @@ public class ZScoreRefreshIntentService extends IntentService {
      */
     private void dumpCsv(Gender gender, boolean force) {
         try {
-            List<ZScore> existingScores = GrowthMonitoringApplication.getInstance().zScoreRepository().findByGender(gender);
+            List<ZScore> existingScores = GrowthMonitoringLibrary.getInstance().zScoreRepository().findByGender(gender);
             if (force == true
                     || existingScores.size() == 0) {
                 String filename = null;
@@ -188,7 +188,7 @@ public class ZScoreRefreshIntentService extends IntentService {
                     }
                     query = query + ");";
 
-                    boolean result = GrowthMonitoringApplication.getInstance().zScoreRepository().runRawQuery(query);
+                    boolean result = GrowthMonitoringLibrary.getInstance().zScoreRepository().runRawQuery(query);
                     Log.d(TAG, "Result is " + result);
                 }
             }
@@ -204,7 +204,7 @@ public class ZScoreRefreshIntentService extends IntentService {
     private void calculateChildZScores() {
         try {
             HashMap<String, CommonPersonObjectClient> children = new HashMap<>();
-            List<Weight> weightsWithoutZScores = GrowthMonitoringApplication.getInstance().weightRepository().findWithNoZScore();
+            List<Weight> weightsWithoutZScores = GrowthMonitoringLibrary.getInstance().weightRepository().findWithNoZScore();
             for (Weight curWeight : weightsWithoutZScores) {
                 if (!TextUtils.isEmpty(curWeight.getBaseEntityId())) {
                     if (!children.containsKey(curWeight.getBaseEntityId())) {
@@ -231,7 +231,7 @@ public class ZScoreRefreshIntentService extends IntentService {
                         }
 
                         if (gender != Gender.UNKNOWN && dob != null) {
-                            GrowthMonitoringApplication.getInstance().weightRepository().add(dob, gender, curWeight);
+                            GrowthMonitoringLibrary.getInstance().weightRepository().add(dob, gender, curWeight);
                         } else {
                             Log.w(TAG, "Could not get the date of birth or gender for child with base entity id " + curWeight.getBaseEntityId());
                         }
@@ -248,12 +248,12 @@ public class ZScoreRefreshIntentService extends IntentService {
     }
 
     private CommonPersonObjectClient getChildDetails(String baseEntityId) {
-        CommonPersonObject rawDetails = GrowthMonitoringApplication.getInstance().context()
+        CommonPersonObject rawDetails = GrowthMonitoringLibrary.getInstance().context()
                 .commonrepository(GMConstants.CHILD_TABLE_NAME).findByBaseEntityId(baseEntityId);
         if (rawDetails != null) {
             // Get extra child details
             CommonPersonObjectClient childDetails = Utils.convert(rawDetails);
-            childDetails.getColumnmaps().putAll(GrowthMonitoringApplication.getInstance().context()
+            childDetails.getColumnmaps().putAll(GrowthMonitoringLibrary.getInstance().context()
                     .detailsRepository().getAllDetailsForClient(baseEntityId));
 
             return childDetails;

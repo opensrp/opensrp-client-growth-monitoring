@@ -64,12 +64,16 @@ dependencies {
     compile 'com.android.support:design:22.2.1'
     compile 'com.android.support:appcompat-v7:22.1.1'
 
+    compile group: 'org.apache.commons', name: 'commons-csv', version: '1.4'
+    compile 'com.google.code.gson:gson:2.3'
+    compile 'com.mcxiaoke.volley:library:1.0.+'
+    compile 'com.github.lecho:hellocharts-android:v1.5.8'
+
     // opensrp-app dependencies -- TO REMOVE
     compile 'net.zetetic:android-database-sqlcipher:3.5.6@aar'
     compile 'joda-time:joda-time:2.3'
     compile 'com.github.johnkil.print:print:1.2.3'
     compile 'org.apache.commons:commons-lang3:3.2'
-    compile group: 'org.apache.commons', name: 'commons-csv', version: '1.4'
-    compile 'com.google.code.gson:gson:2.3'
+
 
 }
