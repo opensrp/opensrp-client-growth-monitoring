@@ -56,7 +56,7 @@ public class GrowthDialogFragment extends DialogFragment {
     private static final String TAG = GrowthDialogFragment.class.getName();
     private CommonPersonObjectClient personDetails;
     private List<Weight> weights;
-    public static final String DIALOG_TAG = "VaccinationDialogFragment";
+    public static final String DIALOG_TAG = "GrowthDialogFragment";
     public static final String WRAPPER_TAG = "tag";
 
     public static GrowthDialogFragment newInstance(CommonPersonObjectClient personDetails,

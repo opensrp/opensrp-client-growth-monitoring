@@ -1,40 +1,43 @@
 package org.smartregister.growthmonitoring.sample;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.domain.WeightWrapper;
 import org.smartregister.growthmonitoring.fragment.GrowthDialogFragment;
-import org.smartregister.growthmonitoring.fragment.RecordWeightDialogFragment;
 import org.smartregister.growthmonitoring.listener.WeightActionListener;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
+import org.smartregister.growthmonitoring.sample.util.SampleUtil;
+import org.smartregister.repository.EventClientRepository;
+import org.smartregister.util.DateUtil;
 import org.smartregister.util.Utils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements WeightActionListener {
     private static final String TAG = MainActivity.class.getCanonicalName();
 
     private static final String DIALOG_TAG = "DIALOG_TAG_DUUH";
-    private String entityId = "1";
-    private double birthWeight = 3.3d;
-    private String dobString = "2016-06-10T00:00:00.000Z";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +55,18 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
             }
         });
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         View recordWeight = findViewById(R.id.record_weight);
         recordWeight.setClickable(true);
         recordWeight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showWeightDialog(view);
+                SampleUtil.showWeightDialog(MainActivity.this, view, DIALOG_TAG);
             }
         });
 
@@ -70,36 +79,7 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
             }
         });
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    private void showWeightDialog(View view) {
-        WeightWrapper weightWrapper = (WeightWrapper) view.getTag();
-        RecordWeightDialogFragment recordWeightDialogFragment = RecordWeightDialogFragment.newInstance(weightWrapper);
-        recordWeightDialogFragment.show(initFragmentTransaction(), DIALOG_TAG);
-
+        refreshEditWeightLayout();
     }
 
     private class ShowGrowthChartTask extends AsyncTask<Void, Void, List<Weight>> {
@@ -111,11 +91,11 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
         @Override
         protected List<Weight> doInBackground(Void... params) {
             WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
-            List<Weight> allWeights = weightRepository.findByEntityId(entityId);
+            List<Weight> allWeights = weightRepository.findByEntityId(SampleUtil.ENTITY_ID);
             try {
-                DateTime dateTime = new DateTime(dobString);
+                DateTime dateTime = new DateTime(SampleUtil.DOB_STRING);
 
-                Weight weight = new Weight(-1l, null, (float) birthWeight, dateTime.toDate(), null, null, null, Calendar.getInstance().getTimeInMillis(), null, null, 0);
+                Weight weight = new Weight(-1l, null, (float) SampleUtil.BIRTH_WEIGHT, dateTime.toDate(), null, null, null, Calendar.getInstance().getTimeInMillis(), null, null, 0);
                 allWeights.add(weight);
             } catch (Exception e) {
                 Log.e(TAG, Log.getStackTraceString(e));
@@ -128,25 +108,133 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
         protected void onPostExecute(List<Weight> allWeights) {
             super.onPostExecute(allWeights);
 
-            GrowthDialogFragment growthDialogFragment = GrowthDialogFragment.newInstance(null, allWeights);
-            growthDialogFragment.show(initFragmentTransaction(), DIALOG_TAG);
+            if (allWeights == null || allWeights.isEmpty()) {
+                Toast.makeText(MainActivity.this, "Record atleast one weight", Toast.LENGTH_LONG).show();
+            } else {
+                GrowthDialogFragment growthDialogFragment = GrowthDialogFragment.newInstance(SampleUtil.dummyDetatils(), allWeights);
+                growthDialogFragment.show(SampleUtil.initFragmentTransaction(MainActivity.this, DIALOG_TAG), DIALOG_TAG);
+            }
         }
     }
 
-    private FragmentTransaction initFragmentTransaction() {
-        FragmentTransaction ft = this.getFragmentManager().beginTransaction();
-        Fragment prev = this.getFragmentManager().findFragmentByTag(DIALOG_TAG);
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-        return ft;
-    }
-
-    //Weight Listener
 
     @Override
-    public void onWeightTaken(WeightWrapper weightWrapper) {
-        Toast.makeText(this, weightWrapper.getWeight() + " Taken", Toast.LENGTH_SHORT).show();
+    public void onWeightTaken(WeightWrapper tag) {
+        if (tag != null) {
+            final WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
+            Weight weight = new Weight();
+            if (tag.getDbKey() != null) {
+                weight = weightRepository.find(tag.getDbKey());
+            }
+            weight.setBaseEntityId(SampleUtil.ENTITY_ID);
+            weight.setKg(tag.getWeight());
+            weight.setDate(tag.getUpdatedWeightDate().toDate());
+            weight.setAnmId("sample");
+            weight.setLocationId("Kenya");
+
+            Gender gender = Gender.UNKNOWN;
+
+            String genderString = SampleUtil.GENDER;
+
+            if (genderString != null && genderString.toLowerCase().equals("female")) {
+                gender = Gender.FEMALE;
+            } else if (genderString != null && genderString.toLowerCase().equals("male")) {
+                gender = Gender.MALE;
+            }
+
+            Date dob = null;
+            if (!TextUtils.isEmpty(SampleUtil.DOB_STRING)) {
+                DateTime dateTime = new DateTime(SampleUtil.DOB_STRING);
+                dob = dateTime.toDate();
+            }
+
+            if (dob != null && gender != Gender.UNKNOWN) {
+                weightRepository.add(dob, gender, weight);
+            } else {
+                weightRepository.add(weight);
+            }
+
+            tag.setDbKey(weight.getId());
+
+        }
+
+        refreshEditWeightLayout();
     }
+
+    private void refreshEditWeightLayout() {
+        View weightWidget = findViewById(R.id.weight_widget);
+
+        LinkedHashMap<Long, Pair<String, String>> weightmap = new LinkedHashMap<>();
+        ArrayList<Boolean> weighteditmode = new ArrayList<Boolean>();
+        ArrayList<View.OnClickListener> listeners = new ArrayList<>();
+
+        WeightRepository wp = GrowthMonitoringLibrary.getInstance().weightRepository();
+        List<Weight> weightlist = wp.findLast5(SampleUtil.ENTITY_ID);
+
+        for (int i = 0; i < weightlist.size(); i++) {
+            Weight weight = weightlist.get(i);
+            String formattedAge = "";
+            if (weight.getDate() != null) {
+
+                Date weighttaken = weight.getDate();
+                DateTime birthday = new DateTime(SampleUtil.DOB_STRING);
+                Date birth = birthday.toDate();
+                long timeDiff = weighttaken.getTime() - birth.getTime();
+                Log.v("timeDiff is ", timeDiff + "");
+                if (timeDiff >= 0) {
+                    formattedAge = DateUtil.getDuration(timeDiff);
+                    Log.v("age is ", formattedAge);
+                }
+            }
+            if (!formattedAge.equalsIgnoreCase("0d")) {
+                weightmap.put(weight.getId(), Pair.create(formattedAge, Utils.kgStringSuffix(weight.getKg())));
+
+                ////////////////////////check 3 months///////////////////////////////
+                boolean less_than_three_months_event_created = false;
+
+                org.smartregister.domain.db.Event event = null;
+                EventClientRepository db = GrowthMonitoringLibrary.getInstance().eventClientRepository();
+                if (weight.getEventId() != null) {
+                    event = db.convert(db.getEventsByEventId(weight.getEventId()), org.smartregister.domain.db.Event.class);
+                } else if (weight.getFormSubmissionId() != null) {
+                    event = db.convert(db.getEventsByFormSubmissionId(weight.getFormSubmissionId()), org.smartregister.domain.db.Event.class);
+                }
+                if (event != null) {
+                    Date weight_create_date = event.getDateCreated().toDate();
+                    if (!SampleUtil.checkIfDateThreeMonthsOlder(weight_create_date)) {
+                        less_than_three_months_event_created = true;
+                    }
+                } else {
+                    less_than_three_months_event_created = true;
+                }
+                ///////////////////////////////////////////////////////////////////////
+                if (less_than_three_months_event_created) {
+                    weighteditmode.add(true);
+                } else {
+                    weighteditmode.add(false);
+                }
+
+                final int finalI = i;
+                View.OnClickListener onclicklistener = new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        SampleUtil.showEditWeightDialog(MainActivity.this, finalI, DIALOG_TAG);
+                    }
+                };
+                listeners.add(onclicklistener);
+            }
+
+        }
+        if (weightmap.size() < 5) {
+            weightmap.put(0l, Pair.create(DateUtil.getDuration(0), SampleUtil.BIRTH_WEIGHT + " kg"));
+            weighteditmode.add(false);
+            listeners.add(null);
+        }
+
+        if (weightmap.size() > 0) {
+            SampleUtil.createWeightWidget(MainActivity.this, weightWidget, weightmap, listeners, weighteditmode);
+        }
+    }
+
 }

@@ -5,6 +5,7 @@ import org.opensrp.api.constants.Gender;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.Photo;
 import org.smartregister.domain.ProfileImage;
+import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.R;
 
 import static org.smartregister.util.Utils.getValue;
@@ -40,7 +41,7 @@ public class ImageUtils {
 
     public static Photo profilePhotoByClient(CommonPersonObjectClient client) {
         Photo photo = new Photo();
-        ProfileImage profileImage = org.smartregister.Context.getInstance().imageRepository().findByEntityId(client.entityId());
+        ProfileImage profileImage = GrowthMonitoringLibrary.getInstance().context().imageRepository().findByEntityId(client.entityId());
         if (profileImage != null) {
             photo.setFilePath(profileImage.getFilepath());
         } else {

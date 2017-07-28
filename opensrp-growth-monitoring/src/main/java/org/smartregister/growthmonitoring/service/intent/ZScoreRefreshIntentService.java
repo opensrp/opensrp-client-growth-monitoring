@@ -10,7 +10,6 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.joda.time.DateTime;
 import org.opensrp.api.constants.Gender;
-import org.smartregister.Context;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
@@ -106,7 +105,7 @@ public class ZScoreRefreshIntentService extends IntentService {
                 urlConnection = (HttpsURLConnection) url.openConnection();
 
                 // Sets the user agent for this request.
-                urlConnection.setRequestProperty("User-Agent", FileUtilities.getUserAgent(Context.getInstance().applicationContext()));
+                urlConnection.setRequestProperty("User-Agent", FileUtilities.getUserAgent(GrowthMonitoringLibrary.getInstance().context().applicationContext()));
 
                 // Gets a response code from the RSS server
                 responseCode = ((HttpsURLConnection) urlConnection).getResponseCode();
@@ -115,7 +114,7 @@ public class ZScoreRefreshIntentService extends IntentService {
                 urlConnection = (HttpURLConnection) url.openConnection();
 
                 // Sets the user agent for this request.
-                urlConnection.setRequestProperty("User-Agent", FileUtilities.getUserAgent(Context.getInstance().applicationContext()));
+                urlConnection.setRequestProperty("User-Agent", FileUtilities.getUserAgent(GrowthMonitoringLibrary.getInstance().context().applicationContext()));
 
                 // Gets a response code from the RSS server
                 responseCode = ((HttpsURLConnection) urlConnection).getResponseCode();
