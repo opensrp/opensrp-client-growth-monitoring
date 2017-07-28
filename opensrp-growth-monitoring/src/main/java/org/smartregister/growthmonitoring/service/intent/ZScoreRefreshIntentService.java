@@ -147,7 +147,7 @@ public class ZScoreRefreshIntentService extends IntentService {
     private void dumpCsv(Gender gender, boolean force) {
         try {
             List<ZScore> existingScores = GrowthMonitoringLibrary.getInstance().zScoreRepository().findByGender(gender);
-            if (force == true
+            if (force
                     || existingScores.size() == 0) {
                 String filename = null;
                 if (gender.equals(Gender.FEMALE)) {
@@ -216,9 +216,9 @@ public class ZScoreRefreshIntentService extends IntentService {
                     if (curChild != null) {
                         Gender gender = Gender.UNKNOWN;
                         String genderString = Utils.getValue(curChild.getColumnmaps(), "gender", false);
-                        if (genderString != null && genderString.toLowerCase().equals("female")) {
+                        if (genderString != null && genderString.equalsIgnoreCase("female")) {
                             gender = Gender.FEMALE;
-                        } else if (genderString != null && genderString.toLowerCase().equals("male")) {
+                        } else if (genderString != null && genderString.equalsIgnoreCase("male")) {
                             gender = Gender.MALE;
                         }
 
@@ -262,8 +262,8 @@ public class ZScoreRefreshIntentService extends IntentService {
     }
 
     private void processResponse(URLConnection urlConnection, Gender gender) {
-        String response = readInputStreamToString(urlConnection);
         // TODO: write file to asset folder
+        //String response = readInputStreamToString(urlConnection);
     }
 
     /**

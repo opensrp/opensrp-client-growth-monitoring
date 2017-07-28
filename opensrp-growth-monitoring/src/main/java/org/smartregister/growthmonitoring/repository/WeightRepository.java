@@ -119,12 +119,15 @@ public class WeightRepository extends BaseRepository {
         }
 
         try {
+            SQLiteDatabase db;
             if (database == null) {
-                database = getRepository().getWritableDatabase();
+                db = getRepository().getWritableDatabase();
+            } else {
+                db = database;
             }
 
             String idSelection = ID_COLUMN + " = ?";
-            database.update(WEIGHT_TABLE_NAME, createValuesFor(weight), idSelection, new String[]{weight.getId().toString()});
+            db.update(WEIGHT_TABLE_NAME, createValuesFor(weight), idSelection, new String[]{weight.getId().toString()});
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
@@ -320,7 +323,9 @@ public class WeightRepository extends BaseRepository {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         } finally {
-            cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
         }
         return weights;
 

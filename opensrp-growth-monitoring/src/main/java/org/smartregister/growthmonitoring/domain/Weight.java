@@ -8,7 +8,7 @@ import java.util.HashMap;
  */
 public class Weight {
     private static final String ZEIR_ID = "ZEIR_ID";
-    Long id;
+    private Long id;
     private String baseEntityId;
     private String eventId;
     private String formSubmissionId;

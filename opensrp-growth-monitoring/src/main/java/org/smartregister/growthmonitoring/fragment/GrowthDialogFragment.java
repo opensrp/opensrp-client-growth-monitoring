@@ -94,7 +94,7 @@ public class GrowthDialogFragment extends DialogFragment {
 
                 if (!weightHashMap.containsKey(curCalendar.getTimeInMillis())) {
                     weightHashMap.put(curCalendar.getTimeInMillis(), curWeight);
-                } else if(curWeight.getUpdatedAt() > weightHashMap.get(curCalendar.getTimeInMillis()).getUpdatedAt()) {
+                } else if (curWeight.getUpdatedAt() > weightHashMap.get(curCalendar.getTimeInMillis()).getUpdatedAt()) {
                     weightHashMap.put(curCalendar.getTimeInMillis(), curWeight);
                 }
             }
@@ -166,9 +166,9 @@ public class GrowthDialogFragment extends DialogFragment {
         }
 
         Gender gender = Gender.UNKNOWN;
-        if (genderString != null && genderString.toLowerCase().equals("female")) {
+        if (genderString != null && genderString.equalsIgnoreCase("female")) {
             gender = Gender.FEMALE;
-        } else if (genderString != null && genderString.toLowerCase().equals("male")) {
+        } else if (genderString != null && genderString.equalsIgnoreCase("male")) {
             gender = Gender.MALE;
         }
 
@@ -349,10 +349,8 @@ public class GrowthDialogFragment extends DialogFragment {
         Calendar maxWeighingDate = getMaxWeighingDate(dob);
 
         for (Weight curWeight : weights) {
-            if (isWeightOkToDisplay(minWeighingDate, maxWeighingDate, curWeight)) {
-                if (curWeight.getKg() > maxY) {
-                    maxY = curWeight.getKg();
-                }
+            if (isWeightOkToDisplay(minWeighingDate, maxWeighingDate, curWeight) && curWeight.getKg() > maxY) {
+                maxY = curWeight.getKg();
             }
         }
 
@@ -365,10 +363,8 @@ public class GrowthDialogFragment extends DialogFragment {
         Calendar maxWeighingDate = getMaxWeighingDate(dob);
 
         for (Weight curWeight : weights) {
-            if (isWeightOkToDisplay(minWeighingDate, maxWeighingDate, curWeight)) {
-                if (curWeight.getKg() < minY) {
-                    minY = curWeight.getKg();
-                }
+            if (isWeightOkToDisplay(minWeighingDate, maxWeighingDate, curWeight) && curWeight.getKg() < minY) {
+                minY = curWeight.getKg();
             }
         }
 
@@ -450,11 +446,10 @@ public class GrowthDialogFragment extends DialogFragment {
                     standardiseCalendarDate(curWeightCal);
 
                     if (curWeightCal.getTimeInMillis() >= dobCalendar.getTimeInMillis()
-                            && curWeightCal.getTimeInMillis() >= minGraphTime.getTimeInMillis()) {
-                        if (minCalendar == null
-                                || curWeightCal.getTimeInMillis() < minCalendar.getTimeInMillis()) {
-                            minCalendar = curWeightCal;
-                        }
+                            && curWeightCal.getTimeInMillis() >= minGraphTime.getTimeInMillis() &&
+                            (minCalendar == null
+                                    || curWeightCal.getTimeInMillis() < minCalendar.getTimeInMillis())) {
+                        minCalendar = curWeightCal;
                     }
                 }
             }

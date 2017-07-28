@@ -6,12 +6,17 @@ import org.smartregister.growthmonitoring.repository.ZScoreRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Repository;
 
-import static org.smartregister.util.Log.logError;
-
 /**
  * Created by koros on 2/3/16.
  */
 public class GrowthMonitoringLibrary {
+
+    private final Repository repository;
+    private final Context context;
+
+    private WeightRepository weightRepository;
+    private ZScoreRepository zScoreRepository;
+    private EventClientRepository eventClientRepository;
 
     private static GrowthMonitoringLibrary instance;
 
@@ -27,13 +32,6 @@ public class GrowthMonitoringLibrary {
         }
         return instance;
     }
-
-    private final Repository repository;
-    private final Context context;
-
-    private WeightRepository weightRepository;
-    private ZScoreRepository zScoreRepository;
-    private EventClientRepository eventClientRepository;
 
     private GrowthMonitoringLibrary(Context context, Repository repository) {
         this.repository = repository;

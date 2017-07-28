@@ -46,9 +46,10 @@ public class EditWeightDialogFragment extends DialogFragment {
                                      WeightWrapper tag) {
         this.context = context;
         if (tag == null) {
-            tag = new WeightWrapper();
+            this.tag = new WeightWrapper();
+        } else {
+            this.tag = tag;
         }
-        this.tag = tag;
     }
 
     public static EditWeightDialogFragment newInstance(
@@ -148,9 +149,9 @@ public class EditWeightDialogFragment extends DialogFragment {
 
             }
         });
-        if(tag.getUpdatedWeightDate()!=null) {
-            ((TextView) dialogView.findViewById(R.id.service_date)).setText("Date weighed: " + tag.getUpdatedWeightDate().dayOfMonth().get()+"-"+ tag.getUpdatedWeightDate().monthOfYear().get()+"-"+ tag.getUpdatedWeightDate().year().get()+"");
-        }else{
+        if (tag.getUpdatedWeightDate() != null) {
+            ((TextView) dialogView.findViewById(R.id.service_date)).setText("Date weighed: " + tag.getUpdatedWeightDate().dayOfMonth().get() + "-" + tag.getUpdatedWeightDate().monthOfYear().get() + "-" + tag.getUpdatedWeightDate().year().get() + "");
+        } else {
             ((TextView) dialogView.findViewById(R.id.service_date)).setVisibility(View.GONE);
             weightDelete.setVisibility(View.GONE);
         }

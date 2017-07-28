@@ -158,4 +158,36 @@ public class ZScore {
         calendarDate.set(Calendar.SECOND, 0);
         calendarDate.set(Calendar.MILLISECOND, 0);
     }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public double getSd3Neg() {
+        return sd3Neg;
+    }
+
+    public double getSd2Neg() {
+        return sd2Neg;
+    }
+
+    public double getSd1Neg() {
+        return sd1Neg;
+    }
+
+    public double getSd0() {
+        return sd0;
+    }
+
+    public double getSd1() {
+        return sd1;
+    }
+
+    public double getSd3() {
+        return sd3;
+    }
+
+    public double getSd2() {
+        return sd2;
+    }
 }

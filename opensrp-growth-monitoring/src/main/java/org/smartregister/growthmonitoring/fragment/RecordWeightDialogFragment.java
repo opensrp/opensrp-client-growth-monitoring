@@ -40,14 +40,17 @@ public class RecordWeightDialogFragment extends DialogFragment {
     public static RecordWeightDialogFragment newInstance(
             WeightWrapper tag) {
 
+        WeightWrapper tagToSend;
         if (tag == null) {
-            tag = new WeightWrapper();
+            tagToSend = new WeightWrapper();
+        } else {
+            tagToSend = tag;
         }
 
         RecordWeightDialogFragment recordWeightDialogFragment = new RecordWeightDialogFragment();
 
         Bundle args = new Bundle();
-        args.putSerializable(WRAPPER_TAG, tag);
+        args.putSerializable(WRAPPER_TAG, tagToSend);
         recordWeightDialogFragment.setArguments(args);
 
         return recordWeightDialogFragment;
