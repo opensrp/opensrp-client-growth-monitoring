@@ -9,14 +9,6 @@ buildscript {
     }
 }
 
-allprojects {
-    repositories {
-        flatDir {
-            dirs 'aars'
-        }
-    }
-}
-
 apply plugin: 'com.android.library'
 
 android {
@@ -52,13 +44,18 @@ android {
     }
 }
 
+allprojects {
+    repositories {
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        mavenLocal()
+    }
+}
+
 dependencies {
-    compile(name: 'opensrp-app-debug', ext: 'aar') {
+    compile('org.smartregister:opensrp-client-core:1.0.0-SNAPSHOT@aar') {
         transitive = true
-        exclude group: 'com.github.johnkil.print', module: 'print'
         exclude group: 'com.github.bmelnychuk', module: 'atv'
     }
-
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:design:22.2.1'
@@ -77,3 +74,5 @@ dependencies {
 
 
 }
+
+apply from: '../maven.gradle'
