@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
                 }
                 if (event != null) {
                     Date weight_create_date = event.getDateCreated().toDate();
-                    if (!SampleUtil.checkIfDateThreeMonthsOlder(weight_create_date)) {
+                    if (!DateUtil.checkIfDateThreeMonthsOlder(weight_create_date)) {
                         less_than_three_months_event_created = true;
                     }
                 } else {

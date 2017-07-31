@@ -1,5 +1,7 @@
 package org.smartregister.growthmonitoring.util;
 
+import org.smartregister.growthmonitoring.BuildConfig;
+
 /**
  * Created by keyman on 26/07/2017.
  */
@@ -11,7 +13,7 @@ public class GMConstants {
     public static final String CHILD_TABLE_NAME = "ec_child";
     public static final String MOTHER_TABLE_NAME = "ec_mother";
 
-    public static final int VACCINE_SYNC_TIME = 0;
+    public static final int WEIGHT_SYNC_TIME = BuildConfig.WEIGHT_SYNC_TIME;
 
     public static final class JsonForm {
         public static final String OPENMRS_ENTITY = "openmrs_entity";
