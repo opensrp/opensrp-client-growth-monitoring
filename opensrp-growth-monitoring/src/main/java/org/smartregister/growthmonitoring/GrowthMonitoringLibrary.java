@@ -28,7 +28,7 @@ public class GrowthMonitoringLibrary {
 
     public static GrowthMonitoringLibrary getInstance() {
         if (instance == null) {
-            throw new IllegalStateException(" Repository does not exist!!! Did you forget to init? ");
+            throw new IllegalStateException(" Instance does not exist!!! Call " + GrowthMonitoringLibrary.class.getName() + ".init method in the onCreate method of your Application class ");
         }
         return instance;
     }

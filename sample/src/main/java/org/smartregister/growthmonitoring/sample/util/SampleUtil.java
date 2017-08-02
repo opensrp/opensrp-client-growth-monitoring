@@ -135,14 +135,6 @@ public class SampleUtil {
         return rows;
     }
 
-    public static boolean checkIfDateThreeMonthsOlder(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(cal.getTime());
-        cal.add(Calendar.DATE, -90);
-        Date dateBefore90Days = cal.getTime();
-        return date.before(dateBefore90Days);
-    }
-
     public static CommonPersonObjectClient dummyDetatils() {
         HashMap<String, String> columnMap = new HashMap<String, String>();
         columnMap.put("first_name", "Test");

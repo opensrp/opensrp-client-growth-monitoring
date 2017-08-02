@@ -23,8 +23,19 @@ android {
     }
     buildTypes {
         release {
+
+        }
+    }
+
+    buildTypes {
+        release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "int", "WEIGHT_SYNC_TIME", '12'
+        }
+
+        debug {
+            buildConfigField "int", "WEIGHT_SYNC_TIME", '0'
         }
     }
 
@@ -65,13 +76,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.mcxiaoke.volley:library:1.0.+'
     compile 'com.github.lecho:hellocharts-android:v1.5.8'
-
-    // opensrp-app dependencies -- TO REMOVE
-    compile 'net.zetetic:android-database-sqlcipher:3.5.6@aar'
-    compile 'joda-time:joda-time:2.3'
-    compile 'com.github.johnkil.print:print:1.2.3'
-    compile 'org.apache.commons:commons-lang3:3.2'
-
 
 }
 
