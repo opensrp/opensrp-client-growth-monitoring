@@ -143,7 +143,7 @@ public class EditWeightDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 dismiss();
                 WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
-                weightRepository.delete(tag.getId());
+                weightRepository.delete(String.valueOf(tag.getDbKey()));
 //                tag = null;
                 listener.onWeightTaken(null);
 
