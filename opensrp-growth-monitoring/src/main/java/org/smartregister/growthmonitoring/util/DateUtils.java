@@ -1,15 +1,6 @@
 package org.smartregister.growthmonitoring.util;
 
-import android.content.Context;
 import android.util.Log;
-
-import org.apache.commons.lang3.StringUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.smartregister.clientandeventmodel.Event;
-import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
-import org.smartregister.growthmonitoring.domain.Weight;
-import org.smartregister.repository.EventClientRepository;
 
 import java.text.DateFormat;
 import java.text.ParseException;

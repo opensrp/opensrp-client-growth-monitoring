@@ -25,7 +25,6 @@ import org.smartregister.growthmonitoring.domain.WeightWrapper;
 import org.smartregister.growthmonitoring.listener.WeightActionListener;
 import org.smartregister.growthmonitoring.util.DateUtils;
 import org.smartregister.growthmonitoring.util.ImageUtils;
-import org.smartregister.growthmonitoring.util.JsonFormUtils;
 import org.smartregister.util.DatePickerUtils;
 import org.smartregister.util.OpenSRPImageLoader;
 import org.smartregister.view.activity.DrishtiApplication;
