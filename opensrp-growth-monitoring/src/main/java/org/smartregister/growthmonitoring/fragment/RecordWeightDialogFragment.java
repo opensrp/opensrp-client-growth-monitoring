@@ -23,7 +23,9 @@ import org.joda.time.DateTime;
 import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.domain.WeightWrapper;
 import org.smartregister.growthmonitoring.listener.WeightActionListener;
+import org.smartregister.growthmonitoring.util.DateUtils;
 import org.smartregister.growthmonitoring.util.ImageUtils;
+import org.smartregister.growthmonitoring.util.JsonFormUtils;
 import org.smartregister.util.DatePickerUtils;
 import org.smartregister.util.OpenSRPImageLoader;
 import org.smartregister.view.activity.DrishtiApplication;
@@ -86,6 +88,10 @@ public class RecordWeightDialogFragment extends DialogFragment {
         //formatEditWeightView(editWeight, "");
 
         final DatePicker earlierDatePicker = (DatePicker) dialogView.findViewById(R.id.earlier_date_picker);
+        earlierDatePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
+        Calendar birthDateCalendar = Calendar.getInstance();
+        birthDateCalendar.setTime(DateUtils.getDateFromString(tag.getDateOfBirth()));
+        earlierDatePicker.setMinDate(birthDateCalendar.getTimeInMillis());
 
         TextView nameView = (TextView) dialogView.findViewById(R.id.child_name);
         nameView.setText(tag.getPatientName());
