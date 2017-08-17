@@ -75,7 +75,6 @@ public class EditWeightDialogFragment extends DialogFragment {
             editWeight.setText(tag.getWeight().toString());
             editWeight.setSelection(editWeight.getText().length());
         }
-        //formatEditWeightView(editWeight, "");
 
         final DatePicker earlierDatePicker = (DatePicker) dialogView.findViewById(R.id.earlier_date_picker);
 
@@ -102,7 +101,7 @@ public class EditWeightDialogFragment extends DialogFragment {
         if (tag.getId() != null) {
             ImageView mImageView = (ImageView) dialogView.findViewById(R.id.child_profilepic);
 
-            if (tag.getId() != null) {//image already in local storage most likey ):
+            if (tag.getId() != null) {//image already in local storage most likely ):
                 //set profile image by passing the client id.If the image doesn't exist in the image repository then download and save locally
                 mImageView.setTag(R.id.entity_id, tag.getId());
                 DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(tag.getId(), OpenSRPImageLoader.getStaticImageListener((ImageView) mImageView, ImageUtils.profileImageResourceByGender(tag.getGender()), ImageUtils.profileImageResourceByGender(tag.getGender())));
@@ -144,7 +143,6 @@ public class EditWeightDialogFragment extends DialogFragment {
                 dismiss();
                 WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
                 weightRepository.delete(String.valueOf(tag.getDbKey()));
-//                tag = null;
                 listener.onWeightTaken(null);
 
             }
