@@ -52,7 +52,7 @@ public class WeightIntentService extends IntentService {
                     zScoreObject.put(GMConstants.JsonForm.OPENMRS_ENTITY, "concept");
                     zScoreObject.put(GMConstants.JsonForm.OPENMRS_ENTITY_ID, "162584AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                     zScoreObject.put(GMConstants.JsonForm.OPENMRS_ENTITY_PARENT, "");
-                    zScoreObject.put(GMConstants.JsonForm.OPENMRS_DATA_TYPE, "Calculation");
+                    zScoreObject.put(GMConstants.JsonForm.OPENMRS_DATA_TYPE, "calculation");
                     zScoreObject.put(GMConstants.JsonForm.VALUE, weight.getZScore());
 
                     JSONArray jsonArray = new JSONArray();
