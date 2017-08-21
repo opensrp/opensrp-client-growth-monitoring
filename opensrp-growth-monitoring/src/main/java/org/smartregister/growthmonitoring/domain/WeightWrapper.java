@@ -17,7 +17,7 @@ public class WeightWrapper implements Serializable {
     private String patientNumber;
     private String patientAge;
     private String pmtctStatus;
-
+    private String dateOfBirth;
     private Float weight;
     private DateTime updatedWeightDate;
     private boolean today;
@@ -109,5 +109,13 @@ public class WeightWrapper implements Serializable {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }
