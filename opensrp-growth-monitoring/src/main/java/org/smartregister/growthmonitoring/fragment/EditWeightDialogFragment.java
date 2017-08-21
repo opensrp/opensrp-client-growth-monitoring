@@ -82,8 +82,8 @@ public class EditWeightDialogFragment extends DialogFragment {
         Calendar birthDateCalendar = Calendar.getInstance();
         if (tag.getDateOfBirth() != null && !tag.getDateOfBirth().isEmpty()) {
             birthDateCalendar.setTime(DateUtils.getDateFromString(tag.getDateOfBirth()));
+            earlierDatePicker.setMinDate(birthDateCalendar.getTimeInMillis());
         }
-        earlierDatePicker.setMinDate(birthDateCalendar.getTimeInMillis());
 
         TextView nameView = (TextView) dialogView.findViewById(R.id.child_name);
         nameView.setText(tag.getPatientName());
