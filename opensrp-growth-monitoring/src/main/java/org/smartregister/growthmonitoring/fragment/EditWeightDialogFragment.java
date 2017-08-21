@@ -25,6 +25,7 @@ import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.domain.WeightWrapper;
 import org.smartregister.growthmonitoring.listener.WeightActionListener;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
+import org.smartregister.growthmonitoring.util.DateUtils;
 import org.smartregister.util.DatePickerUtils;
 import org.smartregister.util.OpenSRPImageLoader;
 import org.smartregister.view.activity.DrishtiApplication;
@@ -75,9 +76,14 @@ public class EditWeightDialogFragment extends DialogFragment {
             editWeight.setText(tag.getWeight().toString());
             editWeight.setSelection(editWeight.getText().length());
         }
-        //formatEditWeightView(editWeight, "");
 
         final DatePicker earlierDatePicker = (DatePicker) dialogView.findViewById(R.id.earlier_date_picker);
+        earlierDatePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
+        Calendar birthDateCalendar = Calendar.getInstance();
+        if (tag.getDateOfBirth() != null && !tag.getDateOfBirth().isEmpty()) {
+            birthDateCalendar.setTime(DateUtils.getDateFromString(tag.getDateOfBirth()));
+        }
+        earlierDatePicker.setMinDate(birthDateCalendar.getTimeInMillis());
 
         TextView nameView = (TextView) dialogView.findViewById(R.id.child_name);
         nameView.setText(tag.getPatientName());
@@ -102,7 +108,7 @@ public class EditWeightDialogFragment extends DialogFragment {
         if (tag.getId() != null) {
             ImageView mImageView = (ImageView) dialogView.findViewById(R.id.child_profilepic);
 
-            if (tag.getId() != null) {//image already in local storage most likey ):
+            if (tag.getId() != null) {//image already in local storage most likely ):
                 //set profile image by passing the client id.If the image doesn't exist in the image repository then download and save locally
                 mImageView.setTag(R.id.entity_id, tag.getId());
                 DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(tag.getId(), OpenSRPImageLoader.getStaticImageListener((ImageView) mImageView, ImageUtils.profileImageResourceByGender(tag.getGender()), ImageUtils.profileImageResourceByGender(tag.getGender())));
@@ -143,8 +149,7 @@ public class EditWeightDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 dismiss();
                 WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
-                weightRepository.delete(tag.getId());
-//                tag = null;
+                weightRepository.delete(String.valueOf(tag.getDbKey()));
                 listener.onWeightTaken(null);
 
             }
