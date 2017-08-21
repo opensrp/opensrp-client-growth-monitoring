@@ -47,7 +47,8 @@ public class SampleUtil {
     public static final String GENDER = (new Random()).nextBoolean() ? "male" : "female";
 
     public static void showWeightDialog(Activity context, View view, String tag) {
-        WeightWrapper weightWrapper = (WeightWrapper) view.getTag();
+        WeightWrapper weightWrapper = view.getTag() != null ? (WeightWrapper) view.getTag() : new WeightWrapper();
+        weightWrapper.setDateOfBirth(DOB_STRING);
         RecordWeightDialogFragment recordWeightDialogFragment = RecordWeightDialogFragment.newInstance(weightWrapper);
         recordWeightDialogFragment.show(initFragmentTransaction(context, tag), tag);
 
@@ -87,6 +88,7 @@ public class SampleUtil {
         weightWrapper.setPatientNumber(zeirId);
         weightWrapper.setPatientAge(duration);
         weightWrapper.setPhoto(photo);
+        weightWrapper.setDateOfBirth(DOB_STRING);
         weightWrapper.setPmtctStatus(getValue(childDetails.getColumnmaps(), "pmtct_status", false));
 
         EditWeightDialogFragment editWeightDialogFragment = EditWeightDialogFragment.newInstance(context, weightWrapper);
