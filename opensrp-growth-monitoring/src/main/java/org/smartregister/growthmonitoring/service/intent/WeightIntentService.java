@@ -37,6 +37,7 @@ public class WeightIntentService extends IntentService {
             if (!weights.isEmpty()) {
                 for (Weight weight : weights) {
 
+                    //Weight
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put(GMConstants.JsonForm.KEY, "Weight_Kgs");
                     jsonObject.put(GMConstants.JsonForm.OPENMRS_ENTITY, "concept");
@@ -45,9 +46,18 @@ public class WeightIntentService extends IntentService {
                     jsonObject.put(GMConstants.JsonForm.OPENMRS_DATA_TYPE, "decimal");
                     jsonObject.put(GMConstants.JsonForm.VALUE, weight.getKg());
 
+                    //Zscore
+                    JSONObject zScoreObject = new JSONObject();
+                    zScoreObject.put(GMConstants.JsonForm.KEY, "Z_Score_Weight_Age");
+                    zScoreObject.put(GMConstants.JsonForm.OPENMRS_ENTITY, "concept");
+                    zScoreObject.put(GMConstants.JsonForm.OPENMRS_ENTITY_ID, "162584AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                    zScoreObject.put(GMConstants.JsonForm.OPENMRS_ENTITY_PARENT, "");
+                    zScoreObject.put(GMConstants.JsonForm.OPENMRS_DATA_TYPE, "calculation");
+                    zScoreObject.put(GMConstants.JsonForm.VALUE, weight.getZScore());
 
                     JSONArray jsonArray = new JSONArray();
                     jsonArray.put(jsonObject);
+                    jsonArray.put(zScoreObject);
 
                     JsonFormUtils.createWeightEvent(getApplicationContext(), weight, EVENT_TYPE, ENTITY_TYPE, jsonArray);
                     if (weight.getBaseEntityId() == null || weight.getBaseEntityId().isEmpty()) {

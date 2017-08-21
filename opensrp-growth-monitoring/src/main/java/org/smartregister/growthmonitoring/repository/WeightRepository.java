@@ -276,9 +276,9 @@ public class WeightRepository extends BaseRepository {
         return null;
     }
 
-    public void delete(String entityID) {
+    public void delete(String id) {
         try {
-            getRepository().getWritableDatabase().delete(WEIGHT_TABLE_NAME, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? ", new String[]{entityID, TYPE_Unsynced});
+            getRepository().getWritableDatabase().delete(WEIGHT_TABLE_NAME, ID_COLUMN + " = ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? ", new String[]{id, TYPE_Unsynced});
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
