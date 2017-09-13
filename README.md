@@ -24,10 +24,10 @@ This OpenSRP Module/app provides weight recording, updating, editing and chartin
 The app has the following features:
 
 1. It enables one to record the current or past weight
-2. It enables one to edit a weight record
-3. It enables one to view patient weight over time on a graph
+2. It enables one to edit a patient's weight record
+3. It enables one to view the patient's weight over time on a graph
 4. It enables one to view the **z-score**
-5. It enables one to determine a patients weight status from the z-score
+5. It enables one to determine a patient's weight status from the z-score
 
 # Z-Score
 
@@ -58,7 +58,7 @@ The app is easy to use and has five important screens
 
      ![Record Weight Screenshot](https://user-images.githubusercontent.com/31766075/30361164-1c9a2d64-985e-11e7-8852-099b6d55f577.png)
      ![Record Past Weight Screenshot](https://user-images.githubusercontent.com/31766075/30361167-1ca12718-985e-11e7-9863-bb4a89efa134.png)
-     - **Weight Graph Button** which displays a dialog with the respective z-scores over the patients lifetime on a graph. The specific values are also displayed below the graph with the patient's age respective age.
+     - **Weight Graph Button** which displays a dialog with the age respective z-scores over the patients lifetime on a graph. The specific values are also displayed below the graph with the patient's age respective age.
      ![Weight Graph Screenshot](https://user-images.githubusercontent.com/31766075/30361166-1ca12f92-985e-11e7-97b7-2ab3ed8bebe6.png)
 
 
@@ -97,7 +97,7 @@ This section will provide a brief description how to build and install the appli
 ## How to install
 
 1. Import the project into Android Studio by: **Import a gradle project** option
-   _All the plugins required are explicitly stated therefore can work with any Android Studio version - Just enable it to download any packages not available offline_
+   _All the plugins required are explicitly stated, therefore it can work with any Android Studio version - Just enable it to download any packages not available offline_
 1. Open Genymotion and Run the Virtual Device created previously.
 1. Run the app on Android Studio and chose the Genymotion Emulator as the ` Deployment Target`
 
