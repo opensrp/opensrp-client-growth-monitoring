@@ -3,27 +3,110 @@
 
 [![Dristhi](https://raw.githubusercontent.com/OpenSRP/opensrp-client/master/opensrp-app/res/drawable-mdpi/login_logo.png)](https://smartregister.atlassian.net/wiki/dashboard.action)
 
-To run this project, you need to do this:
-=========================================
+## TABLE OF CONTENTS
 
-1. Set the `ANDROID_HOME` environment variable to point to the location of your installed Android SDK 4.1.2 API level 16. For more information, look at [the documentation of maven-android-plugin](http://code.google.com/p/maven-android-plugin/wiki/GettingStarted).
+* [Introduction](#introduction)
+* [Features](#features)
+* [Z-Score](#z-score)
+* [App Walkthrough](#app-walkthrough)
+* [Developer Documentation](#developer-documentation)
+   * [Pre-requisites](#pre-requisites)
+   * [Installation Devices](#installation-devices)
+   * [How to install](#how-to-install)
 
-2. Start an Android Virtual Device. Normally, this means you need to run `android avd` and then start one of the devices there.
 
-Then, you can run `mvn clean install` in the main directory.
+# Introduction
 
-Tips and tricks (to be completed):
-=================================
+This OpenSRP Module/app provides weight recording, updating, editing and charting capabilities. It also provides the **z-score** of a patient from their weight.
 
-* How to setup your Android SDK so that Maven finds it: http://pivotal.github.com/robolectric/maven-quick-start.html
+# Features
 
-* Adding an external Android library (apklib) as a submodule, and making it work with both Maven and IntelliJ. TODO: Write about `mvn clean` trick.
+The app has the following features:
 
-Login (for demo server):
-=================================
-```
-login-username - demotest
-login-password - Demot123
-```
+1. It enables one to record the current or past weight
+2. It enables one to edit a patient's weight record
+3. It enables one to view the patient's weight over time on a graph
+4. It enables one to view the **z-score**
+5. It enables one to determine a patient's weight status from the z-score
 
-Check `app.properties` file in `drishti-app/asset/` folder to change the demo server url to your own instance of opensrp server.
+# Z-Score
+
+The z-score is a score calculated from the weight & age of a patient to determine their weight status i.e. **overweight, underweight, average weight ...**
+
+This score is calculated using values provided by WHO.
+
+#### Z-score color codes
+
+Color | Meaning | Appropriate Z-score
+----- | ------- | -------------------
+Red | Underweight/Overweight | -2 and above OR +2 and above
+Green | Good! :thumbsup: | Between -2 and +2
+Dark Blue | Dangerous weight | Over +3 or below -3
+
+You can easily tell the weight status by checking the z-score line on the graph and where it falls within the z-score indicators. The z-score line indicators use the same color-codes [above](#z-score-color-codes)
+
+# App Walkthrough
+
+The app is easy to use and has five important screens
+
+1. When you open the app, the following page is displayed.
+
+![Main Page](https://user-images.githubusercontent.com/31766075/30366688-a33394c6-9874-11e7-9d21-1a408dba867f.png)
+
+ * The **Top Section** has two buttons:
+     - **Record Weight Button** which enables one to record `current` or `past weight`
+
+     ![Record Weight Screenshot](https://user-images.githubusercontent.com/31766075/30361164-1c9a2d64-985e-11e7-8852-099b6d55f577.png)
+     ![Record Past Weight Screenshot](https://user-images.githubusercontent.com/31766075/30361167-1ca12718-985e-11e7-9863-bb4a89efa134.png)
+     - **Weight Graph Button** which displays a dialog with the age respective z-scores over the patients lifetime on a graph. The specific values are also displayed below the graph with the patient's age respective age.
+     ![Weight Graph Screenshot](https://user-images.githubusercontent.com/31766075/30361166-1ca12f92-985e-11e7-97b7-2ab3ed8bebe6.png)
+
+
+* The **Bottom Section** displays the last 5 weights recorded in the patient's lifetime. 
+    - Each row has:
+        + The **Patient Age** eg. `0d`
+        + The **Patient Weight** eg. `3.8 kg`
+        + The **Edit Weight Button** except the `birth weight` which cannot be changed
+
+        ![Edit Weight Screenshot](https://user-images.githubusercontent.com/31766075/30361163-1c99caf4-985e-11e7-8e3e-f985dff40a7a.png)
+
+
+# Developer Documentation
+
+This section will provide a brief description how to build and install the application from the repository source code.
+
+## Pre-requisites
+
+1. Make sure you have Java 1.7 to 1.8 installed
+2. Make sure you have Android Studio installed or [download it from here](https://developer.android.com/studio/index.html)
+
+
+## Installation Devices
+
+1. Use a physical Android device to run the app
+2. Use the Android Emulator that comes with the Android Studio installation (Slow & not advisable)
+3. Use Genymotion Android Emulator
+    * Go [here](https://www.genymotion.com/) and register for genymotion account if none. Free accounts have limitations which are not counter-productive
+    * Download your OS Version of VirtualBox at [here](https://www.virtualbox.org/wiki/Downloads)
+    * Install VirtualBox
+    * Download Genymotion & Install it
+    * Sign in to the genymotion app
+    * Create a new Genymotion Virtual Device 
+        * **Preferrable & Stable Choice** - API 22(Android 5.1.0), Screen size of around 800 X 1280, 1024 MB Memory --> eg. Google Nexus 7, Google Nexus 5
+
+## How to install
+
+1. Import the project into Android Studio by: **Import a gradle project** option
+   _All the plugins required are explicitly stated, therefore it can work with any Android Studio version - Just enable it to download any packages not available offline_
+1. Open Genymotion and Run the Virtual Device created previously.
+1. Run the app on Android Studio and chose the Genymotion Emulator as the ` Deployment Target`
+
+
+
+
+
+
+
+
+
+
