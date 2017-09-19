@@ -202,7 +202,7 @@ public class GrowthDialogFragment extends DialogFragment {
         scrollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Prior implementation - weightScrollView.fullScroll(View.FOCUS_DOWN);
+                //Prior implementation
                 if (!isExpanded) {
                     isExpanded = true;
                     getHeight( dialogView.findViewById(R.id.growth_chart), new ViewMeasureListener() {
