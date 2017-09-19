@@ -58,6 +58,7 @@ public class GrowthDialogFragment extends DialogFragment {
     private List<Weight> weights;
     public static final String DIALOG_TAG = "GrowthDialogFragment";
     public static final String WRAPPER_TAG = "tag";
+    private boolean isExpanded = false;
 
     public static GrowthDialogFragment newInstance(CommonPersonObjectClient personDetails,
                                                    List<Weight> weights) {
@@ -195,11 +196,26 @@ public class GrowthDialogFragment extends DialogFragment {
         });
 
         final ScrollView weightScrollView = (ScrollView) dialogView.findViewById(R.id.weight_scroll_view);
-        ImageButton scrollButton = (ImageButton) dialogView.findViewById(R.id.scroll_button);
+        final ImageButton scrollButton = (ImageButton) dialogView.findViewById(R.id.scroll_button);
         scrollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                weightScrollView.fullScroll(View.FOCUS_DOWN);
+                //Prior implementation - weightScrollView.fullScroll(View.FOCUS_DOWN);
+                if (!isExpanded) {
+                    isExpanded = true;
+                    dialogView.findViewById(R.id.growth_chart).setVisibility(View.GONE);
+                    dialogView.findViewById(R.id.ll_growthDialogView_weightTableLayout).getLayoutParams().height =
+                            ViewGroup.LayoutParams.MATCH_PARENT;
+                    weightScrollView.fullScroll(View.FOCUS_DOWN);
+                    //Change the icon
+                } else {
+                    isExpanded = false;
+                    dialogView.findViewById(R.id.growth_chart).setVisibility(View.VISIBLE);
+                    dialogView.findViewById(R.id.ll_growthDialogView_weightTableLayout).getLayoutParams().height =
+                            getResources().getDimensionPixelSize(R.dimen.weight_table_height);
+                    //Revert the icon
+                    scrollButton.setImageResource(R.drawable.ic_icon_expand);
+                }
             }
         });
         try {
