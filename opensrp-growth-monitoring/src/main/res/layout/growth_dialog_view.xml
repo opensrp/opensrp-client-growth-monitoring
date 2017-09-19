@@ -128,8 +128,9 @@
             <!-- Weight table section -->
 
             <LinearLayout
+                android:id="@+id/ll_growthDialogView_weightTableLayout"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="@dimen/weight_table_height"
                 android:orientation="vertical">
 
                 <ScrollView
