@@ -205,7 +205,7 @@ public class GrowthDialogFragment extends DialogFragment {
                 //Prior implementation
                 if (!isExpanded) {
                     isExpanded = true;
-                    getHeight( dialogView.findViewById(R.id.growth_chart), new ViewMeasureListener() {
+                    getHeight(dialogView.findViewById(R.id.growth_chart), new ViewMeasureListener() {
                         @Override
                         public void onCompletedMeasuring(int height) {
                             dialogView.findViewById(R.id.ll_growthDialogView_weightTableLayout).getLayoutParams().height =
