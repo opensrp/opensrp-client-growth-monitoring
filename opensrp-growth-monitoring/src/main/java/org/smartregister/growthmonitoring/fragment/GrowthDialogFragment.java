@@ -543,7 +543,6 @@ public class GrowthDialogFragment extends DialogFragment {
         calendarDate.set(Calendar.MILLISECOND, 0);
     }
 
-
     private void getHeight (final View view, final ViewMeasureListener viewMeasureListener) {
         if (view == null) {
             if (viewMeasureListener != null) {
