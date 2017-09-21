@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -31,6 +32,7 @@ import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.domain.ZScore;
+import org.smartregister.growthmonitoring.listener.ViewMeasureListener;
 import org.smartregister.growthmonitoring.util.ImageUtils;
 import org.smartregister.util.DateUtil;
 import org.smartregister.util.OpenSRPImageLoader;
@@ -58,6 +60,7 @@ public class GrowthDialogFragment extends DialogFragment {
     private List<Weight> weights;
     public static final String DIALOG_TAG = "GrowthDialogFragment";
     public static final String WRAPPER_TAG = "tag";
+    private boolean isExpanded = false;
 
     public static GrowthDialogFragment newInstance(CommonPersonObjectClient personDetails,
                                                    List<Weight> weights) {
@@ -195,11 +198,32 @@ public class GrowthDialogFragment extends DialogFragment {
         });
 
         final ScrollView weightScrollView = (ScrollView) dialogView.findViewById(R.id.weight_scroll_view);
-        ImageButton scrollButton = (ImageButton) dialogView.findViewById(R.id.scroll_button);
+        final ImageButton scrollButton = (ImageButton) dialogView.findViewById(R.id.scroll_button);
         scrollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                weightScrollView.fullScroll(View.FOCUS_DOWN);
+                //Prior implementation
+                if (!isExpanded) {
+                    isExpanded = true;
+                    getHeight(dialogView.findViewById(R.id.growth_chart), new ViewMeasureListener() {
+                        @Override
+                        public void onCompletedMeasuring(int height) {
+                            dialogView.findViewById(R.id.ll_growthDialogView_weightTableLayout).getLayoutParams().height =
+                                    getResources().getDimensionPixelSize(R.dimen.weight_table_height) + height;
+                        }
+                    });
+                    dialogView.findViewById(R.id.growth_chart).setVisibility(View.GONE);
+                    //Change the icon
+                    scrollButton.setImageResource(R.drawable.ic_icon_expand);
+
+                } else {
+                    isExpanded = false;
+                    dialogView.findViewById(R.id.growth_chart).setVisibility(View.VISIBLE);
+                    dialogView.findViewById(R.id.ll_growthDialogView_weightTableLayout).getLayoutParams().height =
+                            getResources().getDimensionPixelSize(R.dimen.weight_table_height);
+                    //Revert the icon
+                    scrollButton.setImageResource(R.drawable.ic_icon_collapse);
+                }
             }
         });
         try {
@@ -217,7 +241,7 @@ public class GrowthDialogFragment extends DialogFragment {
         return dialogView;
     }
 
-    private void refreshPreviousWeightsTable(ViewGroup dialogView, Gender gender, Date dob) {
+    private void refreshPreviousWeightsTable(final ViewGroup dialogView, Gender gender, Date dob) {
         TableLayout tableLayout = (TableLayout) dialogView.findViewById(R.id.weights_table);
         for (Weight weight : weights) {
             TableRow dividerRow = new TableRow(dialogView.getContext());
@@ -265,6 +289,21 @@ public class GrowthDialogFragment extends DialogFragment {
             curRow.addView(zScoreTextView);
             tableLayout.addView(curRow);
         }
+
+        //Now set the expand button if items are too many
+        final ScrollView weightsTableScrollView = (ScrollView) dialogView.findViewById(R.id.weight_scroll_view);
+        getHeight(weightsTableScrollView, new ViewMeasureListener() {
+            @Override
+            public void onCompletedMeasuring(int height) {
+                int childHeight = weightsTableScrollView.getChildAt(0).getMeasuredHeight();
+                ImageButton scrollButton = (ImageButton) dialogView.findViewById(R.id.scroll_button);
+                if (childHeight > height) {
+                    scrollButton.setVisibility(View.VISIBLE);
+                } else {
+                    scrollButton.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     private void refreshGrowthChart(ViewGroup parent, Gender gender, Date dob) {
@@ -517,6 +556,37 @@ public class GrowthDialogFragment extends DialogFragment {
         calendarDate.set(Calendar.MINUTE, 0);
         calendarDate.set(Calendar.SECOND, 0);
         calendarDate.set(Calendar.MILLISECOND, 0);
+    }
+
+    private void getHeight (final View view, final ViewMeasureListener viewMeasureListener) {
+        if (view == null) {
+            if (viewMeasureListener != null) {
+                viewMeasureListener.onCompletedMeasuring(0);
+            }
+
+            return;
+        }
+
+        int measuredHeight = view.getMeasuredHeight();
+
+        if (measuredHeight > 0) {
+            if (viewMeasureListener != null) {
+                viewMeasureListener.onCompletedMeasuring(measuredHeight);
+            }
+
+            return;
+        }
+
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (viewMeasureListener != null) {
+                    viewMeasureListener.onCompletedMeasuring(view.getMeasuredHeight());
+                }
+
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
     }
 
 }

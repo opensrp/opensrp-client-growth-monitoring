@@ -128,8 +128,9 @@
             <!-- Weight table section -->
 
             <LinearLayout
+                android:id="@+id/ll_growthDialogView_weightTableLayout"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="@dimen/weight_table_height"
                 android:orientation="vertical">
 
                 <ScrollView
@@ -162,14 +163,16 @@
 
                             <ImageButton
                                 android:id="@+id/scroll_button"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
                                 android:scaleType="centerInside"
+                                android:padding="5dp"
+                                android:visibility="gone"
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
                                 android:layout_marginRight="20dp"
                                 android:background="@null"
-                                android:src="@drawable/ic_icon_expand" />
+                                android:src="@drawable/ic_icon_collapse" />
                         </RelativeLayout>
 
                         <TableLayout

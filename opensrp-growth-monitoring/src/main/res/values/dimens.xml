@@ -5,4 +5,5 @@
     <dimen name="table_contents_text_height">33dp</dimen>
     <dimen name="weight_table_divider_height">1dp</dimen>
     <dimen name="weight_table_contents_text_size">22sp</dimen>
+    <dimen name="weight_table_height">200dp</dimen>
 </resources>
