@@ -253,10 +253,6 @@ public class GrowthDialogFragment extends DialogFragment {
 
         TableLayout tableLayout = (TableLayout) dialogView.findViewById(R.id.weights_table);
         for (Weight weight : weights) {
-            if (weight.getDate().compareTo(maxWeighingDate.getTime()) > 0) {
-                continue;
-            }
-
             TableRow dividerRow = new TableRow(dialogView.getContext());
             View divider = new View(dialogView.getContext());
             TableRow.LayoutParams params = (TableRow.LayoutParams) divider.getLayoutParams();
@@ -295,10 +291,14 @@ public class GrowthDialogFragment extends DialogFragment {
             zScoreTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     getResources().getDimension(R.dimen.weight_table_contents_text_size));
             zScoreTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-            double zScore = ZScore.calculate(gender, dob, weight.getDate(), weight.getKg());
-            zScore = ZScore.roundOff(zScore);
-            zScoreTextView.setTextColor(getResources().getColor(ZScore.getZScoreColor(zScore)));
-            zScoreTextView.setText(String.valueOf(zScore));
+            if (weight.getDate().compareTo(maxWeighingDate.getTime()) > 0) {
+                zScoreTextView.setText("");
+            } else {
+                double zScore = ZScore.calculate(gender, dob, weight.getDate(), weight.getKg());
+                zScore = ZScore.roundOff(zScore);
+                zScoreTextView.setTextColor(getResources().getColor(ZScore.getZScoreColor(zScore)));
+                zScoreTextView.setText(String.valueOf(zScore));
+            }
             curRow.addView(zScoreTextView);
             tableLayout.addView(curRow);
         }
