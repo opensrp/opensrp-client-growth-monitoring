@@ -75,9 +75,7 @@ dependencies {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
     }
-    compile project(":opensrp-growth-monitoring")/*('org.smartregister:opensrp-client-growth-monitoring:1.0.0-SNAPSHOT@aar') {
-        transitive = true
-    }*/
+    compile project(":opensrp-growth-monitoring")
     compile 'com.android.support:cardview-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
     compile 'com.android.support:appcompat-v7:22.1.1'
