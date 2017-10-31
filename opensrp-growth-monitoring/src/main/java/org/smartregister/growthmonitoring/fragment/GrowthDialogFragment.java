@@ -61,6 +61,9 @@ public class GrowthDialogFragment extends DialogFragment {
     public static final String DIALOG_TAG = "GrowthDialogFragment";
     public static final String WRAPPER_TAG = "tag";
     private boolean isExpanded = false;
+    private static final int GRAPH_MONTHS_TIMELINE = 12;
+    private Calendar maxWeighingDate = null;
+    private Calendar minWeighingDate = null;
 
     public static GrowthDialogFragment newInstance(CommonPersonObjectClient personDetails,
                                                    List<Weight> weights) {
@@ -187,6 +190,9 @@ public class GrowthDialogFragment extends DialogFragment {
         if (StringUtils.isNotBlank(dobString)) {
             DateTime dateTime = new DateTime(dobString);
             dob = dateTime.toDate();
+            Calendar[] weighingDates = getMinAndMaxWeighingDates(dob);
+            minWeighingDate = weighingDates[0];
+            maxWeighingDate = weighingDates[1];
         }
 
         Button done = (Button) dialogView.findViewById(R.id.done);
@@ -197,7 +203,6 @@ public class GrowthDialogFragment extends DialogFragment {
             }
         });
 
-        final ScrollView weightScrollView = (ScrollView) dialogView.findViewById(R.id.weight_scroll_view);
         final ImageButton scrollButton = (ImageButton) dialogView.findViewById(R.id.scroll_button);
         scrollButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,6 +247,10 @@ public class GrowthDialogFragment extends DialogFragment {
     }
 
     private void refreshPreviousWeightsTable(final ViewGroup dialogView, Gender gender, Date dob) {
+        if (minWeighingDate == null || maxWeighingDate == null) {
+            return;
+        }
+
         TableLayout tableLayout = (TableLayout) dialogView.findViewById(R.id.weights_table);
         for (Weight weight : weights) {
             TableRow dividerRow = new TableRow(dialogView.getContext());
@@ -282,10 +291,14 @@ public class GrowthDialogFragment extends DialogFragment {
             zScoreTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     getResources().getDimension(R.dimen.weight_table_contents_text_size));
             zScoreTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-            double zScore = ZScore.calculate(gender, dob, weight.getDate(), weight.getKg());
-            zScore = ZScore.roundOff(zScore);
-            zScoreTextView.setTextColor(getResources().getColor(ZScore.getZScoreColor(zScore)));
-            zScoreTextView.setText(String.valueOf(zScore));
+            if (weight.getDate().compareTo(maxWeighingDate.getTime()) > 0) {
+                zScoreTextView.setText("");
+            } else {
+                double zScore = ZScore.calculate(gender, dob, weight.getDate(), weight.getKg());
+                zScore = ZScore.roundOff(zScore);
+                zScoreTextView.setTextColor(getResources().getColor(ZScore.getZScoreColor(zScore)));
+                zScoreTextView.setText(String.valueOf(zScore));
+            }
             curRow.addView(zScoreTextView);
             tableLayout.addView(curRow);
         }
@@ -307,11 +320,14 @@ public class GrowthDialogFragment extends DialogFragment {
     }
 
     private void refreshGrowthChart(ViewGroup parent, Gender gender, Date dob) {
-        Calendar minWeighingDate = getMinWeighingDate(dob);
+        if (minWeighingDate == null || maxWeighingDate == null) {
+            return;
+        }
+
         if (gender != Gender.UNKNOWN && dob != null && minWeighingDate != null) {
             LineChartView growthChart = (LineChartView) parent.findViewById(R.id.growth_chart);
             double minAge = ZScore.getAgeInMonths(dob, minWeighingDate.getTime());
-            double maxAge = minAge + 12;
+            double maxAge = minAge + GRAPH_MONTHS_TIMELINE;
             List<Line> lines = new ArrayList<>();
             for (int z = -3; z <= 3; z++) {
                 if (z != 1 && z != -1) {
@@ -369,6 +385,10 @@ public class GrowthDialogFragment extends DialogFragment {
         double maxY = getMaxY(dob, maxAge, gender);
         double minY = getMinY(dob, minAge, gender);
 
+        if (personsAgeInMonthsToday > ZScore.MAX_REPRESENTED_AGE) {
+            personsAgeInMonthsToday = ZScore.MAX_REPRESENTED_AGE;
+        }
+
         List<PointValue> values = new ArrayList<>();
         values.add(new PointValue((float) personsAgeInMonthsToday, (float) minY));
         values.add(new PointValue((float) personsAgeInMonthsToday, (float) maxY));
@@ -383,9 +403,11 @@ public class GrowthDialogFragment extends DialogFragment {
     }
 
     private double getMaxY(Date dob, double maxAge, Gender gender) {
+        if (minWeighingDate == null || maxWeighingDate == null) {
+            return 0d;
+        }
+
         double maxY = ZScore.reverse(gender, maxAge, 3d);
-        Calendar minWeighingDate = getMinWeighingDate(dob);
-        Calendar maxWeighingDate = getMaxWeighingDate(dob);
 
         for (Weight curWeight : weights) {
             if (isWeightOkToDisplay(minWeighingDate, maxWeighingDate, curWeight) && curWeight.getKg() > maxY) {
@@ -397,9 +419,11 @@ public class GrowthDialogFragment extends DialogFragment {
     }
 
     private double getMinY(Date dob, double minAge, Gender gender) {
+        if (minWeighingDate == null || maxWeighingDate == null) {
+            return 0d;
+        }
+
         double minY = ZScore.reverse(gender, minAge, -3d);
-        Calendar minWeighingDate = getMinWeighingDate(dob);
-        Calendar maxWeighingDate = getMaxWeighingDate(dob);
 
         for (Weight curWeight : weights) {
             if (isWeightOkToDisplay(minWeighingDate, maxWeighingDate, curWeight) && curWeight.getKg() < minY) {
@@ -411,8 +435,9 @@ public class GrowthDialogFragment extends DialogFragment {
     }
 
     private Line getPersonWeightLine(Gender gender, Date dob) {
-        Calendar minWeighingDate = getMinWeighingDate(dob);
-        Calendar maxWeighingDate = getMaxWeighingDate(dob);
+        if (minWeighingDate == null || maxWeighingDate == null) {
+            return null;
+        }
 
         List<PointValue> values = new ArrayList<>();
         for (Weight curWeight : weights) {
@@ -452,60 +477,39 @@ public class GrowthDialogFragment extends DialogFragment {
         return false;
     }
 
-    private Calendar getMinWeighingDate(Date dob) {
-        Calendar minCalendar = null;
+    private Calendar[] getMinAndMaxWeighingDates(Date dob) {
+        Calendar minGraphTime = null;
+        Calendar maxGraphTime = null;
         if (dob != null) {
             Calendar dobCalendar = Calendar.getInstance();
             dobCalendar.setTime(dob);
             standardiseCalendarDate(dobCalendar);
 
-            Calendar minGraphTime = Calendar.getInstance();
-            minGraphTime.add(Calendar.MONTH, 6);
+            minGraphTime = Calendar.getInstance();
+            maxGraphTime = Calendar.getInstance();
 
-            if (ZScore.getAgeInMonths(dob, minGraphTime.getTime()) > ZScore.MAX_REPRESENTED_AGE) {
+            if (ZScore.getAgeInMonths(dob, maxGraphTime.getTime()) > ZScore.MAX_REPRESENTED_AGE) {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(dob);
                 cal.add(Calendar.MONTH, (int) Math.round(ZScore.MAX_REPRESENTED_AGE));
-                minGraphTime = cal;
+                maxGraphTime = cal;
+                minGraphTime = (Calendar) maxGraphTime.clone();
             }
 
-            minGraphTime.add(Calendar.MONTH, -12);
+            minGraphTime.add(Calendar.MONTH, -GRAPH_MONTHS_TIMELINE);
             standardiseCalendarDate(minGraphTime);
+            standardiseCalendarDate(maxGraphTime);
 
             if (minGraphTime.getTimeInMillis() < dobCalendar.getTimeInMillis()) {
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(dobCalendar.getTime());
-                minCalendar = cal;
-            }
+                minGraphTime.setTime(dob);
+                standardiseCalendarDate(minGraphTime);
 
-            for (Weight curWeight : weights) {
-                if (curWeight.getDate() != null) {
-                    Calendar curWeightCal = Calendar.getInstance();
-                    curWeightCal.setTime(curWeight.getDate());
-                    standardiseCalendarDate(curWeightCal);
-
-                    if (curWeightCal.getTimeInMillis() >= dobCalendar.getTimeInMillis()
-                            && curWeightCal.getTimeInMillis() >= minGraphTime.getTimeInMillis() &&
-                            (minCalendar == null
-                                    || curWeightCal.getTimeInMillis() < minCalendar.getTimeInMillis())) {
-                        minCalendar = curWeightCal;
-                    }
-                }
-            }
-
-            if (minCalendar == null) {
-                minCalendar = minGraphTime;
+                maxGraphTime = (Calendar) minGraphTime.clone();
+                maxGraphTime.add(Calendar.MONTH, GRAPH_MONTHS_TIMELINE);
             }
         }
 
-        return minCalendar;
-    }
-
-    private Calendar getMaxWeighingDate(Date dob) {
-        Calendar maxGraphTime = Calendar.getInstance();
-        standardiseCalendarDate(maxGraphTime);
-
-        return maxGraphTime;
+        return new Calendar[]{minGraphTime, maxGraphTime};
     }
 
     private Line getZScoreLine(Gender gender, double startAgeInMonths, double endAgeInMonths, double z, int color) {

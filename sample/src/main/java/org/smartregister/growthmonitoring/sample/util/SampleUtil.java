@@ -43,7 +43,7 @@ public class SampleUtil {
     // Dummpy values, Can be changed manually
     public static final String ENTITY_ID = "1";
     public static final double BIRTH_WEIGHT = 3.8d;
-    public static final String DOB_STRING = "2017-01-01T00:00:00.000Z";
+    public static final String DOB_STRING = "2012-01-01T00:00:00.000Z";
     public static final String GENDER = (new Random()).nextBoolean() ? "male" : "female";
 
     public static void showWeightDialog(Activity context, View view, String tag) {
