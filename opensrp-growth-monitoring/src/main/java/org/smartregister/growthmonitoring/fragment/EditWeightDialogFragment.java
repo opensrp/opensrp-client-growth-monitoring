@@ -26,14 +26,13 @@ import org.smartregister.growthmonitoring.domain.WeightWrapper;
 import org.smartregister.growthmonitoring.listener.WeightActionListener;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.util.DateUtils;
+import org.smartregister.growthmonitoring.util.ImageUtils;
 import org.smartregister.util.DatePickerUtils;
 import org.smartregister.util.OpenSRPImageLoader;
 import org.smartregister.view.activity.DrishtiApplication;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
-import org.smartregister.growthmonitoring.util.ImageUtils;
 
 @SuppressLint("ValidFragment")
 public class EditWeightDialogFragment extends DialogFragment {
@@ -42,6 +41,9 @@ public class EditWeightDialogFragment extends DialogFragment {
     private WeightActionListener listener;
     public static final String DIALOG_TAG = "EditWeightDialogFragment";
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+
+    private DateTime currentWeightDate;
+    private Float currentWeight;
 
     private EditWeightDialogFragment(Context context,
                                      WeightWrapper tag) {
@@ -75,6 +77,11 @@ public class EditWeightDialogFragment extends DialogFragment {
         if (tag.getWeight() != null) {
             editWeight.setText(tag.getWeight().toString());
             editWeight.setSelection(editWeight.getText().length());
+            currentWeight = tag.getWeight();
+        }
+
+        if (tag.getUpdatedWeightDate() != null) {
+            currentWeightDate = tag.getUpdatedWeightDate();
         }
 
         final DatePicker earlierDatePicker = (DatePicker) dialogView.findViewById(R.id.earlier_date_picker);
@@ -127,18 +134,33 @@ public class EditWeightDialogFragment extends DialogFragment {
 
                 dismiss();
 
-                int day = earlierDatePicker.getDayOfMonth();
-                int month = earlierDatePicker.getMonth();
-                int year = earlierDatePicker.getYear();
+                boolean weightChanged = false;
+                boolean dateChanged = false;
 
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(year, month, day);
-                tag.setUpdatedWeightDate(new DateTime(calendar.getTime()), false);
+                if (earlierDatePicker.getVisibility() == View.VISIBLE) {
+                    int day = earlierDatePicker.getDayOfMonth();
+                    int month = earlierDatePicker.getMonth();
+                    int year = earlierDatePicker.getYear();
+
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(year, month, day);
+
+                    if (!org.apache.commons.lang3.time.DateUtils.isSameDay(calendar.getTime(), currentWeightDate.toDate())) {
+                        tag.setUpdatedWeightDate(new DateTime(calendar.getTime()), false);
+                        dateChanged = true;
+                    }
+                }
+
 
                 Float weight = Float.valueOf(weightString);
-                tag.setWeight(weight);
+                if (!weight.equals(currentWeight)) {
+                    tag.setWeight(weight);
+                    weightChanged = true;
+                }
 
-                listener.onWeightTaken(tag);
+                if (weightChanged || dateChanged) {
+                    listener.onWeightTaken(tag);
+                }
 
             }
         });
@@ -175,6 +197,8 @@ public class EditWeightDialogFragment extends DialogFragment {
                 set.setVisibility(View.VISIBLE);
 
                 DatePickerUtils.themeDatePicker(earlierDatePicker, new char[]{'d', 'm', 'y'});
+
+                earlierDatePicker.updateDate(currentWeightDate.year().get(), currentWeightDate.monthOfYear().get() - 1, currentWeightDate.dayOfMonth().get());
             }
         });
 
