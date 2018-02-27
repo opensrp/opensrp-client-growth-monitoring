@@ -25,7 +25,6 @@ import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.domain.WeightWrapper;
 import org.smartregister.growthmonitoring.listener.WeightActionListener;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
-import org.smartregister.growthmonitoring.util.DateUtils;
 import org.smartregister.growthmonitoring.util.ImageUtils;
 import org.smartregister.util.DatePickerUtils;
 import org.smartregister.util.OpenSRPImageLoader;
@@ -33,6 +32,7 @@ import org.smartregister.view.activity.DrishtiApplication;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 @SuppressLint("ValidFragment")
 public class EditWeightDialogFragment extends DialogFragment {
@@ -45,9 +45,11 @@ public class EditWeightDialogFragment extends DialogFragment {
     private DateTime currentWeightDate;
     private Float currentWeight;
 
-    private EditWeightDialogFragment(Context context,
-                                     WeightWrapper tag) {
+    private Date dateOfBirth;
+
+    private EditWeightDialogFragment(Context context, Date dateOfBirth, WeightWrapper tag) {
         this.context = context;
+        this.dateOfBirth = dateOfBirth;
         if (tag == null) {
             this.tag = new WeightWrapper();
         } else {
@@ -55,10 +57,8 @@ public class EditWeightDialogFragment extends DialogFragment {
         }
     }
 
-    public static EditWeightDialogFragment newInstance(
-            Context context,
-            WeightWrapper tag) {
-        return new EditWeightDialogFragment(context, tag);
+    public static EditWeightDialogFragment newInstance(Context context, Date dateOfBirth, WeightWrapper tag) {
+        return new EditWeightDialogFragment(context, dateOfBirth, tag);
     }
 
     @Override
@@ -86,10 +86,8 @@ public class EditWeightDialogFragment extends DialogFragment {
 
         final DatePicker earlierDatePicker = (DatePicker) dialogView.findViewById(R.id.earlier_date_picker);
         earlierDatePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
-        Calendar birthDateCalendar = Calendar.getInstance();
-        if (tag.getDateOfBirth() != null && !tag.getDateOfBirth().isEmpty()) {
-            birthDateCalendar.setTime(DateUtils.getDateFromString(tag.getDateOfBirth()));
-            earlierDatePicker.setMinDate(birthDateCalendar.getTimeInMillis());
+        if (dateOfBirth != null) {
+            earlierDatePicker.setMinDate(dateOfBirth.getTime());
         }
 
         TextView nameView = (TextView) dialogView.findViewById(R.id.child_name);

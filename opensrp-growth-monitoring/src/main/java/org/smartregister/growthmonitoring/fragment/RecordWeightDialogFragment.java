@@ -23,7 +23,6 @@ import org.joda.time.DateTime;
 import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.domain.WeightWrapper;
 import org.smartregister.growthmonitoring.listener.WeightActionListener;
-import org.smartregister.growthmonitoring.util.DateUtils;
 import org.smartregister.growthmonitoring.util.ImageUtils;
 import org.smartregister.util.DatePickerUtils;
 import org.smartregister.util.OpenSRPImageLoader;
@@ -31,15 +30,19 @@ import org.smartregister.view.activity.DrishtiApplication;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
 
 @SuppressLint("ValidFragment")
 public class RecordWeightDialogFragment extends DialogFragment {
     private WeightWrapper tag;
     private WeightActionListener listener;
+    private Date dateOfBirth;
+
     public static final String WRAPPER_TAG = "tag";
+    public static final String DATE_OF_BIRTH_TAG = "dob";
 
     public static RecordWeightDialogFragment newInstance(
-            WeightWrapper tag) {
+            Date dateOfBirth, WeightWrapper tag) {
 
         WeightWrapper tagToSend;
         if (tag == null) {
@@ -51,6 +54,7 @@ public class RecordWeightDialogFragment extends DialogFragment {
         RecordWeightDialogFragment recordWeightDialogFragment = new RecordWeightDialogFragment();
 
         Bundle args = new Bundle();
+        args.putSerializable(DATE_OF_BIRTH_TAG, dateOfBirth);
         args.putSerializable(WRAPPER_TAG, tagToSend);
         recordWeightDialogFragment.setArguments(args);
 
@@ -77,6 +81,11 @@ public class RecordWeightDialogFragment extends DialogFragment {
             return null;
         }
 
+        Serializable dateSerializable = bundle.getSerializable(DATE_OF_BIRTH_TAG);
+        if (dateSerializable != null && dateSerializable instanceof Date) {
+            dateOfBirth = (Date) dateSerializable;
+        }
+
         ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.record_weight_dialog_view, container, false);
 
         final EditText editWeight = (EditText) dialogView.findViewById(R.id.edit_weight);
@@ -88,10 +97,8 @@ public class RecordWeightDialogFragment extends DialogFragment {
 
         final DatePicker earlierDatePicker = (DatePicker) dialogView.findViewById(R.id.earlier_date_picker);
         earlierDatePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
-        Calendar birthDateCalendar = Calendar.getInstance();
-        if (tag.getDateOfBirth() != null && !tag.getDateOfBirth().isEmpty()) {
-            birthDateCalendar.setTime(DateUtils.getDateFromString(tag.getDateOfBirth()));
-            earlierDatePicker.setMinDate(birthDateCalendar.getTimeInMillis());
+        if (dateOfBirth != null) {
+            earlierDatePicker.setMinDate(dateOfBirth.getTime());
         }
 
         TextView nameView = (TextView) dialogView.findViewById(R.id.child_name);
