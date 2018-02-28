@@ -3,6 +3,7 @@ package org.smartregister.growthmonitoring.sample.util;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +26,9 @@ import org.smartregister.growthmonitoring.util.ImageUtils;
 import org.smartregister.util.DateUtil;
 import org.smartregister.util.Utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -48,10 +50,8 @@ public class SampleUtil {
 
     public static void showWeightDialog(Activity context, View view, String tag) {
         WeightWrapper weightWrapper = view.getTag() != null ? (WeightWrapper) view.getTag() : new WeightWrapper();
-        weightWrapper.setDateOfBirth(DOB_STRING);
-        RecordWeightDialogFragment recordWeightDialogFragment = RecordWeightDialogFragment.newInstance(weightWrapper);
+        RecordWeightDialogFragment recordWeightDialogFragment = RecordWeightDialogFragment.newInstance(dateOfBirth(), weightWrapper);
         recordWeightDialogFragment.show(initFragmentTransaction(context, tag), tag);
-
     }
 
     public static void showEditWeightDialog(Activity context, int i, String tag) {
@@ -88,10 +88,9 @@ public class SampleUtil {
         weightWrapper.setPatientNumber(zeirId);
         weightWrapper.setPatientAge(duration);
         weightWrapper.setPhoto(photo);
-        weightWrapper.setDateOfBirth(DOB_STRING);
         weightWrapper.setPmtctStatus(getValue(childDetails.getColumnmaps(), "pmtct_status", false));
 
-        EditWeightDialogFragment editWeightDialogFragment = EditWeightDialogFragment.newInstance(context, weightWrapper);
+        EditWeightDialogFragment editWeightDialogFragment = EditWeightDialogFragment.newInstance(context, dateOfBirth(), weightWrapper);
         editWeightDialogFragment.show(initFragmentTransaction(context, tag), tag);
 
     }
@@ -150,5 +149,15 @@ public class SampleUtil {
         personDetails.setColumnmaps(columnMap);
 
         return personDetails;
+    }
+
+    private static Date dateOfBirth() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'");
+        try {
+            return simpleDateFormat.parse(DOB_STRING);
+        } catch (ParseException e) {
+            Log.e(SampleUtil.class.getName(), e.getMessage(), e);
+        }
+        return null;
     }
 }
