@@ -22,6 +22,7 @@ import org.smartregister.growthmonitoring.fragment.GrowthDialogFragment;
 import org.smartregister.growthmonitoring.listener.WeightActionListener;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.sample.util.SampleUtil;
+import org.smartregister.growthmonitoring.util.WeightUtils;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.util.DateUtil;
 import org.smartregister.util.Utils;
@@ -187,18 +188,7 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
             if (!formattedAge.equalsIgnoreCase("0d")) {
                 weightmap.put(weight.getId(), Pair.create(formattedAge, Utils.kgStringSuffix(weight.getKg())));
 
-                ////////////////////////check 3 months///////////////////////////////
-                boolean lessThanThreeMonthsEventCreated = false;
-
-                Date weightCreatedDate = weight.getCreatedAt();
-                if (weightCreatedDate != null) {
-                    if (!DateUtil.checkIfDateThreeMonthsOlder(weightCreatedDate)) {
-                        lessThanThreeMonthsEventCreated = true;
-                    }
-                } else {
-                    lessThanThreeMonthsEventCreated = true;
-                }
-                ///////////////////////////////////////////////////////////////////////
+                boolean lessThanThreeMonthsEventCreated = WeightUtils.lessThanThreeMonths(weight);
                 if (lessThanThreeMonthsEventCreated) {
                     weighteditmode.add(true);
                 } else {
