@@ -6,8 +6,10 @@ import android.util.Log;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.smartregister.AllConstants;
+import org.smartregister.domain.db.Column;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.repository.ZScoreRepository;
+import org.smartregister.growthmonitoring.sample.BuildConfig;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Repository;
 
@@ -24,7 +26,7 @@ public class SampleRepository extends Repository {
     private String password = "Sample_PASS";
 
     public SampleRepository(Context context, org.smartregister.Context openSRPContext) {
-        super(context, AllConstants.DATABASE_NAME, AllConstants.DATABASE_VERSION, openSRPContext.session(), null, openSRPContext.sharedRepositoriesArray());
+        super(context, AllConstants.DATABASE_NAME, BuildConfig.DATABASE_VERSION, openSRPContext.session(), null, openSRPContext.sharedRepositoriesArray());
         this.context = context;
     }
 
@@ -47,7 +49,7 @@ public class SampleRepository extends Repository {
 
         EventClientRepository.createTable(database, EventClientRepository.Table.path_reports, EventClientRepository.report_column.values());
 
-        onUpgrade(database, 1, 2);
+        onUpgrade(database, 1, BuildConfig.DATABASE_VERSION);
 
     }
 
@@ -63,6 +65,9 @@ public class SampleRepository extends Repository {
                 case 2:
                     upgradeToVersion2(db);
                     break;
+                case 3:
+                    upgradeToVersion3(db);
+                    break;
                 default:
                     break;
             }
@@ -71,9 +76,27 @@ public class SampleRepository extends Repository {
     }
 
     private void upgradeToVersion2(SQLiteDatabase db) {
-        ZScoreRepository.createTable(db);
-        db.execSQL(WeightRepository.ALTER_ADD_Z_SCORE_COLUMN);
+        try {
+            ZScoreRepository.createTable(db);
+            db.execSQL(WeightRepository.ALTER_ADD_Z_SCORE_COLUMN);
+        } catch (Exception e) {
+            Log.e(TAG, "upgradeToVersion2 " + e.getMessage());
+        }
     }
+
+    private void upgradeToVersion3(SQLiteDatabase db) {
+        try {
+            Column[] columns = {EventClientRepository.event_column.formSubmissionId};
+            EventClientRepository.createIndex(db, EventClientRepository.Table.event, columns);
+
+            db.execSQL(WeightRepository.ALTER_ADD_CREATED_AT_COLUMN);
+            WeightRepository.migrateCreatedAt(db);
+        } catch (Exception e) {
+            Log.e(TAG, "upgradeToVersion3 " + e.getMessage());
+        }
+
+    }
+
 
     @Override
     public SQLiteDatabase getReadableDatabase() {
