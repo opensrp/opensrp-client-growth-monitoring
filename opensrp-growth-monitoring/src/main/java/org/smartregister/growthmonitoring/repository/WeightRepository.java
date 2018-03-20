@@ -37,9 +37,9 @@ public class WeightRepository extends BaseRepository {
     public static final String LOCATIONID = "location_id";
     public static final String SYNC_STATUS = "sync_status";
     public static final String UPDATED_AT_COLUMN = "updated_at";
-    private static final String Z_SCORE = "z_score";
+    public static final String Z_SCORE = "z_score";
     public static final double DEFAULT_Z_SCORE = 999999d;
-    private static final String CREATED_AT = "created_at";
+    public static final String CREATED_AT = "created_at";
 
     public static final String[] WEIGHT_TABLE_COLUMNS = {
             ID_COLUMN, BASE_ENTITY_ID, PROGRAM_CLIENT_ID, KG, DATE, ANMID, LOCATIONID, SYNC_STATUS,
@@ -107,7 +107,9 @@ public class WeightRepository extends BaseRepository {
                     weight.setId(sameWeight.getId());
                     update(database, weight);
                 } else {
-                    weight.setCreatedAt(new Date());
+                    if(weight.getCreatedAt() == null) {
+                        weight.setCreatedAt(new Date());
+                    }
                     weight.setId(database.insert(WEIGHT_TABLE_NAME, null, createValuesFor(weight)));
                 }
             } else {
