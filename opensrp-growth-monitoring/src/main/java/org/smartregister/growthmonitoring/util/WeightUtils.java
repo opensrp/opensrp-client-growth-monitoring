@@ -3,8 +3,6 @@ package org.smartregister.growthmonitoring.util;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.util.DateUtil;
 
-import java.util.Date;
-
 /**
  * Created by keyman on 3/19/2018.
  */

@@ -107,7 +107,7 @@ public class WeightRepository extends BaseRepository {
                     weight.setId(sameWeight.getId());
                     update(database, weight);
                 } else {
-                    if(weight.getCreatedAt() == null) {
+                    if (weight.getCreatedAt() == null) {
                         weight.setCreatedAt(new Date());
                     }
                     weight.setId(database.insert(WEIGHT_TABLE_NAME, null, createValuesFor(weight)));
@@ -253,13 +253,14 @@ public class WeightRepository extends BaseRepository {
         return weightList;
     }
 
-    public Weight findUnique(SQLiteDatabase database, Weight weight) {
+    public Weight findUnique(SQLiteDatabase db, Weight weight) {
 
         if (weight == null || (StringUtils.isBlank(weight.getFormSubmissionId()) && StringUtils.isBlank(weight.getEventId()))) {
             return null;
         }
 
         try {
+            SQLiteDatabase database = db;
             if (database == null) {
                 database = getRepository().getReadableDatabase();
             }
