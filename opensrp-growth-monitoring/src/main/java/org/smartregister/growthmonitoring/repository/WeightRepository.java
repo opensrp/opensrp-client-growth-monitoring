@@ -11,8 +11,10 @@ import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.domain.ZScore;
 import org.smartregister.repository.BaseRepository;
+import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Repository;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,11 +37,13 @@ public class WeightRepository extends BaseRepository {
     public static final String LOCATIONID = "location_id";
     public static final String SYNC_STATUS = "sync_status";
     public static final String UPDATED_AT_COLUMN = "updated_at";
-    private static final String Z_SCORE = "z_score";
+    public static final String Z_SCORE = "z_score";
     public static final double DEFAULT_Z_SCORE = 999999d;
+    public static final String CREATED_AT = "created_at";
+
     public static final String[] WEIGHT_TABLE_COLUMNS = {
             ID_COLUMN, BASE_ENTITY_ID, PROGRAM_CLIENT_ID, KG, DATE, ANMID, LOCATIONID, SYNC_STATUS,
-            UPDATED_AT_COLUMN, EVENT_ID, FORMSUBMISSION_ID, Z_SCORE, OUT_OF_AREA};
+            UPDATED_AT_COLUMN, EVENT_ID, FORMSUBMISSION_ID, Z_SCORE, OUT_OF_AREA, CREATED_AT};
 
     private static final String BASE_ENTITY_ID_INDEX = "CREATE INDEX " + WEIGHT_TABLE_NAME + "_" + BASE_ENTITY_ID + "_index ON " + WEIGHT_TABLE_NAME + "(" + BASE_ENTITY_ID + " COLLATE NOCASE);";
     private static final String SYNC_STATUS_INDEX = "CREATE INDEX " + WEIGHT_TABLE_NAME + "_" + SYNC_STATUS + "_index ON " + WEIGHT_TABLE_NAME + "(" + SYNC_STATUS + " COLLATE NOCASE);";
@@ -52,6 +56,7 @@ public class WeightRepository extends BaseRepository {
     public static final String UPDATE_TABLE_ADD_OUT_OF_AREA_COL_INDEX = "CREATE INDEX " + WEIGHT_TABLE_NAME + "_" + OUT_OF_AREA + "_index ON " + WEIGHT_TABLE_NAME + "(" + OUT_OF_AREA + " COLLATE NOCASE);";
 
     public static final String ALTER_ADD_Z_SCORE_COLUMN = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + Z_SCORE + " REAL NOT NULL DEFAULT " + String.valueOf(DEFAULT_Z_SCORE);
+    public static final String ALTER_ADD_CREATED_AT_COLUMN = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + CREATED_AT + " DATETIME NULL ";
 
 
     public WeightRepository(Repository repository) {
@@ -102,6 +107,9 @@ public class WeightRepository extends BaseRepository {
                     weight.setId(sameWeight.getId());
                     update(database, weight);
                 } else {
+                    if (weight.getCreatedAt() == null) {
+                        weight.setCreatedAt(new Date());
+                    }
                     weight.setId(database.insert(WEIGHT_TABLE_NAME, null, createValuesFor(weight)));
                 }
             } else {
@@ -230,23 +238,29 @@ public class WeightRepository extends BaseRepository {
     }
 
     public List<Weight> findLast5(String entityid) {
-        Cursor cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE, new String[]{entityid}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
-
-        List<Weight> weights = readAllWeights(cursor);
-//        if (!weights.isEmpty()) {
-        return weights;
-//        }
-
-//        return null;
+        List<Weight> weightList = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE, new String[]{entityid}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
+            weightList = readAllWeights(cursor);
+        } catch (Exception e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return weightList;
     }
 
-    public Weight findUnique(SQLiteDatabase database, Weight weight) {
+    public Weight findUnique(SQLiteDatabase db, Weight weight) {
 
         if (weight == null || (StringUtils.isBlank(weight.getFormSubmissionId()) && StringUtils.isBlank(weight.getEventId()))) {
             return null;
         }
 
         try {
+            SQLiteDatabase database = db;
             if (database == null) {
                 database = getRepository().getReadableDatabase();
             }
@@ -294,6 +308,22 @@ public class WeightRepository extends BaseRepository {
         }
     }
 
+    public static void migrateCreatedAt(SQLiteDatabase database) {
+        try {
+            String sql = "UPDATE " + WEIGHT_TABLE_NAME +
+                    " SET " + CREATED_AT + " = " +
+                    " ( SELECT " + EventClientRepository.event_column.dateCreated.name() +
+                    "   FROM " + EventClientRepository.Table.event.name() +
+                    "   WHERE " + EventClientRepository.event_column.eventId.name() + " = " + WEIGHT_TABLE_NAME + "." + EVENT_ID +
+                    "   OR " + EventClientRepository.event_column.formSubmissionId.name() + " = " + WEIGHT_TABLE_NAME + "." + FORMSUBMISSION_ID +
+                    " ) " +
+                    " WHERE " + CREATED_AT + " is null ";
+            database.execSQL(sql);
+        } catch (Exception e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
+    }
+
     private List<Weight> readAllWeights(Cursor cursor) {
         List<Weight> weights = new ArrayList<>();
         try {
@@ -302,6 +332,16 @@ public class WeightRepository extends BaseRepository {
                     Double zScore = cursor.getDouble(cursor.getColumnIndex(Z_SCORE));
                     if (zScore != null && zScore.equals(new Double(DEFAULT_Z_SCORE))) {
                         zScore = null;
+                    }
+
+                    Date createdAt = null;
+                    String dateCreatedString = cursor.getString(cursor.getColumnIndex(CREATED_AT));
+                    if (StringUtils.isNotBlank(dateCreatedString)) {
+                        try {
+                            createdAt = EventClientRepository.dateFormat.parse(dateCreatedString);
+                        } catch (ParseException e) {
+                            Log.e(TAG, Log.getStackTraceString(e));
+                        }
                     }
 
                     weights.add(
@@ -313,7 +353,12 @@ public class WeightRepository extends BaseRepository {
                                     cursor.getString(cursor.getColumnIndex(ANMID)),
                                     cursor.getString(cursor.getColumnIndex(LOCATIONID)),
                                     cursor.getString(cursor.getColumnIndex(SYNC_STATUS)),
-                                    cursor.getLong(cursor.getColumnIndex(UPDATED_AT_COLUMN)), cursor.getString(cursor.getColumnIndex(EVENT_ID)), cursor.getString(cursor.getColumnIndex(FORMSUBMISSION_ID)), zScore, cursor.getInt(cursor.getColumnIndex(OUT_OF_AREA))
+                                    cursor.getLong(cursor.getColumnIndex(UPDATED_AT_COLUMN)),
+                                    cursor.getString(cursor.getColumnIndex(EVENT_ID)),
+                                    cursor.getString(cursor.getColumnIndex(FORMSUBMISSION_ID)),
+                                    zScore,
+                                    cursor.getInt(cursor.getColumnIndex(OUT_OF_AREA)),
+                                    createdAt
 
                             ));
 
@@ -347,6 +392,7 @@ public class WeightRepository extends BaseRepository {
         values.put(FORMSUBMISSION_ID, weight.getFormSubmissionId() != null ? weight.getFormSubmissionId() : null);
         values.put(OUT_OF_AREA, weight.getOutOfCatchment() != null ? weight.getOutOfCatchment() : null);
         values.put(Z_SCORE, weight.getZScore() == null ? DEFAULT_Z_SCORE : weight.getZScore());
+        values.put(CREATED_AT, weight.getCreatedAt() != null ? EventClientRepository.dateFormat.format(weight.getCreatedAt()) : null);
         return values;
     }
 }

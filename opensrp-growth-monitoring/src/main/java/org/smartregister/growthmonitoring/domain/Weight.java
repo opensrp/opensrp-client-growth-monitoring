@@ -21,6 +21,7 @@ public class Weight {
     private Integer outOfCatchment;
     private Long updatedAt;
     private Double zScore;
+    private Date createdAt;
 
     public Weight() {
     }
@@ -44,7 +45,7 @@ public class Weight {
 
     public Weight(Long id, String baseEntityId, String programClientId, Float kg, Date date,
                   String anmId, String locationId, String syncStatus, Long updatedAt, String
-                          eventId, String formSubmissionId, Double zScore, Integer outOfCatchment) {
+                          eventId, String formSubmissionId, Double zScore, Integer outOfCatchment, Date createdAt) {
         this.id = id;
         this.baseEntityId = baseEntityId;
         this.programClientId = programClientId;
@@ -58,6 +59,8 @@ public class Weight {
         this.formSubmissionId = formSubmissionId;
         this.outOfCatchment = outOfCatchment;
         this.zScore = zScore;
+        this.createdAt = createdAt;
+
     }
 
     public Long getId() {
@@ -168,5 +171,13 @@ public class Weight {
 
     public void setZScore(Double zScore) {
         this.zScore = zScore;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
     }
 }
