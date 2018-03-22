@@ -11,10 +11,8 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
@@ -24,6 +22,7 @@ import org.smartregister.growthmonitoring.fragment.GrowthDialogFragment;
 import org.smartregister.growthmonitoring.listener.WeightActionListener;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.sample.util.SampleUtil;
+import org.smartregister.growthmonitoring.util.WeightUtils;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.util.DateUtil;
 import org.smartregister.util.Utils;
@@ -189,26 +188,8 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
             if (!formattedAge.equalsIgnoreCase("0d")) {
                 weightmap.put(weight.getId(), Pair.create(formattedAge, Utils.kgStringSuffix(weight.getKg())));
 
-                ////////////////////////check 3 months///////////////////////////////
-                boolean less_than_three_months_event_created = false;
-
-                org.smartregister.domain.db.Event event = null;
-                EventClientRepository db = GrowthMonitoringLibrary.getInstance().eventClientRepository();
-                if (weight.getEventId() != null) {
-                    event = db.convert(db.getEventsByEventId(weight.getEventId()), org.smartregister.domain.db.Event.class);
-                } else if (weight.getFormSubmissionId() != null) {
-                    event = db.convert(db.getEventsByFormSubmissionId(weight.getFormSubmissionId()), org.smartregister.domain.db.Event.class);
-                }
-                if (event != null) {
-                    Date weight_create_date = event.getDateCreated().toDate();
-                    if (!DateUtil.checkIfDateThreeMonthsOlder(weight_create_date)) {
-                        less_than_three_months_event_created = true;
-                    }
-                } else {
-                    less_than_three_months_event_created = true;
-                }
-                ///////////////////////////////////////////////////////////////////////
-                if (less_than_three_months_event_created) {
+                boolean lessThanThreeMonthsEventCreated = WeightUtils.lessThanThreeMonths(weight);
+                if (lessThanThreeMonthsEventCreated) {
                     weighteditmode.add(true);
                 } else {
                     weighteditmode.add(false);

@@ -40,11 +40,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "int", "DATABASE_VERSION", '2'
+            buildConfigField "int", "DATABASE_VERSION", '3'
         }
 
         debug {
-            buildConfigField "int", "DATABASE_VERSION", '2'
+            buildConfigField "int", "DATABASE_VERSION", '3'
         }
     }
 
@@ -71,7 +71,7 @@ android {
 }
 
 dependencies {
-    compile('org.smartregister:opensrp-client-core:1.0.0-SNAPSHOT@aar') {
+    compile('org.smartregister:opensrp-client-core:1.2.5-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
     }
