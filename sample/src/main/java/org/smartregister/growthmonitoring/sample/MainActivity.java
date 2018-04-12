@@ -65,7 +65,9 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
         recordWeight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                view.setEnabled(false);
                 SampleUtil.showWeightDialog(MainActivity.this, view, DIALOG_TAG);
+                view.setEnabled(true);
             }
         });
 
@@ -74,7 +76,9 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
         growthChartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.setEnabled(false);
                 Utils.startAsyncTask(new ShowGrowthChartTask(), null);
+                v.setEnabled(true);
             }
         });
 
@@ -200,7 +204,9 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
 
                     @Override
                     public void onClick(View v) {
+                        v.setEnabled(false);
                         SampleUtil.showEditWeightDialog(MainActivity.this, finalI, DIALOG_TAG);
+                        v.setEnabled(true);
                     }
                 };
                 listeners.add(onclicklistener);
