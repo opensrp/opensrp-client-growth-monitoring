@@ -163,8 +163,8 @@
 
                             <ImageButton
                                 android:id="@+id/scroll_button"
-                                android:layout_width="35dp"
-                                android:layout_height="35dp"
+                                android:layout_width="@dimen/scroll_btn_dimen"
+                                android:layout_height="@dimen/scroll_btn_dimen"
                                 android:scaleType="centerInside"
                                 android:padding="5dp"
                                 android:visibility="gone"

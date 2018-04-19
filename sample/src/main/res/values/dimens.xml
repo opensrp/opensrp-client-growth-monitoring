@@ -14,4 +14,6 @@
     <dimen name="child_name_tv_text_size">18sp</dimen>
     <dimen name="growth_chart_height">170dp</dimen>
     <dimen name="weight_graph_btn_padding">10dp</dimen>
+    <dimen name="date_picker_height">160dp</dimen>
+    <dimen name="scroll_btn_dimen">20dp</dimen>
 </resources>

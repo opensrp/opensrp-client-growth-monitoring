@@ -6,4 +6,6 @@
     <dimen name="child_name_tv_text_size">26sp</dimen>
     <dimen name="growth_chart_height">300dp</dimen>
     <dimen name="weight_graph_btn_padding">20dp</dimen>
+    <dimen name="date_picker_height">180dp</dimen>
+    <dimen name="scroll_btn_dimen">35dp</dimen>
 </resources>
