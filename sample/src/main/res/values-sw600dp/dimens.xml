@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="record_weight_tv_text_size">100sp</dimen>
+    <dimen name="record_weight_btn_text_size">22sp</dimen>
+    <dimen name="child_details_tv_text_size">22sp</dimen>
+    <dimen name="child_name_tv_text_size">26sp</dimen>
+    <dimen name="growth_chart_height">300dp</dimen>
+    <dimen name="weight_graph_btn_padding">20dp</dimen>
+</resources>

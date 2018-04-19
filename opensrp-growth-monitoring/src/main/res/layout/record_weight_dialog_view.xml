@@ -51,7 +51,7 @@
                         android:layout_marginBottom="5dp"
                         android:text="Child Name"
                         android:textColor="@color/black"
-                        android:textSize="26sp"
+                        android:textSize="@dimen/child_name_tv_text_size"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -67,7 +67,7 @@
                             android:layout_height="wrap_content"
                             android:text="EIR"
                             android:textColor="@color/client_list_grey"
-                            android:textSize="22sp" />
+                            android:textSize="@dimen/child_details_tv_text_size" />
 
                         <org.smartregister.view.customcontrols.CustomFontTextView
                             android:id="@+id/child_age"
@@ -77,7 +77,7 @@
                             android:layout_marginLeft="20dp"
                             android:text="Age"
                             android:textColor="@color/client_list_grey"
-                            android:textSize="22sp" />
+                            android:textSize="@dimen/child_details_tv_text_size" />
                     </LinearLayout>
 
                     <org.smartregister.view.customcontrols.CustomFontTextView
@@ -87,7 +87,7 @@
                         android:layout_height="wrap_content"
                         android:text="pmtct_status"
                         android:textColor="@color/client_list_grey"
-                        android:textSize="22sp" />
+                        android:textSize="@dimen/child_details_tv_text_size" />
 
                 </LinearLayout>
 
@@ -107,7 +107,7 @@
                 android:layout_marginTop="23dp"
                 android:text="Record Weight"
                 android:textColor="@color/text_black"
-                android:textSize="30sp"
+                android:textSize="@dimen/record_weight_tv_text_size"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -126,7 +126,7 @@
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:inputType="number|numberDecimal"
-                    android:textSize="100dp" />
+                    android:textSize="@dimen/record_weight_tv_text_size" />
 
                 <TextView
                     android:id="@+id/value_unit_symbol"
@@ -134,7 +134,7 @@
                     android:layout_height="wrap_content"
                     android:text="kg"
                     android:textColor="@color/light_grey"
-                    android:textSize="100dp" />
+                    android:textSize="@dimen/record_weight_tv_text_size" />
             </LinearLayout>
 
             <LinearLayout
@@ -159,7 +159,7 @@
                     android:textAllCaps="false"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/white"
-                    android:textSize="22sp" />
+                    android:textSize="@dimen/record_weight_btn_text_size" />
 
                 <Button
                     android:id="@+id/weight_taken_earlier"
@@ -175,7 +175,7 @@
                     android:textAllCaps="false"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/client_list_grey"
-                    android:textSize="22sp" />
+                    android:textSize="@dimen/record_weight_btn_text_size" />
             </LinearLayout>
 
             <DatePicker
@@ -207,7 +207,7 @@
                     android:textAllCaps="false"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/client_list_grey"
-                    android:textSize="22sp" />
+                    android:textSize="@dimen/record_weight_btn_text_size" />
 
                 <Button
                     android:id="@+id/set"
@@ -219,7 +219,7 @@
                     android:textAllCaps="false"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/client_list_grey"
-                    android:textSize="22sp"
+                    android:textSize="@dimen/record_weight_btn_text_size"
                     android:visibility="gone" />
 
             </LinearLayout>

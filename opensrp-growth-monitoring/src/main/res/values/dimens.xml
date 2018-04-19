@@ -2,8 +2,14 @@
 <resources>
     <dimen name="client_profile_pic_dialog_width">100dp</dimen>
     <dimen name="client_profile_pic_dialog_height">100dp</dimen>
-    <dimen name="table_contents_text_height">33dp</dimen>
+    <dimen name="table_contents_text_height">20dp</dimen>
     <dimen name="weight_table_divider_height">1dp</dimen>
-    <dimen name="weight_table_contents_text_size">22sp</dimen>
-    <dimen name="weight_table_height">200dp</dimen>
+    <dimen name="weight_table_contents_text_size">14sp</dimen>
+    <dimen name="weight_table_height">150dp</dimen>
+    <dimen name="record_weight_tv_text_size">16sp</dimen>
+    <dimen name="record_weight_btn_text_size">14sp</dimen>
+    <dimen name="child_details_tv_text_size">14sp</dimen>
+    <dimen name="child_name_tv_text_size">18sp</dimen>
+    <dimen name="growth_chart_height">170dp</dimen>
+    <dimen name="weight_graph_btn_padding">10dp</dimen>
 </resources>
