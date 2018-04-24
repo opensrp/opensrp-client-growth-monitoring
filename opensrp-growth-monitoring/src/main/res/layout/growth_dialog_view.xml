@@ -248,7 +248,7 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_margin="@dimen/done_btn_layout_margin"
                 android:background="@drawable/record_weight_earlier_bg"
                 android:paddingBottom="@dimen/weight_graph_btn_padding"
                 android:paddingTop="@dimen/weight_graph_btn_padding"

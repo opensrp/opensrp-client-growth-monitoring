@@ -11,8 +11,9 @@
     <dimen name="child_details_tv_text_size">14sp</dimen>
     <dimen name="child_name_tv_text_size">18sp</dimen>
     <dimen name="growth_chart_height">170dp</dimen>
-    <dimen name="weight_graph_btn_padding">10dp</dimen>
+    <dimen name="weight_graph_btn_padding">0dp</dimen>
     <dimen name="date_picker_height">160dp</dimen>
     <dimen name="scroll_btn_dimen">20dp</dimen>
-    <dimen name="weight_table_column_min_width">70dp</dimen>
+    <dimen name="weight_table_column_min_width">80dp</dimen>
+    <dimen name="done_btn_layout_margin">10dp</dimen>
 </resources>
