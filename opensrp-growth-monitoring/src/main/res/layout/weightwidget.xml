@@ -33,7 +33,7 @@
         android:id="@+id/weightvalues"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="150dp"
+        android:layout_marginRight="50dp"
         android:orientation="vertical"></LinearLayout>
 
 </LinearLayout>
