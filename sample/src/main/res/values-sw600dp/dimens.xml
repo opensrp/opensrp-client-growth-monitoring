@@ -8,4 +8,6 @@
     <dimen name="weight_graph_btn_padding">20dp</dimen>
     <dimen name="date_picker_height">180dp</dimen>
     <dimen name="scroll_btn_dimen">35dp</dimen>
+
+    <item name="btn_layout_weight" format="integer" type="dimen">1</item>
 </resources>
