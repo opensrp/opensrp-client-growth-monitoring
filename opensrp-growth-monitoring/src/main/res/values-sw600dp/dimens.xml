@@ -13,4 +13,6 @@
     <dimen name="done_btn_layout_margin">20dp</dimen>
     <dimen name="weight_table_contents_text_size">18sp</dimen>
     <dimen name="table_contents_text_height">30dp</dimen>
+
+    <item name="btn_layout_weight" format="integer" type="dimen">2</item>
 </resources>
