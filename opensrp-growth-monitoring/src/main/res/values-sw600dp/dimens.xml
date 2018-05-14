@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="record_weight_tv_text_size">30sp</dimen>
+    <dimen name="record_weight_btn_text_size">22sp</dimen>
+    <dimen name="child_details_tv_text_size">22sp</dimen>
+    <dimen name="child_name_tv_text_size">26sp</dimen>
+    <dimen name="growth_chart_height">300dp</dimen>
+    <dimen name="weight_graph_btn_padding">20dp</dimen>
+    <dimen name="date_picker_height">180dp</dimen>
+    <dimen name="scroll_btn_dimen">35dp</dimen>
+    <dimen name="weight_table_height">150dp</dimen>
+    <dimen name="weight_table_column_min_width">150dp</dimen>
+    <dimen name="done_btn_layout_margin">20dp</dimen>
+    <dimen name="weight_table_contents_text_size">18sp</dimen>
+    <dimen name="table_contents_text_height">30dp</dimen>
+
+    <item name="btn_layout_weight" format="integer" type="dimen">2</item>
+</resources>

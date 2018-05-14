@@ -51,7 +51,7 @@
                         android:layout_marginBottom="5dp"
                         android:text="Child Name"
                         android:textColor="@color/black"
-                        android:textSize="26sp"
+                        android:textSize="@dimen/child_name_tv_text_size"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -67,7 +67,7 @@
                             android:layout_height="wrap_content"
                             android:text="EIR"
                             android:textColor="@color/client_list_grey"
-                            android:textSize="22sp" />
+                            android:textSize="@dimen/child_details_tv_text_size" />
 
                         <org.smartregister.view.customcontrols.CustomFontTextView
                             android:id="@+id/child_age"
@@ -77,7 +77,7 @@
                             android:layout_marginLeft="20dp"
                             android:text="Age"
                             android:textColor="@color/client_list_grey"
-                            android:textSize="22sp" />
+                            android:textSize="@dimen/child_details_tv_text_size" />
                     </LinearLayout>
 
                     <org.smartregister.view.customcontrols.CustomFontTextView
@@ -87,7 +87,7 @@
                         android:layout_height="wrap_content"
                         android:text="pmtct_status"
                         android:textColor="@color/client_list_grey"
-                        android:textSize="22sp" />
+                        android:textSize="@dimen/child_details_tv_text_size" />
 
                 </LinearLayout>
 
@@ -111,13 +111,13 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/black"
-                android:textSize="22sp"
+                android:textSize="@dimen/record_weight_tv_text_size"
                 android:textStyle="bold" />
 
             <lecho.lib.hellocharts.view.LineChartView
                 android:id="@+id/growth_chart"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="@dimen/growth_chart_height"
                 android:layout_margin="10dp" />
 
             <View
@@ -159,12 +159,12 @@
                                 android:layout_marginTop="10dp"
                                 android:text="@string/previous_weights"
                                 android:textColor="@color/black"
-                                android:textSize="22sp" />
+                                android:textSize="@dimen/record_weight_tv_text_size" />
 
                             <ImageButton
                                 android:id="@+id/scroll_button"
-                                android:layout_width="35dp"
-                                android:layout_height="35dp"
+                                android:layout_width="@dimen/scroll_btn_dimen"
+                                android:layout_height="@dimen/scroll_btn_dimen"
                                 android:scaleType="centerInside"
                                 android:padding="5dp"
                                 android:visibility="gone"
@@ -192,43 +192,43 @@
                                 <org.smartregister.view.customcontrols.CustomFontTextView
                                     style="@style/CustomFontTextViewStyle.ClientList.Medium"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="@dimen/table_contents_text_height"
+                                    android:layout_height="wrap_content"
                                     android:layout_marginLeft="0dp"
                                     android:layout_marginRight="10dp"
                                     android:gravity="left|center_vertical"
-                                    android:minWidth="100dp"
+                                    android:minWidth="@dimen/weight_table_column_min_width"
                                     android:paddingLeft="0dp"
                                     android:text="Age"
                                     android:textColor="@color/client_list_grey"
-                                    android:textSize="22sp"
+                                    android:textSize="@dimen/record_weight_tv_text_size"
                                     android:textStyle="bold" />
 
                                 <org.smartregister.view.customcontrols.CustomFontTextView
                                     style="@style/CustomFontTextViewStyle.ClientList.Medium"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="@dimen/table_contents_text_height"
+                                    android:layout_height="wrap_content"
                                     android:layout_marginLeft="0dp"
                                     android:layout_marginRight="10dp"
                                     android:gravity="left|center_vertical"
-                                    android:minWidth="100dp"
+                                    android:minWidth="@dimen/weight_table_column_min_width"
                                     android:paddingLeft="0dp"
                                     android:text="Weight"
                                     android:textColor="@color/client_list_grey"
-                                    android:textSize="22sp"
+                                    android:textSize="@dimen/record_weight_tv_text_size"
                                     android:textStyle="bold" />
 
                                 <org.smartregister.view.customcontrols.CustomFontTextView
                                     style="@style/CustomFontTextViewStyle.ClientList.Medium"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="@dimen/table_contents_text_height"
+                                    android:layout_height="wrap_content"
                                     android:layout_marginLeft="0dp"
                                     android:layout_marginRight="10dp"
                                     android:gravity="left|center_vertical"
-                                    android:minWidth="100dp"
+                                    android:minWidth="@dimen/weight_table_column_min_width"
                                     android:paddingLeft="0dp"
                                     android:text="Z-score"
                                     android:textColor="@color/client_list_grey"
-                                    android:textSize="22sp"
+                                    android:textSize="@dimen/record_weight_tv_text_size"
                                     android:textStyle="bold" />
                             </TableRow>
                         </TableLayout>
@@ -247,16 +247,16 @@
                 android:id="@+id/done"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:layout_margin="20dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/done_btn_layout_margin"
                 android:background="@drawable/record_weight_earlier_bg"
-                android:paddingBottom="20dp"
-                android:paddingTop="20dp"
+                android:paddingBottom="@dimen/weight_graph_btn_padding"
+                android:paddingTop="@dimen/weight_graph_btn_padding"
                 android:text="Done"
                 android:textAllCaps="false"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/client_list_grey"
-                android:textSize="22sp" />
+                android:textSize="@dimen/record_weight_btn_text_size" />
 
         </LinearLayout>
     </FrameLayout>

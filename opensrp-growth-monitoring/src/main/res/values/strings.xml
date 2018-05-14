@@ -15,5 +15,6 @@
     <string name="kg">Kg</string>
     <string name="girls">Girls</string>
     <string name="boys">Boys</string>
+    <string name="btn_layout_weight">2</string>
 
 </resources>
