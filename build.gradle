@@ -67,7 +67,7 @@ apply plugin : 'build-dashboard'
 apply plugin: 'io.codearte.nexus-staging'
 
 buildDashboard {
-    reports.html.destination = "build/"
+    reports.html.setDestination(file("build/"))
 }
 
 test.reports.html.enabled = false
