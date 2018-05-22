@@ -28,7 +28,7 @@ android {
 
     defaultConfig {
         minSdkVersion 18
-        targetSdkVersion 21
+        targetSdkVersion 27
         versionCode Integer.parseInt(project.VERSION_CODE)
         versionName project.VERSION_NAME
         multiDexEnabled true
