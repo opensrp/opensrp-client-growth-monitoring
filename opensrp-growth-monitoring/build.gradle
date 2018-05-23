@@ -43,6 +43,7 @@ android {
 
         debug {
             buildConfigField "int", "WEIGHT_SYNC_TIME", '0'
+            testCoverageEnabled true
         }
     }
 
