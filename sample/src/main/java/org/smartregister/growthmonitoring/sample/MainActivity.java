@@ -1,5 +1,6 @@
 package org.smartregister.growthmonitoring.sample;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +23,7 @@ import org.smartregister.growthmonitoring.fragment.GrowthDialogFragment;
 import org.smartregister.growthmonitoring.listener.WeightActionListener;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.sample.util.SampleUtil;
+import org.smartregister.growthmonitoring.service.intent.WeightIntentService;
 import org.smartregister.growthmonitoring.util.WeightUtils;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.util.DateUtil;
@@ -83,6 +85,13 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
         });
 
         refreshEditWeightLayout();
+
+        startServices();
+    }
+
+    public void startServices() {
+        Intent vaccineIntent = new Intent(this, WeightIntentService.class);
+        startService(vaccineIntent);
     }
 
     private class ShowGrowthChartTask extends AsyncTask<Void, Void, List<Weight>> {
@@ -134,6 +143,9 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
             weight.setDate(tag.getUpdatedWeightDate().toDate());
             weight.setAnmId("sample");
             weight.setLocationId("Kenya");
+            weight.setTeam("testTeam");
+            weight.setTeamId("testTeamId");
+            weight.setChildLocationId("testChildLocationId");
 
             Gender gender = Gender.UNKNOWN;
 

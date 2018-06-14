@@ -68,6 +68,9 @@ public class SampleRepository extends Repository {
                 case 3:
                     upgradeToVersion3(db);
                     break;
+                case 4:
+                    upgradeToVersion4(db);
+                    break;
                 default:
                     break;
             }
@@ -97,6 +100,15 @@ public class SampleRepository extends Repository {
 
     }
 
+    private void upgradeToVersion4(SQLiteDatabase db) {
+        try {
+            db.execSQL(WeightRepository.UPDATE_TABLE_ADD_TEAM_COL);
+            db.execSQL(WeightRepository.UPDATE_TABLE_ADD_TEAM_ID_COL);
+            db.execSQL(WeightRepository.UPDATE_TABLE_ADD_CHILD_LOCATION_ID_COL);
+        } catch (Exception e) {
+            Log.e(TAG, "upgradeToVersion4 " + Log.getStackTraceString(e));
+        }
+    }
 
     @Override
     public SQLiteDatabase getReadableDatabase() {
