@@ -17,6 +17,9 @@ public class Weight {
     private Date date;
     private String anmId;
     private String locationId;
+    private String childLocationId;
+    private String team;
+    private String teamId;
     private String syncStatus;
     private Integer outOfCatchment;
     private Long updatedAt;
@@ -179,5 +182,29 @@ public class Weight {
 
     public Date getCreatedAt() {
         return createdAt;
+    }
+
+    public String getChildLocationId() {
+        return childLocationId;
+    }
+
+    public void setChildLocationId(String childLocationId) {
+        this.childLocationId = childLocationId;
+    }
+
+    public String getTeam() {
+        return team;
+    }
+
+    public void setTeam(String team) {
+        this.team = team;
+    }
+
+    public String getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
     }
 }

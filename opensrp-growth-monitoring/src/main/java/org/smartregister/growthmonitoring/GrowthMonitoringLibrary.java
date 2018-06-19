@@ -17,12 +17,15 @@ public class GrowthMonitoringLibrary {
     private WeightRepository weightRepository;
     private ZScoreRepository zScoreRepository;
     private EventClientRepository eventClientRepository;
+    private int applicationVersion;
+    private int databaseVersion;
+
 
     private static GrowthMonitoringLibrary instance;
 
-    public static void init(Context context, Repository repository) {
+    public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion) {
         if (instance == null) {
-            instance = new GrowthMonitoringLibrary(context, repository);
+            instance = new GrowthMonitoringLibrary(context, repository, applicationVersion, databaseVersion);
         }
     }
 
@@ -33,9 +36,11 @@ public class GrowthMonitoringLibrary {
         return instance;
     }
 
-    private GrowthMonitoringLibrary(Context context, Repository repository) {
+    private GrowthMonitoringLibrary(Context context, Repository repository, int applicationVersion, int databaseVersion) {
         this.repository = repository;
         this.context = context;
+        this.applicationVersion = applicationVersion;
+        this.databaseVersion = databaseVersion;
     }
 
     public Repository getRepository() {
@@ -70,4 +75,11 @@ public class GrowthMonitoringLibrary {
         return context;
     }
 
+    public int getApplicationVersion() {
+        return applicationVersion;
+    }
+
+    public int getDatabaseVersion() {
+        return databaseVersion;
+    }
 }

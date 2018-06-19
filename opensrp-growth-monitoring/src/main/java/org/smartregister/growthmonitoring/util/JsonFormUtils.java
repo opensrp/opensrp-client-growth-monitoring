@@ -32,6 +32,12 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                     .withFormSubmissionId(weight.getFormSubmissionId() == null ? generateRandomUUIDString() : weight.getFormSubmissionId())
                     .withDateCreated(new Date());
 
+            event.setTeam(weight.getTeam());
+            event.setTeamId(weight.getTeamId());
+            event.setChildLocationId(weight.getChildLocationId());
+
+            event.setClientApplicationVersion(GrowthMonitoringLibrary.getInstance().getApplicationVersion());
+            event.setClientDatabaseVersion(GrowthMonitoringLibrary.getInstance().getDatabaseVersion());
 
             if (fields != null && fields.length() != 0)
                 for (int i = 0; i < fields.length(); i++) {

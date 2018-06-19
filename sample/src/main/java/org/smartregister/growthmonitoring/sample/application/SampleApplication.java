@@ -5,6 +5,7 @@ import android.content.Intent;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
+import org.smartregister.growthmonitoring.sample.BuildConfig;
 import org.smartregister.growthmonitoring.sample.repository.SampleRepository;
 import org.smartregister.growthmonitoring.service.intent.ZScoreRefreshIntentService;
 import org.smartregister.repository.Repository;
@@ -29,7 +30,7 @@ public class SampleApplication extends DrishtiApplication {
 
         //Initialize Modules
         CoreLibrary.init(context);
-        GrowthMonitoringLibrary.init(context, getRepository());
+        GrowthMonitoringLibrary.init(context, getRepository(), BuildConfig.VERSION_CODE, BuildConfig.DATABASE_VERSION);
 
         startZscoreRefreshService();
 

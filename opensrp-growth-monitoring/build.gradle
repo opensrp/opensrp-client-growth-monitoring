@@ -86,7 +86,7 @@ allprojects {
 }
 
 dependencies {
-    implementation('org.smartregister:opensrp-client-core:1.3.2-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-core:1.3.5-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
     }

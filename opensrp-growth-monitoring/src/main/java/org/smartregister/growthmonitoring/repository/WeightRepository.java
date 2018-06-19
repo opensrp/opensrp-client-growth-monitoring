@@ -35,15 +35,19 @@ public class WeightRepository extends BaseRepository {
     public static final String DATE = "date";
     public static final String ANMID = "anmid";
     public static final String LOCATIONID = "location_id";
+    public static final String CHILD_LOCATION_ID = "child_location_id";
     public static final String SYNC_STATUS = "sync_status";
     public static final String UPDATED_AT_COLUMN = "updated_at";
     public static final String Z_SCORE = "z_score";
     public static final double DEFAULT_Z_SCORE = 999999d;
     public static final String CREATED_AT = "created_at";
+    public static final String TEAM_ID = "team_id";
+    public static final String TEAM = "team";
+
 
     public static final String[] WEIGHT_TABLE_COLUMNS = {
-            ID_COLUMN, BASE_ENTITY_ID, PROGRAM_CLIENT_ID, KG, DATE, ANMID, LOCATIONID, SYNC_STATUS,
-            UPDATED_AT_COLUMN, EVENT_ID, FORMSUBMISSION_ID, Z_SCORE, OUT_OF_AREA, CREATED_AT};
+            ID_COLUMN, BASE_ENTITY_ID, PROGRAM_CLIENT_ID, KG, DATE, ANMID, LOCATIONID, CHILD_LOCATION_ID, TEAM, TEAM_ID,
+            SYNC_STATUS, UPDATED_AT_COLUMN, EVENT_ID, FORMSUBMISSION_ID, Z_SCORE, OUT_OF_AREA, CREATED_AT};
 
     private static final String BASE_ENTITY_ID_INDEX = "CREATE INDEX " + WEIGHT_TABLE_NAME + "_" + BASE_ENTITY_ID + "_index ON " + WEIGHT_TABLE_NAME + "(" + BASE_ENTITY_ID + " COLLATE NOCASE);";
     private static final String SYNC_STATUS_INDEX = "CREATE INDEX " + WEIGHT_TABLE_NAME + "_" + SYNC_STATUS + "_index ON " + WEIGHT_TABLE_NAME + "(" + SYNC_STATUS + " COLLATE NOCASE);";
@@ -57,6 +61,11 @@ public class WeightRepository extends BaseRepository {
 
     public static final String ALTER_ADD_Z_SCORE_COLUMN = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + Z_SCORE + " REAL NOT NULL DEFAULT " + String.valueOf(DEFAULT_Z_SCORE);
     public static final String ALTER_ADD_CREATED_AT_COLUMN = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + CREATED_AT + " DATETIME NULL ";
+
+    public static final String UPDATE_TABLE_ADD_TEAM_COL = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + TEAM + " VARCHAR;";
+    public static final String UPDATE_TABLE_ADD_TEAM_ID_COL = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + TEAM_ID + " VARCHAR;";
+
+    public static final String UPDATE_TABLE_ADD_CHILD_LOCATION_ID_COL = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + CHILD_LOCATION_ID + " VARCHAR;";
 
 
     public WeightRepository(Repository repository) {
@@ -344,23 +353,26 @@ public class WeightRepository extends BaseRepository {
                         }
                     }
 
-                    weights.add(
-                            new Weight(cursor.getLong(cursor.getColumnIndex(ID_COLUMN)),
-                                    cursor.getString(cursor.getColumnIndex(BASE_ENTITY_ID)),
-                                    cursor.getString(cursor.getColumnIndex(PROGRAM_CLIENT_ID)),
-                                    cursor.getFloat(cursor.getColumnIndex(KG)),
-                                    new Date(cursor.getLong(cursor.getColumnIndex(DATE))),
-                                    cursor.getString(cursor.getColumnIndex(ANMID)),
-                                    cursor.getString(cursor.getColumnIndex(LOCATIONID)),
-                                    cursor.getString(cursor.getColumnIndex(SYNC_STATUS)),
-                                    cursor.getLong(cursor.getColumnIndex(UPDATED_AT_COLUMN)),
-                                    cursor.getString(cursor.getColumnIndex(EVENT_ID)),
-                                    cursor.getString(cursor.getColumnIndex(FORMSUBMISSION_ID)),
-                                    zScore,
-                                    cursor.getInt(cursor.getColumnIndex(OUT_OF_AREA)),
-                                    createdAt
+                    Weight weight = new Weight(cursor.getLong(cursor.getColumnIndex(ID_COLUMN)),
+                            cursor.getString(cursor.getColumnIndex(BASE_ENTITY_ID)),
+                            cursor.getString(cursor.getColumnIndex(PROGRAM_CLIENT_ID)),
+                            cursor.getFloat(cursor.getColumnIndex(KG)),
+                            new Date(cursor.getLong(cursor.getColumnIndex(DATE))),
+                            cursor.getString(cursor.getColumnIndex(ANMID)),
+                            cursor.getString(cursor.getColumnIndex(LOCATIONID)),
+                            cursor.getString(cursor.getColumnIndex(SYNC_STATUS)),
+                            cursor.getLong(cursor.getColumnIndex(UPDATED_AT_COLUMN)),
+                            cursor.getString(cursor.getColumnIndex(EVENT_ID)),
+                            cursor.getString(cursor.getColumnIndex(FORMSUBMISSION_ID)),
+                            zScore,
+                            cursor.getInt(cursor.getColumnIndex(OUT_OF_AREA)),
+                            createdAt);
 
-                            ));
+                    weight.setTeam(cursor.getString(cursor.getColumnIndex(TEAM)));
+                    weight.setTeamId(cursor.getString(cursor.getColumnIndex(TEAM_ID)));
+                    weight.setChildLocationId(cursor.getString(cursor.getColumnIndex(CHILD_LOCATION_ID)));
+
+                    weights.add(weight);
 
                     cursor.moveToNext();
                 }
@@ -386,6 +398,9 @@ public class WeightRepository extends BaseRepository {
         values.put(DATE, weight.getDate() != null ? weight.getDate().getTime() : null);
         values.put(ANMID, weight.getAnmId());
         values.put(LOCATIONID, weight.getLocationId());
+        values.put(CHILD_LOCATION_ID, weight.getChildLocationId());
+        values.put(TEAM, weight.getTeam());
+        values.put(TEAM_ID, weight.getTeamId());
         values.put(SYNC_STATUS, weight.getSyncStatus());
         values.put(UPDATED_AT_COLUMN, weight.getUpdatedAt() != null ? weight.getUpdatedAt() : null);
         values.put(EVENT_ID, weight.getEventId() != null ? weight.getEventId() : null);
