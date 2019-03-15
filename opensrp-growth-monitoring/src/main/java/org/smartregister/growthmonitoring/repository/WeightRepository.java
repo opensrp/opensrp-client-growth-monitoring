@@ -103,7 +103,7 @@ public class WeightRepository extends BaseRepository {
             AllSharedPreferences allSharedPreferences = GrowthMonitoringLibrary.getInstance().context().allSharedPreferences();
             String providerId = allSharedPreferences.fetchRegisteredANM();
             weight.setTeam(allSharedPreferences.fetchDefaultTeam(providerId));
-            weight.setTeam(allSharedPreferences.fetchDefaultTeamId(providerId));
+            weight.setTeamId(allSharedPreferences.fetchDefaultTeamId(providerId));
             weight.setLocationId(allSharedPreferences.fetchDefaultLocalityId(providerId));
             weight.setChildLocationId(LocationHelper.getInstance().getChildLocationId());
 
