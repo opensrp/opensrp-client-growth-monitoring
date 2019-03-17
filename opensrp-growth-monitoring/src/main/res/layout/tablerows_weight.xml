@@ -51,7 +51,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
                     android:background="@drawable/undo_weight_background"
-                    android:text="Edit"
+                    android:text="@string/edit"
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
                     android:visibility="invisible" />

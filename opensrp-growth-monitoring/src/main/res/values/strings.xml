@@ -17,4 +17,7 @@
     <string name="boys">Boys</string>
     <string name="btn_layout_weight">2</string>
 
+    <string name="Last_five_weights">Last 5 weights</string>
+    <string name="see_all">See All</string>
+
 </resources>
