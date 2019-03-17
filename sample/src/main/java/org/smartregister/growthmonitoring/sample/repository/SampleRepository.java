@@ -34,9 +34,7 @@ public class SampleRepository extends Repository {
     public void onCreate(SQLiteDatabase database) {
         super.onCreate(database);
         EventClientRepository.createTable(database, EventClientRepository.Table.client, EventClientRepository.client_column.values());
-        EventClientRepository.createTable(database, EventClientRepository.Table.address, EventClientRepository.address_column.values());
         EventClientRepository.createTable(database, EventClientRepository.Table.event, EventClientRepository.event_column.values());
-        EventClientRepository.createTable(database, EventClientRepository.Table.obs, EventClientRepository.obs_column.values());
 
         WeightRepository.createTable(database);
         database.execSQL(WeightRepository.UPDATE_TABLE_ADD_EVENT_ID_COL);
@@ -46,8 +44,6 @@ public class SampleRepository extends Repository {
 
         database.execSQL(WeightRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL);
         database.execSQL(WeightRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL_INDEX);
-
-        EventClientRepository.createTable(database, EventClientRepository.Table.path_reports, EventClientRepository.report_column.values());
 
         onUpgrade(database, 1, BuildConfig.DATABASE_VERSION);
 
