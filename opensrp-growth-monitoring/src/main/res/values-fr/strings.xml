@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="Last_five_weights">5 DERNIERS POID</string>
+    <string name="see_all">voir tout</string>
+    <string name="edit">modifier</string>
+
     <string name="app_name">opensrp-growth-monitoring</string>
     <string name="action_settings">Paramètres</string>
     <string name="label_zeir">ZEIR</string>
@@ -17,5 +22,6 @@
     <string name="girls">Filles</string>
     <string name="boys">Garçons</string>
     <string name="btn_layout_weight">2</string>
+
 
 </resources>
