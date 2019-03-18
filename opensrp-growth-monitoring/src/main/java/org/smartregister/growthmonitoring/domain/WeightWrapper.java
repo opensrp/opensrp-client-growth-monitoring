@@ -20,6 +20,7 @@ public class WeightWrapper implements Serializable {
     private Float weight;
     private DateTime updatedWeightDate;
     private boolean today;
+    private String dob;
 
     public String getId() {
         return id;
@@ -109,5 +110,14 @@ public class WeightWrapper implements Serializable {
     public void setGender(String gender) {
         this.gender = gender;
     }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
 
 }

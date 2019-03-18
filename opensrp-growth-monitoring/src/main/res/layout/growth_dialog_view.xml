@@ -198,7 +198,7 @@
                                     android:gravity="left|center_vertical"
                                     android:minWidth="@dimen/weight_table_column_min_width"
                                     android:paddingLeft="0dp"
-                                    android:text="Age"
+                                    android:text="@string/age"
                                     android:textColor="@color/client_list_grey"
                                     android:textSize="@dimen/record_weight_tv_text_size"
                                     android:textStyle="bold" />
@@ -212,7 +212,7 @@
                                     android:gravity="left|center_vertical"
                                     android:minWidth="@dimen/weight_table_column_min_width"
                                     android:paddingLeft="0dp"
-                                    android:text="Weight"
+                                    android:text="@string/weight"
                                     android:textColor="@color/client_list_grey"
                                     android:textSize="@dimen/record_weight_tv_text_size"
                                     android:textStyle="bold" />
@@ -226,7 +226,7 @@
                                     android:gravity="left|center_vertical"
                                     android:minWidth="@dimen/weight_table_column_min_width"
                                     android:paddingLeft="0dp"
-                                    android:text="Z-score"
+                                    android:text="@string/z_score"
                                     android:textColor="@color/client_list_grey"
                                     android:textSize="@dimen/record_weight_tv_text_size"
                                     android:textStyle="bold" />
@@ -252,7 +252,7 @@
                 android:background="@drawable/record_weight_earlier_bg"
                 android:paddingBottom="@dimen/weight_graph_btn_padding"
                 android:paddingTop="@dimen/weight_graph_btn_padding"
-                android:text="Done"
+                android:text="@string/done"
                 android:textAllCaps="false"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/client_list_grey"
