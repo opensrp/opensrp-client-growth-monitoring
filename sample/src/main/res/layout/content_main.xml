@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="org.smartregister.growthmonitoring.sample.MainActivity"
@@ -29,8 +29,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
             android:paddingTop="10dp">
 
             <org.smartregister.view.customcontrols.CustomFontTextView
@@ -76,7 +76,7 @@
                     android:id="@+id/growth_chart_button"
                     android:layout_width="0dp"
                     android:layout_height="70dp"
-                    android:layout_marginLeft="@dimen/card_category_horizontal_margin"
+                    android:layout_marginStart="@dimen/card_category_horizontal_margin"
                     android:layout_weight="0.5"
                     android:background="@null"
                     android:src="@drawable/ic_icon_growth_chart" />
@@ -103,8 +103,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
             android:paddingTop="10dp">
 
             <include
