@@ -7,7 +7,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -25,7 +24,6 @@ import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.sample.util.SampleUtil;
 import org.smartregister.growthmonitoring.service.intent.WeightIntentService;
 import org.smartregister.growthmonitoring.util.WeightUtils;
-import org.smartregister.repository.EventClientRepository;
 import org.smartregister.util.DateUtil;
 import org.smartregister.util.Utils;
 
@@ -105,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
             WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
             List<Weight> allWeights = weightRepository.findByEntityId(SampleUtil.ENTITY_ID);
             try {
-                DateTime dateTime = new DateTime(SampleUtil.DOB_STRING);
+                DateTime dateTime = new DateTime(SampleUtil.getDateOfBirth());
 
                 Weight weight = new Weight(-1l, null, (float) SampleUtil.BIRTH_WEIGHT, dateTime.toDate(), null, null, null, Calendar.getInstance().getTimeInMillis(), null, null, 0);
                 allWeights.add(weight);
@@ -157,11 +155,8 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
                 gender = Gender.MALE;
             }
 
-            Date dob = null;
-            if (!TextUtils.isEmpty(SampleUtil.DOB_STRING)) {
-                DateTime dateTime = new DateTime(SampleUtil.DOB_STRING);
-                dob = dateTime.toDate();
-            }
+            Date dob = SampleUtil.getDateOfBirth();
+
 
             if (dob != null && gender != Gender.UNKNOWN) {
                 weightRepository.add(dob, gender, weight);
@@ -192,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
             if (weight.getDate() != null) {
 
                 Date weighttaken = weight.getDate();
-                DateTime birthday = new DateTime(SampleUtil.DOB_STRING);
+                DateTime birthday = new DateTime(SampleUtil.getDateOfBirth());
                 Date birth = birthday.toDate();
                 long timeDiff = weighttaken.getTime() - birth.getTime();
                 Log.v("timeDiff is ", timeDiff + "");
