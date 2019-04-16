@@ -3,7 +3,6 @@ package org.smartregister.growthmonitoring.sample.util;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,8 @@ import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.Photo;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
@@ -26,7 +27,6 @@ import org.smartregister.growthmonitoring.util.ImageUtils;
 import org.smartregister.util.DateUtil;
 import org.smartregister.util.Utils;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,12 +45,11 @@ public class SampleUtil {
     // Dummpy values, Can be changed manually
     public static final String ENTITY_ID = "1";
     public static final double BIRTH_WEIGHT = 3.8d;
-    public static final String DOB_STRING = "2012-01-01T00:00:00.000Z";
     public static final String GENDER = (new Random()).nextBoolean() ? "male" : "female";
 
     public static void showWeightDialog(Activity context, View view, String tag) {
         WeightWrapper weightWrapper = view.getTag() != null ? (WeightWrapper) view.getTag() : new WeightWrapper();
-        RecordWeightDialogFragment recordWeightDialogFragment = RecordWeightDialogFragment.newInstance(dateOfBirth(), weightWrapper);
+        RecordWeightDialogFragment recordWeightDialogFragment = RecordWeightDialogFragment.newInstance(getDateOfBirth(), weightWrapper);
         recordWeightDialogFragment.show(initFragmentTransaction(context, tag), tag);
     }
 
@@ -90,7 +89,7 @@ public class SampleUtil {
         weightWrapper.setPhoto(photo);
         weightWrapper.setPmtctStatus(getValue(childDetails.getColumnmaps(), "pmtct_status", false));
 
-        EditWeightDialogFragment editWeightDialogFragment = EditWeightDialogFragment.newInstance(context, dateOfBirth(), weightWrapper);
+        EditWeightDialogFragment editWeightDialogFragment = EditWeightDialogFragment.newInstance(context, getDateOfBirth(), weightWrapper);
         editWeightDialogFragment.show(initFragmentTransaction(context, tag), tag);
 
     }
@@ -141,7 +140,7 @@ public class SampleUtil {
         columnMap.put("first_name", "Test");
         columnMap.put("last_name", "Doe");
         columnMap.put("zeir_id", "1");
-        columnMap.put("dob", DOB_STRING);
+        columnMap.put("dob", new SimpleDateFormat(DateUtil.DATE_FORMAT_FOR_TIMELINE_EVENT).format(SampleUtil.getDateOfBirth()));
         columnMap.put("gender", GENDER);
 
 
@@ -151,13 +150,12 @@ public class SampleUtil {
         return personDetails;
     }
 
-    private static Date dateOfBirth() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'");
-        try {
-            return simpleDateFormat.parse(DOB_STRING);
-        } catch (ParseException e) {
-            Log.e(SampleUtil.class.getName(), e.getMessage(), e);
-        }
-        return null;
+
+    public static Date getDateOfBirth() {
+        LocalDate localDate = new LocalDate();
+        //DOB for sample app needs to ba dynamic
+        DateTime dateTime = localDate.minusYears(5).plusMonths(2).toDateTime(LocalTime.now());
+        Date dob = dateTime.toDate();
+        return dob;
     }
 }

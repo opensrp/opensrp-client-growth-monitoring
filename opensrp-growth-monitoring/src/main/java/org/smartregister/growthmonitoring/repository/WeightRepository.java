@@ -8,8 +8,11 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.apache.commons.lang3.StringUtils;
 import org.opensrp.api.constants.Gender;
+import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.domain.ZScore;
+import org.smartregister.location.helper.LocationHelper;
+import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Repository;
@@ -96,6 +99,15 @@ public class WeightRepository extends BaseRepository {
             if (weight == null) {
                 return;
             }
+
+            AllSharedPreferences allSharedPreferences = GrowthMonitoringLibrary.getInstance().context().allSharedPreferences();
+            String providerId = allSharedPreferences.fetchRegisteredANM();
+            weight.setTeam(allSharedPreferences.fetchDefaultTeam(providerId));
+            weight.setTeamId(allSharedPreferences.fetchDefaultTeamId(providerId));
+            weight.setLocationId(allSharedPreferences.fetchDefaultLocalityId(providerId));
+            weight.setChildLocationId(LocationHelper.getInstance().getChildLocationId());
+
+
             if (StringUtils.isBlank(weight.getSyncStatus())) {
                 weight.setSyncStatus(TYPE_Unsynced);
             }

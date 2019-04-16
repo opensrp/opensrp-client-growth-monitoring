@@ -1,11 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="Last_five_weights">5 DERNIERS POID</string>
+    <string name="see_all">voir tout</string>
+    <string name="edit">modifier</string>
+
     <string name="app_name">opensrp-growth-monitoring</string>
     <string name="action_settings">Settings</string>
-    <string name="label_zeir">ZEIR</string>
+    <string name="label_zeir">ID</string>
     <string name="age">Age</string>
 
     <string name="edit_weight_data">Edit weight data</string>
-    <string name="record_weight_with_nl">Record\nweight</string>
+    <string name="record_weight_with_nl">Record\nweigh</string>
     <string name="record_weight">Record weight</string>
     <string name="record_weight_notification">"Don't forget to record child's weight"</string>
     <string name="weight_for_age">Weight-for-age %1$s</string>
@@ -16,5 +22,21 @@
     <string name="girls">Girls</string>
     <string name="boys">Boys</string>
     <string name="btn_layout_weight">2</string>
+
+    <string name="weight">Weight</string>
+    <string name="done">Complete</string>
+    <string name="z_score"> Z-score</string>
+
+
+    <string name="delete_weight">Delete weight</string>
+    <string name="change_date_weighed">Change date weighed</string>
+    <string name="cancel">Cancel</string>
+    <string name="set">Set</string>
+    <string name="service_date">Service date</string>
+    <string name="edit_weight">Edit Weight</string>
+    <string name="weight_taken_today">Weight taken today</string>
+    <string name="weight_taken_earlier">Weight taken earlier</string>
+    <string name="catchment_area">Catchment area</string>
+
 
 </resources>

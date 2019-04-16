@@ -14,7 +14,7 @@
             style="@style/CustomFontTextViewStyle.ClientList.NoPadding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="LAST 5 WEIGHTS"
+            android:text="@string/Last_five_weights"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/text_black" />
 
@@ -22,8 +22,8 @@
             android:id="@+id/see_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="See All"
+            android:layout_marginStart="10dp"
+            android:text="@string/see_all"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#0A84D9"
             android:visibility="gone" />
@@ -33,7 +33,7 @@
         android:id="@+id/weightvalues"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="50dp"
+        android:layout_marginEnd="50dp"
         android:orientation="vertical"></LinearLayout>
 
 </LinearLayout>

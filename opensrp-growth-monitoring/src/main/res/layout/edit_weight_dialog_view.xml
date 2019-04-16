@@ -39,7 +39,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
 
@@ -75,8 +75,8 @@
                             style="@style/CustomFontTextViewStyle.ClientList.Light"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:text="Age"
+                            android:layout_marginStart="20dp"
+                            android:text="@string/age"
                             android:textColor="@color/client_list_grey"
                             android:textSize="22sp" />
                     </LinearLayout>
@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="23dp"
-                android:text="Edit Weight"
+                android:text="@string/edit_weight"
                 android:textColor="@color/text_black"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -116,8 +116,8 @@
                 android:layout_height="match_parent"
                 android:layout_margin="20dp"
                 android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:paddingTop="20dp">
 
                 <EditText
@@ -142,7 +142,7 @@
                 style="@style/CustomFontTextViewStyle.ClientList.Light"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="service date"
+                android:text="@string/service_date"
                 android:textColor="@color/client_list_grey"
                 android:textSize="22sp"
                 android:gravity="center" />
@@ -153,15 +153,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/record_weight_earlier_bg"
-                android:text="Change date weighed"
+                android:text="@string/change_date_weighed"
                 android:textAllCaps="false"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/client_list_grey"
                 android:textSize="22sp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp" />
 
@@ -181,13 +181,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/record_weight_earlier_bg"
-                android:text="Delete weight"
+                android:text="@string/delete_weight"
                 android:textAllCaps="false"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/client_list_grey"
                 android:textSize="22sp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
                 android:paddingTop="20dp"
@@ -208,7 +208,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Cancel"
+                    android:text="@string/cancel"
                     android:textAllCaps="false"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/client_list_grey"
@@ -220,7 +220,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Set"
+                    android:text="@string/set"
                     android:textAllCaps="false"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/client_list_grey"

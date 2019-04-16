@@ -1,5 +1,7 @@
 package org.smartregister.growthmonitoring.domain;
 
+import android.util.Log;
+
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.R;
@@ -88,24 +90,29 @@ public class ZScore {
     }
 
     public static Double calculate(Gender gender, Date dateOfBirth, Date weighingDate, double weight) {
-        if (dateOfBirth != null && gender != null && weighingDate != null) {
-            int ageInMonths = (int) Math.round(getAgeInMonths(dateOfBirth, weighingDate));
-            List<ZScore> zScores = GrowthMonitoringLibrary.getInstance().zScoreRepository().findByGender(gender);
+        try {
+            if (dateOfBirth != null && gender != null && weighingDate != null) {
+                int ageInMonths = (int) Math.round(getAgeInMonths(dateOfBirth, weighingDate));
+                List<ZScore> zScores = GrowthMonitoringLibrary.getInstance().zScoreRepository().findByGender(gender);
 
-            ZScore zScoreToUse = null;
-            for (ZScore curZScore : zScores) {
-                if (curZScore.month == ageInMonths) {
-                    zScoreToUse = curZScore;
-                    break;
+                ZScore zScoreToUse = null;
+                for (ZScore curZScore : zScores) {
+                    if (curZScore.month == ageInMonths) {
+                        zScoreToUse = curZScore;
+                        break;
+                    }
+                }
+
+                if (zScoreToUse != null) {
+                    return new Double(zScoreToUse.getZ(weight));
                 }
             }
 
-            if (zScoreToUse != null) {
-                return new Double(zScoreToUse.getZ(weight));
-            }
+            return 0.0;
+        } catch (Exception e) {
+            Log.e(ZScore.class.getCanonicalName(), e.getMessage());
+            return null;
         }
-
-        return null;
     }
 
     /**

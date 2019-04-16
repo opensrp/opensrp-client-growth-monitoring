@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="2"
-                android:text="Catchment area"
+                android:text="@string/catchment_area"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/dark_grey" />
 
@@ -51,7 +51,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
                     android:background="@drawable/undo_weight_background"
-                    android:text="Edit"
+                    android:text="@string/edit"
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
                     android:visibility="invisible" />
