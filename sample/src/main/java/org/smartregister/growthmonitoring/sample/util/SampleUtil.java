@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -106,7 +107,7 @@ public class SampleUtil {
 
     public static void createWeightWidget(Activity context, View fragmentContainer, HashMap<Long, Pair<String, String>> last_five_weight_map, ArrayList<View.OnClickListener> listeners, ArrayList<Boolean> editenabled) {
 
-        LinearLayout tableLayout = (LinearLayout) fragmentContainer.findViewById(R.id.weightvalues);
+        LinearLayout tableLayout = fragmentContainer.findViewById(R.id.weightvalues);
         tableLayout.removeAllViews();
 
         int i = 0;
@@ -121,9 +122,9 @@ public class SampleUtil {
 
     public static View createTableRowForWeight(Activity context, ViewGroup container, String labelString, String valueString, boolean editenabled, View.OnClickListener listener) {
         View rows = context.getLayoutInflater().inflate(R.layout.tablerows_weight, container, false);
-        TextView label = (TextView) rows.findViewById(R.id.label);
-        TextView value = (TextView) rows.findViewById(R.id.value);
-        Button edit = (Button) rows.findViewById(R.id.edit);
+        TextView label = rows.findViewById(R.id.label);
+        TextView value = rows.findViewById(R.id.value);
+        Button edit = rows.findViewById(R.id.edit);
         if (editenabled) {
             edit.setVisibility(View.VISIBLE);
             edit.setOnClickListener(listener);
@@ -136,11 +137,11 @@ public class SampleUtil {
     }
 
     public static CommonPersonObjectClient dummyDetatils() {
-        HashMap<String, String> columnMap = new HashMap<String, String>();
+        HashMap<String, String> columnMap = new HashMap<>();
         columnMap.put("first_name", "Test");
         columnMap.put("last_name", "Doe");
         columnMap.put("zeir_id", "1");
-        columnMap.put("dob", new SimpleDateFormat(DateUtil.DATE_FORMAT_FOR_TIMELINE_EVENT).format(SampleUtil.getDateOfBirth()));
+        columnMap.put("dob", StringUtils.reverseDelimited(new SimpleDateFormat(DateUtil.DATE_FORMAT_FOR_TIMELINE_EVENT, new Locale("en")).format(SampleUtil.getDateOfBirth()), '-'));
         columnMap.put("gender", GENDER);
 
 

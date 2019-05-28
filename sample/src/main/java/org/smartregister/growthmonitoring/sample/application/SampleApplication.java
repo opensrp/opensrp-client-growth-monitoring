@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
+import org.smartregister.growthmonitoring.GrowthMonitoringConfig;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.sample.BuildConfig;
 import org.smartregister.growthmonitoring.sample.repository.SampleRepository;
@@ -45,8 +46,10 @@ public class SampleApplication extends DrishtiApplication {
         CoreLibrary.init(context);
 
         LocationHelper.init(ALLOWED_LEVELS, DEFAULT_LOCATION_LEVEL);
-        GrowthMonitoringLibrary.init(context, getRepository(), BuildConfig.VERSION_CODE, BuildConfig.DATABASE_VERSION);
 
+        GrowthMonitoringConfig config = new GrowthMonitoringConfig();
+        config.setFemaleZScoreFile("zscores/custom_female_zscore_file.txt");
+        GrowthMonitoringLibrary.init(context, getRepository(), BuildConfig.VERSION_CODE, BuildConfig.DATABASE_VERSION, config);
 
 
         startZscoreRefreshService();

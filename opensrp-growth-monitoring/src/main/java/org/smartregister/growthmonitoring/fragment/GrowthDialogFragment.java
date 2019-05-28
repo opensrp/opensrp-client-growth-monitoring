@@ -123,11 +123,11 @@ public class GrowthDialogFragment extends DialogFragment {
         String firstName = Utils.getValue(personDetails.getColumnmaps(), "first_name", true);
         String lastName = Utils.getValue(personDetails.getColumnmaps(), "last_name", true);
         final ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.growth_dialog_view, container, false);
-        TextView nameView = (TextView) dialogView.findViewById(R.id.child_name);
+        TextView nameView = dialogView.findViewById(R.id.child_name);
         nameView.setText(Utils.getName(firstName, lastName));
 
         String personId = Utils.getValue(personDetails.getColumnmaps(), "zeir_id", false);
-        TextView numberView = (TextView) dialogView.findViewById(R.id.child_zeir_id);
+        TextView numberView = dialogView.findViewById(R.id.child_zeir_id);
         if (StringUtils.isNotBlank(personId)) {
             numberView.setText(String.format("%s: %s", getString(R.string.label_zeir), personId));
         } else {
@@ -136,11 +136,11 @@ public class GrowthDialogFragment extends DialogFragment {
 
         String genderString = Utils.getValue(personDetails, "gender", false);
         String baseEntityId = personDetails.entityId();
-        ImageView profilePic = (ImageView) dialogView.findViewById(R.id.child_profilepic);
+        ImageView profilePic = dialogView.findViewById(R.id.child_profilepic);
         profilePic.setTag(R.id.entity_id, baseEntityId);
         DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(baseEntityId,
                 OpenSRPImageLoader.getStaticImageListener(
-                        (ImageView) profilePic,
+                        profilePic,
                         ImageUtils.profileImageResourceByGender(genderString),
                         ImageUtils.profileImageResourceByGender(genderString)));
 
@@ -156,14 +156,14 @@ public class GrowthDialogFragment extends DialogFragment {
             }
         }
 
-        TextView ageView = (TextView) dialogView.findViewById(R.id.child_age);
+        TextView ageView = dialogView.findViewById(R.id.child_age);
         if (StringUtils.isNotBlank(formattedAge)) {
             ageView.setText(String.format("%s: %s", getString(R.string.age), formattedAge));
         } else {
             ageView.setText("");
         }
 
-        TextView pmtctStatus = (TextView) dialogView.findViewById(R.id.pmtct_status);
+        TextView pmtctStatus = dialogView.findViewById(R.id.pmtct_status);
         String pmtctStatusString = Utils.getValue(personDetails.getColumnmaps(), "pmtct_status", true);
         if (!TextUtils.isEmpty(pmtctStatusString)) {
             pmtctStatus.setText(pmtctStatusString);
@@ -183,7 +183,7 @@ public class GrowthDialogFragment extends DialogFragment {
             genderStringRes = R.string.girls;
         }
 
-        TextView weightForAge = (TextView) dialogView.findViewById(R.id.weight_for_age);
+        TextView weightForAge = dialogView.findViewById(R.id.weight_for_age);
         weightForAge.setText(String.format(getString(R.string.weight_for_age), getString(genderStringRes).toUpperCase()));
 
         Date dob = null;
@@ -195,7 +195,7 @@ public class GrowthDialogFragment extends DialogFragment {
             maxWeighingDate = weighingDates[1];
         }
 
-        Button done = (Button) dialogView.findViewById(R.id.done);
+        Button done = dialogView.findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -203,7 +203,7 @@ public class GrowthDialogFragment extends DialogFragment {
             }
         });
 
-        final ImageButton scrollButton = (ImageButton) dialogView.findViewById(R.id.scroll_button);
+        final ImageButton scrollButton = dialogView.findViewById(R.id.scroll_button);
         scrollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -251,7 +251,7 @@ public class GrowthDialogFragment extends DialogFragment {
             return;
         }
 
-        TableLayout tableLayout = (TableLayout) dialogView.findViewById(R.id.weights_table);
+        TableLayout tableLayout = dialogView.findViewById(R.id.weights_table);
         for (Weight weight : weights) {
             TableRow dividerRow = new TableRow(dialogView.getContext());
             View divider = new View(dialogView.getContext());
@@ -570,7 +570,7 @@ public class GrowthDialogFragment extends DialogFragment {
         calendarDate.set(Calendar.MILLISECOND, 0);
     }
 
-    private void getHeight (final View view, final ViewMeasureListener viewMeasureListener) {
+    private void getHeight(final View view, final ViewMeasureListener viewMeasureListener) {
         if (view == null) {
             if (viewMeasureListener != null) {
                 viewMeasureListener.onCompletedMeasuring(0);

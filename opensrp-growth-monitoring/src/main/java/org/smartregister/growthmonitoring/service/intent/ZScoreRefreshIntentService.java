@@ -41,8 +41,6 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class ZScoreRefreshIntentService extends IntentService {
     private static final String TAG = ZScoreRefreshIntentService.class.getName();
-    private static final String ZSCORE_MALE_FILE = "zscores_male.csv";
-    private static final String ZSCORE_FEMALE_FILE = "zscores_female.csv";
     private static final Map<String, String> CSV_HEADING_SQL_COLUMN_MAP;
 
     static {
@@ -151,9 +149,9 @@ public class ZScoreRefreshIntentService extends IntentService {
                     || existingScores.size() == 0) {
                 String filename = null;
                 if (gender.equals(Gender.FEMALE)) {
-                    filename = ZSCORE_FEMALE_FILE;
+                    filename = GrowthMonitoringLibrary.getInstance().config.getFemaleZScoreFile();
                 } else if (gender.equals(Gender.MALE)) {
-                    filename = ZSCORE_MALE_FILE;
+                    filename = GrowthMonitoringLibrary.getInstance().config.getMaleZScoreFile();
                 }
 
                 if (filename != null) {
