@@ -19,6 +19,7 @@ public class GrowthMonitoringLibrary {
     private EventClientRepository eventClientRepository;
     private int applicationVersion;
     private int databaseVersion;
+    public static GrowthMonitoringConfig config;
 
 
     private static GrowthMonitoringLibrary instance;
@@ -27,6 +28,14 @@ public class GrowthMonitoringLibrary {
         if (instance == null) {
             instance = new GrowthMonitoringLibrary(context, repository, applicationVersion, databaseVersion);
         }
+    }
+
+    public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion, GrowthMonitoringConfig growthMonitoringConfig) {
+
+        init(context, repository, applicationVersion, databaseVersion);
+
+        config = growthMonitoringConfig != null ? growthMonitoringConfig : new GrowthMonitoringConfig();
+
     }
 
     public static GrowthMonitoringLibrary getInstance() {

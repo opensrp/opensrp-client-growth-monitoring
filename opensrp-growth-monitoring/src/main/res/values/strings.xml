@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="Last_five_weights">5 DERNIERS POID</string>
-    <string name="see_all">voir tout</string>
-    <string name="edit">modifier</string>
+    <string name="Last_five_weights">LAST FIVE WEIGHTS</string>
+    <string name="see_all">see all</string>
+    <string name="edit">edit</string>
 
     <string name="app_name">opensrp-growth-monitoring</string>
     <string name="action_settings">Settings</string>

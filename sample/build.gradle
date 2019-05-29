@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:3.1.2"
+        classpath "com.android.tools.build:gradle:$androidToolsBuildGradle"
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2'
     }
 }
@@ -19,13 +19,13 @@ allprojects {
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
 
     defaultConfig {
         applicationId "org.smartregister.growthmonitoring.sample"
-        minSdkVersion 18
-        targetSdkVersion 27
+        minSdkVersion androidMinSdkVersion
+        targetSdkVersion androidTargetSdkVersion
         versionCode 2
         versionName "1.0"
         multiDexEnabled true
@@ -72,7 +72,7 @@ android {
 }
 
 dependencies {
-    implementation('org.smartregister:opensrp-client-core:1.6.26-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-core:1.6.27-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
     }
