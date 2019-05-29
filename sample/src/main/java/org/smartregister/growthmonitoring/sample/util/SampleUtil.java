@@ -55,7 +55,7 @@ public class SampleUtil {
     }
 
     public static void showEditWeightDialog(Activity context, int i, String tag) {
-        CommonPersonObjectClient childDetails = dummyDetatils();
+        CommonPersonObjectClient childDetails = dummydetails();
 
         String firstName = Utils.getValue(childDetails.getColumnmaps(), "first_name", true);
         String lastName = Utils.getValue(childDetails.getColumnmaps(), "last_name", true);
@@ -136,7 +136,7 @@ public class SampleUtil {
         return rows;
     }
 
-    public static CommonPersonObjectClient dummyDetatils() {
+    public static CommonPersonObjectClient dummydetails() {
         HashMap<String, String> columnMap = new HashMap<>();
         columnMap.put("first_name", "Test");
         columnMap.put("last_name", "Doe");

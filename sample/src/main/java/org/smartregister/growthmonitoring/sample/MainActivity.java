@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
             if (allWeights == null || allWeights.isEmpty()) {
                 Toast.makeText(MainActivity.this, "Record atleast one weight", Toast.LENGTH_LONG).show();
             } else {
-                GrowthDialogFragment growthDialogFragment = GrowthDialogFragment.newInstance(SampleUtil.dummyDetatils(), allWeights);
+                GrowthDialogFragment growthDialogFragment = GrowthDialogFragment.newInstance(SampleUtil.dummydetails(), allWeights);
                 growthDialogFragment.show(SampleUtil.initFragmentTransaction(MainActivity.this, DIALOG_TAG), DIALOG_TAG);
             }
         }
