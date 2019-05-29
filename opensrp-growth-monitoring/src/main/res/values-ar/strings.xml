@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="Last_five_weights">الاوزان 5 الاخيرة</string>
+    <string name="see_all">اظهار الكل</string>
+    <string name="edit">تحرير</string>
+
+    <string name="app_name">نظام التسجيل الذكي المفتوح-مراقبة-النمو</string>
+    <string name="action_settings">الإعدادات</string>
+    <string name="label_zeir">رقم الهوية</string>
+    <string name="age">العمر</string>
+
+    <string name="edit_weight_data">تحرير بيانات الوزن</string>
+    <string name="record_weight_with_nl">سجل\n وزن</string>
+    <string name="record_weight"> سجل الوزن</string>
+    <string name="record_weight_notification">لا تنس تسجيل وزن الطفل</string>
+    <string name="weight_for_age">الوزن بالنسبة للعمر 1%1$s</string>
+    <string name="previous_weights">الأوزان السابقة</string>
+
+    <string name="months">الشهور</string>
+    <string name="kg">كلغ</string>
+    <string name="girls">الفتيات</string>
+    <string name="boys">ألاولاد</string>
+    <string name="btn_layout_weight">2</string>
+
+    <string name="weight">الوزن</string>
+    <string name="done">كامل</string>
+    <string name="z_score"> Z-score</string>
+
+
+    <string name="delete_weight">حذف الوزن</string>
+    <string name="change_date_weighed">تغيير تاريخ وزنه</string>
+    <string name="cancel">إلغاء</string>
+    <string name="set">مجموعة</string>
+    <string name="service_date">تاريخ الخدمة</string>
+    <string name="edit_weight">تحرير الوزن</string>
+    <string name="weight_taken_today">الوزن مأخوذ اليوم</string>
+    <string name="weight_taken_earlier">الوزن ماخوذ سابقا</string>
+    <string name="catchment_area">منطقة التغطية</string>
+
+
+</resources>
