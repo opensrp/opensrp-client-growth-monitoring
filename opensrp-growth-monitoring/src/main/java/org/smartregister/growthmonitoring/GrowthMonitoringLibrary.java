@@ -19,9 +19,7 @@ public class GrowthMonitoringLibrary {
     private EventClientRepository eventClientRepository;
     private int applicationVersion;
     private int databaseVersion;
-    public static GrowthMonitoringConfig config;
-
-
+    private static GrowthMonitoringConfig config = new GrowthMonitoringConfig();
     private static GrowthMonitoringLibrary instance;
 
     public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion) {
@@ -34,7 +32,7 @@ public class GrowthMonitoringLibrary {
 
         init(context, repository, applicationVersion, databaseVersion);
 
-        config = growthMonitoringConfig != null ? growthMonitoringConfig : new GrowthMonitoringConfig();
+        config = growthMonitoringConfig != null ? growthMonitoringConfig : config;
 
     }
 
@@ -90,5 +88,9 @@ public class GrowthMonitoringLibrary {
 
     public int getDatabaseVersion() {
         return databaseVersion;
+    }
+
+    public GrowthMonitoringConfig getConfig() {
+        return config;
     }
 }
