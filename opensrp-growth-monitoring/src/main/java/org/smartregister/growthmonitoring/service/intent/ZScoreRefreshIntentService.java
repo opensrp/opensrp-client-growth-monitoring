@@ -149,9 +149,9 @@ public class ZScoreRefreshIntentService extends IntentService {
                     || existingScores.size() == 0) {
                 String filename = null;
                 if (gender.equals(Gender.FEMALE)) {
-                    filename = GrowthMonitoringLibrary.getInstance().config.getFemaleZScoreFile();
+                    filename = GrowthMonitoringLibrary.getInstance().getConfig().getFemaleZScoreFile();
                 } else if (gender.equals(Gender.MALE)) {
-                    filename = GrowthMonitoringLibrary.getInstance().config.getMaleZScoreFile();
+                    filename = GrowthMonitoringLibrary.getInstance().getConfig().getMaleZScoreFile();
                 }
 
                 if (filename != null) {

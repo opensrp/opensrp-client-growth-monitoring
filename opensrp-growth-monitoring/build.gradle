@@ -86,7 +86,7 @@ allprojects {
 }
 
 dependencies {
-    implementation('org.smartregister:opensrp-client-core:1.6.27-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-core:1.6.29-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
     }
@@ -97,6 +97,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.mcxiaoke.volley:library:1.0.19'
     implementation 'com.github.lecho:hellocharts-android:v1.5.8'
+
+    testImplementation 'junit:junit:4.12'
 
     testImplementation('org.robolectric:robolectric:3.8') {
 
@@ -115,15 +117,6 @@ dependencies {
 
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'junit', module: 'junit'
-    }
-    // PowerMock
-    def powerMockVersion = '1.6.4'
-    testImplementation "org.powermock:powermock-module-junit4:$powerMockVersion"
-    testImplementation "org.powermock:powermock-module-junit4-rule:$powerMockVersion"
-    testImplementation "org.powermock:powermock-api-mockito:$powerMockVersion"
-    testImplementation("org.powermock:powermock-classloading-xstream:$powerMockVersion") {
-
-        exclude group: 'com.thoughtworks.xstream', module: 'xstream'
     }
 
 }
