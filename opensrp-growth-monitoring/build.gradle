@@ -98,6 +98,8 @@ dependencies {
     implementation 'com.mcxiaoke.volley:library:1.0.19'
     implementation 'com.github.lecho:hellocharts-android:v1.5.8'
 
+    testImplementation 'junit:junit:4.12'
+
     testImplementation('org.robolectric:robolectric:3.8') {
 
         exclude group: 'com.google.guava', module: 'guava'
