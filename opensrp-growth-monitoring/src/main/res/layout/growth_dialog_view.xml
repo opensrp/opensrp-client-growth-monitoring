@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_margin="20dp"
-    android:background="@android:color/white"
-    android:gravity="center_horizontal"
-    android:orientation="horizontal">
+    android:background="@android:color/white">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/dialog_shape">
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -98,151 +94,31 @@
                 android:layout_height="1dp"
                 android:background="@color/client_list_header_dark_grey" />
 
-            <!-- Growth Chart section -->
-
-            <org.smartregister.view.customcontrols.CustomFontTextView
-                android:id="@+id/weight_for_age"
-                style="@style/CustomFontTextViewStyle.ClientList.Medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/black"
-                android:textSize="@dimen/record_weight_tv_text_size"
-                android:textStyle="bold" />
-
-            <lecho.lib.hellocharts.view.LineChartView
-                android:id="@+id/growth_chart"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/growth_chart_height"
-                android:layout_margin="10dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/client_list_header_dark_grey" />
-
-            <!-- Weight table section -->
+            <!-- Growth tabs section -->
 
             <LinearLayout
-                android:id="@+id/ll_growthDialogView_weightTableLayout"
+                android:id="@+id/tabs_layout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/weight_table_height"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <ScrollView
-                    android:id="@+id/weight_scroll_view"
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/growth_tab_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/growth_view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <org.smartregister.view.customcontrols.CustomFontTextView
-                                style="@style/CustomFontTextViewStyle.ClientList.Light"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentStart="true"
-                                android:layout_centerVertical="true"
-                                android:layout_gravity="start"
-                                android:layout_marginStart="20dp"
-                                android:layout_marginEnd="20dp"
-                                android:layout_marginTop="10dp"
-                                android:text="@string/previous_weights"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/record_weight_tv_text_size" />
-
-                            <ImageButton
-                                android:id="@+id/scroll_button"
-                                android:layout_width="@dimen/scroll_btn_dimen"
-                                android:layout_height="@dimen/scroll_btn_dimen"
-                                android:scaleType="centerInside"
-                                android:padding="5dp"
-                                android:visibility="gone"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginEnd="20dp"
-                                android:background="@null"
-                                android:src="@drawable/ic_icon_collapse" />
-                        </RelativeLayout>
-
-                        <TableLayout
-                            android:id="@+id/weights_table"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="10dp"
-                            android:layout_marginStart="30dp"
-                            android:layout_marginEnd="30dp"
-                            android:layout_marginTop="10dp"
-                            android:stretchColumns="2">
-
-                            <TableRow
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <org.smartregister.view.customcontrols.CustomFontTextView
-                                    style="@style/CustomFontTextViewStyle.ClientList.Medium"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="0dp"
-                                    android:layout_marginEnd="10dp"
-                                    android:gravity="start|center_vertical"
-                                    android:minWidth="@dimen/weight_table_column_min_width"
-                                    android:paddingStart="0dp"
-                                    android:text="@string/age"
-                                    android:textColor="@color/client_list_grey"
-                                    android:textSize="@dimen/record_weight_tv_text_size"
-                                    android:textStyle="bold" />
-
-                                <org.smartregister.view.customcontrols.CustomFontTextView
-                                    style="@style/CustomFontTextViewStyle.ClientList.Medium"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="0dp"
-                                    android:layout_marginEnd="10dp"
-                                    android:gravity="start|center_vertical"
-                                    android:minWidth="@dimen/weight_table_column_min_width"
-                                    android:paddingStart="0dp"
-                                    android:text="@string/weight"
-                                    android:textColor="@color/client_list_grey"
-                                    android:textSize="@dimen/record_weight_tv_text_size"
-                                    android:textStyle="bold" />
-
-                                <org.smartregister.view.customcontrols.CustomFontTextView
-                                    style="@style/CustomFontTextViewStyle.ClientList.Medium"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="0dp"
-                                    android:layout_marginEnd="10dp"
-                                    android:gravity="start|center_vertical"
-                                    android:minWidth="@dimen/weight_table_column_min_width"
-                                    android:paddingStart="0dp"
-                                    android:text="@string/z_score"
-                                    android:textColor="@color/client_list_grey"
-                                    android:textSize="@dimen/record_weight_tv_text_size"
-                                    android:textStyle="bold" />
-                            </TableRow>
-                        </TableLayout>
-                    </LinearLayout>
-                </ScrollView>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/client_list_header_dark_grey" />
-
             <!-- Done button section -->
-
             <Button
                 android:id="@+id/done"
                 style="?android:attr/borderlessButtonStyle"
@@ -250,8 +126,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/done_btn_layout_margin"
                 android:background="@drawable/record_weight_earlier_bg"
-                android:paddingBottom="@dimen/weight_graph_btn_padding"
                 android:paddingTop="@dimen/weight_graph_btn_padding"
+                android:paddingBottom="@dimen/weight_graph_btn_padding"
                 android:text="@string/done"
                 android:textAllCaps="false"
                 android:textAppearance="?android:textAppearanceSmall"
@@ -260,4 +136,4 @@
 
         </LinearLayout>
     </FrameLayout>
-</FrameLayout>
+</ScrollView>

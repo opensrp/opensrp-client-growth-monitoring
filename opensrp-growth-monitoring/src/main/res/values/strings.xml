@@ -12,10 +12,14 @@
 
     <string name="edit_weight_data">Edit weight data</string>
     <string name="record_weight_with_nl">Record\nweigh</string>
+    <string name="record_growth">Record Growth</string>
+    <string name="record_growth_notification">"Don't forget to record child's growth"</string>
     <string name="record_weight">Record weight</string>
-    <string name="record_weight_notification">"Don't forget to record child's weight"</string>
+    <string name="record_height">Record height</string>
     <string name="weight_for_age">Weight-for-age %1$s</string>
+    <string name="height_for_age">Height-for-age %1$s</string>
     <string name="previous_weights">PREVIOUS WEIGHTS</string>
+    <string name="previous_heights">PREVIOUS HEIGHTS</string>
 
     <string name="months">Months</string>
     <string name="kg">Kg</string>
@@ -24,6 +28,7 @@
     <string name="btn_layout_weight">2</string>
 
     <string name="weight">Weight</string>
+    <string name="height">Height</string>
     <string name="done">Complete</string>
     <string name="z_score"> Z-score</string>
 
@@ -34,8 +39,8 @@
     <string name="set">Set</string>
     <string name="service_date">Service date</string>
     <string name="edit_weight">Edit Weight</string>
-    <string name="weight_taken_today">Weight taken today</string>
-    <string name="weight_taken_earlier">Weight taken earlier</string>
+    <string name="growth_taken_today">Growth taken today</string>
+    <string name="growth_taken_earlier">Growth taken earlier</string>
     <string name="catchment_area">Catchment area</string>
 
 

@@ -1,8 +1,9 @@
 package org.smartregister.growthmonitoring.sample.util;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +20,8 @@ import org.smartregister.domain.Photo;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.domain.WeightWrapper;
-import org.smartregister.growthmonitoring.fragment.EditWeightDialogFragment;
-import org.smartregister.growthmonitoring.fragment.RecordWeightDialogFragment;
+import org.smartregister.growthmonitoring.fragment.EditGrowthDialogFragment;
+import org.smartregister.growthmonitoring.fragment.RecordGrowthDialogFragment;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.sample.R;
 import org.smartregister.growthmonitoring.util.ImageUtils;
@@ -48,13 +49,14 @@ public class SampleUtil {
     public static final double BIRTH_WEIGHT = 3.8d;
     public static final String GENDER = (new Random()).nextBoolean() ? "male" : "female";
 
-    public static void showWeightDialog(Activity context, View view, String tag) {
+    public static void showWeightDialog(FragmentActivity context, View view, String tag) {
         WeightWrapper weightWrapper = view.getTag() != null ? (WeightWrapper) view.getTag() : new WeightWrapper();
-        RecordWeightDialogFragment recordWeightDialogFragment = RecordWeightDialogFragment.newInstance(getDateOfBirth(), weightWrapper);
-        recordWeightDialogFragment.show(initFragmentTransaction(context, tag), tag);
+        RecordGrowthDialogFragment recordGrowthDialogFragment = RecordGrowthDialogFragment
+                .newInstance(getDateOfBirth(), weightWrapper);
+        recordGrowthDialogFragment.show(initFragmentTransaction(context, tag), tag);
     }
 
-    public static void showEditWeightDialog(Activity context, int i, String tag) {
+    public static void showEditWeightDialog(FragmentActivity context, int i, String tag) {
         CommonPersonObjectClient childDetails = dummydetails();
 
         String firstName = Utils.getValue(childDetails.getColumnmaps(), "first_name", true);
@@ -90,14 +92,15 @@ public class SampleUtil {
         weightWrapper.setPhoto(photo);
         weightWrapper.setPmtctStatus(getValue(childDetails.getColumnmaps(), "pmtct_status", false));
 
-        EditWeightDialogFragment editWeightDialogFragment = EditWeightDialogFragment.newInstance(context, getDateOfBirth(), weightWrapper);
-        editWeightDialogFragment.show(initFragmentTransaction(context, tag), tag);
+        EditGrowthDialogFragment editGrowthDialogFragment = EditGrowthDialogFragment
+                .newInstance(context, getDateOfBirth(), weightWrapper);
+        editGrowthDialogFragment.show(initFragmentTransaction(context, tag), tag);
 
     }
 
-    public static FragmentTransaction initFragmentTransaction(Activity context, String tag) {
-        FragmentTransaction ft = context.getFragmentManager().beginTransaction();
-        Fragment prev = context.getFragmentManager().findFragmentByTag(tag);
+    public static FragmentTransaction initFragmentTransaction(FragmentActivity context, String tag) {
+        FragmentTransaction ft = context.getSupportFragmentManager().beginTransaction();
+        Fragment prev = context.getSupportFragmentManager().findFragmentByTag(tag);
         if (prev != null) {
             ft.remove(prev);
         }

@@ -2,10 +2,10 @@ package org.smartregister.growthmonitoring.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.DialogFragment;
 import android.text.Selection;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 @SuppressLint("ValidFragment")
-public class RecordWeightDialogFragment extends DialogFragment {
+public class RecordGrowthDialogFragment extends DialogFragment {
     private WeightWrapper tag;
     private WeightActionListener listener;
     private Date dateOfBirth;
@@ -42,7 +42,7 @@ public class RecordWeightDialogFragment extends DialogFragment {
     public static final String WRAPPER_TAG = "tag";
     public static final String DATE_OF_BIRTH_TAG = "dob";
 
-    public static RecordWeightDialogFragment newInstance(
+    public static RecordGrowthDialogFragment newInstance(
             Date dateOfBirth, WeightWrapper tag) {
 
         WeightWrapper tagToSend;
@@ -52,14 +52,14 @@ public class RecordWeightDialogFragment extends DialogFragment {
             tagToSend = tag;
         }
 
-        RecordWeightDialogFragment recordWeightDialogFragment = new RecordWeightDialogFragment();
+        RecordGrowthDialogFragment recordGrowthDialogFragment = new RecordGrowthDialogFragment();
 
         Bundle args = new Bundle();
         args.putSerializable(DATE_OF_BIRTH_TAG, dateOfBirth);
         args.putSerializable(WRAPPER_TAG, tagToSend);
-        recordWeightDialogFragment.setArguments(args);
+        recordGrowthDialogFragment.setArguments(args);
 
-        return recordWeightDialogFragment;
+        return recordGrowthDialogFragment;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class RecordWeightDialogFragment extends DialogFragment {
             dateOfBirth = (Date) dateSerializable;
         }
 
-        ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.record_weight_dialog_view, container, false);
+        ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.record_growth_dialog_view, container, false);
 
         final EditText editWeight = (EditText) dialogView.findViewById(R.id.edit_weight);
         if (tag.getWeight() != null) {

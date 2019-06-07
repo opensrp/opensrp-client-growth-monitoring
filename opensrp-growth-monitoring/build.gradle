@@ -90,11 +90,11 @@ dependencies {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
     }
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
 
     implementation group: 'org.apache.commons', name: 'commons-csv', version: '1.4'
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.mcxiaoke.volley:library:1.0.19'
     implementation 'com.github.lecho:hellocharts-android:v1.5.8'
 

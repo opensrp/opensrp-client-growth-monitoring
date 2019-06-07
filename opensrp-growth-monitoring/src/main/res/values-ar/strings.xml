@@ -10,8 +10,8 @@
     <string name="age">العمر</string>
     <string name="edit_weight_data">تحرير بيانات الوزن</string>
     <string name="record_weight_with_nl">سجل\n وزن</string>
-    <string name="record_weight"> سجل الوزن</string>
-    <string name="record_weight_notification">لا تنس تسجيل وزن الطفل</string>
+    <string name="record_growth"> سجل الوزن</string>
+    <string name="record_growth_notification">لا تنس تسجيل وزن الطفل</string>
     <string name="weight_for_age">الوزن بالنسبة للعمر 1%1$s</string>
     <string name="previous_weights">الأوزان السابقة</string>
     <string name="months">الشهور</string>
@@ -28,8 +28,8 @@
     <string name="set">مجموعة</string>
     <string name="service_date">تاريخ الخدمة</string>
     <string name="edit_weight">تحرير الوزن</string>
-    <string name="weight_taken_today">الوزن مأخوذ اليوم</string>
-    <string name="weight_taken_earlier">الوزن ماخوذ سابقا</string>
+    <string name="growth_taken_today">الوزن مأخوذ اليوم</string>
+    <string name="growth_taken_earlier">الوزن ماخوذ سابقا</string>
     <string name="catchment_area">منطقة التغطية</string>
 
 

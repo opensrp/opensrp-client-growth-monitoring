@@ -16,7 +16,7 @@ import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.domain.ZScore;
 import org.smartregister.growthmonitoring.repository.ZScoreRepository;
-import org.smartregister.growthmonitoring.util.GMConstants;
+import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
 import org.smartregister.util.FileUtilities;
 import org.smartregister.util.Utils;
 
@@ -87,9 +87,9 @@ public class ZScoreRefreshIntentService extends IntentService {
     private void fetchCSV(Gender gender) {
         String urlString = null;
         if (gender.equals(Gender.FEMALE)) {
-            urlString = GMConstants.ZSCORE_FEMALE_URL;
+            urlString = GrowthMonitoringConstants.ZSCORE_FEMALE_URL;
         } else if (gender.equals(Gender.MALE)) {
-            urlString = GMConstants.ZSCORE_MALE_URL;
+            urlString = GrowthMonitoringConstants.ZSCORE_MALE_URL;
         }
 
         try {
@@ -246,7 +246,7 @@ public class ZScoreRefreshIntentService extends IntentService {
 
     private CommonPersonObjectClient getChildDetails(String baseEntityId) {
         CommonPersonObject rawDetails = GrowthMonitoringLibrary.getInstance().context()
-                .commonrepository(GMConstants.CHILD_TABLE_NAME).findByBaseEntityId(baseEntityId);
+                .commonrepository(GrowthMonitoringConstants.CHILD_TABLE_NAME).findByBaseEntityId(baseEntityId);
         if (rawDetails != null) {
             // Get extra child details
             CommonPersonObjectClient childDetails = Utils.convert(rawDetails);

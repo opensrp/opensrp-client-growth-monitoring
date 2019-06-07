@@ -5,7 +5,7 @@ import org.smartregister.growthmonitoring.BuildConfig;
 /**
  * Created by keyman on 26/07/2017.
  */
-public class GMConstants {
+public class GrowthMonitoringConstants {
 
     public static final String ZSCORE_MALE_URL = "http://www.who.int/childgrowth/standards/wfa_boys_0_5_zscores.txt";
     public static final String ZSCORE_FEMALE_URL = "http://www.who.int/childgrowth/standards/wfa_girls_0_5_zscores.txt";
@@ -14,6 +14,11 @@ public class GMConstants {
     public static final String MOTHER_TABLE_NAME = "ec_mother";
 
     public static final int WEIGHT_SYNC_TIME = BuildConfig.WEIGHT_SYNC_TIME;
+    public static final String FIRST_NAME = "first_name";
+    public static final String LAST_NAME = "last_name";
+    public static final String FEMALE = "female";
+    public static final String MALE = "male";
+    public static final int GRAPH_MONTHS_TIMELINE = 12;
 
     public static final class JsonForm {
         public static final String OPENMRS_ENTITY = "openmrs_entity";
