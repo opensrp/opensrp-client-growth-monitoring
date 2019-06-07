@@ -8,7 +8,7 @@ import net.sqlcipher.database.SQLiteDatabase;
 import org.smartregister.AllConstants;
 import org.smartregister.domain.db.Column;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
-import org.smartregister.growthmonitoring.repository.ZScoreRepository;
+import org.smartregister.growthmonitoring.repository.WeightZScoreRepository;
 import org.smartregister.growthmonitoring.sample.BuildConfig;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Repository;
@@ -76,7 +76,7 @@ public class SampleRepository extends Repository {
 
     private void upgradeToVersion2(SQLiteDatabase db) {
         try {
-            ZScoreRepository.createTable(db);
+            WeightZScoreRepository.createTable(db);
             db.execSQL(WeightRepository.ALTER_ADD_Z_SCORE_COLUMN);
         } catch (Exception e) {
             Log.e(TAG, "upgradeToVersion2 " + e.getMessage());

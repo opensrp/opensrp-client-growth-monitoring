@@ -100,6 +100,45 @@
                 android:background="@color/client_list_header_dark_grey" />
 
             <org.smartregister.view.customcontrols.CustomFontTextView
+                android:id="@+id/record_height"
+                style="@style/CustomFontTextViewStyle.ClientList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="23dp"
+                android:text="@string/edit_height"
+                android:textColor="@color/text_black"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp"
+                android:orientation="horizontal"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="20dp">
+
+                <EditText
+                    android:id="@+id/edit_height"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:inputType="number|numberDecimal"
+                    android:textSize="80dp" />
+
+                <TextView
+                    android:id="@+id/height_value_unit_symbol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="kg"
+                    android:textColor="@color/light_grey"
+                    android:textSize="80dp" />
+            </LinearLayout>
+
+            <org.smartregister.view.customcontrols.CustomFontTextView
                 android:id="@+id/record_weight"
                 style="@style/CustomFontTextViewStyle.ClientList"
                 android:layout_width="wrap_content"
@@ -127,16 +166,17 @@
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:inputType="number|numberDecimal"
-                    android:textSize="100dp" />
+                    android:textSize="80dp" />
 
                 <TextView
-                    android:id="@+id/value_unit_symbol"
+                    android:id="@+id/weight_value_unit_symbol"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="kg"
                     android:textColor="@color/light_grey"
-                    android:textSize="100dp" />
+                    android:textSize="80dp" />
             </LinearLayout>
+
             <org.smartregister.view.customcontrols.CustomFontTextView
                 android:id="@+id/service_date"
                 style="@style/CustomFontTextViewStyle.ClientList.Light"

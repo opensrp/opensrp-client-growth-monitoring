@@ -6,7 +6,8 @@ import android.util.Log;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.opensrp.api.constants.Gender;
-import org.smartregister.growthmonitoring.domain.ZScore;
+import org.smartregister.growthmonitoring.domain.HeightZScore;
+import org.smartregister.growthmonitoring.domain.WeightZScore;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.Repository;
 
@@ -21,9 +22,9 @@ import java.util.List;
  * Created by Jason Rogena - jrogena@ona.io on 29/05/2017.
  */
 
-public class ZScoreRepository extends BaseRepository {
-    private static final String TAG = ZScoreRepository.class.getName();
-    public static final String TABLE_NAME = "z_scores";
+public class HeightZScoreRepository extends BaseRepository {
+    private static final String TAG = HeightZScoreRepository.class.getName();
+    public static final String TABLE_NAME = "height_z_scores";
     public static final String COLUMN_SEX = "sex";
     public static final String COLUMN_MONTH = "month";
     public static final String COLUMN_L = "l";
@@ -56,7 +57,7 @@ public class ZScoreRepository extends BaseRepository {
     private static final String CREATE_INDEX_SEX_QUERY = "CREATE INDEX " + COLUMN_SEX + "_index ON " + TABLE_NAME + "(" + COLUMN_SEX + " COLLATE NOCASE);";
     private static final String CREATE_INDEX_MONTH_QUERY = "CREATE INDEX " + COLUMN_MONTH + "_index ON " + TABLE_NAME + "(" + COLUMN_MONTH + " COLLATE NOCASE);";
 
-    public ZScoreRepository(Repository repository) {
+    public HeightZScoreRepository(Repository repository) {
         super(repository);
     }
 
@@ -81,8 +82,8 @@ public class ZScoreRepository extends BaseRepository {
         return false;
     }
 
-    public List<ZScore> findByGender(Gender gender) {
-        List<ZScore> result = new ArrayList<>();
+    public List<HeightZScore> findByGender(Gender gender) {
+        List<HeightZScore> result = new ArrayList<>();
         Cursor cursor = null;
         try {
             SQLiteDatabase database = getRepository().getReadableDatabase();
@@ -93,7 +94,7 @@ public class ZScoreRepository extends BaseRepository {
 
             if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
-                    result.add(new ZScore(gender,
+                    result.add(new HeightZScore(gender,
                             cursor.getInt(cursor.getColumnIndex(COLUMN_MONTH)),
                             cursor.getDouble(cursor.getColumnIndex(COLUMN_L)),
                             cursor.getDouble(cursor.getColumnIndex(COLUMN_M)),

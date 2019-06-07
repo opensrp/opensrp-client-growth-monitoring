@@ -75,6 +75,7 @@ public class WeightIntentService extends IntentService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
+
         return super.onStartCommand(intent, flags, startId);
     }
 }

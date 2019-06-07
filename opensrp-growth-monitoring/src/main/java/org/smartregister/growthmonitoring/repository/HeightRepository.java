@@ -23,10 +23,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class WeightRepository extends BaseRepository {
-    private static final String TAG = WeightRepository.class.getCanonicalName();
-    private static final String WEIGHT_SQL = "CREATE TABLE weights (_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,base_entity_id VARCHAR NOT NULL,program_client_id VARCHAR NULL,kg REAL NOT NULL,date DATETIME NOT NULL,anmid VARCHAR NULL,location_id VARCHAR NULL,sync_status VARCHAR,updated_at INTEGER NULL)";
-    public static final String WEIGHT_TABLE_NAME = "weights";
+public class HeightRepository extends BaseRepository {
+    private static final String TAG = HeightRepository.class.getCanonicalName();
+    private static final String WEIGHT_SQL = "CREATE TABLE heights (_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+            "base_entity_id VARCHAR NOT NULL,program_client_id VARCHAR NULL,kg REAL NOT NULL,date DATETIME NOT NULL,anmid VARCHAR NULL,location_id VARCHAR NULL,sync_status VARCHAR,updated_at INTEGER NULL)";
+    public static final String WEIGHT_TABLE_NAME = "heights";
     public static final String ID_COLUMN = "_id";
     public static final String BASE_ENTITY_ID = "base_entity_id";
     public static final String EVENT_ID = "event_id";
@@ -71,7 +72,7 @@ public class WeightRepository extends BaseRepository {
     public static final String UPDATE_TABLE_ADD_CHILD_LOCATION_ID_COL = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + CHILD_LOCATION_ID + " VARCHAR;";
 
 
-    public WeightRepository(Repository repository) {
+    public HeightRepository(Repository repository) {
         super(repository);
     }
 
@@ -163,7 +164,7 @@ public class WeightRepository extends BaseRepository {
     }
 
     public List<Weight> findUnSyncedBeforeTime(int hours) {
-        List<Weight> weights = new ArrayList<>();
+        List<Weight> heights = new ArrayList<>();
         Cursor cursor = null;
         try {
 
@@ -173,7 +174,7 @@ public class WeightRepository extends BaseRepository {
             Long time = calendar.getTimeInMillis();
 
             cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, UPDATED_AT_COLUMN + " < ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? " + COLLATE_NOCASE, new String[]{time.toString(), TYPE_Unsynced}, null, null, null, null);
-            weights = readAllWeights(cursor);
+            heights = readAllheights(cursor);
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));
         } finally {
@@ -181,7 +182,7 @@ public class WeightRepository extends BaseRepository {
                 cursor.close();
             }
         }
-        return weights;
+        return heights;
     }
 
     public Weight findUnSyncedByEntityId(String entityId) {
@@ -190,9 +191,9 @@ public class WeightRepository extends BaseRepository {
         try {
 
             cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? ", new String[]{entityId, TYPE_Unsynced}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
-            List<Weight> weights = readAllWeights(cursor);
-            if (!weights.isEmpty()) {
-                weight = weights.get(0);
+            List<Weight> heights = readAllheights(cursor);
+            if (!heights.isEmpty()) {
+                weight = heights.get(0);
             }
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));
@@ -205,11 +206,11 @@ public class WeightRepository extends BaseRepository {
     }
 
     public List<Weight> findByEntityId(String entityId) {
-        List<Weight> weights = null;
+        List<Weight> heights = null;
         Cursor cursor = null;
         try {
             cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE, new String[]{entityId}, null, null, null, null);
-            weights = readAllWeights(cursor);
+            heights = readAllheights(cursor);
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));
         } finally {
@@ -218,7 +219,7 @@ public class WeightRepository extends BaseRepository {
             }
         }
 
-        return weights;
+        return heights;
     }
 
     public List<Weight> findWithNoZScore() {
@@ -227,7 +228,7 @@ public class WeightRepository extends BaseRepository {
         try {
             cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME,
                     WEIGHT_TABLE_COLUMNS, Z_SCORE + " = " + DEFAULT_Z_SCORE, null, null, null, null, null);
-            result = readAllWeights(cursor);
+            result = readAllheights(cursor);
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));
         } finally {
@@ -244,9 +245,9 @@ public class WeightRepository extends BaseRepository {
         Cursor cursor = null;
         try {
             cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, ID_COLUMN + " = ?", new String[]{caseId.toString()}, null, null, null, null);
-            List<Weight> weights = readAllWeights(cursor);
-            if (!weights.isEmpty()) {
-                weight = weights.get(0);
+            List<Weight> heights = readAllheights(cursor);
+            if (!heights.isEmpty()) {
+                weight = heights.get(0);
             }
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));
@@ -263,7 +264,7 @@ public class WeightRepository extends BaseRepository {
         Cursor cursor = null;
         try {
             cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE, new String[]{entityid}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
-            weightList = readAllWeights(cursor);
+            weightList = readAllheights(cursor);
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));
         } finally {
@@ -300,7 +301,7 @@ public class WeightRepository extends BaseRepository {
             }
 
             Cursor cursor = database.query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, selection, selectionArgs, null, null, ID_COLUMN + " DESC ", null);
-            List<Weight> weightList = readAllWeights(cursor);
+            List<Weight> weightList = readAllheights(cursor);
             if (!weightList.isEmpty()) {
                 return weightList.get(0);
             }
@@ -345,8 +346,8 @@ public class WeightRepository extends BaseRepository {
         }
     }
 
-    private List<Weight> readAllWeights(Cursor cursor) {
-        List<Weight> weights = new ArrayList<>();
+    private List<Weight> readAllheights(Cursor cursor) {
+        List<Weight> heights = new ArrayList<>();
         try {
             if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
@@ -384,7 +385,7 @@ public class WeightRepository extends BaseRepository {
                     weight.setTeamId(cursor.getString(cursor.getColumnIndex(TEAM_ID)));
                     weight.setChildLocationId(cursor.getString(cursor.getColumnIndex(CHILD_LOCATION_ID)));
 
-                    weights.add(weight);
+                    heights.add(weight);
 
                     cursor.moveToNext();
                 }
@@ -396,7 +397,7 @@ public class WeightRepository extends BaseRepository {
                 cursor.close();
             }
         }
-        return weights;
+        return heights;
 
     }
 

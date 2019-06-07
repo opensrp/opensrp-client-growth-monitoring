@@ -89,53 +89,53 @@ public class RecordGrowthDialogFragment extends DialogFragment {
 
         ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.record_growth_dialog_view, container, false);
 
-        final EditText editWeight = (EditText) dialogView.findViewById(R.id.edit_weight);
+        final EditText editWeight = dialogView.findViewById(R.id.edit_weight);
         if (tag.getWeight() != null) {
             editWeight.setText(tag.getWeight().toString());
             editWeight.setSelection(editWeight.getText().length());
         }
         //formatEditWeightView(editWeight, "");
 
-        final DatePicker earlierDatePicker = (DatePicker) dialogView.findViewById(R.id.earlier_date_picker);
+        final DatePicker earlierDatePicker = dialogView.findViewById(R.id.earlier_date_picker);
         earlierDatePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
         if (dateOfBirth != null) {
             earlierDatePicker.setMinDate(dateOfBirth.getTime());
         }
 
-        TextView nameView = (TextView) dialogView.findViewById(R.id.child_name);
+        TextView nameView = dialogView.findViewById(R.id.child_name);
         nameView.setText(tag.getPatientName());
 
-        TextView numberView = (TextView) dialogView.findViewById(R.id.child_zeir_id);
+        TextView numberView = dialogView.findViewById(R.id.child_zeir_id);
         if (StringUtils.isNotBlank(tag.getPatientNumber())) {
             numberView.setText(String.format("%s: %s", getString(R.string.label_zeir), tag.getPatientNumber()));
         } else {
             numberView.setText("");
         }
 
-        TextView ageView = (TextView) dialogView.findViewById(R.id.child_age);
+        TextView ageView = dialogView.findViewById(R.id.child_age);
         if (StringUtils.isNotBlank(tag.getPatientAge())) {
             ageView.setText(String.format("%s: %s", getString(R.string.age), tag.getPatientAge()));
         } else {
             ageView.setText("");
         }
 
-        TextView pmtctStatusView = (TextView) dialogView.findViewById(R.id.pmtct_status);
+        TextView pmtctStatusView = dialogView.findViewById(R.id.pmtct_status);
         pmtctStatusView.setText(tag.getPmtctStatus());
 
         if (tag.getId() != null) {
-            ImageView mImageView = (ImageView) dialogView.findViewById(R.id.child_profilepic);
+            ImageView mImageView = dialogView.findViewById(R.id.child_profilepic);
 
             if (tag.getId() != null) {//image already in local storage most likey ):
                 //set profile image by passing the client id.If the image doesn't exist in the image repository then download and save locally
                 mImageView.setTag(R.id.entity_id, tag.getId());
                 DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(tag.getId(),
-                        OpenSRPImageLoader.getStaticImageListener((ImageView) mImageView,
+                        OpenSRPImageLoader.getStaticImageListener(mImageView,
                                 ImageUtils.profileImageResourceByGender(tag.getGender()),
                                 ImageUtils.profileImageResourceByGender(tag.getGender())));
             }
         }
 
-        final Button set = (Button) dialogView.findViewById(R.id.set);
+        final Button set = dialogView.findViewById(R.id.set);
         set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,7 +162,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
             }
         });
 
-        final Button weightTakenToday = (Button) dialogView.findViewById(R.id.weight_taken_today);
+        final Button weightTakenToday = dialogView.findViewById(R.id.weight_taken_today);
         weightTakenToday.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -184,7 +184,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
             }
         });
 
-        final Button weightTakenEarlier = (Button) dialogView.findViewById(R.id.weight_taken_earlier);
+        final Button weightTakenEarlier = dialogView.findViewById(R.id.weight_taken_earlier);
         weightTakenEarlier.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -201,7 +201,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
             }
         });
 
-        Button cancel = (Button) dialogView.findViewById(R.id.cancel);
+        Button cancel = dialogView.findViewById(R.id.cancel);
         cancel.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {

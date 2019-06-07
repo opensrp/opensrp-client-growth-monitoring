@@ -14,8 +14,8 @@ import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.domain.Weight;
-import org.smartregister.growthmonitoring.domain.ZScore;
-import org.smartregister.growthmonitoring.repository.ZScoreRepository;
+import org.smartregister.growthmonitoring.domain.WeightZScore;
+import org.smartregister.growthmonitoring.repository.WeightZScoreRepository;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
 import org.smartregister.util.FileUtilities;
 import org.smartregister.util.Utils;
@@ -45,17 +45,17 @@ public class ZScoreRefreshIntentService extends IntentService {
 
     static {
         CSV_HEADING_SQL_COLUMN_MAP = new HashMap<>();
-        CSV_HEADING_SQL_COLUMN_MAP.put("Month", ZScoreRepository.COLUMN_MONTH);
-        CSV_HEADING_SQL_COLUMN_MAP.put("L", ZScoreRepository.COLUMN_L);
-        CSV_HEADING_SQL_COLUMN_MAP.put("M", ZScoreRepository.COLUMN_M);
-        CSV_HEADING_SQL_COLUMN_MAP.put("S", ZScoreRepository.COLUMN_S);
-        CSV_HEADING_SQL_COLUMN_MAP.put("SD3neg", ZScoreRepository.COLUMN_SD3NEG);
-        CSV_HEADING_SQL_COLUMN_MAP.put("SD2neg", ZScoreRepository.COLUMN_SD2NEG);
-        CSV_HEADING_SQL_COLUMN_MAP.put("SD1neg", ZScoreRepository.COLUMN_SD1NEG);
-        CSV_HEADING_SQL_COLUMN_MAP.put("SD0", ZScoreRepository.COLUMN_SD0);
-        CSV_HEADING_SQL_COLUMN_MAP.put("SD1", ZScoreRepository.COLUMN_SD1);
-        CSV_HEADING_SQL_COLUMN_MAP.put("SD2", ZScoreRepository.COLUMN_SD2);
-        CSV_HEADING_SQL_COLUMN_MAP.put("SD3", ZScoreRepository.COLUMN_SD3);
+        CSV_HEADING_SQL_COLUMN_MAP.put("Month", WeightZScoreRepository.COLUMN_MONTH);
+        CSV_HEADING_SQL_COLUMN_MAP.put("L", WeightZScoreRepository.COLUMN_L);
+        CSV_HEADING_SQL_COLUMN_MAP.put("M", WeightZScoreRepository.COLUMN_M);
+        CSV_HEADING_SQL_COLUMN_MAP.put("S", WeightZScoreRepository.COLUMN_S);
+        CSV_HEADING_SQL_COLUMN_MAP.put("SD3neg", WeightZScoreRepository.COLUMN_SD3NEG);
+        CSV_HEADING_SQL_COLUMN_MAP.put("SD2neg", WeightZScoreRepository.COLUMN_SD2NEG);
+        CSV_HEADING_SQL_COLUMN_MAP.put("SD1neg", WeightZScoreRepository.COLUMN_SD1NEG);
+        CSV_HEADING_SQL_COLUMN_MAP.put("SD0", WeightZScoreRepository.COLUMN_SD0);
+        CSV_HEADING_SQL_COLUMN_MAP.put("SD1", WeightZScoreRepository.COLUMN_SD1);
+        CSV_HEADING_SQL_COLUMN_MAP.put("SD2", WeightZScoreRepository.COLUMN_SD2);
+        CSV_HEADING_SQL_COLUMN_MAP.put("SD3", WeightZScoreRepository.COLUMN_SD3);
     }
 
     public ZScoreRefreshIntentService() {
@@ -137,14 +137,14 @@ public class ZScoreRefreshIntentService extends IntentService {
     }
 
     /**
-     * This method dumps the ZScore CSV corresponding to the provided gender into the z_score table
+     * This method dumps the WeightZScore CSV corresponding to the provided gender into the z_score table
      *
      * @param gender
      * @param force
      */
     private void dumpCsv(Gender gender, boolean force) {
         try {
-            List<ZScore> existingScores = GrowthMonitoringLibrary.getInstance().zScoreRepository().findByGender(gender);
+            List<WeightZScore> existingScores = GrowthMonitoringLibrary.getInstance().weightZScoreRepository().findByGender(gender);
             if (force
                     || existingScores.size() == 0) {
                 String filename = null;
@@ -159,7 +159,7 @@ public class ZScoreRefreshIntentService extends IntentService {
                             CSVFormat.newFormat('\t'));
 
                     HashMap<Integer, Boolean> columnStatus = new HashMap<>();
-                    String query = "INSERT INTO `" + ZScoreRepository.TABLE_NAME + "` ( `" + ZScoreRepository.COLUMN_SEX + "`";
+                    String query = "INSERT INTO `" + WeightZScoreRepository.TABLE_NAME + "` ( `" + WeightZScoreRepository.COLUMN_SEX + "`";
                     for (CSVRecord record : csvParser) {
                         if (csvParser.getCurrentLineNumber() == 2) {// The second line
                             query = query + ")\n VALUES (\"" + gender.name() + "\"";
@@ -185,7 +185,7 @@ public class ZScoreRefreshIntentService extends IntentService {
                     }
                     query = query + ");";
 
-                    boolean result = GrowthMonitoringLibrary.getInstance().zScoreRepository().runRawQuery(query);
+                    boolean result = GrowthMonitoringLibrary.getInstance().weightZScoreRepository().runRawQuery(query);
                     Log.d(TAG, "Result is " + result);
                 }
             }

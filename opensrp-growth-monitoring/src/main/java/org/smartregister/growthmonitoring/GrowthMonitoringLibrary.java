@@ -1,8 +1,10 @@
 package org.smartregister.growthmonitoring;
 
 import org.smartregister.Context;
+import org.smartregister.growthmonitoring.repository.HeightRepository;
+import org.smartregister.growthmonitoring.repository.HeightZScoreRepository;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
-import org.smartregister.growthmonitoring.repository.ZScoreRepository;
+import org.smartregister.growthmonitoring.repository.WeightZScoreRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Repository;
 
@@ -15,7 +17,9 @@ public class GrowthMonitoringLibrary {
     private final Context context;
 
     private WeightRepository weightRepository;
-    private ZScoreRepository zScoreRepository;
+    private HeightRepository heightRepository;
+    private WeightZScoreRepository weightZScoreRepository;
+    private HeightZScoreRepository heightZScoreRepository;
     private EventClientRepository eventClientRepository;
     private int applicationVersion;
     private int databaseVersion;
@@ -61,13 +65,28 @@ public class GrowthMonitoringLibrary {
         return weightRepository;
     }
 
+    public HeightRepository heightRepository() {
+        if (heightRepository == null) {
+            heightRepository = new HeightRepository(getRepository());
+        }
+        return heightRepository;
+    }
 
-    public ZScoreRepository zScoreRepository() {
-        if (zScoreRepository == null) {
-            zScoreRepository = new ZScoreRepository(getRepository());
+
+    public WeightZScoreRepository weightZScoreRepository() {
+        if (weightZScoreRepository == null) {
+            weightZScoreRepository = new WeightZScoreRepository(getRepository());
         }
 
-        return zScoreRepository;
+        return weightZScoreRepository;
+    }
+
+    public HeightZScoreRepository heightZScoreRepository() {
+        if (heightZScoreRepository == null) {
+            heightZScoreRepository = new HeightZScoreRepository(getRepository());
+        }
+
+        return heightZScoreRepository;
     }
 
     public EventClientRepository eventClientRepository() {

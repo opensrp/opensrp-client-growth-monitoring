@@ -39,6 +39,7 @@
     <string name="set">Set</string>
     <string name="service_date">Service date</string>
     <string name="edit_weight">Edit Weight</string>
+    <string name="edit_height">Edit Height</string>
     <string name="growth_taken_today">Growth taken today</string>
     <string name="growth_taken_earlier">Growth taken earlier</string>
     <string name="catchment_area">Catchment area</string>

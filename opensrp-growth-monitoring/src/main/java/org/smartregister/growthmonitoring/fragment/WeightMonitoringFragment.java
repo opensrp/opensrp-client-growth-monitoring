@@ -22,7 +22,7 @@ import org.joda.time.DateTime;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.domain.Weight;
-import org.smartregister.growthmonitoring.domain.ZScore;
+import org.smartregister.growthmonitoring.domain.WeightZScore;
 import org.smartregister.growthmonitoring.listener.ViewMeasureListener;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringUtils;
@@ -63,6 +63,7 @@ public class WeightMonitoringFragment extends Fragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View weightTabView = inflater.inflate(R.layout.weight_monitoring_fragment, container, false);
+        final ImageButton scrollButton = weightTabView.findViewById(R.id.scroll_button);
 
         Date dob = null;
         if (StringUtils.isNotBlank(getDobString())) {
@@ -73,7 +74,6 @@ public class WeightMonitoringFragment extends Fragment {
             maxWeighingDate = weighingDates[1];
         }
 
-        final ImageButton scrollButton = weightTabView.findViewById(R.id.scroll_button);
         scrollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,14 +88,12 @@ public class WeightMonitoringFragment extends Fragment {
                         }
                     });
                     weightTabView.findViewById(R.id.weight_growth_chart).setVisibility(View.GONE);
-                    //Change the icon
                     scrollButton.setImageResource(R.drawable.ic_icon_expand);
                 } else {
                     isExpanded = false;
                     weightTabView.findViewById(R.id.weight_growth_chart).setVisibility(View.VISIBLE);
                     weightTabView.findViewById(R.id.growth_dialog_weight_table_ayout).getLayoutParams().height =
                             getResources().getDimensionPixelSize(R.dimen.weight_table_height);
-                    //Revert the icon
                     scrollButton.setImageResource(R.drawable.ic_icon_collapse);
                 }
             }
@@ -163,9 +161,9 @@ public class WeightMonitoringFragment extends Fragment {
             if (weight.getDate().compareTo(maxWeighingDate.getTime()) > 0) {
                 zScoreTextView.setText("");
             } else {
-                double zScore = ZScore.calculate(gender, dob, weight.getDate(), weight.getKg());
-                zScore = ZScore.roundOff(zScore);
-                zScoreTextView.setTextColor(getResources().getColor(ZScore.getZScoreColor(zScore)));
+                double zScore = WeightZScore.calculate(gender, dob, weight.getDate(), weight.getKg());
+                zScore = WeightZScore.roundOff(zScore);
+                zScoreTextView.setTextColor(getResources().getColor(WeightZScore.getZScoreColor(zScore)));
                 zScoreTextView.setText(String.valueOf(zScore));
             }
             curRow.addView(zScoreTextView);
@@ -195,13 +193,13 @@ public class WeightMonitoringFragment extends Fragment {
 
         if (gender != Gender.UNKNOWN && dob != null && minWeighingDate != null) {
             LineChartView growthChart = parent.findViewById(R.id.weight_growth_chart);
-            double minAge = ZScore.getAgeInMonths(dob, minWeighingDate.getTime());
+            double minAge = WeightZScore.getAgeInMonths(dob, minWeighingDate.getTime());
             double maxAge = minAge + GrowthMonitoringConstants.GRAPH_MONTHS_TIMELINE;
             List<Line> lines = new ArrayList<>();
             for (int z = -3; z <= 3; z++) {
                 if (z != 1 && z != -1) {
                     Line curLine = getZScoreLine(gender, minAge, maxAge, z,
-                            getActivity().getResources().getColor(ZScore.getZScoreColor(z)));
+                            getActivity().getResources().getColor(WeightZScore.getZScoreColor(z)));
                     if (z == -3) {
                         curLine.setPathEffect(new DashPathEffect(new float[] {10, 20}, 0));
                     }
@@ -250,12 +248,12 @@ public class WeightMonitoringFragment extends Fragment {
     }
 
     private Line getTodayLine(Gender gender, Date dob, double minAge, double maxAge) {
-        double personsAgeInMonthsToday = ZScore.getAgeInMonths(dob, Calendar.getInstance().getTime());
+        double personsAgeInMonthsToday = WeightZScore.getAgeInMonths(dob, Calendar.getInstance().getTime());
         double maxY = getMaxY(dob, maxAge, gender);
         double minY = getMinY(dob, minAge, gender);
 
-        if (personsAgeInMonthsToday > ZScore.MAX_REPRESENTED_AGE) {
-            personsAgeInMonthsToday = ZScore.MAX_REPRESENTED_AGE;
+        if (personsAgeInMonthsToday > WeightZScore.MAX_REPRESENTED_AGE) {
+            personsAgeInMonthsToday = WeightZScore.MAX_REPRESENTED_AGE;
         }
 
         List<PointValue> values = new ArrayList<>();
@@ -276,7 +274,7 @@ public class WeightMonitoringFragment extends Fragment {
             return 0d;
         }
 
-        double maxY = ZScore.reverse(gender, maxAge, 3d);
+        double maxY = WeightZScore.reverse(gender, maxAge, 3d);
 
         for (Weight curWeight : getWeights()) {
             if (isWeightOkToDisplay(minWeighingDate, maxWeighingDate, curWeight) && curWeight.getKg() > maxY) {
@@ -292,7 +290,7 @@ public class WeightMonitoringFragment extends Fragment {
             return 0d;
         }
 
-        double minY = ZScore.reverse(gender, minAge, -3d);
+        double minY = WeightZScore.reverse(gender, minAge, -3d);
 
         for (Weight curWeight : getWeights()) {
             if (isWeightOkToDisplay(minWeighingDate, maxWeighingDate, curWeight) && curWeight.getKg() < minY) {
@@ -314,7 +312,7 @@ public class WeightMonitoringFragment extends Fragment {
                 Calendar weighingDate = Calendar.getInstance();
                 weighingDate.setTime(curWeight.getDate());
                 GrowthMonitoringUtils.standardiseCalendarDate(weighingDate);
-                double x = ZScore.getAgeInMonths(dob, weighingDate.getTime());
+                double x = WeightZScore.getAgeInMonths(dob, weighingDate.getTime());
                 double y = curWeight.getKg();
                 values.add(new PointValue((float) x, (float) y));
             }
@@ -348,7 +346,7 @@ public class WeightMonitoringFragment extends Fragment {
     private Line getZScoreLine(Gender gender, double startAgeInMonths, double endAgeInMonths, double z, int color) {
         List<PointValue> values = new ArrayList<>();
         while (startAgeInMonths <= endAgeInMonths) {
-            Double weight = ZScore.reverse(gender, startAgeInMonths, z);
+            Double weight = WeightZScore.reverse(gender, startAgeInMonths, z);
 
             if (weight != null) {
                 values.add(new PointValue((float) startAgeInMonths, (float) weight.doubleValue()));
@@ -376,15 +374,15 @@ public class WeightMonitoringFragment extends Fragment {
             minGraphTime = Calendar.getInstance();
             maxGraphTime = Calendar.getInstance();
 
-            if (ZScore.getAgeInMonths(dob, maxGraphTime.getTime()) > ZScore.MAX_REPRESENTED_AGE) {
+            if (WeightZScore.getAgeInMonths(dob, maxGraphTime.getTime()) > WeightZScore.MAX_REPRESENTED_AGE) {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(dob);
-                cal.add(Calendar.MONTH, (int) Math.round(ZScore.MAX_REPRESENTED_AGE));
+                cal.add(Calendar.MONTH, (int) Math.round(WeightZScore.MAX_REPRESENTED_AGE));
                 maxGraphTime = cal;
                 minGraphTime = (Calendar) maxGraphTime.clone();
             }
 
-            minGraphTime.add(Calendar.MONTH, - GrowthMonitoringConstants.GRAPH_MONTHS_TIMELINE);
+            minGraphTime.add(Calendar.MONTH, -GrowthMonitoringConstants.GRAPH_MONTHS_TIMELINE);
             GrowthMonitoringUtils.standardiseCalendarDate(minGraphTime);
             GrowthMonitoringUtils.standardiseCalendarDate(maxGraphTime);
 

@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Jason Rogena - jrogena@ona.io on 31/05/2017.
  */
 
-public class ZScore {
+public class WeightZScore {
     public static double MAX_REPRESENTED_AGE = 60d;
     private final Gender gender;
     private final int month;
@@ -29,8 +29,8 @@ public class ZScore {
     private final double sd2;
     private final double sd3;
 
-    public ZScore(Gender gender, int month, double l, double m, double s, double sd3Neg,
-                  double sd2Neg, double sd1Neg, double sd0, double sd1, double sd2, double sd3) {
+    public WeightZScore(Gender gender, int month, double l, double m, double s, double sd3Neg,
+                        double sd2Neg, double sd1Neg, double sd0, double sd1, double sd2, double sd3) {
         this.gender = gender;
         this.month = month;
         this.l = l;
@@ -93,24 +93,24 @@ public class ZScore {
         try {
             if (dateOfBirth != null && gender != null && weighingDate != null) {
                 int ageInMonths = (int) Math.round(getAgeInMonths(dateOfBirth, weighingDate));
-                List<ZScore> zScores = GrowthMonitoringLibrary.getInstance().zScoreRepository().findByGender(gender);
+                List<WeightZScore> weightZScores = GrowthMonitoringLibrary.getInstance().weightZScoreRepository().findByGender(gender);
 
-                ZScore zScoreToUse = null;
-                for (ZScore curZScore : zScores) {
-                    if (curZScore.month == ageInMonths) {
-                        zScoreToUse = curZScore;
+                WeightZScore weightZScoreToUse = null;
+                for (WeightZScore curWeightZScore : weightZScores) {
+                    if (curWeightZScore.month == ageInMonths) {
+                        weightZScoreToUse = curWeightZScore;
                         break;
                     }
                 }
 
-                if (zScoreToUse != null) {
-                    return new Double(zScoreToUse.getZ(weight));
+                if (weightZScoreToUse != null) {
+                    return new Double(weightZScoreToUse.getZ(weight));
                 }
             }
 
             return 0.0;
         } catch (Exception e) {
-            Log.e(ZScore.class.getCanonicalName(), e.getMessage());
+            Log.e(WeightZScore.class.getCanonicalName(), e.getMessage());
             return null;
         }
     }
@@ -125,18 +125,18 @@ public class ZScore {
      */
     public static Double reverse(Gender gender, double ageInMonthsDouble, Double z) {
         int ageInMonths = (int) Math.round(ageInMonthsDouble);
-        List<ZScore> zScores = GrowthMonitoringLibrary.getInstance().zScoreRepository().findByGender(gender);
+        List<WeightZScore> weightZScores = GrowthMonitoringLibrary.getInstance().weightZScoreRepository().findByGender(gender);
 
-        ZScore zScoreToUse = null;
-        for (ZScore curZScore : zScores) {
-            if (curZScore.month == ageInMonths) {
-                zScoreToUse = curZScore;
+        WeightZScore weightZScoreToUse = null;
+        for (WeightZScore curWeightZScore : weightZScores) {
+            if (curWeightZScore.month == ageInMonths) {
+                weightZScoreToUse = curWeightZScore;
                 break;
             }
         }
 
-        if (zScoreToUse != null) {
-            return new Double(zScoreToUse.getX(z));
+        if (weightZScoreToUse != null) {
+            return new Double(weightZScoreToUse.getX(z));
         }
 
         return null;
