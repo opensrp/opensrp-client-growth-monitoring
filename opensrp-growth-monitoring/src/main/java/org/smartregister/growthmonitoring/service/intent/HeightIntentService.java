@@ -8,9 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.domain.Height;
-import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.repository.HeightRepository;
-import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
 import org.smartregister.growthmonitoring.util.JsonFormUtils;
 

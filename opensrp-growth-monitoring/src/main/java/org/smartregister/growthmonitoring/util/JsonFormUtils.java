@@ -1,6 +1,5 @@
 package org.smartregister.growthmonitoring.util;
 
-import android.content.Context;
 import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;

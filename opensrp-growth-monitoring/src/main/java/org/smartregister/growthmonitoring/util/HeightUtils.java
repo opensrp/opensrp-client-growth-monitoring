@@ -1,7 +1,6 @@
 package org.smartregister.growthmonitoring.util;
 
 import org.smartregister.growthmonitoring.domain.Height;
-import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.util.DateUtil;
 
 /**
