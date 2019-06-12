@@ -23,8 +23,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.R;
+import org.smartregister.growthmonitoring.domain.HeightWrapper;
 import org.smartregister.growthmonitoring.domain.WeightWrapper;
-import org.smartregister.growthmonitoring.listener.WeightActionListener;
+import org.smartregister.growthmonitoring.listener.GMActionListener;
+import org.smartregister.growthmonitoring.repository.HeightRepository;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.util.ImageUtils;
 import org.smartregister.util.DatePickerUtils;
@@ -38,28 +40,37 @@ import java.util.Date;
 @SuppressLint("ValidFragment")
 public class EditGrowthDialogFragment extends DialogFragment {
     private final Context context;
-    private final WeightWrapper tag;
-    private WeightActionListener listener;
+    private final WeightWrapper weightWrapper;
+    private final HeightWrapper heightWrapper;
+    private GMActionListener GMActionListener;
     public static final String DIALOG_TAG = "EditGrowthDialogFragment";
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
     private DateTime currentWeightDate;
     private Float currentWeight;
+    private Float currentHeight;
 
     private Date dateOfBirth;
 
-    private EditGrowthDialogFragment(Context context, Date dateOfBirth, WeightWrapper tag) {
+    private EditGrowthDialogFragment(Context context, Date dateOfBirth, WeightWrapper weightWrapper, HeightWrapper heightWrapper) {
         this.context = context;
         this.dateOfBirth = dateOfBirth;
-        if (tag == null) {
-            this.tag = new WeightWrapper();
+        if (weightWrapper == null) {
+            this.weightWrapper = new WeightWrapper();
         } else {
-            this.tag = tag;
+            this.weightWrapper = weightWrapper;
+        }
+
+        if (heightWrapper == null) {
+            this.heightWrapper = new HeightWrapper();
+        } else {
+            this.heightWrapper = heightWrapper;
         }
     }
 
-    public static EditGrowthDialogFragment newInstance(Context context, Date dateOfBirth, WeightWrapper tag) {
-        return new EditGrowthDialogFragment(context, dateOfBirth, tag);
+    public static EditGrowthDialogFragment newInstance(Context context, Date dateOfBirth, WeightWrapper weightWrapper,
+                                                       HeightWrapper heightWrapper) {
+        return new EditGrowthDialogFragment(context, dateOfBirth, weightWrapper, heightWrapper);
     }
 
     @Override
@@ -75,14 +86,21 @@ public class EditGrowthDialogFragment extends DialogFragment {
         ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.edit_growth_dialog_view, container, false);
 
         final EditText editWeight = dialogView.findViewById(R.id.edit_weight);
-        if (tag.getWeight() != null) {
-            editWeight.setText(tag.getWeight().toString());
+        if (weightWrapper.getWeight() != null) {
+            editWeight.setText(weightWrapper.getWeight().toString());
             editWeight.setSelection(editWeight.getText().length());
-            currentWeight = tag.getWeight();
+            currentWeight = weightWrapper.getWeight();
         }
 
-        if (tag.getUpdatedWeightDate() != null) {
-            currentWeightDate = tag.getUpdatedWeightDate();
+        final EditText editHeight = dialogView.findViewById(R.id.edit_height);
+        if (heightWrapper.getHeight() != null) {
+            editHeight.setText(heightWrapper.getHeight().toString());
+            editHeight.setSelection(editWeight.getText().length());
+            currentHeight = heightWrapper.getHeight();
+        }
+
+        if (weightWrapper.getUpdatedWeightDate() != null) {
+            currentWeightDate = weightWrapper.getUpdatedWeightDate();
         }
 
         final DatePicker earlierDatePicker = dialogView.findViewById(R.id.earlier_date_picker);
@@ -92,33 +110,34 @@ public class EditGrowthDialogFragment extends DialogFragment {
         }
 
         TextView nameView = dialogView.findViewById(R.id.child_name);
-        nameView.setText(tag.getPatientName());
+        nameView.setText(weightWrapper.getPatientName());
 
         TextView numberView = dialogView.findViewById(R.id.child_zeir_id);
-        if (StringUtils.isNotBlank(tag.getPatientNumber())) {
-            numberView.setText(String.format("%s: %s", getString(R.string.label_zeir), tag.getPatientNumber()));
+        if (StringUtils.isNotBlank(weightWrapper.getPatientNumber())) {
+            numberView.setText(String.format("%s: %s", getString(R.string.label_zeir), weightWrapper.getPatientNumber()));
         } else {
             numberView.setText("");
         }
 
         TextView ageView = dialogView.findViewById(R.id.child_age);
-        if (StringUtils.isNotBlank(tag.getPatientAge())) {
-            ageView.setText(String.format("%s: %s", getString(R.string.age), tag.getPatientAge()));
+        if (StringUtils.isNotBlank(weightWrapper.getPatientAge())) {
+            ageView.setText(String.format("%s: %s", getString(R.string.age), weightWrapper.getPatientAge()));
         } else {
             ageView.setText("");
         }
 
         TextView pmtctStatusView = dialogView.findViewById(R.id.pmtct_status);
-        pmtctStatusView.setText(tag.getPmtctStatus());
+        pmtctStatusView.setText(weightWrapper.getPmtctStatus());
 
-        if (tag.getId() != null) {
+        if (weightWrapper.getId() != null) {
             ImageView mImageView = dialogView.findViewById(R.id.child_profilepic);
 
-            if (tag.getId() != null) {//image already in local storage most likely ):
+            if (weightWrapper.getId() != null) {//image already in local storage most likely ):
                 //set profile image by passing the client id.If the image doesn't exist in the image repository then download and save locally
-                mImageView.setTag(R.id.entity_id, tag.getId());
-                DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(tag.getId(), OpenSRPImageLoader.getStaticImageListener(
-                        mImageView, ImageUtils.profileImageResourceByGender(tag.getGender()), ImageUtils.profileImageResourceByGender(tag.getGender())));
+                mImageView.setTag(R.id.entity_id, weightWrapper.getId());
+                DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(weightWrapper.getId(), OpenSRPImageLoader.getStaticImageListener(
+                        mImageView, ImageUtils.profileImageResourceByGender(weightWrapper.getGender()), ImageUtils.profileImageResourceByGender(
+                                weightWrapper.getGender())));
             }
         }
 
@@ -132,9 +151,15 @@ public class EditGrowthDialogFragment extends DialogFragment {
                     return;
                 }
 
+                String heightString = editHeight.getText().toString();
+                if (StringUtils.isBlank(heightString) || Float.valueOf(heightString) <= 0f) {
+                    return;
+                }
+
                 dismiss();
 
                 boolean weightChanged = false;
+                boolean heightChanged = false;
                 boolean dateChanged = false;
 
                 if (earlierDatePicker.getVisibility() == View.VISIBLE) {
@@ -146,7 +171,7 @@ public class EditGrowthDialogFragment extends DialogFragment {
                     calendar.set(year, month, day);
 
                     if (!org.apache.commons.lang3.time.DateUtils.isSameDay(calendar.getTime(), currentWeightDate.toDate())) {
-                        tag.setUpdatedWeightDate(new DateTime(calendar.getTime()), false);
+                        weightWrapper.setUpdatedWeightDate(new DateTime(calendar.getTime()), false);
                         dateChanged = true;
                     }
                 }
@@ -154,12 +179,22 @@ public class EditGrowthDialogFragment extends DialogFragment {
 
                 Float weight = Float.valueOf(weightString);
                 if (!weight.equals(currentWeight)) {
-                    tag.setWeight(weight);
+                    weightWrapper.setWeight(weight);
                     weightChanged = true;
                 }
 
                 if (weightChanged || dateChanged) {
-                    listener.onWeightTaken(tag);
+                    GMActionListener.onWeightTaken(weightWrapper);
+                }
+
+                Float height = Float.valueOf(heightString);
+                if (!height.equals(currentHeight)) {
+                    heightWrapper.setHeight(height);
+                    heightChanged = true;
+                }
+
+                if (heightChanged || dateChanged) {
+                    GMActionListener.onHeightTaken(heightWrapper);
                 }
 
             }
@@ -171,13 +206,20 @@ public class EditGrowthDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 dismiss();
                 WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
-                weightRepository.delete(String.valueOf(tag.getDbKey()));
-                listener.onWeightTaken(null);
+                weightRepository.delete(String.valueOf(weightWrapper.getDbKey()));
+                GMActionListener.onWeightTaken(null);
+
+                HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
+                heightRepository.delete(String.valueOf(heightWrapper.getDbKey()));
+                GMActionListener.onHeightTaken(null);
 
             }
         });
-        if (tag.getUpdatedWeightDate() != null) {
-            ((TextView) dialogView.findViewById(R.id.service_date)).setText("Date weighed: " + tag.getUpdatedWeightDate().dayOfMonth().get() + "-" + tag.getUpdatedWeightDate().monthOfYear().get() + "-" + tag.getUpdatedWeightDate().year().get() + "");
+        if (weightWrapper.getUpdatedWeightDate() != null || heightWrapper.getUpdatedHeightDate() != null) {
+            ((TextView) dialogView.findViewById(R.id.service_date)).setText(getString(R.string.date_recorded) + weightWrapper.getUpdatedWeightDate().dayOfMonth().get() + "-" + weightWrapper
+                    .getUpdatedWeightDate().monthOfYear().get() + "-" + weightWrapper.getUpdatedWeightDate().year().get() + "");
+            ((TextView) dialogView.findViewById(R.id.service_date)).setText(getString(R.string.date_recorded) + heightWrapper.getUpdatedHeightDate().dayOfMonth().get() + "-" + heightWrapper
+                    .getUpdatedHeightDate().monthOfYear().get() + "-" + heightWrapper.getUpdatedHeightDate().year().get() + "");
         } else {
             dialogView.findViewById(R.id.service_date).setVisibility(View.GONE);
             weightDelete.setVisibility(View.GONE);
@@ -218,12 +260,13 @@ public class EditGrowthDialogFragment extends DialogFragment {
         super.onAttach(activity);
         // Verify that the host activity implements the callback interface
         try {
-            // Instantiate the WeightActionListener so we can send events to the host
-            listener = (WeightActionListener) activity;
+            // Instantiate the GMActionListener so we can send events to the host
+            GMActionListener = (GMActionListener) activity;
+            GMActionListener = (GMActionListener) activity;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(activity.toString()
-                    + " must implement WeightActionListener");
+                    + " must implement GMActionListener");
         }
     }
 

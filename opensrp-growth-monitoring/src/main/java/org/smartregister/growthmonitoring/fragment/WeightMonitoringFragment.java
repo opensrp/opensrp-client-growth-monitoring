@@ -82,9 +82,9 @@ public class WeightMonitoringFragment extends Fragment {
                     isExpanded = true;
                     getHeight(weightTabView.findViewById(R.id.weight_growth_chart), new ViewMeasureListener() {
                         @Override
-                        public void onCompletedMeasuring(int height) {
-                            weightTabView.findViewById(R.id.growth_dialog_weight_table_ayout).getLayoutParams().height =
-                                    getResources().getDimensionPixelSize(R.dimen.weight_table_height) + height;
+                        public void onCompletedMeasuring(int weight) {
+                            weightTabView.findViewById(R.id.growth_dialog_weight_table_layout).getLayoutParams().height =
+                                    getResources().getDimensionPixelSize(R.dimen.weight_table_height) + weight;
                         }
                     });
                     weightTabView.findViewById(R.id.weight_growth_chart).setVisibility(View.GONE);
@@ -92,7 +92,7 @@ public class WeightMonitoringFragment extends Fragment {
                 } else {
                     isExpanded = false;
                     weightTabView.findViewById(R.id.weight_growth_chart).setVisibility(View.VISIBLE);
-                    weightTabView.findViewById(R.id.growth_dialog_weight_table_ayout).getLayoutParams().height =
+                    weightTabView.findViewById(R.id.growth_dialog_weight_table_layout).getLayoutParams().height =
                             getResources().getDimensionPixelSize(R.dimen.weight_table_height);
                     scrollButton.setImageResource(R.drawable.ic_icon_collapse);
                 }

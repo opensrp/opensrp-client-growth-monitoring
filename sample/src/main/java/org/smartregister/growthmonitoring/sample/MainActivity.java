@@ -16,13 +16,17 @@ import android.widget.Toast;
 import org.joda.time.DateTime;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
+import org.smartregister.growthmonitoring.domain.Height;
+import org.smartregister.growthmonitoring.domain.HeightWrapper;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.domain.WeightWrapper;
 import org.smartregister.growthmonitoring.fragment.GrowthDialogFragment;
-import org.smartregister.growthmonitoring.listener.WeightActionListener;
+import org.smartregister.growthmonitoring.listener.GMActionListener;
+import org.smartregister.growthmonitoring.repository.HeightRepository;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.sample.util.SampleUtil;
 import org.smartregister.growthmonitoring.service.intent.WeightIntentService;
+import org.smartregister.growthmonitoring.util.HeightUtils;
 import org.smartregister.growthmonitoring.util.WeightUtils;
 import org.smartregister.util.DateUtil;
 import org.smartregister.util.Utils;
@@ -33,7 +37,9 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements WeightActionListener {
+import timber.log.Timber;
+
+public class MainActivity extends AppCompatActivity implements GMActionListener {
     private static final String TAG = MainActivity.class.getCanonicalName();
 
     private static final String DIALOG_TAG = "DIALOG_TAG_DUUH";
@@ -129,16 +135,16 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
 
 
     @Override
-    public void onWeightTaken(WeightWrapper tag) {
-        if (tag != null) {
+    public void onWeightTaken(WeightWrapper weightWrapper) {
+        if (weightWrapper != null) {
             final WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
             Weight weight = new Weight();
-            if (tag.getDbKey() != null) {
-                weight = weightRepository.find(tag.getDbKey());
+            if (weightWrapper.getDbKey() != null) {
+                weight = weightRepository.find(weightWrapper.getDbKey());
             }
             weight.setBaseEntityId(SampleUtil.ENTITY_ID);
-            weight.setKg(tag.getWeight());
-            weight.setDate(tag.getUpdatedWeightDate().toDate());
+            weight.setKg(weightWrapper.getWeight());
+            weight.setDate(weightWrapper.getUpdatedWeightDate().toDate());
             weight.setAnmId("sample");
             weight.setLocationId("Kenya");
             weight.setTeam("testTeam");
@@ -164,11 +170,53 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
                 weightRepository.add(weight);
             }
 
-            tag.setDbKey(weight.getId());
+            weightWrapper.setDbKey(weight.getId());
 
         }
 
         refreshEditWeightLayout();
+    }
+
+    @Override
+    public void onHeightTaken(HeightWrapper heightWrapper) {
+        if (heightWrapper != null) {
+            final HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
+            Height height = new Height();
+            if (heightWrapper.getDbKey() != null) {
+                height = heightRepository.find(heightWrapper.getDbKey());
+            }
+            height.setBaseEntityId(SampleUtil.ENTITY_ID);
+            height.setCm(heightWrapper.getHeight());
+            height.setDate(heightWrapper.getUpdatedHeightDate().toDate());
+            height.setAnmId("sample");
+            height.setLocationId("Kenya");
+            height.setTeam("testTeam");
+            height.setTeamId("testTeamId");
+            height.setChildLocationId("testChildLocationId");
+
+            Gender gender = Gender.UNKNOWN;
+
+            String genderString = SampleUtil.GENDER;
+
+            if (genderString != null && genderString.toLowerCase().equals("female")) {
+                gender = Gender.FEMALE;
+            } else if (genderString != null && genderString.toLowerCase().equals("male")) {
+                gender = Gender.MALE;
+            }
+
+            Date dob = SampleUtil.getDateOfBirth();
+
+            if (dob != null && gender != Gender.UNKNOWN) {
+                heightRepository.add(dob, gender, height);
+            } else {
+                heightRepository.add(height);
+            }
+
+            heightWrapper.setDbKey(height.getId());
+
+        }
+
+        refreshEditHeightLayout();
     }
 
     private void refreshEditWeightLayout() {
@@ -212,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
                     @Override
                     public void onClick(View v) {
                         v.setEnabled(false);
-                        SampleUtil.showEditWeightDialog(MainActivity.this, finalI, DIALOG_TAG);
+                        SampleUtil.showEditGrowthMonitoringDialog(MainActivity.this, finalI, DIALOG_TAG);
                         v.setEnabled(true);
                     }
                 };
@@ -228,6 +276,62 @@ public class MainActivity extends AppCompatActivity implements WeightActionListe
 
         if (weightmap.size() > 0) {
             SampleUtil.createWeightWidget(MainActivity.this, weightWidget, weightmap, listeners, weighteditmode);
+        }
+    }
+
+    private void refreshEditHeightLayout() {
+        View heightWidget = findViewById(R.id.height_widget);
+
+        LinkedHashMap<Long, Pair<String, String>> heightmap = new LinkedHashMap<>();
+        ArrayList<Boolean> heightEditMode = new ArrayList<>();
+        ArrayList<View.OnClickListener> listeners = new ArrayList<>();
+
+        HeightRepository wp = GrowthMonitoringLibrary.getInstance().heightRepository();
+        List<Height> heightList = wp.findLast5(SampleUtil.ENTITY_ID);
+
+        for (int i = 0; i < heightList.size(); i++) {
+            Height height = heightList.get(i);
+            String formattedAge = "";
+            if (height.getDate() != null) {
+
+                Date heightDate = height.getDate();
+                DateTime birthday = new DateTime(SampleUtil.getDateOfBirth());
+                Date birth = birthday.toDate();
+                long timeDiff = heightDate.getTime() - birth.getTime();
+                Timber.v("%s", timeDiff);
+                if (timeDiff >= 0) {
+                    formattedAge = DateUtil.getDuration(timeDiff);
+                    Timber.v(formattedAge);
+                }
+            }
+            if (!formattedAge.equalsIgnoreCase("0d")) {
+                heightmap.put(height.getId(), Pair.create(formattedAge, Utils.cmStringSuffix(height.getCm())));
+
+                boolean lessThanThreeMonthsEventCreated = HeightUtils.lessThanThreeMonths(height);
+                heightEditMode.add(lessThanThreeMonthsEventCreated);
+
+                final int finalI = i;
+                View.OnClickListener onClickListener = new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        v.setEnabled(false);
+                        SampleUtil.showEditGrowthMonitoringDialog(MainActivity.this, finalI, DIALOG_TAG);
+                        v.setEnabled(true);
+                    }
+                };
+                listeners.add(onClickListener);
+            }
+
+        }
+        if (heightmap.size() < 5) {
+            heightmap.put(0l, Pair.create(DateUtil.getDuration(0), SampleUtil.BIRTH_HEIGHT + " cm"));
+            heightEditMode.add(false);
+            listeners.add(null);
+        }
+
+        if (heightmap.size() > 0) {
+            SampleUtil.createHeightWidget(MainActivity.this, heightWidget, heightmap, listeners, heightEditMode);
         }
     }
 

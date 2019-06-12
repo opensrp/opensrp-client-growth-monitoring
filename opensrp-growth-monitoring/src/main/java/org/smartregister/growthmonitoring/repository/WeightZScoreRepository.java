@@ -23,7 +23,7 @@ import java.util.List;
 
 public class WeightZScoreRepository extends BaseRepository {
     private static final String TAG = WeightZScoreRepository.class.getName();
-    public static final String TABLE_NAME = "_z_scores";
+    public static final String TABLE_NAME = "weight_z_scores";
     public static final String COLUMN_SEX = "sex";
     public static final String COLUMN_MONTH = "month";
     public static final String COLUMN_L = "l";
@@ -53,8 +53,8 @@ public class WeightZScoreRepository extends BaseRepository {
             COLUMN_SD3 + " REAL NOT NULL, " +
             "UNIQUE(" + COLUMN_SEX + ", " + COLUMN_MONTH + ") ON CONFLICT REPLACE)";
 
-    private static final String CREATE_INDEX_SEX_QUERY = "CREATE INDEX " + COLUMN_SEX + "_index ON " + TABLE_NAME + "(" + COLUMN_SEX + " COLLATE NOCASE);";
-    private static final String CREATE_INDEX_MONTH_QUERY = "CREATE INDEX " + COLUMN_MONTH + "_index ON " + TABLE_NAME + "(" + COLUMN_MONTH + " COLLATE NOCASE);";
+    private static final String CREATE_INDEX_SEX_QUERY = "CREATE INDEX " + TABLE_NAME + "_" + COLUMN_SEX + "_index ON " + TABLE_NAME + "(" + COLUMN_SEX + " COLLATE " + "NOCASE);";
+    private static final String CREATE_INDEX_MONTH_QUERY = "CREATE INDEX " + TABLE_NAME + "_" + COLUMN_MONTH + "_index ON " + TABLE_NAME + "(" + COLUMN_MONTH + " COLLATE NOCASE);";
 
     public WeightZScoreRepository(Repository repository) {
         super(repository);
@@ -89,7 +89,7 @@ public class WeightZScoreRepository extends BaseRepository {
             cursor = database.query(TABLE_NAME,
                     null,
                     COLUMN_SEX + " = ? " + COLLATE_NOCASE,
-                    new String[]{gender.name()}, null, null, null, null);
+                    new String[] {gender.name()}, null, null, null, null);
 
             if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {

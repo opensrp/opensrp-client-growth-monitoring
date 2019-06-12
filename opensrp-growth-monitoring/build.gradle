@@ -38,11 +38,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "int", "WEIGHT_SYNC_TIME", '12'
+            buildConfigField "int", "GROWTH_MONITORING_SYNC_TIME", '12'
         }
 
         debug {
-            buildConfigField "int", "WEIGHT_SYNC_TIME", '0'
+            buildConfigField "int", "GROWTH_MONITORING_SYNC_TIME", '0'
             testCoverageEnabled true
         }
     }
@@ -81,12 +81,13 @@ tasks.withType(Test) {
 allprojects {
     repositories {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         mavenLocal()
     }
 }
 
 dependencies {
-    implementation('org.smartregister:opensrp-client-core:1.6.29-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-core:1.6.3500-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
     }

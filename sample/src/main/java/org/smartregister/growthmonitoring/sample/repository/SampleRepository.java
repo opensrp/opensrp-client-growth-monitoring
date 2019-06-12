@@ -7,6 +7,8 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.smartregister.AllConstants;
 import org.smartregister.domain.db.Column;
+import org.smartregister.growthmonitoring.repository.HeightRepository;
+import org.smartregister.growthmonitoring.repository.HeightZScoreRepository;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.repository.WeightZScoreRepository;
 import org.smartregister.growthmonitoring.sample.BuildConfig;
@@ -17,8 +19,6 @@ import org.smartregister.repository.Repository;
  * Created by keyman on 28/07/2017.
  */
 public class SampleRepository extends Repository {
-
-
     private static final String TAG = SampleRepository.class.getCanonicalName();
     protected SQLiteDatabase readableDatabase;
     protected SQLiteDatabase writableDatabase;
@@ -41,9 +41,16 @@ public class SampleRepository extends Repository {
         database.execSQL(WeightRepository.EVENT_ID_INDEX);
         database.execSQL(WeightRepository.UPDATE_TABLE_ADD_FORMSUBMISSION_ID_COL);
         database.execSQL(WeightRepository.FORMSUBMISSION_INDEX);
-
         database.execSQL(WeightRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL);
         database.execSQL(WeightRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL_INDEX);
+
+        HeightRepository.createTable(database);
+        database.execSQL(HeightRepository.UPDATE_TABLE_ADD_EVENT_ID_COL);
+        database.execSQL(HeightRepository.EVENT_ID_INDEX);
+        database.execSQL(HeightRepository.UPDATE_TABLE_ADD_FORMSUBMISSION_ID_COL);
+        database.execSQL(HeightRepository.FORMSUBMISSION_INDEX);
+        database.execSQL(HeightRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL);
+        database.execSQL(HeightRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL_INDEX);
 
         onUpgrade(database, 1, BuildConfig.DATABASE_VERSION);
 
@@ -77,7 +84,10 @@ public class SampleRepository extends Repository {
     private void upgradeToVersion2(SQLiteDatabase db) {
         try {
             WeightZScoreRepository.createTable(db);
+            HeightZScoreRepository.createTable(db);
+
             db.execSQL(WeightRepository.ALTER_ADD_Z_SCORE_COLUMN);
+            db.execSQL(HeightRepository.ALTER_ADD_Z_SCORE_COLUMN);
         } catch (Exception e) {
             Log.e(TAG, "upgradeToVersion2 " + e.getMessage());
         }
@@ -89,7 +99,10 @@ public class SampleRepository extends Repository {
             EventClientRepository.createIndex(db, EventClientRepository.Table.event, columns);
 
             db.execSQL(WeightRepository.ALTER_ADD_CREATED_AT_COLUMN);
+            db.execSQL(HeightRepository.ALTER_ADD_CREATED_AT_COLUMN);
+
             WeightRepository.migrateCreatedAt(db);
+            HeightRepository.migrateCreatedAt(db);
         } catch (Exception e) {
             Log.e(TAG, "upgradeToVersion3 " + e.getMessage());
         }
@@ -101,6 +114,10 @@ public class SampleRepository extends Repository {
             db.execSQL(WeightRepository.UPDATE_TABLE_ADD_TEAM_COL);
             db.execSQL(WeightRepository.UPDATE_TABLE_ADD_TEAM_ID_COL);
             db.execSQL(WeightRepository.UPDATE_TABLE_ADD_CHILD_LOCATION_ID_COL);
+
+            db.execSQL(HeightRepository.UPDATE_TABLE_ADD_TEAM_COL);
+            db.execSQL(HeightRepository.UPDATE_TABLE_ADD_TEAM_ID_COL);
+            db.execSQL(HeightRepository.UPDATE_TABLE_ADD_CHILD_LOCATION_ID_COL);
         } catch (Exception e) {
             Log.e(TAG, "upgradeToVersion4 " + Log.getStackTraceString(e));
         }

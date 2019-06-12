@@ -7,7 +7,9 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
+import org.smartregister.growthmonitoring.domain.Height;
 import org.smartregister.growthmonitoring.domain.Weight;
+import org.smartregister.growthmonitoring.repository.HeightRepository;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
 import org.smartregister.growthmonitoring.util.JsonFormUtils;
@@ -17,54 +19,54 @@ import java.util.List;
 /**
  * Created by keyman on 3/01/2017.
  */
-public class WeightIntentService extends IntentService {
-    private static final String TAG = WeightIntentService.class.getCanonicalName();
+public class HeightIntentService extends IntentService {
+    private static final String TAG = HeightIntentService.class.getCanonicalName();
     public static final String EVENT_TYPE = "Growth Monitoring";
     public static final String EVENT_TYPE_OUT_OF_CATCHMENT = "Out of Area Service - Growth Monitoring";
-    public static final String ENTITY_TYPE = "weight";
-    private WeightRepository weightRepository;
+    public static final String ENTITY_TYPE = "height";
+    private HeightRepository heightRepository;
 
 
-    public WeightIntentService() {
-        super("WeightService");
+    public HeightIntentService() {
+        super("HeightService");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
 
         try {
-            List<Weight> weights = weightRepository.findUnSyncedBeforeTime(GrowthMonitoringConstants.GROWTH_MONITORING_SYNC_TIME);
-            if (!weights.isEmpty()) {
-                for (Weight weight : weights) {
+            List<Height> heights = heightRepository.findUnSyncedBeforeTime(GrowthMonitoringConstants.GROWTH_MONITORING_SYNC_TIME);
+            if (!heights.isEmpty()) {
+                for (Height height : heights) {
 
                     //Weight
                     JSONObject jsonObject = new JSONObject();
-                    jsonObject.put(GrowthMonitoringConstants.JsonForm.KEY, "Weight_Kgs");
+                    jsonObject.put(GrowthMonitoringConstants.JsonForm.KEY, "height_cm");
                     jsonObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY, "concept");
                     jsonObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_ID, "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                     jsonObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_PARENT, "");
                     jsonObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_DATA_TYPE, "decimal");
-                    jsonObject.put(GrowthMonitoringConstants.JsonForm.VALUE, weight.getKg());
+                    jsonObject.put(GrowthMonitoringConstants.JsonForm.VALUE, height.getCm());
 
                     //Zscore
                     JSONObject zScoreObject = new JSONObject();
-                    zScoreObject.put(GrowthMonitoringConstants.JsonForm.KEY, "Z_Score_Weight_Age");
+                    zScoreObject.put(GrowthMonitoringConstants.JsonForm.KEY, "Z_Score_Height_Age");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY, "concept");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_ID, "162584AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_PARENT, "");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_DATA_TYPE, "calculation");
-                    zScoreObject.put(GrowthMonitoringConstants.JsonForm.VALUE, weight.getZScore());
+                    zScoreObject.put(GrowthMonitoringConstants.JsonForm.VALUE, height.getZScore());
 
                     JSONArray jsonArray = new JSONArray();
                     jsonArray.put(jsonObject);
                     jsonArray.put(zScoreObject);
 
-                    JsonFormUtils.createWeightEvent( weight, EVENT_TYPE, ENTITY_TYPE, jsonArray);
-                    if (weight.getBaseEntityId() == null || weight.getBaseEntityId().isEmpty()) {
-                        JsonFormUtils.createWeightEvent( weight, EVENT_TYPE_OUT_OF_CATCHMENT, ENTITY_TYPE, jsonArray);
+                    JsonFormUtils.createHeightEvent( height, EVENT_TYPE, ENTITY_TYPE, jsonArray);
+                    if (height.getBaseEntityId() == null || height.getBaseEntityId().isEmpty()) {
+                        JsonFormUtils.createHeightEvent( height, EVENT_TYPE_OUT_OF_CATCHMENT, ENTITY_TYPE, jsonArray);
 
                     }
-                    weightRepository.close(weight.getId());
+                    heightRepository.close(height.getId());
                 }
             }
         } catch (Exception e) {
@@ -74,7 +76,7 @@ public class WeightIntentService extends IntentService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
+        heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
         return super.onStartCommand(intent, flags, startId);
     }
 }

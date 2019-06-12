@@ -89,22 +89,22 @@ public class HeightZScore {
         }
     }
 
-    public static Double calculate(Gender gender, Date dateOfBirth, Date weighingDate, double weight) {
+    public static Double calculate(Gender gender, Date dateOfBirth, Date heightDate, double weight) {
         try {
-            if (dateOfBirth != null && gender != null && weighingDate != null) {
-                int ageInMonths = (int) Math.round(getAgeInMonths(dateOfBirth, weighingDate));
+            if (dateOfBirth != null && gender != null && heightDate != null) {
+                int ageInMonths = (int) Math.round(getAgeInMonths(dateOfBirth, heightDate));
                 List<HeightZScore> heightZScores = GrowthMonitoringLibrary.getInstance().heightZScoreRepository().findByGender(gender);
 
-                HeightZScore weightZScoreToUse = null;
-                for (HeightZScore curWeightZScore : heightZScores) {
-                    if (curWeightZScore.month == ageInMonths) {
-                        weightZScoreToUse = curWeightZScore;
+                HeightZScore heightZScoreToUse = null;
+                for (HeightZScore curHeightZScore : heightZScores) {
+                    if (curHeightZScore.month == ageInMonths) {
+                        heightZScoreToUse = curHeightZScore;
                         break;
                     }
                 }
 
-                if (weightZScoreToUse != null) {
-                    return new Double(weightZScoreToUse.getZ(weight));
+                if (heightZScoreToUse != null) {
+                    return new Double(heightZScoreToUse.getZ(weight));
                 }
             }
 
@@ -127,33 +127,33 @@ public class HeightZScore {
         int ageInMonths = (int) Math.round(ageInMonthsDouble);
         List<HeightZScore> heightZScores = GrowthMonitoringLibrary.getInstance().heightZScoreRepository().findByGender(gender);
 
-        HeightZScore weightZScoreToUse = null;
-        for (HeightZScore curWeightZScore : heightZScores) {
-            if (curWeightZScore.month == ageInMonths) {
-                weightZScoreToUse = curWeightZScore;
+        HeightZScore heightZScoreToUse = null;
+        for (HeightZScore curHeightZScore : heightZScores) {
+            if (curHeightZScore.month == ageInMonths) {
+                heightZScoreToUse = curHeightZScore;
                 break;
             }
         }
 
-        if (weightZScoreToUse != null) {
-            return new Double(weightZScoreToUse.getX(z));
+        if (heightZScoreToUse != null) {
+            return new Double(heightZScoreToUse.getX(z));
         }
 
         return null;
     }
 
-    public static double getAgeInMonths(Date dateOfBirth, Date weighingDate) {
+    public static double getAgeInMonths(Date dateOfBirth, Date heightDate) {
         Calendar dobCalendar = Calendar.getInstance();
         dobCalendar.setTime(dateOfBirth);
         standardiseCalendarDate(dobCalendar);
 
-        Calendar weighingCalendar = Calendar.getInstance();
-        weighingCalendar.setTime(weighingDate);
-        standardiseCalendarDate(weighingCalendar);
+        Calendar heightCalendar = Calendar.getInstance();
+        heightCalendar.setTime(heightDate);
+        standardiseCalendarDate(heightCalendar);
 
         double result = 0;
-        if (dobCalendar.getTimeInMillis() <= weighingCalendar.getTimeInMillis()) {
-            result = ((double) (weighingCalendar.getTimeInMillis() - dobCalendar.getTimeInMillis())) / 2629746000l;
+        if (dobCalendar.getTimeInMillis() <= heightCalendar.getTimeInMillis()) {
+            result = ((double) (heightCalendar.getTimeInMillis() - dobCalendar.getTimeInMillis())) / 2629746000l;
         }
 
         return result;

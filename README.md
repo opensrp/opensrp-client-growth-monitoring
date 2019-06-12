@@ -17,21 +17,21 @@
 
 # Introduction
 
-This OpenSRP Module/app provides weight recording, updating, editing and charting capabilities. It also provides the **z-score** of a patient from their weight.
+This OpenSRP Module/app provides growthMonitoring recording, updating, editing and charting capabilities. It also provides the **z-score** of a patient from their growthMonitoring.
 
 # Features
 
 The app has the following features:
 
-1. It enables one to record the current or past weight
-2. It enables one to edit a patient's weight record
-3. It enables one to view the patient's weight over time on a graph
+1. It enables one to record the current or past growthMonitoring
+2. It enables one to edit a patient's growthMonitoring record
+3. It enables one to view the patient's growthMonitoring over time on a graph
 4. It enables one to view the **z-score**
-5. It enables one to determine a patient's weight status from the z-score
+5. It enables one to determine a patient's growthMonitoring status from the z-score
 
 # Z-Score
 
-The z-score is a score calculated from the weight & age of a patient to determine their weight status i.e. **overweight, underweight, average weight ...**
+The z-score is a score calculated from the growthMonitoring & age of a patient to determine their growthMonitoring status i.e. **overweight, underweight, average growthMonitoring ...**
 
 This score is calculated using values provided by WHO.
 
@@ -41,9 +41,9 @@ Color | Meaning | Appropriate Z-score
 ----- | ------- | -------------------
 Red | Underweight/Overweight | -2 and above OR +2 and above
 Green | Good! :thumbsup: | Between -2 and +2
-Dark Blue | Dangerous weight | Over +3 or below -3
+Dark Blue | Dangerous growthMonitoring | Over +3 or below -3
 
-You can easily tell the weight status by checking the z-score line on the graph and where it falls within the z-score indicators. The z-score line indicators use the same color-codes [above](#z-score-color-codes)
+You can easily tell the growthMonitoring status by checking the z-score line on the graph and where it falls within the z-score indicators. The z-score line indicators use the same color-codes [above](#z-score-color-codes)
 
 # App Walkthrough
 
@@ -54,7 +54,7 @@ The app is easy to use and has five important screens
 ![Main Page](https://user-images.githubusercontent.com/31766075/30366688-a33394c6-9874-11e7-9d21-1a408dba867f.png)
 
  * The **Top Section** has two buttons:
-     - **Record Weight Button** which enables one to record `current` or `past weight`
+     - **Record Weight Button** which enables one to record `current` or `past growthMonitoring`
 
      ![Record Weight Screenshot](https://user-images.githubusercontent.com/31766075/30361164-1c9a2d64-985e-11e7-8852-099b6d55f577.png)
      ![Record Past Weight Screenshot](https://user-images.githubusercontent.com/31766075/30361167-1ca12718-985e-11e7-9863-bb4a89efa134.png)
@@ -62,11 +62,11 @@ The app is easy to use and has five important screens
      ![Weight Graph Screenshot](https://user-images.githubusercontent.com/31766075/30361166-1ca12f92-985e-11e7-97b7-2ab3ed8bebe6.png)
 
 
-* The **Bottom Section** displays the last 5 weights recorded in the patient's lifetime. 
+* The **Bottom Section** displays the last 5 growthMonitorings recorded in the patient's lifetime. 
     - Each row has:
         + The **Patient Age** eg. `0d`
-        + The **Patient Weight** eg. `3.8 kg`
-        + The **Edit Weight Button** except the `birth weight` which cannot be changed
+        + The **Patient Weight** eg. `3.8 unit`
+        + The **Edit Weight Button** except the `birth growthMonitoring` which cannot be changed
 
         ![Edit Weight Screenshot](https://user-images.githubusercontent.com/31766075/30361163-1c99caf4-985e-11e7-8e3e-f985dff40a7a.png)
 

@@ -2,6 +2,7 @@
 <resources>
 
     <string name="Last_five_weights">LAST FIVE WEIGHTS</string>
+    <string name="Last_five_heights">LAST FIVE HEIGHTS</string>
     <string name="see_all">see all</string>
     <string name="edit">edit</string>
 
@@ -10,8 +11,8 @@
     <string name="label_zeir">ID</string>
     <string name="age">Age</string>
 
-    <string name="edit_weight_data">Edit weight data</string>
-    <string name="record_weight_with_nl">Record\nweigh</string>
+    <string name="edit_weight_data">Edit height data</string>
+    <string name="record_weight_with_nl">Record\nweight</string>
     <string name="record_growth">Record Growth</string>
     <string name="record_growth_notification">"Don't forget to record child's growth"</string>
     <string name="record_weight">Record weight</string>
@@ -23,6 +24,7 @@
 
     <string name="months">Months</string>
     <string name="kg">Kg</string>
+    <string name="cm">Cm</string>
     <string name="girls">Girls</string>
     <string name="boys">Boys</string>
     <string name="btn_layout_weight">2</string>
@@ -33,8 +35,9 @@
     <string name="z_score"> Z-score</string>
 
 
-    <string name="delete_weight">Delete weight</string>
-    <string name="change_date_weighed">Change date weighed</string>
+    <string name="delete_record">Delete record</string>
+    <string name="date_recorded">Date recorded</string>
+    <string name="change_date_recorded">Change date recorded</string>
     <string name="cancel">Cancel</string>
     <string name="set">Set</string>
     <string name="service_date">Service date</string>

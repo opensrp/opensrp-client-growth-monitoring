@@ -17,8 +17,8 @@ public class HeightWrapper implements Serializable {
     private String patientNumber;
     private String patientAge;
     private String pmtctStatus;
-    private Float weight;
-    private DateTime updatedWeightDate;
+    private Float height;
+    private DateTime updatedHeightDate;
     private boolean today;
     private String dob;
 
@@ -54,21 +54,21 @@ public class HeightWrapper implements Serializable {
         this.patientNumber = patientNumber;
     }
 
-    public DateTime getUpdatedWeightDate() {
-        return updatedWeightDate;
+    public DateTime getUpdatedHeightDate() {
+        return updatedHeightDate;
     }
 
-    public void setUpdatedWeightDate(DateTime updatedWeightDate, boolean today) {
+    public void setUpdatedHeightDate(DateTime updatedWeightDate, boolean today) {
         this.today = today;
-        this.updatedWeightDate = updatedWeightDate;
+        this.updatedHeightDate = updatedWeightDate;
     }
 
     public boolean isToday() {
         return today;
     }
 
-    public String getUpdatedWeightDateAsString() {
-        return updatedWeightDate != null ? updatedWeightDate.toString("yyyy-MM-dd") : "";
+    public String getUpdatedhHeightDateAsString() {
+        return updatedHeightDate != null ? updatedHeightDate.toString("yyyy-MM-dd") : "";
     }
 
     public void setPhoto(Photo photo) {
@@ -79,12 +79,12 @@ public class HeightWrapper implements Serializable {
         return photo;
     }
 
-    public void setWeight(Float weight) {
-        this.weight = weight;
+    public void setHeight(Float height) {
+        this.height = height;
     }
 
-    public Float getWeight() {
-        return weight;
+    public Float getHeight() {
+        return height;
     }
 
     public void setPatientAge(String patientAge) {

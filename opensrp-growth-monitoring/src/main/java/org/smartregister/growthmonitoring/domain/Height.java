@@ -3,6 +3,9 @@ package org.smartregister.growthmonitoring.domain;
 import java.util.Date;
 import java.util.HashMap;
 
+/**
+ * Created by keyman on 3/1/17.
+ */
 public class Height {
     private static final String ZEIR_ID = "ZEIR_ID";
     private Long id;
@@ -10,7 +13,7 @@ public class Height {
     private String eventId;
     private String formSubmissionId;
     private String programClientId;
-    private Float kg;
+    private Float cm;
     private Date date;
     private String anmId;
     private String locationId;
@@ -26,13 +29,13 @@ public class Height {
     public Height() {
     }
 
-    public Height(Long id, String baseEntityId, Float kg, Date date, String anmId, String
+    public Height(Long id, String baseEntityId, Float cm, Date date, String anmId, String
             locationId, String syncStatus, Long updatedAt, String eventId, String
                           formSubmissionId, Integer outOfCatchment) {
         this.id = id;
         this.baseEntityId = baseEntityId;
         this.programClientId = null;
-        this.kg = kg;
+        this.cm = cm;
         this.date = date;
         this.anmId = anmId;
         this.locationId = locationId;
@@ -43,13 +46,13 @@ public class Height {
         this.outOfCatchment = outOfCatchment;
     }
 
-    public Height(Long id, String baseEntityId, String programClientId, Float kg, Date date,
+    public Height(Long id, String baseEntityId, String programClientId, Float cm, Date date,
                   String anmId, String locationId, String syncStatus, Long updatedAt, String
                           eventId, String formSubmissionId, Double zScore, Integer outOfCatchment, Date createdAt) {
         this.id = id;
         this.baseEntityId = baseEntityId;
         this.programClientId = programClientId;
-        this.kg = kg;
+        this.cm = cm;
         this.date = date;
         this.anmId = anmId;
         this.locationId = locationId;
@@ -93,12 +96,12 @@ public class Height {
         return identifiers;
     }
 
-    public Float getKg() {
-        return kg;
+    public Float getCm() {
+        return cm;
     }
 
-    public void setKg(Float kg) {
-        this.kg = kg;
+    public void setCm(Float cm) {
+        this.cm = cm;
     }
 
     public Date getDate() {

@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="org.smartregister.growthmonitoring.service.intent.WeightIntentService" />
+        <service android:name="org.smartregister.growthmonitoring.service.intent.GrowthMonitoringIntentService" />
         <service android:name="org.smartregister.growthmonitoring.service.intent.ZScoreRefreshIntentService" />
     </application>
 

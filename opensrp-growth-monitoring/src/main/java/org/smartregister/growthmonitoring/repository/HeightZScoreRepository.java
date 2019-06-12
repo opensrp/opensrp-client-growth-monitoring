@@ -7,7 +7,6 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.domain.HeightZScore;
-import org.smartregister.growthmonitoring.domain.WeightZScore;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.Repository;
 
@@ -54,8 +53,8 @@ public class HeightZScoreRepository extends BaseRepository {
             COLUMN_SD3 + " REAL NOT NULL, " +
             "UNIQUE(" + COLUMN_SEX + ", " + COLUMN_MONTH + ") ON CONFLICT REPLACE)";
 
-    private static final String CREATE_INDEX_SEX_QUERY = "CREATE INDEX " + COLUMN_SEX + "_index ON " + TABLE_NAME + "(" + COLUMN_SEX + " COLLATE NOCASE);";
-    private static final String CREATE_INDEX_MONTH_QUERY = "CREATE INDEX " + COLUMN_MONTH + "_index ON " + TABLE_NAME + "(" + COLUMN_MONTH + " COLLATE NOCASE);";
+    private static final String CREATE_INDEX_SEX_QUERY = "CREATE INDEX " + TABLE_NAME + "_" + COLUMN_SEX + "_index ON " + TABLE_NAME + "(" + COLUMN_SEX + " COLLATE NOCASE);";
+    private static final String CREATE_INDEX_MONTH_QUERY = "CREATE INDEX " + TABLE_NAME + "_" + COLUMN_MONTH + "_index ON " + TABLE_NAME + "(" + COLUMN_MONTH + " COLLATE NOCASE);";
 
     public HeightZScoreRepository(Repository repository) {
         super(repository);

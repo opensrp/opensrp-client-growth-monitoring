@@ -13,8 +13,11 @@ import org.opensrp.api.constants.Gender;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
+import org.smartregister.growthmonitoring.domain.Height;
+import org.smartregister.growthmonitoring.domain.HeightZScore;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.domain.WeightZScore;
+import org.smartregister.growthmonitoring.repository.HeightZScoreRepository;
 import org.smartregister.growthmonitoring.repository.WeightZScoreRepository;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
 import org.smartregister.util.FileUtilities;
@@ -74,10 +77,13 @@ public class ZScoreRefreshIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         // Dump CSV to file
-        dumpCsv(Gender.MALE, false);
-        dumpCsv(Gender.FEMALE, false);
+        dumpWeightCsv(Gender.MALE, false);
+        dumpWeightCsv(Gender.FEMALE, false);
+        dumpHeightCsv(Gender.FEMALE, false);
+        dumpHeightCsv(Gender.FEMALE, false);
 
-        calculateChildZScores();
+        calculateChildWeightZScores();
+        calculateChildHeightZScores();
 
         //FIXME split-growth-monitoring:Calling hia2Service after calculating zscore
         //Intent hia2Intent = new Intent(GrowthMonitoringLibrary.getInstance(), HIA2IntentService.class);
@@ -100,7 +106,7 @@ public class ZScoreRefreshIntentService extends IntentService {
 
             int responseCode = 0;
             if (url.getProtocol().equalsIgnoreCase("https")) {
-                urlConnection = (HttpsURLConnection) url.openConnection();
+                urlConnection = url.openConnection();
 
                 // Sets the user agent for this request.
                 urlConnection.setRequestProperty("User-Agent", FileUtilities.getUserAgent(GrowthMonitoringLibrary.getInstance().context().applicationContext()));
@@ -109,7 +115,7 @@ public class ZScoreRefreshIntentService extends IntentService {
                 responseCode = ((HttpsURLConnection) urlConnection).getResponseCode();
 
             } else if (url.getProtocol().equalsIgnoreCase("http")) {
-                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection = url.openConnection();
 
                 // Sets the user agent for this request.
                 urlConnection.setRequestProperty("User-Agent", FileUtilities.getUserAgent(GrowthMonitoringLibrary.getInstance().context().applicationContext()));
@@ -142,7 +148,7 @@ public class ZScoreRefreshIntentService extends IntentService {
      * @param gender
      * @param force
      */
-    private void dumpCsv(Gender gender, boolean force) {
+    private void dumpWeightCsv(Gender gender, boolean force) {
         try {
             List<WeightZScore> existingScores = GrowthMonitoringLibrary.getInstance().weightZScoreRepository().findByGender(gender);
             if (force
@@ -195,10 +201,119 @@ public class ZScoreRefreshIntentService extends IntentService {
     }
 
     /**
+     * This method dumps the HeightZScore CSV corresponding to the provided gender into the z_score table
+     *
+     * @param gender
+     * @param force
+     */
+    private void dumpHeightCsv(Gender gender, boolean force) {
+        try {
+            List<HeightZScore> existingScores = GrowthMonitoringLibrary.getInstance().heightZScoreRepository().findByGender(gender);
+            if (force
+                    || existingScores.size() == 0) {
+                String filename = null;
+                if (gender.equals(Gender.FEMALE)) {
+                    filename = GrowthMonitoringLibrary.getInstance().getConfig().getFemaleZScoreFile();
+                } else if (gender.equals(Gender.MALE)) {
+                    filename = GrowthMonitoringLibrary.getInstance().getConfig().getMaleZScoreFile();
+                }
+
+                if (filename != null) {
+                    CSVParser csvParser = CSVParser.parse(Utils.readAssetContents(this, filename),
+                            CSVFormat.newFormat('\t'));
+
+                    HashMap<Integer, Boolean> columnStatus = new HashMap<>();
+                    String query = "INSERT INTO `" + HeightZScoreRepository.TABLE_NAME + "` ( `" + HeightZScoreRepository.COLUMN_SEX + "`";
+                    for (CSVRecord record : csvParser) {
+                        if (csvParser.getCurrentLineNumber() == 2) {// The second line
+                            query = query + ")\n VALUES (\"" + gender.name() + "\"";
+                        } else if (csvParser.getCurrentLineNumber() > 2) {
+                            query = query + "),\n (\"" + gender.name() + "\"";
+                        }
+
+                        for (int columnIndex = 0; columnIndex < record.size(); columnIndex++) {
+                            String curColumn = record.get(columnIndex);
+                            if (csvParser.getCurrentLineNumber() == 1) {
+                                if (CSV_HEADING_SQL_COLUMN_MAP.containsKey(curColumn)) {
+                                    columnStatus.put(columnIndex, true);
+                                    query = query + ", `" + CSV_HEADING_SQL_COLUMN_MAP.get(curColumn) + "`";
+                                } else {
+                                    columnStatus.put(columnIndex, false);
+                                }
+                            } else {
+                                if (columnStatus.get(columnIndex)) {
+                                    query = query + ", \"" + curColumn + "\"";
+                                }
+                            }
+                        }
+                    }
+                    query = query + ");";
+
+                    boolean result = GrowthMonitoringLibrary.getInstance().heightZScoreRepository().runRawQuery(query);
+                    Log.d(TAG, "Result is " + result);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
+    }
+
+
+    /**
+     * This method retrieves all height records that don't have ZScores and tries to calculate their
+     * corresponding ZScores
+     */
+    private void calculateChildHeightZScores() {
+        try {
+            HashMap<String, CommonPersonObjectClient> children = new HashMap<>();
+            List<Height> heightsWithoutZScores = GrowthMonitoringLibrary.getInstance().heightRepository().findWithNoZScore();
+            for (Height curHeight : heightsWithoutZScores) {
+                if (!TextUtils.isEmpty(curHeight.getBaseEntityId())) {
+                    if (!children.containsKey(curHeight.getBaseEntityId())) {
+                        CommonPersonObjectClient childDetails = getChildDetails(curHeight.getBaseEntityId());
+                        children.put(curHeight.getBaseEntityId(), childDetails);
+                    }
+
+                    CommonPersonObjectClient curChild = children.get(curHeight.getBaseEntityId());
+
+                    if (curChild != null) {
+                        Gender gender = Gender.UNKNOWN;
+                        String genderString = Utils.getValue(curChild.getColumnmaps(), "gender", false);
+                        if (genderString != null && genderString.equalsIgnoreCase("female")) {
+                            gender = Gender.FEMALE;
+                        } else if (genderString != null && genderString.equalsIgnoreCase("male")) {
+                            gender = Gender.MALE;
+                        }
+
+                        Date dob = null;
+                        String dobString = Utils.getValue(curChild.getColumnmaps(), "dob", false);
+                        if (!TextUtils.isEmpty(dobString)) {
+                            DateTime dateTime = new DateTime(dobString);
+                            dob = dateTime.toDate();
+                        }
+
+                        if (gender != Gender.UNKNOWN && dob != null) {
+                            GrowthMonitoringLibrary.getInstance().heightRepository().add(dob, gender, curHeight);
+                        } else {
+                            Log.w(TAG, "Could not get the date of birth or gender for child with base entity id " + curHeight.getBaseEntityId());
+                        }
+                    } else {
+                        Log.w(TAG, "Could not get the details for child with base entity id " + curHeight.getBaseEntityId());
+                    }
+                } else {
+                    Log.w(TAG, "Current weight with id " + curHeight.getId() + " has no base entity id");
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
+    }
+
+    /**
      * This method retrieves all weight records that don't have ZScores and tries to calculate their
      * corresponding ZScores
      */
-    private void calculateChildZScores() {
+    private void calculateChildWeightZScores() {
         try {
             HashMap<String, CommonPersonObjectClient> children = new HashMap<>();
             List<Weight> weightsWithoutZScores = GrowthMonitoringLibrary.getInstance().weightRepository().findWithNoZScore();

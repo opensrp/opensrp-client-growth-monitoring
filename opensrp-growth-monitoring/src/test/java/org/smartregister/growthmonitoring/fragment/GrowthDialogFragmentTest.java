@@ -5,7 +5,7 @@ import org.junit.Assert;
 
 import org.junit.Test;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
-import org.smartregister.growthmonitoring.domain.Weight;
+import org.smartregister.growthmonitoring.domain.GrowthMonitoring;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,19 +24,19 @@ public class GrowthDialogFragmentTest {
     @Test
     public void testGrowthDialogFragmentInstantiatesValidInstance() {
 
-        List<Weight> weightList = new ArrayList<>();
+        List<GrowthMonitoring> growthMonitoringList = new ArrayList<>();
 
-        Weight weight = new Weight();
-        weight.setDate(new Date());
-        weight.setAnmId("demo");
-        weight.setBaseEntityId(DUMMY_BASE_ENTITY_ID);
-        weight.setChildLocationId(TEST_STRING);
-        weight.setKg(3.4f);
+        GrowthMonitoring growthMonitoring = new GrowthMonitoring();
+        growthMonitoring.setDate(new Date());
+        growthMonitoring.setAnmId("demo");
+        growthMonitoring.setBaseEntityId(DUMMY_BASE_ENTITY_ID);
+        growthMonitoring.setChildLocationId(TEST_STRING);
+        growthMonitoring.setUnit(3.4f);
 
-        weightList.add(weight);
+        growthMonitoringList.add(growthMonitoring);
 
 
-        GrowthDialogFragment dialogFragment = GrowthDialogFragment.newInstance(dummydetails(), weightList);
+        GrowthDialogFragment dialogFragment = GrowthDialogFragment.newInstance(dummydetails(), growthMonitoringList);
         Assert.assertNotNull(dialogFragment);
 
     }

@@ -17,7 +17,7 @@
 
     <!-- Height table section -->
     <LinearLayout
-        android:id="@+id/growth_dialog_weight_table_ayout"
+        android:id="@+id/growth_dialog_weight_table_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/weight_table_height"
         android:orientation="vertical">

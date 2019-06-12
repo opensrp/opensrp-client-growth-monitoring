@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="20dp"
@@ -127,15 +127,15 @@
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:inputType="number|numberDecimal"
-                    android:textSize="80dp" />
+                    android:textSize="50dp" />
 
                 <TextView
                     android:id="@+id/height_value_unit_symbol"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="kg"
+                    android:text="@string/cm"
                     android:textColor="@color/light_grey"
-                    android:textSize="80dp" />
+                    android:textSize="50dp" />
             </LinearLayout>
 
             <org.smartregister.view.customcontrols.CustomFontTextView
@@ -166,15 +166,15 @@
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:inputType="number|numberDecimal"
-                    android:textSize="80dp" />
+                    android:textSize="50dp" />
 
                 <TextView
                     android:id="@+id/weight_value_unit_symbol"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="kg"
+                    android:text="@string/kg"
                     android:textColor="@color/light_grey"
-                    android:textSize="80dp" />
+                    android:textSize="50dp" />
             </LinearLayout>
 
             <org.smartregister.view.customcontrols.CustomFontTextView
@@ -193,7 +193,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/record_weight_earlier_bg"
-                android:text="@string/change_date_weighed"
+                android:text="@string/change_date_recorded"
                 android:textAllCaps="false"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/client_list_grey"
@@ -221,7 +221,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/record_weight_earlier_bg"
-                android:text="@string/delete_weight"
+                android:text="@string/delete_record"
                 android:textAllCaps="false"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/client_list_grey"
@@ -269,4 +269,4 @@
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>
-</FrameLayout>
+</ScrollView>

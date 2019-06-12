@@ -18,18 +18,15 @@
     <string name="previous_weights">POIDS PRÉCEDANTES</string>
 
     <string name="months">Mois</string>
-    <string name="kg">Kg</string>
+    <string name="unit">Kg</string>
     <string name="girls">Filles</string>
     <string name="boys">Garçons</string>
     <string name="btn_layout_weight">2</string>
 
-    <string name="weight">Poids</string>
+    <string name="growthMonitoring">Poids</string>
     <string name="done">Complet</string>
     <string name="z_score"> Z-score</string>
 
-
-    <string name="delete_weight">Supprimer le poids</string>
-    <string name="change_date_weighed">Changer la date pesée</string>
     <string name="cancel">Annuler</string>
     <string name="set"> Régler</string>
     <string name="service_date"> date de service</string>

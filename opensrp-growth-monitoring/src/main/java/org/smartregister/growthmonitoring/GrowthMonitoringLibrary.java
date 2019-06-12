@@ -32,7 +32,8 @@ public class GrowthMonitoringLibrary {
         }
     }
 
-    public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion, GrowthMonitoringConfig growthMonitoringConfig) {
+    public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion,
+                            GrowthMonitoringConfig growthMonitoringConfig) {
 
         init(context, repository, applicationVersion, databaseVersion);
 
@@ -42,7 +43,8 @@ public class GrowthMonitoringLibrary {
 
     public static GrowthMonitoringLibrary getInstance() {
         if (instance == null) {
-            throw new IllegalStateException(" Instance does not exist!!! Call " + GrowthMonitoringLibrary.class.getName() + ".init method in the onCreate method of your Application class ");
+            throw new IllegalStateException(" Instance does not exist!!! Call " + GrowthMonitoringLibrary.class
+                    .getName() + ".init method in the onCreate method of your Application class ");
         }
         return instance;
     }

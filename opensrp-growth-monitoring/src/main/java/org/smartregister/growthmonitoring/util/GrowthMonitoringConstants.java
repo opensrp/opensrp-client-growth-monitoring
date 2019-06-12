@@ -13,7 +13,7 @@ public class GrowthMonitoringConstants {
     public static final String CHILD_TABLE_NAME = "ec_child";
     public static final String MOTHER_TABLE_NAME = "ec_mother";
 
-    public static final int WEIGHT_SYNC_TIME = BuildConfig.WEIGHT_SYNC_TIME;
+    public static final int GROWTH_MONITORING_SYNC_TIME = BuildConfig.GROWTH_MONITORING_SYNC_TIME;
     public static final String FIRST_NAME = "first_name";
     public static final String LAST_NAME = "last_name";
     public static final String FEMALE = "female";

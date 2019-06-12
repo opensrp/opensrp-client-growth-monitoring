@@ -25,7 +25,9 @@ import java.util.List;
 
 public class WeightRepository extends BaseRepository {
     private static final String TAG = WeightRepository.class.getCanonicalName();
-    private static final String WEIGHT_SQL = "CREATE TABLE weights (_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,base_entity_id VARCHAR NOT NULL,program_client_id VARCHAR NULL,kg REAL NOT NULL,date DATETIME NOT NULL,anmid VARCHAR NULL,location_id VARCHAR NULL,sync_status VARCHAR,updated_at INTEGER NULL)";
+    private static final String WEIGHT_SQL = "CREATE TABLE weights (_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+            "base_entity_id VARCHAR NOT NULL,program_client_id VARCHAR NULL,kg REAL NOT NULL,date DATETIME NOT NULL,anmid " +
+            "VARCHAR NULL,location_id VARCHAR NULL,sync_status VARCHAR,updated_at INTEGER NULL)";
     public static final String WEIGHT_TABLE_NAME = "weights";
     public static final String ID_COLUMN = "_id";
     public static final String BASE_ENTITY_ID = "base_entity_id";
@@ -62,7 +64,7 @@ public class WeightRepository extends BaseRepository {
     public static final String UPDATE_TABLE_ADD_OUT_OF_AREA_COL = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + OUT_OF_AREA + " VARCHAR;";
     public static final String UPDATE_TABLE_ADD_OUT_OF_AREA_COL_INDEX = "CREATE INDEX " + WEIGHT_TABLE_NAME + "_" + OUT_OF_AREA + "_index ON " + WEIGHT_TABLE_NAME + "(" + OUT_OF_AREA + " COLLATE NOCASE);";
 
-    public static final String ALTER_ADD_Z_SCORE_COLUMN = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + Z_SCORE + " REAL NOT NULL DEFAULT " + String.valueOf(DEFAULT_Z_SCORE);
+    public static final String ALTER_ADD_Z_SCORE_COLUMN = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + Z_SCORE + " REAL NOT NULL DEFAULT " + DEFAULT_Z_SCORE;
     public static final String ALTER_ADD_CREATED_AT_COLUMN = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + CREATED_AT + " DATETIME NULL ";
 
     public static final String UPDATE_TABLE_ADD_TEAM_COL = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + TEAM + " VARCHAR;";
@@ -414,10 +416,10 @@ public class WeightRepository extends BaseRepository {
         values.put(TEAM, weight.getTeam());
         values.put(TEAM_ID, weight.getTeamId());
         values.put(SYNC_STATUS, weight.getSyncStatus());
-        values.put(UPDATED_AT_COLUMN, weight.getUpdatedAt() != null ? weight.getUpdatedAt() : null);
-        values.put(EVENT_ID, weight.getEventId() != null ? weight.getEventId() : null);
-        values.put(FORMSUBMISSION_ID, weight.getFormSubmissionId() != null ? weight.getFormSubmissionId() : null);
-        values.put(OUT_OF_AREA, weight.getOutOfCatchment() != null ? weight.getOutOfCatchment() : null);
+        values.put(UPDATED_AT_COLUMN, weight.getUpdatedAt());
+        values.put(EVENT_ID, weight.getEventId());
+        values.put(FORMSUBMISSION_ID, weight.getFormSubmissionId());
+        values.put(OUT_OF_AREA, weight.getOutOfCatchment());
         values.put(Z_SCORE, weight.getZScore() == null ? DEFAULT_Z_SCORE : weight.getZScore());
         values.put(CREATED_AT, weight.getCreatedAt() != null ? EventClientRepository.dateFormat.format(weight.getCreatedAt()) : null);
         return values;
