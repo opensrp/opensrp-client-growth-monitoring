@@ -25,6 +25,7 @@ import org.opensrp.api.constants.Gender;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.adapter.GrowthMonitoringTabsAdapter;
+import org.smartregister.growthmonitoring.domain.Height;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringUtils;
@@ -45,13 +46,15 @@ import java.util.List;
 public class GrowthDialogFragment extends DialogFragment {
     private CommonPersonObjectClient personDetails;
     private List<Weight> weights;
+    private List<Height> heights;
 
     public static GrowthDialogFragment newInstance(CommonPersonObjectClient personDetails,
-                                                   List<Weight> weights) {
+                                                   List<Weight> weights, List<Height> heights) {
 
         GrowthDialogFragment vaccinationDialogFragment = new GrowthDialogFragment();
         vaccinationDialogFragment.setPersonDetails(personDetails);
         vaccinationDialogFragment.setWeights(weights);
+        vaccinationDialogFragment.setHeights(heights);
 
         return vaccinationDialogFragment;
     }
@@ -65,6 +68,11 @@ public class GrowthDialogFragment extends DialogFragment {
     public void setWeights(List<Weight> weights) {
         this.weights = weights;
         sortWeights();
+    }
+
+    public void setHeights(List<Height> heights) {
+        this.heights = heights;
+        sortHeights();
     }
 
     public void setPersonDetails(CommonPersonObjectClient personDetails) {
@@ -96,6 +104,33 @@ public class GrowthDialogFragment extends DialogFragment {
         }
 
         this.weights = result;
+    }
+
+    private void sortHeights() {
+        HashMap<Long, Height> heightHashMap = new HashMap<>();
+        for (Height curHeight : heights) {
+            if (curHeight.getDate() != null) {
+                Calendar curCalendar = Calendar.getInstance();
+                curCalendar.setTime(curHeight.getDate());
+                GrowthMonitoringUtils.standardiseCalendarDate(curCalendar);
+
+                if (!heightHashMap.containsKey(curCalendar.getTimeInMillis())) {
+                    heightHashMap.put(curCalendar.getTimeInMillis(), curHeight);
+                } else if (curHeight.getUpdatedAt() > heightHashMap.get(curCalendar.getTimeInMillis()).getUpdatedAt()) {
+                    heightHashMap.put(curCalendar.getTimeInMillis(), curHeight);
+                }
+            }
+        }
+
+        List<Long> keys = new ArrayList<>(heightHashMap.keySet());
+        Collections.sort(keys, Collections.<Long>reverseOrder());
+
+        List<Height> result = new ArrayList<>();
+        for (Long curKey : keys) {
+            result.add(heightHashMap.get(curKey));
+        }
+
+        this.heights = result;
     }
 
     @Override
@@ -171,9 +206,9 @@ public class GrowthDialogFragment extends DialogFragment {
 
         GrowthMonitoringTabsAdapter adapter = new GrowthMonitoringTabsAdapter(getChildFragmentManager());
         adapter.addFragment(String.format(getString(R.string.weight_for_age), getString(genderStringRes).toUpperCase()),
-                WeightMonitoringFragment.createInstance(dobString,gender,weights));
+                WeightMonitoringFragment.createInstance(dobString, gender, weights));
         adapter.addFragment(String.format(getString(R.string.height_for_age), getString(genderStringRes).toUpperCase()),
-                HeightMonitoringFragment.createInstance());
+                HeightMonitoringFragment.createInstance(dobString, gender, heights));
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

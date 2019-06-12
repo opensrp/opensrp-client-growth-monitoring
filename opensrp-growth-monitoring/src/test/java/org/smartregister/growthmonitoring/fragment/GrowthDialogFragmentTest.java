@@ -2,10 +2,10 @@ package org.smartregister.growthmonitoring.fragment;
 
 
 import org.junit.Assert;
-
 import org.junit.Test;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
-import org.smartregister.growthmonitoring.domain.GrowthMonitoring;
+import org.smartregister.growthmonitoring.domain.Height;
+import org.smartregister.growthmonitoring.domain.Weight;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,19 +24,31 @@ public class GrowthDialogFragmentTest {
     @Test
     public void testGrowthDialogFragmentInstantiatesValidInstance() {
 
-        List<GrowthMonitoring> growthMonitoringList = new ArrayList<>();
+        List<Weight> weightArrayList = new ArrayList<>();
 
-        GrowthMonitoring growthMonitoring = new GrowthMonitoring();
-        growthMonitoring.setDate(new Date());
-        growthMonitoring.setAnmId("demo");
-        growthMonitoring.setBaseEntityId(DUMMY_BASE_ENTITY_ID);
-        growthMonitoring.setChildLocationId(TEST_STRING);
-        growthMonitoring.setUnit(3.4f);
+        Weight weight = new Weight();
+        weight.setDate(new Date());
+        weight.setAnmId("demo");
+        weight.setBaseEntityId(DUMMY_BASE_ENTITY_ID);
+        weight.setChildLocationId(TEST_STRING);
+        weight.setKg(3.4f);
 
-        growthMonitoringList.add(growthMonitoring);
+        weightArrayList.add(weight);
 
 
-        GrowthDialogFragment dialogFragment = GrowthDialogFragment.newInstance(dummydetails(), growthMonitoringList);
+        List<Height> heightArrayList = new ArrayList<>();
+
+        Height height = new Height();
+        height.setDate(new Date());
+        height.setAnmId("demo");
+        height.setBaseEntityId(DUMMY_BASE_ENTITY_ID);
+        height.setChildLocationId(TEST_STRING);
+        height.setCm(50.4f);
+
+        heightArrayList.add(height);
+
+        GrowthDialogFragment dialogFragment = GrowthDialogFragment
+                .newInstance(dummydetails(), weightArrayList, heightArrayList);
         Assert.assertNotNull(dialogFragment);
 
     }

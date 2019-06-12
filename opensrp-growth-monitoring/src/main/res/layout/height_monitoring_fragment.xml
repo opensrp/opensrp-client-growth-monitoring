@@ -17,13 +17,13 @@
 
     <!-- Height table section -->
     <LinearLayout
-        android:id="@+id/growth_dialog_weight_table_layout"
+        android:id="@+id/growth_dialog_height_table_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/weight_table_height"
+        android:layout_height="@dimen/table_height"
         android:orientation="vertical">
 
         <ScrollView
-            android:id="@+id/weight_scroll_view"
+            android:id="@+id/height_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -65,7 +65,7 @@
                 </RelativeLayout>
 
                 <TableLayout
-                    android:id="@+id/weights_table"
+                    android:id="@+id/heights_table"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"

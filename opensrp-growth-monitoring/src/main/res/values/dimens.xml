@@ -3,9 +3,9 @@
     <dimen name="client_profile_pic_dialog_width">100dp</dimen>
     <dimen name="client_profile_pic_dialog_height">100dp</dimen>
     <dimen name="table_contents_text_height">20dp</dimen>
-    <dimen name="weight_table_divider_height">1dp</dimen>
-    <dimen name="weight_table_contents_text_size">14sp</dimen>
-    <dimen name="weight_table_height">100dp</dimen>
+    <dimen name="table_divider_height">1dp</dimen>
+    <dimen name="table_contents_text_size">14sp</dimen>
+    <dimen name="table_height">100dp</dimen>
     <dimen name="record_weight_tv_text_size">15sp</dimen>
     <dimen name="record_weight_btn_text_size">14sp</dimen>
     <dimen name="child_details_tv_text_size">14sp</dimen>

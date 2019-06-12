@@ -62,6 +62,24 @@ public class SampleUtil {
         recordGrowthDialogFragment.show(initFragmentTransaction(context, tag), tag);
     }
 
+    public static Date getDateOfBirth() {
+        LocalDate localDate = new LocalDate();
+        //DOB for sample app needs to ba dynamic
+        DateTime dateTime = localDate.minusYears(5).plusMonths(2).toDateTime(LocalTime.now());
+        Date dob = dateTime.toDate();
+        return dob;
+    }
+
+    public static FragmentTransaction initFragmentTransaction(FragmentActivity context, String tag) {
+        FragmentTransaction ft = context.getSupportFragmentManager().beginTransaction();
+        Fragment prev = context.getSupportFragmentManager().findFragmentByTag(tag);
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        return ft;
+    }
+
     public static void showEditGrowthMonitoringDialog(FragmentActivity context, int i, String tag) {
         CommonPersonObjectClient childDetails = dummydetails();
 
@@ -88,6 +106,23 @@ public class SampleUtil {
                 .newInstance(context, getDateOfBirth(), weightWrapper, heightWrapper);
         editGrowthDialogFragment.show(initFragmentTransaction(context, tag), tag);
 
+    }
+
+    public static CommonPersonObjectClient dummydetails() {
+        HashMap<String, String> columnMap = new HashMap<>();
+        columnMap.put("first_name", "Test");
+        columnMap.put("last_name", "Doe");
+        columnMap.put("zeir_id", "1");
+        columnMap.put("dob", StringUtils.reverseDelimited(
+                new SimpleDateFormat(DateUtil.DATE_FORMAT_FOR_TIMELINE_EVENT, new Locale("en"))
+                        .format(SampleUtil.getDateOfBirth()), '-'));
+        columnMap.put("gender", GENDER);
+
+
+        CommonPersonObjectClient personDetails = new CommonPersonObjectClient(ENTITY_ID, columnMap, "Test");
+        personDetails.setColumnmaps(columnMap);
+
+        return personDetails;
     }
 
     @NotNull
@@ -134,16 +169,6 @@ public class SampleUtil {
         return heightWrapper;
     }
 
-    public static FragmentTransaction initFragmentTransaction(FragmentActivity context, String tag) {
-        FragmentTransaction ft = context.getSupportFragmentManager().beginTransaction();
-        Fragment prev = context.getSupportFragmentManager().findFragmentByTag(tag);
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-        return ft;
-    }
-
     public static void createWeightWidget(Activity context, View fragmentContainer,
                                           HashMap<Long, Pair<String, String>> last_five_weight_map,
                                           ArrayList<View.OnClickListener> listeners, ArrayList<Boolean> editenabled) {
@@ -155,24 +180,6 @@ public class SampleUtil {
         for (Map.Entry<Long, Pair<String, String>> entry : last_five_weight_map.entrySet()) {
             Pair<String, String> pair = entry.getValue();
             View view = createTableRowForWeight(context, tableLayout, pair.first, pair.second, editenabled.get(i),
-                    listeners.get(i));
-
-            tableLayout.addView(view);
-            i++;
-        }
-    }
-
-    public static void createHeightWidget(Activity context, View fragmentContainer,
-                                          HashMap<Long, Pair<String, String>> last_five_weight_map,
-                                          ArrayList<View.OnClickListener> listeners, ArrayList<Boolean> editenabled) {
-
-        LinearLayout tableLayout = fragmentContainer.findViewById(R.id.heightvalues);
-        tableLayout.removeAllViews();
-
-        int i = 0;
-        for (Map.Entry<Long, Pair<String, String>> entry : last_five_weight_map.entrySet()) {
-            Pair<String, String> pair = entry.getValue();
-            View view = createTableRowForHeight(context, tableLayout, pair.first, pair.second, editenabled.get(i),
                     listeners.get(i));
 
             tableLayout.addView(view);
@@ -197,6 +204,24 @@ public class SampleUtil {
         return rows;
     }
 
+    public static void createHeightWidget(Activity context, View fragmentContainer,
+                                          HashMap<Long, Pair<String, String>> last_five_weight_map,
+                                          ArrayList<View.OnClickListener> listeners, ArrayList<Boolean> editenabled) {
+
+        LinearLayout tableLayout = fragmentContainer.findViewById(R.id.heightvalues);
+        tableLayout.removeAllViews();
+
+        int i = 0;
+        for (Map.Entry<Long, Pair<String, String>> entry : last_five_weight_map.entrySet()) {
+            Pair<String, String> pair = entry.getValue();
+            View view = createTableRowForHeight(context, tableLayout, pair.first, pair.second, editenabled.get(i),
+                    listeners.get(i));
+
+            tableLayout.addView(view);
+            i++;
+        }
+    }
+
     public static View createTableRowForHeight(Activity context, ViewGroup container, String labelString, String valueString,
                                                boolean editenabled, View.OnClickListener listener) {
         View rows = context.getLayoutInflater().inflate(R.layout.tablerows_weight, container, false);
@@ -212,31 +237,5 @@ public class SampleUtil {
         label.setText(labelString);
         value.setText(valueString);
         return rows;
-    }
-
-    public static CommonPersonObjectClient dummydetails() {
-        HashMap<String, String> columnMap = new HashMap<>();
-        columnMap.put("first_name", "Test");
-        columnMap.put("last_name", "Doe");
-        columnMap.put("zeir_id", "1");
-        columnMap.put("dob", StringUtils.reverseDelimited(
-                new SimpleDateFormat(DateUtil.DATE_FORMAT_FOR_TIMELINE_EVENT, new Locale("en"))
-                        .format(SampleUtil.getDateOfBirth()), '-'));
-        columnMap.put("gender", GENDER);
-
-
-        CommonPersonObjectClient personDetails = new CommonPersonObjectClient(ENTITY_ID, columnMap, "Test");
-        personDetails.setColumnmaps(columnMap);
-
-        return personDetails;
-    }
-
-
-    public static Date getDateOfBirth() {
-        LocalDate localDate = new LocalDate();
-        //DOB for sample app needs to ba dynamic
-        DateTime dateTime = localDate.minusYears(5).plusMonths(2).toDateTime(LocalTime.now());
-        Date dob = dateTime.toDate();
-        return dob;
     }
 }

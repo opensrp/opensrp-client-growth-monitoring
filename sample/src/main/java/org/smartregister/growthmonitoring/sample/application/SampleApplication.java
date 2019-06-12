@@ -49,15 +49,17 @@ public class SampleApplication extends DrishtiApplication {
 
         GrowthMonitoringConfig config = new GrowthMonitoringConfig();
         config.setFemaleZScoreFile("zscores/custom_female_zscore_file.txt");
-        GrowthMonitoringLibrary.init(context, getRepository(), BuildConfig.VERSION_CODE, BuildConfig.DATABASE_VERSION, config);
+        GrowthMonitoringLibrary
+                .init(context, getRepository(), BuildConfig.VERSION_CODE, BuildConfig.DATABASE_VERSION, config);
 
 
         startZscoreRefreshService();
 
     }
 
-    public static synchronized SampleApplication getInstance() {
-        return (SampleApplication) mInstance;
+    @Override
+    public void logoutCurrentUser() {
+
     }
 
     @Override
@@ -73,14 +75,12 @@ public class SampleApplication extends DrishtiApplication {
         return repository;
     }
 
-
-    @Override
-    public void logoutCurrentUser() {
-
-    }
-
     public void startZscoreRefreshService() {
         Intent intent = new Intent(this.getApplicationContext(), ZScoreRefreshIntentService.class);
         this.getApplicationContext().startService(intent);
+    }
+
+    public static synchronized SampleApplication getInstance() {
+        return (SampleApplication) mInstance;
     }
 }

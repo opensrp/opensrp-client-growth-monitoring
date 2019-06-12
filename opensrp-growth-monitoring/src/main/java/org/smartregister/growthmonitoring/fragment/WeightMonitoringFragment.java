@@ -69,7 +69,7 @@ public class WeightMonitoringFragment extends Fragment {
         if (StringUtils.isNotBlank(getDobString())) {
             DateTime dateTime = new DateTime(getDobString());
             dob = dateTime.toDate();
-            Calendar[] weighingDates = getMinAndMaxWeighingDates(dob);
+            Calendar[] weighingDates = GrowthMonitoringUtils.getMinAndMaxRecordingDates(dob);
             minWeighingDate = weighingDates[0];
             maxWeighingDate = weighingDates[1];
         }
@@ -80,11 +80,12 @@ public class WeightMonitoringFragment extends Fragment {
                 //Prior implementation
                 if (!isExpanded) {
                     isExpanded = true;
-                    getHeight(weightTabView.findViewById(R.id.weight_growth_chart), new ViewMeasureListener() {
+                    GrowthMonitoringUtils.getHeight(weightTabView.findViewById(R.id.weight_growth_chart),
+                            new ViewMeasureListener() {
                         @Override
                         public void onCompletedMeasuring(int weight) {
                             weightTabView.findViewById(R.id.growth_dialog_weight_table_layout).getLayoutParams().height =
-                                    getResources().getDimensionPixelSize(R.dimen.weight_table_height) + weight;
+                                    getResources().getDimensionPixelSize(R.dimen.table_height) + weight;
                         }
                     });
                     weightTabView.findViewById(R.id.weight_growth_chart).setVisibility(View.GONE);
@@ -93,7 +94,7 @@ public class WeightMonitoringFragment extends Fragment {
                     isExpanded = false;
                     weightTabView.findViewById(R.id.weight_growth_chart).setVisibility(View.VISIBLE);
                     weightTabView.findViewById(R.id.growth_dialog_weight_table_layout).getLayoutParams().height =
-                            getResources().getDimensionPixelSize(R.dimen.weight_table_height);
+                            getResources().getDimensionPixelSize(R.dimen.table_height);
                     scrollButton.setImageResource(R.drawable.ic_icon_collapse);
                 }
             }
@@ -125,7 +126,7 @@ public class WeightMonitoringFragment extends Fragment {
             TableRow.LayoutParams params = (TableRow.LayoutParams) divider.getLayoutParams();
             if (params == null) params = new TableRow.LayoutParams();
             params.width = TableRow.LayoutParams.MATCH_PARENT;
-            params.height = getResources().getDimensionPixelSize(R.dimen.weight_table_divider_height);
+            params.height = getResources().getDimensionPixelSize(R.dimen.table_divider_height);
             params.span = 3;
             divider.setLayoutParams(params);
             divider.setBackgroundColor(getResources().getColor(R.color.client_list_header_dark_grey));
@@ -137,7 +138,7 @@ public class WeightMonitoringFragment extends Fragment {
             TextView ageTextView = new TextView(weightTabView.getContext());
             ageTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
             ageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    getResources().getDimension(R.dimen.weight_table_contents_text_size));
+                    getResources().getDimension(R.dimen.table_contents_text_size));
             ageTextView.setText(DateUtil.getDuration(weight.getDate().getTime() - dob.getTime()));
             ageTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
             ageTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
@@ -146,7 +147,7 @@ public class WeightMonitoringFragment extends Fragment {
             TextView weightTextView = new TextView(weightTabView.getContext());
             weightTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
             weightTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    getResources().getDimension(R.dimen.weight_table_contents_text_size));
+                    getResources().getDimension(R.dimen.table_contents_text_size));
             weightTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
             weightTextView.setText(
                     String.format("%s %s", String.valueOf(weight.getKg()), getString(R.string.kg)));
@@ -156,7 +157,7 @@ public class WeightMonitoringFragment extends Fragment {
             TextView zScoreTextView = new TextView(weightTabView.getContext());
             zScoreTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
             zScoreTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    getResources().getDimension(R.dimen.weight_table_contents_text_size));
+                    getResources().getDimension(R.dimen.table_contents_text_size));
             zScoreTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
             if (weight.getDate().compareTo(maxWeighingDate.getTime()) > 0) {
                 zScoreTextView.setText("");
@@ -172,7 +173,7 @@ public class WeightMonitoringFragment extends Fragment {
 
         //Now set the expand button if items are too many
         final ScrollView weightsTableScrollView = weightTabView.findViewById(R.id.weight_scroll_view);
-        getHeight(weightsTableScrollView, new ViewMeasureListener() {
+        GrowthMonitoringUtils.getHeight(weightsTableScrollView, new ViewMeasureListener() {
             @Override
             public void onCompletedMeasuring(int height) {
                 int childHeight = weightsTableScrollView.getChildAt(0).getMeasuredHeight();
@@ -361,72 +362,6 @@ public class WeightMonitoringFragment extends Fragment {
         line.setHasLabels(true);
         line.setStrokeWidth(2);
         return line;
-    }
-
-    private Calendar[] getMinAndMaxWeighingDates(Date dob) {
-        Calendar minGraphTime = null;
-        Calendar maxGraphTime = null;
-        if (dob != null) {
-            Calendar dobCalendar = Calendar.getInstance();
-            dobCalendar.setTime(dob);
-            GrowthMonitoringUtils.standardiseCalendarDate(dobCalendar);
-
-            minGraphTime = Calendar.getInstance();
-            maxGraphTime = Calendar.getInstance();
-
-            if (WeightZScore.getAgeInMonths(dob, maxGraphTime.getTime()) > WeightZScore.MAX_REPRESENTED_AGE) {
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(dob);
-                cal.add(Calendar.MONTH, (int) Math.round(WeightZScore.MAX_REPRESENTED_AGE));
-                maxGraphTime = cal;
-                minGraphTime = (Calendar) maxGraphTime.clone();
-            }
-
-            minGraphTime.add(Calendar.MONTH, -GrowthMonitoringConstants.GRAPH_MONTHS_TIMELINE);
-            GrowthMonitoringUtils.standardiseCalendarDate(minGraphTime);
-            GrowthMonitoringUtils.standardiseCalendarDate(maxGraphTime);
-
-            if (minGraphTime.getTimeInMillis() < dobCalendar.getTimeInMillis()) {
-                minGraphTime.setTime(dob);
-                GrowthMonitoringUtils.standardiseCalendarDate(minGraphTime);
-
-                maxGraphTime = (Calendar) minGraphTime.clone();
-                maxGraphTime.add(Calendar.MONTH, GrowthMonitoringConstants.GRAPH_MONTHS_TIMELINE);
-            }
-        }
-
-        return new Calendar[] {minGraphTime, maxGraphTime};
-    }
-
-    private void getHeight(final View view, final ViewMeasureListener viewMeasureListener) {
-        if (view == null) {
-            if (viewMeasureListener != null) {
-                viewMeasureListener.onCompletedMeasuring(0);
-            }
-
-            return;
-        }
-
-        int measuredHeight = view.getMeasuredHeight();
-
-        if (measuredHeight > 0) {
-            if (viewMeasureListener != null) {
-                viewMeasureListener.onCompletedMeasuring(measuredHeight);
-            }
-
-            return;
-        }
-
-        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (viewMeasureListener != null) {
-                    viewMeasureListener.onCompletedMeasuring(view.getMeasuredHeight());
-                }
-
-                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-        });
     }
 
     public String getDobString() {
