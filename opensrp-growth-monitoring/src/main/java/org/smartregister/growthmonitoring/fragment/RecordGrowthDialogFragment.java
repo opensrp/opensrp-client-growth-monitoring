@@ -109,7 +109,6 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         try {
             // Instantiate the GMActionListener so we can send events to the host
             GMActionListener = (GMActionListener) activity;
-            GMActionListener = (GMActionListener) activity;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(activity.toString()

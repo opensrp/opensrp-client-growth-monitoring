@@ -1,7 +1,5 @@
 package org.smartregister.growthmonitoring.domain;
 
-import android.util.Log;
-
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.R;
@@ -9,6 +7,8 @@ import org.smartregister.growthmonitoring.R;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Created by Jason Rogena - jrogena@ona.io on 31/05/2017.
@@ -83,7 +83,7 @@ public class WeightZScore {
 
             return 0.0;
         } catch (Exception e) {
-            Log.e(WeightZScore.class.getCanonicalName(), e.getMessage());
+            Timber.e(e.getMessage());
             return null;
         }
     }

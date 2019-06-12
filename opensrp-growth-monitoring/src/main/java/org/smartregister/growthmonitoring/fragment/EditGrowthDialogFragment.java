@@ -33,14 +33,11 @@ import org.smartregister.util.DatePickerUtils;
 import org.smartregister.util.OpenSRPImageLoader;
 import org.smartregister.view.activity.DrishtiApplication;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 @SuppressLint ("ValidFragment")
 public class EditGrowthDialogFragment extends DialogFragment {
-    public static final String DIALOG_TAG = "EditGrowthDialogFragment";
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
     private final Context context;
     private final WeightWrapper weightWrapper;
     private final HeightWrapper heightWrapper;
@@ -109,7 +106,6 @@ public class EditGrowthDialogFragment extends DialogFragment {
         // Verify that the host activity implements the callback interface
         try {
             // Instantiate the GMActionListener so we can send events to the host
-            GMActionListener = (GMActionListener) activity;
             GMActionListener = (GMActionListener) activity;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
@@ -258,12 +254,12 @@ public class EditGrowthDialogFragment extends DialogFragment {
         });
         if (weightWrapper.getUpdatedWeightDate() != null || heightWrapper.getUpdatedHeightDate() != null) {
             ((TextView) dialogView.findViewById(R.id.service_date)).setText(
-                    getString(R.string.date_recorded) + weightWrapper.getUpdatedWeightDate().dayOfMonth()
+                    getString(R.string.date_recorded) + " " + weightWrapper.getUpdatedWeightDate().dayOfMonth()
                             .get() + "-" + weightWrapper
                             .getUpdatedWeightDate().monthOfYear().get() + "-" + weightWrapper.getUpdatedWeightDate().year()
                             .get() + "");
             ((TextView) dialogView.findViewById(R.id.service_date)).setText(
-                    getString(R.string.date_recorded) + heightWrapper.getUpdatedHeightDate().dayOfMonth()
+                    getString(R.string.date_recorded) + " " + heightWrapper.getUpdatedHeightDate().dayOfMonth()
                             .get() + "-" + heightWrapper
                             .getUpdatedHeightDate().monthOfYear().get() + "-" + heightWrapper.getUpdatedHeightDate().year()
                             .get() + "");

@@ -2,7 +2,6 @@ package org.smartregister.growthmonitoring.service.intent;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,6 +12,8 @@ import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
 import org.smartregister.growthmonitoring.util.JsonFormUtils;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Created by keyman on 3/01/2017.
@@ -77,7 +78,7 @@ public class WeightIntentService extends IntentService {
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
+            Timber.e(e, e.getMessage());
         }
     }
 }

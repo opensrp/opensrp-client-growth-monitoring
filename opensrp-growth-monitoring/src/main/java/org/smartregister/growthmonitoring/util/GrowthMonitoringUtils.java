@@ -62,7 +62,6 @@ public class GrowthMonitoringUtils {
         }
 
         int measuredHeight = view.getMeasuredHeight();
-
         if (measuredHeight > 0) {
             if (viewMeasureListener != null) {
                 viewMeasureListener.onCompletedMeasuring(measuredHeight);

@@ -114,10 +114,10 @@ public class MainActivity extends AppCompatActivity implements GMActionListener 
                 DateTime birthday = new DateTime(SampleUtil.getDateOfBirth());
                 Date birth = birthday.toDate();
                 long timeDiff = weighttaken.getTime() - birth.getTime();
-                Log.v("timeDiff is ", timeDiff + "");
+                Timber.tag("timeDiff is ").v(timeDiff + "");
                 if (timeDiff >= 0) {
                     formattedAge = DateUtil.getDuration(timeDiff);
-                    Log.v("age is ", formattedAge);
+                    Timber.tag("age is ").v(formattedAge);
                 }
             }
             if (!formattedAge.equalsIgnoreCase("0d")) {
@@ -224,9 +224,9 @@ public class MainActivity extends AppCompatActivity implements GMActionListener 
 
             String genderString = SampleUtil.GENDER;
 
-            if (genderString != null && genderString.toLowerCase().equals("female")) {
+            if (genderString.toLowerCase().equals("female")) {
                 gender = Gender.FEMALE;
-            } else if (genderString != null && genderString.toLowerCase().equals("male")) {
+            } else if (genderString.toLowerCase().equals("male")) {
                 gender = Gender.MALE;
             }
 
@@ -317,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements GMActionListener 
                         Calendar.getInstance().getTimeInMillis(), null, null, 0);
                 allWeights.add(weight);
             } catch (Exception e) {
-                Log.e(TAG, Log.getStackTraceString(e));
+                Timber.e(Log.getStackTraceString(e));
             }
 
             growthMonitoring.put(WEIGHT, allWeights);
@@ -332,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements GMActionListener 
                         Calendar.getInstance().getTimeInMillis(), null, null, 0);
                 allHeights.add(height);
             } catch (Exception e) {
-                Log.e(TAG, Log.getStackTraceString(e));
+                Timber.e(Log.getStackTraceString(e));
             }
             growthMonitoring.put(HEIGHT, allHeights);
 

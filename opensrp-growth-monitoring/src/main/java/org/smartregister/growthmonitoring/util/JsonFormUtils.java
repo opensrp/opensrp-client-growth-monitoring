@@ -1,7 +1,5 @@
 package org.smartregister.growthmonitoring.util;
 
-import android.util.Log;
-
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,6 +10,8 @@ import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.repository.EventClientRepository;
 
 import java.util.Date;
+
+import timber.log.Timber;
 
 /**
  * Created by keyman on 26/07/2017.
@@ -52,7 +52,6 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
 
 
             if (event != null) {
-
                 JSONObject eventJson = new JSONObject(org.smartregister.util.JsonFormUtils.gson.toJson(event));
 
                 //check if an event already exists and update instead
@@ -66,7 +65,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
 
             }
         } catch (Exception e) {
-            Log.e(TAG, e.toString(), e);
+            Timber.e(e, e.toString());
         }
     }
 
@@ -117,7 +116,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
 
             }
         } catch (Exception e) {
-            Log.e(TAG, e.toString(), e);
+            Timber.e(e, e.toString());
         }
     }
 

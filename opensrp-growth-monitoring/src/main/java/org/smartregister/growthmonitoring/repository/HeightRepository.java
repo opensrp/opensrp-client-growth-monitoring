@@ -23,6 +23,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class HeightRepository extends BaseRepository {
     public static final String HEIGHT_TABLE_NAME = "heights";
     public static final String ID_COLUMN = "_id";
@@ -92,7 +94,7 @@ public class HeightRepository extends BaseRepository {
                     " WHERE " + CREATED_AT + " is null ";
             database.execSQL(sql);
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
     }
 
@@ -153,7 +155,7 @@ public class HeightRepository extends BaseRepository {
                 update(database, height);
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
     }
 
@@ -185,12 +187,12 @@ public class HeightRepository extends BaseRepository {
 
             Cursor cursor = database.query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS, selection, selectionArgs, null, null,
                     ID_COLUMN + " DESC ", null);
-            List<Height> heightList = readAllheights(cursor);
+            List<Height> heightList = readAllHeights(cursor);
             if (!heightList.isEmpty()) {
                 return heightList.get(0);
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
 
         return null;
@@ -212,7 +214,7 @@ public class HeightRepository extends BaseRepository {
             String idSelection = ID_COLUMN + " = ?";
             db.update(HEIGHT_TABLE_NAME, createValuesFor(height), idSelection, new String[] {height.getId().toString()});
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
     }
 
@@ -239,13 +241,13 @@ public class HeightRepository extends BaseRepository {
         return values;
     }
 
-    private List<Height> readAllheights(Cursor cursor) {
+    private List<Height> readAllHeights(Cursor cursor) {
         List<Height> heights = new ArrayList<>();
         try {
             if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
                     Double zScore = cursor.getDouble(cursor.getColumnIndex(Z_SCORE));
-                    if (zScore != null && zScore.equals(new Double(DEFAULT_Z_SCORE))) {
+                    if (zScore.equals(new Double(DEFAULT_Z_SCORE))) {
                         zScore = null;
                     }
 
@@ -255,7 +257,7 @@ public class HeightRepository extends BaseRepository {
                         try {
                             createdAt = EventClientRepository.dateFormat.parse(dateCreatedString);
                         } catch (ParseException e) {
-                            Log.e(TAG, Log.getStackTraceString(e));
+                            Timber.e(Log.getStackTraceString(e));
                         }
                     }
 
@@ -307,9 +309,9 @@ public class HeightRepository extends BaseRepository {
             cursor = getRepository().getReadableDatabase().query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS,
                     UPDATED_AT_COLUMN + " < ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? " + COLLATE_NOCASE,
                     new String[] {time.toString(), TYPE_Unsynced}, null, null, null, null);
-            heights = readAllheights(cursor);
+            heights = readAllHeights(cursor);
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -326,12 +328,12 @@ public class HeightRepository extends BaseRepository {
             cursor = getRepository().getReadableDatabase().query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS,
                     BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? ",
                     new String[] {entityId, TYPE_Unsynced}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
-            List<Height> heights = readAllheights(cursor);
+            List<Height> heights = readAllHeights(cursor);
             if (!heights.isEmpty()) {
                 height = heights.get(0);
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -347,9 +349,9 @@ public class HeightRepository extends BaseRepository {
             cursor = getRepository().getReadableDatabase()
                     .query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE,
                             new String[] {entityId}, null, null, null, null);
-            heights = readAllheights(cursor);
+            heights = readAllHeights(cursor);
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -365,9 +367,9 @@ public class HeightRepository extends BaseRepository {
         try {
             cursor = getRepository().getReadableDatabase().query(HEIGHT_TABLE_NAME,
                     HEIGHT_TABLE_COLUMNS, Z_SCORE + " = " + DEFAULT_Z_SCORE, null, null, null, null, null);
-            result = readAllheights(cursor);
+            result = readAllHeights(cursor);
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -384,12 +386,12 @@ public class HeightRepository extends BaseRepository {
             cursor = getRepository().getReadableDatabase()
                     .query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS, ID_COLUMN + " = ?", new String[] {caseId.toString()},
                             null, null, null, null);
-            List<Height> heights = readAllheights(cursor);
+            List<Height> heights = readAllHeights(cursor);
             if (!heights.isEmpty()) {
                 height = heights.get(0);
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -398,16 +400,16 @@ public class HeightRepository extends BaseRepository {
         return height;
     }
 
-    public List<Height> findLast5(String entityid) {
+    public List<Height> findLast5(String entityId) {
         List<Height> heightList = new ArrayList<>();
         Cursor cursor = null;
         try {
             cursor = getRepository().getReadableDatabase()
                     .query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE,
-                            new String[] {entityid}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
-            heightList = readAllheights(cursor);
+                            new String[] {entityId}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
+            heightList = readAllHeights(cursor);
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -422,7 +424,7 @@ public class HeightRepository extends BaseRepository {
                     .delete(HEIGHT_TABLE_NAME, ID_COLUMN + " = ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? ",
                             new String[] {id, TYPE_Unsynced});
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
     }
 
@@ -433,7 +435,7 @@ public class HeightRepository extends BaseRepository {
             getRepository().getWritableDatabase()
                     .update(HEIGHT_TABLE_NAME, values, ID_COLUMN + " = ?", new String[] {caseId.toString()});
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
     }
 }

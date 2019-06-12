@@ -10,26 +10,26 @@ import org.junit.Test;
 public class GrowthMonitoringConfigTest {
 
     private static final String CUSTOM_ZSCORE_FILE = "custom_zscore_file.txt";
-    private static final String FEMALE_ZSCORE_FILE = "zscores_female.csv";
-    private static final String BOYCHILD_ZSCORE_FILE = "zscores_male.csv";
+    private static final String FEMALE_ZSCORE_FILE = "weight_z_scores_female.csv";
+    private static final String BOYCHILD_ZSCORE_FILE = "weight_z_scores_male.csv";
 
     @Test
     public void testGrowthMonitoringConfigInstantiatesCorrectly() {
 
         GrowthMonitoringConfig config = new GrowthMonitoringConfig();
         Assert.assertNotNull(config);
-        Assert.assertEquals(FEMALE_ZSCORE_FILE, config.getFemaleZScoreFile());
-        Assert.assertEquals(BOYCHILD_ZSCORE_FILE, config.getMaleZScoreFile());
+        Assert.assertEquals(FEMALE_ZSCORE_FILE, config.getFemaleWeightZScoreFile());
+        Assert.assertEquals(BOYCHILD_ZSCORE_FILE, config.getMaleWeightZScoreFile());
         Assert.assertNull(config.getGenderNeutralZScoreFile());
 
-        config.setFemaleZScoreFile(CUSTOM_ZSCORE_FILE);
-        Assert.assertEquals(BOYCHILD_ZSCORE_FILE, config.getMaleZScoreFile());
-        Assert.assertEquals(CUSTOM_ZSCORE_FILE, config.getFemaleZScoreFile());
+        config.setFemaleWeightZScoreFile(CUSTOM_ZSCORE_FILE);
+        Assert.assertEquals(BOYCHILD_ZSCORE_FILE, config.getMaleWeightZScoreFile());
+        Assert.assertEquals(CUSTOM_ZSCORE_FILE, config.getFemaleWeightZScoreFile());
 
 
-        config.setMaleZScoreFile(CUSTOM_ZSCORE_FILE);
-        Assert.assertEquals(CUSTOM_ZSCORE_FILE, config.getMaleZScoreFile());
-        Assert.assertEquals(CUSTOM_ZSCORE_FILE, config.getFemaleZScoreFile());
+        config.setMaleWeightZScoreFile(CUSTOM_ZSCORE_FILE);
+        Assert.assertEquals(CUSTOM_ZSCORE_FILE, config.getMaleWeightZScoreFile());
+        Assert.assertEquals(CUSTOM_ZSCORE_FILE, config.getFemaleWeightZScoreFile());
 
 
         config.setGenderNeutralZScoreFile(CUSTOM_ZSCORE_FILE);

@@ -29,4 +29,21 @@ public class GrowthMonitoringConstants {
         public static final String KEY = "key";
     }
 
+    public static final class ColumnHeaders {
+        public static final String COLUMN_SEX = "sex";
+        public static final String COLUMN_MONTH = "month";
+        public static final String COLUMN_L = "l";
+        public static final String COLUMN_M = "m";
+        public static final String COLUMN_S = "s";
+        public static final String COLUMN_SD3NEG = "sd3neg";
+        public static final String COLUMN_SD2NEG = "sd2neg";
+        public static final String COLUMN_SD1NEG = "sd1neg";
+        public static final String COLUMN_SD0 = "sd0";
+        public static final String COLUMN_SD1 = "sd1";
+        public static final String COLUMN_SD2 = "sd2";
+        public static final String COLUMN_SD3 = "sd3";
+        public static final String COLUMN_SD = "sd";
+    }
+
+
 }

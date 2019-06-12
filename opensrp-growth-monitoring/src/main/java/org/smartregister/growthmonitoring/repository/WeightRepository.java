@@ -23,6 +23,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class WeightRepository extends BaseRepository {
     public static final String WEIGHT_TABLE_NAME = "weights";
     public static final String ID_COLUMN = "_id";
@@ -91,7 +93,7 @@ public class WeightRepository extends BaseRepository {
                     " WHERE " + CREATED_AT + " is null ";
             database.execSQL(sql);
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
     }
 
@@ -152,7 +154,7 @@ public class WeightRepository extends BaseRepository {
                 update(database, weight);
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
     }
 
@@ -189,7 +191,7 @@ public class WeightRepository extends BaseRepository {
                 return weightList.get(0);
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
 
         return null;
@@ -211,7 +213,7 @@ public class WeightRepository extends BaseRepository {
             String idSelection = ID_COLUMN + " = ?";
             db.update(WEIGHT_TABLE_NAME, createValuesFor(weight), idSelection, new String[] {weight.getId().toString()});
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
     }
 
@@ -244,7 +246,7 @@ public class WeightRepository extends BaseRepository {
             if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
                     Double zScore = cursor.getDouble(cursor.getColumnIndex(Z_SCORE));
-                    if (zScore != null && zScore.equals(new Double(DEFAULT_Z_SCORE))) {
+                    if (zScore.equals(new Double(DEFAULT_Z_SCORE))) {
                         zScore = null;
                     }
 
@@ -254,7 +256,7 @@ public class WeightRepository extends BaseRepository {
                         try {
                             createdAt = EventClientRepository.dateFormat.parse(dateCreatedString);
                         } catch (ParseException e) {
-                            Log.e(TAG, Log.getStackTraceString(e));
+                            Timber.e(Log.getStackTraceString(e));
                         }
                     }
 
@@ -283,7 +285,7 @@ public class WeightRepository extends BaseRepository {
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -301,14 +303,14 @@ public class WeightRepository extends BaseRepository {
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.HOUR_OF_DAY, -hours);
 
-            Long time = calendar.getTimeInMillis();
+            long time = calendar.getTimeInMillis();
 
             cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS,
                     UPDATED_AT_COLUMN + " < ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? " + COLLATE_NOCASE,
-                    new String[] {time.toString(), TYPE_Unsynced}, null, null, null, null);
+                    new String[] {Long.toString(time), TYPE_Unsynced}, null, null, null, null);
             weights = readAllWeights(cursor);
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -330,7 +332,7 @@ public class WeightRepository extends BaseRepository {
                 weight = weights.get(0);
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -348,7 +350,7 @@ public class WeightRepository extends BaseRepository {
                             new String[] {entityId}, null, null, null, null);
             weights = readAllWeights(cursor);
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -366,7 +368,7 @@ public class WeightRepository extends BaseRepository {
                     WEIGHT_TABLE_COLUMNS, Z_SCORE + " = " + DEFAULT_Z_SCORE, null, null, null, null, null);
             result = readAllWeights(cursor);
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -388,7 +390,7 @@ public class WeightRepository extends BaseRepository {
                 weight = weights.get(0);
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -406,7 +408,7 @@ public class WeightRepository extends BaseRepository {
                             new String[] {entityid}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
             weightList = readAllWeights(cursor);
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -421,7 +423,7 @@ public class WeightRepository extends BaseRepository {
                     .delete(WEIGHT_TABLE_NAME, ID_COLUMN + " = ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? ",
                             new String[] {id, TYPE_Unsynced});
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
     }
 
@@ -432,7 +434,7 @@ public class WeightRepository extends BaseRepository {
             getRepository().getWritableDatabase()
                     .update(WEIGHT_TABLE_NAME, values, ID_COLUMN + " = ?", new String[] {caseId.toString()});
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
     }
 }

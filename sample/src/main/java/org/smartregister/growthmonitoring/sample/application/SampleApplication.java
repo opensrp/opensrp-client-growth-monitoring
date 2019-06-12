@@ -48,7 +48,7 @@ public class SampleApplication extends DrishtiApplication {
         LocationHelper.init(ALLOWED_LEVELS, DEFAULT_LOCATION_LEVEL);
 
         GrowthMonitoringConfig config = new GrowthMonitoringConfig();
-        config.setFemaleZScoreFile("zscores/custom_female_zscore_file.txt");
+        config.setFemaleWeightZScoreFile("zscores/custom_female_zscore_file.txt");
         GrowthMonitoringLibrary
                 .init(context, getRepository(), BuildConfig.VERSION_CODE, BuildConfig.DATABASE_VERSION, config);
 

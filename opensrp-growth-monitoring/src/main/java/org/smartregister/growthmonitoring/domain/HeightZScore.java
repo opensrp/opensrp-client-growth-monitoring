@@ -1,14 +1,15 @@
 package org.smartregister.growthmonitoring.domain;
 
-import android.util.Log;
-
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.R;
+import org.smartregister.growthmonitoring.util.GrowthMonitoringUtils;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Created by Jason Rogena - jrogena@ona.io on 31/05/2017.
@@ -21,6 +22,7 @@ public class HeightZScore {
     private final double l;
     private final double m;
     private final double s;
+    private final double sd;
     private final double sd3Neg;
     private final double sd2Neg;
     private final double sd1Neg;
@@ -29,13 +31,14 @@ public class HeightZScore {
     private final double sd2;
     private final double sd3;
 
-    public HeightZScore(Gender gender, int month, double l, double m, double s, double sd3Neg,
+    public HeightZScore(Gender gender, int month, double l, double m, double s, double sd, double sd3Neg,
                         double sd2Neg, double sd1Neg, double sd0, double sd1, double sd2, double sd3) {
         this.gender = gender;
         this.month = month;
         this.l = l;
         this.m = m;
         this.s = s;
+        this.sd = sd;
         this.sd3Neg = sd3Neg;
         this.sd2Neg = sd2Neg;
         this.sd1Neg = sd1Neg;
@@ -83,7 +86,7 @@ public class HeightZScore {
 
             return 0.0;
         } catch (Exception e) {
-            Log.e(HeightZScore.class.getCanonicalName(), e.getMessage());
+            Timber.e(e.getMessage());
             return null;
         }
     }
@@ -91,11 +94,11 @@ public class HeightZScore {
     public static double getAgeInMonths(Date dateOfBirth, Date heightDate) {
         Calendar dobCalendar = Calendar.getInstance();
         dobCalendar.setTime(dateOfBirth);
-        standardiseCalendarDate(dobCalendar);
+        GrowthMonitoringUtils.standardiseCalendarDate(dobCalendar);
 
         Calendar heightCalendar = Calendar.getInstance();
         heightCalendar.setTime(heightDate);
-        standardiseCalendarDate(heightCalendar);
+        GrowthMonitoringUtils.standardiseCalendarDate(heightCalendar);
 
         double result = 0;
         if (dobCalendar.getTimeInMillis() <= heightCalendar.getTimeInMillis()) {
@@ -108,7 +111,7 @@ public class HeightZScore {
     /**
      * This method calculates Z (The z-score) using the formulae provided here https://www.cdc.gov/growthcharts/percentile_data_files.htm
      *
-     * @param x The weight to use
+     * @param x The height to use
      * @return
      */
     public double getZ(double x) {
@@ -117,13 +120,6 @@ public class HeightZScore {
         } else {
             return Math.log(x / m) / s;
         }
-    }
-
-    private static void standardiseCalendarDate(Calendar calendarDate) {
-        calendarDate.set(Calendar.HOUR_OF_DAY, 0);
-        calendarDate.set(Calendar.MINUTE, 0);
-        calendarDate.set(Calendar.SECOND, 0);
-        calendarDate.set(Calendar.MILLISECOND, 0);
     }
 
     /**
@@ -155,7 +151,7 @@ public class HeightZScore {
     }
 
     /**
-     * This method calculates X (weight) given the Z-Score
+     * This method calculates X (height) given the Z-Score
      *
      * @param z The z-score to use to calculate X
      * @return

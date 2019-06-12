@@ -41,10 +41,8 @@ import lecho.lib.hellocharts.view.LineChartView;
 import timber.log.Timber;
 
 public class WeightMonitoringFragment extends Fragment {
-    public static final String DIALOG_TAG = "GrowthDialogFragment";
-    public static final String WRAPPER_TAG = "tag";
     private static final String TAG = WeightMonitoringFragment.class.getName();
-    List<Weight> weights;
+    private List<Weight> weights;
     private Calendar maxWeighingDate = null;
     private Calendar minWeighingDate = null;
     private boolean isExpanded = false;
@@ -140,7 +138,7 @@ public class WeightMonitoringFragment extends Fragment {
             }
 
             lines.add(getTodayLine(gender, dob, minAge, maxAge));
-            lines.add(getPersonWeightLine(gender, dob));
+            lines.add(getPersonWeightLine(dob));
 
             List<AxisValue> bottomAxisValues = new ArrayList<>();
             for (int i = (int) Math.round(Math.floor(minAge)); i <= (int) Math.round(Math.ceil(maxAge)); i++) {
@@ -278,8 +276,8 @@ public class WeightMonitoringFragment extends Fragment {
 
     private Line getTodayLine(Gender gender, Date dob, double minAge, double maxAge) {
         double personsAgeInMonthsToday = WeightZScore.getAgeInMonths(dob, Calendar.getInstance().getTime());
-        double maxY = getMaxY(dob, maxAge, gender);
-        double minY = getMinY(dob, minAge, gender);
+        double maxY = getMaxY(maxAge, gender);
+        double minY = getMinY(minAge, gender);
 
         if (personsAgeInMonthsToday > WeightZScore.MAX_REPRESENTED_AGE) {
             personsAgeInMonthsToday = WeightZScore.MAX_REPRESENTED_AGE;
@@ -298,7 +296,7 @@ public class WeightMonitoringFragment extends Fragment {
         return todayLine;
     }
 
-    private Line getPersonWeightLine(Gender gender, Date dob) {
+    private Line getPersonWeightLine(Date dob) {
         if (minWeighingDate == null || maxWeighingDate == null) {
             return null;
         }
@@ -327,7 +325,7 @@ public class WeightMonitoringFragment extends Fragment {
         return weights;
     }
 
-    private double getMaxY(Date dob, double maxAge, Gender gender) {
+    private double getMaxY(double maxAge, Gender gender) {
         if (minWeighingDate == null || maxWeighingDate == null) {
             return 0d;
         }
@@ -343,7 +341,7 @@ public class WeightMonitoringFragment extends Fragment {
         return maxY;
     }
 
-    private double getMinY(Date dob, double minAge, Gender gender) {
+    private double getMinY(double minAge, Gender gender) {
         if (minWeighingDate == null || maxWeighingDate == null) {
             return 0d;
         }

@@ -38,6 +38,8 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import static org.smartregister.growthmonitoring.util.GrowthMonitoringConstants.ColumnHeaders;
+
 /**
  * Created by Jason Rogena - jrogena@ona.io on 30/05/2017.
  */
@@ -45,20 +47,24 @@ import javax.net.ssl.HttpsURLConnection;
 public class ZScoreRefreshIntentService extends IntentService {
     private static final String TAG = ZScoreRefreshIntentService.class.getName();
     private static final Map<String, String> CSV_HEADING_SQL_COLUMN_MAP;
+    private static final Map<String, String> HEIGHT_CSV_HEADING_SQL_COLUMN_MAP;
 
     static {
         CSV_HEADING_SQL_COLUMN_MAP = new HashMap<>();
-        CSV_HEADING_SQL_COLUMN_MAP.put("Month", WeightZScoreRepository.COLUMN_MONTH);
-        CSV_HEADING_SQL_COLUMN_MAP.put("L", WeightZScoreRepository.COLUMN_L);
-        CSV_HEADING_SQL_COLUMN_MAP.put("M", WeightZScoreRepository.COLUMN_M);
-        CSV_HEADING_SQL_COLUMN_MAP.put("S", WeightZScoreRepository.COLUMN_S);
-        CSV_HEADING_SQL_COLUMN_MAP.put("SD3neg", WeightZScoreRepository.COLUMN_SD3NEG);
-        CSV_HEADING_SQL_COLUMN_MAP.put("SD2neg", WeightZScoreRepository.COLUMN_SD2NEG);
-        CSV_HEADING_SQL_COLUMN_MAP.put("SD1neg", WeightZScoreRepository.COLUMN_SD1NEG);
-        CSV_HEADING_SQL_COLUMN_MAP.put("SD0", WeightZScoreRepository.COLUMN_SD0);
-        CSV_HEADING_SQL_COLUMN_MAP.put("SD1", WeightZScoreRepository.COLUMN_SD1);
-        CSV_HEADING_SQL_COLUMN_MAP.put("SD2", WeightZScoreRepository.COLUMN_SD2);
-        CSV_HEADING_SQL_COLUMN_MAP.put("SD3", WeightZScoreRepository.COLUMN_SD3);
+        CSV_HEADING_SQL_COLUMN_MAP.put("Month", ColumnHeaders.COLUMN_MONTH);
+        CSV_HEADING_SQL_COLUMN_MAP.put("L", ColumnHeaders.COLUMN_L);
+        CSV_HEADING_SQL_COLUMN_MAP.put("M", ColumnHeaders.COLUMN_M);
+        CSV_HEADING_SQL_COLUMN_MAP.put("S", ColumnHeaders.COLUMN_S);
+        CSV_HEADING_SQL_COLUMN_MAP.put("SD3neg", ColumnHeaders.COLUMN_SD3NEG);
+        CSV_HEADING_SQL_COLUMN_MAP.put("SD2neg", ColumnHeaders.COLUMN_SD2NEG);
+        CSV_HEADING_SQL_COLUMN_MAP.put("SD1neg", ColumnHeaders.COLUMN_SD1NEG);
+        CSV_HEADING_SQL_COLUMN_MAP.put("SD0", ColumnHeaders.COLUMN_SD0);
+        CSV_HEADING_SQL_COLUMN_MAP.put("SD1", ColumnHeaders.COLUMN_SD1);
+        CSV_HEADING_SQL_COLUMN_MAP.put("SD2", ColumnHeaders.COLUMN_SD2);
+        CSV_HEADING_SQL_COLUMN_MAP.put("SD3", ColumnHeaders.COLUMN_SD3);
+
+        HEIGHT_CSV_HEADING_SQL_COLUMN_MAP = CSV_HEADING_SQL_COLUMN_MAP;
+        HEIGHT_CSV_HEADING_SQL_COLUMN_MAP.put("SD", ColumnHeaders.COLUMN_SD);
     }
 
     public ZScoreRefreshIntentService() {
@@ -79,7 +85,8 @@ public class ZScoreRefreshIntentService extends IntentService {
         // Dump CSV to file
         dumpWeightCsv(Gender.MALE, false);
         dumpWeightCsv(Gender.FEMALE, false);
-        dumpHeightCsv(Gender.FEMALE, false);
+
+        dumpHeightCsv(Gender.MALE, false);
         dumpHeightCsv(Gender.FEMALE, false);
 
         calculateChildWeightZScores();
@@ -104,9 +111,9 @@ public class ZScoreRefreshIntentService extends IntentService {
                     || existingScores.size() == 0) {
                 String filename = null;
                 if (gender.equals(Gender.FEMALE)) {
-                    filename = GrowthMonitoringLibrary.getInstance().getConfig().getFemaleZScoreFile();
+                    filename = GrowthMonitoringLibrary.getInstance().getConfig().getFemaleWeightZScoreFile();
                 } else if (gender.equals(Gender.MALE)) {
-                    filename = GrowthMonitoringLibrary.getInstance().getConfig().getMaleZScoreFile();
+                    filename = GrowthMonitoringLibrary.getInstance().getConfig().getMaleWeightZScoreFile();
                 }
 
                 if (filename != null) {
@@ -114,7 +121,7 @@ public class ZScoreRefreshIntentService extends IntentService {
                             CSVFormat.newFormat('\t'));
 
                     HashMap<Integer, Boolean> columnStatus = new HashMap<>();
-                    String query = "INSERT INTO `" + WeightZScoreRepository.TABLE_NAME + "` ( `" + WeightZScoreRepository.COLUMN_SEX + "`";
+                    String query = "INSERT INTO `" + WeightZScoreRepository.TABLE_NAME + "` ( `" + ColumnHeaders.COLUMN_SEX + "`";
                     for (CSVRecord record : csvParser) {
                         if (csvParser.getCurrentLineNumber() == 2) {// The second line
                             query = query + ")\n VALUES (\"" + gender.name() + "\"";
@@ -163,9 +170,9 @@ public class ZScoreRefreshIntentService extends IntentService {
                     || existingScores.size() == 0) {
                 String filename = null;
                 if (gender.equals(Gender.FEMALE)) {
-                    filename = GrowthMonitoringLibrary.getInstance().getConfig().getFemaleZScoreFile();
+                    filename = GrowthMonitoringLibrary.getInstance().getConfig().getFemaleHeightZScoreFile();
                 } else if (gender.equals(Gender.MALE)) {
-                    filename = GrowthMonitoringLibrary.getInstance().getConfig().getMaleZScoreFile();
+                    filename = GrowthMonitoringLibrary.getInstance().getConfig().getMaleHeightZScoreFile();
                 }
 
                 if (filename != null) {
@@ -173,7 +180,7 @@ public class ZScoreRefreshIntentService extends IntentService {
                             CSVFormat.newFormat('\t'));
 
                     HashMap<Integer, Boolean> columnStatus = new HashMap<>();
-                    String query = "INSERT INTO `" + HeightZScoreRepository.TABLE_NAME + "` ( `" + HeightZScoreRepository.COLUMN_SEX + "`";
+                    String query = "INSERT INTO `" + HeightZScoreRepository.TABLE_NAME + "` ( `" + ColumnHeaders.COLUMN_SEX + "`";
                     for (CSVRecord record : csvParser) {
                         if (csvParser.getCurrentLineNumber() == 2) {// The second line
                             query = query + ")\n VALUES (\"" + gender.name() + "\"";
@@ -184,9 +191,9 @@ public class ZScoreRefreshIntentService extends IntentService {
                         for (int columnIndex = 0; columnIndex < record.size(); columnIndex++) {
                             String curColumn = record.get(columnIndex);
                             if (csvParser.getCurrentLineNumber() == 1) {
-                                if (CSV_HEADING_SQL_COLUMN_MAP.containsKey(curColumn)) {
+                                if (HEIGHT_CSV_HEADING_SQL_COLUMN_MAP.containsKey(curColumn)) {
                                     columnStatus.put(columnIndex, true);
-                                    query = query + ", `" + CSV_HEADING_SQL_COLUMN_MAP.get(curColumn) + "`";
+                                    query = query + ", `" + HEIGHT_CSV_HEADING_SQL_COLUMN_MAP.get(curColumn) + "`";
                                 } else {
                                     columnStatus.put(columnIndex, false);
                                 }
