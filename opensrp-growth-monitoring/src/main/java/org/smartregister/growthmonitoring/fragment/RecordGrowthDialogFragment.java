@@ -36,14 +36,13 @@ import java.util.Date;
 
 @SuppressLint ("ValidFragment")
 public class RecordGrowthDialogFragment extends DialogFragment {
+    public static final String WEIGHT_WRAPPER_TAG = "weightWrapper";
+    public static final String HEIGHT_WRAPPER_TAG = "heightWrapper";
+    public static final String DATE_OF_BIRTH_TAG = "dob";
     private WeightWrapper weightWrapper;
     private HeightWrapper heightWrapper;
     private GMActionListener GMActionListener;
     private Date dateOfBirth;
-
-    public static final String WEIGHT_WRAPPER_TAG = "weightWrapper";
-    public static final String HEIGHT_WRAPPER_TAG = "heightWrapper";
-    public static final String DATE_OF_BIRTH_TAG = "dob";
 
     public static RecordGrowthDialogFragment newInstance(
             Date dateOfBirth, WeightWrapper weightWrapper, HeightWrapper heightWrapper) {
@@ -80,6 +79,45 @@ public class RecordGrowthDialogFragment extends DialogFragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        // without a handler, the window size itself correctly
+        // but the keyboard does not show up
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                Window window = null;
+                if (getDialog() != null) {
+                    window = getDialog().getWindow();
+                }
+
+                if (window == null) {
+                    return;
+                }
+                window.setLayout(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+
+            }
+
+        });
+
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // Verify that the host activity implements the callback interface
+        try {
+            // Instantiate the GMActionListener so we can send events to the host
+            GMActionListener = (GMActionListener) activity;
+            GMActionListener = (GMActionListener) activity;
+        } catch (ClassCastException e) {
+            // The activity doesn't implement the interface, throw exception
+            throw new ClassCastException(activity.toString()
+                    + " must implement GMActionListener");
+        }
+    }
+
+    @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -90,7 +128,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
             weightWrapper = (WeightWrapper) weightBundleSerializable;
         }
 
-        if (heightBundleSerializable instanceof HeightWrapper){
+        if (heightBundleSerializable instanceof HeightWrapper) {
             heightWrapper = (HeightWrapper) heightBundleSerializable;
         }
 
@@ -99,7 +137,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         }
 
         if (heightWrapper == null) {
-            return  null;
+            return null;
         }
 
         Serializable dateSerializable = bundle.getSerializable(DATE_OF_BIRTH_TAG);
@@ -258,21 +296,6 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         return dialogView;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        // Verify that the host activity implements the callback interface
-        try {
-            // Instantiate the GMActionListener so we can send events to the host
-            GMActionListener = (GMActionListener) activity;
-            GMActionListener = (GMActionListener) activity;
-        } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(activity.toString()
-                    + " must implement GMActionListener");
-        }
-    }
-
     private void formatEditWeightView(EditText editWeight, String userInput) {
         StringBuilder stringBuilder = new StringBuilder(userInput);
 
@@ -287,29 +310,5 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         editWeight.setText(stringBuilder.toString());
         // keeps the cursor always to the right
         Selection.setSelection(editWeight.getText(), stringBuilder.toString().length());
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // without a handler, the window size itself correctly
-        // but the keyboard does not show up
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                Window window = null;
-                if (getDialog() != null) {
-                    window = getDialog().getWindow();
-                }
-
-                if (window == null) {
-                    return;
-                }
-                window.setLayout(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-
-            }
-
-        });
-
     }
 }

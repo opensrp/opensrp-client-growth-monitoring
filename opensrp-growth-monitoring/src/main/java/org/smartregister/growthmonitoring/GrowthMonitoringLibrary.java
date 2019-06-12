@@ -13,9 +13,10 @@ import org.smartregister.repository.Repository;
  */
 public class GrowthMonitoringLibrary {
 
+    private static GrowthMonitoringConfig config = new GrowthMonitoringConfig();
+    private static GrowthMonitoringLibrary instance;
     private final Repository repository;
     private final Context context;
-
     private WeightRepository weightRepository;
     private HeightRepository heightRepository;
     private WeightZScoreRepository weightZScoreRepository;
@@ -23,13 +24,12 @@ public class GrowthMonitoringLibrary {
     private EventClientRepository eventClientRepository;
     private int applicationVersion;
     private int databaseVersion;
-    private static GrowthMonitoringConfig config = new GrowthMonitoringConfig();
-    private static GrowthMonitoringLibrary instance;
 
-    public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion) {
-        if (instance == null) {
-            instance = new GrowthMonitoringLibrary(context, repository, applicationVersion, databaseVersion);
-        }
+    private GrowthMonitoringLibrary(Context context, Repository repository, int applicationVersion, int databaseVersion) {
+        this.repository = repository;
+        this.context = context;
+        this.applicationVersion = applicationVersion;
+        this.databaseVersion = databaseVersion;
     }
 
     public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion,
@@ -41,6 +41,12 @@ public class GrowthMonitoringLibrary {
 
     }
 
+    public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion) {
+        if (instance == null) {
+            instance = new GrowthMonitoringLibrary(context, repository, applicationVersion, databaseVersion);
+        }
+    }
+
     public static GrowthMonitoringLibrary getInstance() {
         if (instance == null) {
             throw new IllegalStateException(" Instance does not exist!!! Call " + GrowthMonitoringLibrary.class
@@ -49,22 +55,15 @@ public class GrowthMonitoringLibrary {
         return instance;
     }
 
-    private GrowthMonitoringLibrary(Context context, Repository repository, int applicationVersion, int databaseVersion) {
-        this.repository = repository;
-        this.context = context;
-        this.applicationVersion = applicationVersion;
-        this.databaseVersion = databaseVersion;
-    }
-
-    public Repository getRepository() {
-        return repository;
-    }
-
     public WeightRepository weightRepository() {
         if (weightRepository == null) {
             weightRepository = new WeightRepository(getRepository());
         }
         return weightRepository;
+    }
+
+    public Repository getRepository() {
+        return repository;
     }
 
     public HeightRepository heightRepository() {

@@ -59,10 +59,8 @@ public class GrowthDialogFragment extends DialogFragment {
         return vaccinationDialogFragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog);
+    public void setPersonDetails(CommonPersonObjectClient personDetails) {
+        this.personDetails = personDetails;
     }
 
     public void setWeights(List<Weight> weights) {
@@ -73,10 +71,6 @@ public class GrowthDialogFragment extends DialogFragment {
     public void setHeights(List<Height> heights) {
         this.heights = heights;
         sortHeights();
-    }
-
-    public void setPersonDetails(CommonPersonObjectClient personDetails) {
-        this.personDetails = personDetails;
     }
 
     private void sortWeights() {
@@ -131,6 +125,42 @@ public class GrowthDialogFragment extends DialogFragment {
         }
 
         this.heights = result;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // without a handler, the window sizes itself correctly
+        // but the keyboard does not show up
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                Window window = null;
+                if (getDialog() != null) {
+                    window = getDialog().getWindow();
+                }
+
+                if (window == null) {
+                    return;
+                }
+
+                Point size = new Point();
+
+                Display display = window.getWindowManager().getDefaultDisplay();
+                display.getSize(size);
+
+                int width = size.x;
+
+                window.setLayout((int) (width * 0.9), FrameLayout.LayoutParams.WRAP_CONTENT);
+                window.setGravity(Gravity.CENTER);
+            }
+        });
     }
 
     @Override
@@ -222,35 +252,5 @@ public class GrowthDialogFragment extends DialogFragment {
         });
 
         return dialogView;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // without a handler, the window sizes itself correctly
-        // but the keyboard does not show up
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                Window window = null;
-                if (getDialog() != null) {
-                    window = getDialog().getWindow();
-                }
-
-                if (window == null) {
-                    return;
-                }
-
-                Point size = new Point();
-
-                Display display = window.getWindowManager().getDefaultDisplay();
-                display.getSize(size);
-
-                int width = size.x;
-
-                window.setLayout((int) (width * 0.9), FrameLayout.LayoutParams.WRAP_CONTENT);
-                window.setGravity(Gravity.CENTER);
-            }
-        });
     }
 }

@@ -37,22 +37,22 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-@SuppressLint("ValidFragment")
+@SuppressLint ("ValidFragment")
 public class EditGrowthDialogFragment extends DialogFragment {
+    public static final String DIALOG_TAG = "EditGrowthDialogFragment";
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
     private final Context context;
     private final WeightWrapper weightWrapper;
     private final HeightWrapper heightWrapper;
     private GMActionListener GMActionListener;
-    public static final String DIALOG_TAG = "EditGrowthDialogFragment";
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-
     private DateTime currentWeightDate;
     private Float currentWeight;
     private Float currentHeight;
 
     private Date dateOfBirth;
 
-    private EditGrowthDialogFragment(Context context, Date dateOfBirth, WeightWrapper weightWrapper, HeightWrapper heightWrapper) {
+    private EditGrowthDialogFragment(Context context, Date dateOfBirth, WeightWrapper weightWrapper,
+                                     HeightWrapper heightWrapper) {
         this.context = context;
         this.dateOfBirth = dateOfBirth;
         if (weightWrapper == null) {
@@ -77,6 +77,45 @@ public class EditGrowthDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // without a handler, the window sizes itself correctly
+        // but the keyboard does not show up
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                Window window = null;
+                if (getDialog() != null) {
+                    window = getDialog().getWindow();
+                }
+
+                if (window == null) {
+                    return;
+                }
+
+                window.setLayout(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+
+            }
+        });
+
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // Verify that the host activity implements the callback interface
+        try {
+            // Instantiate the GMActionListener so we can send events to the host
+            GMActionListener = (GMActionListener) activity;
+            GMActionListener = (GMActionListener) activity;
+        } catch (ClassCastException e) {
+            // The activity doesn't implement the interface, throw exception
+            throw new ClassCastException(activity.toString()
+                    + " must implement GMActionListener");
+        }
     }
 
     @Override
@@ -135,9 +174,11 @@ public class EditGrowthDialogFragment extends DialogFragment {
             if (weightWrapper.getId() != null) {//image already in local storage most likely ):
                 //set profile image by passing the client id.If the image doesn't exist in the image repository then download and save locally
                 mImageView.setTag(R.id.entity_id, weightWrapper.getId());
-                DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(weightWrapper.getId(), OpenSRPImageLoader.getStaticImageListener(
-                        mImageView, ImageUtils.profileImageResourceByGender(weightWrapper.getGender()), ImageUtils.profileImageResourceByGender(
-                                weightWrapper.getGender())));
+                DrishtiApplication.getCachedImageLoaderInstance()
+                        .getImageByClientId(weightWrapper.getId(), OpenSRPImageLoader.getStaticImageListener(
+                                mImageView, ImageUtils.profileImageResourceByGender(weightWrapper.getGender()),
+                                ImageUtils.profileImageResourceByGender(
+                                        weightWrapper.getGender())));
             }
         }
 
@@ -216,10 +257,16 @@ public class EditGrowthDialogFragment extends DialogFragment {
             }
         });
         if (weightWrapper.getUpdatedWeightDate() != null || heightWrapper.getUpdatedHeightDate() != null) {
-            ((TextView) dialogView.findViewById(R.id.service_date)).setText(getString(R.string.date_recorded) + weightWrapper.getUpdatedWeightDate().dayOfMonth().get() + "-" + weightWrapper
-                    .getUpdatedWeightDate().monthOfYear().get() + "-" + weightWrapper.getUpdatedWeightDate().year().get() + "");
-            ((TextView) dialogView.findViewById(R.id.service_date)).setText(getString(R.string.date_recorded) + heightWrapper.getUpdatedHeightDate().dayOfMonth().get() + "-" + heightWrapper
-                    .getUpdatedHeightDate().monthOfYear().get() + "-" + heightWrapper.getUpdatedHeightDate().year().get() + "");
+            ((TextView) dialogView.findViewById(R.id.service_date)).setText(
+                    getString(R.string.date_recorded) + weightWrapper.getUpdatedWeightDate().dayOfMonth()
+                            .get() + "-" + weightWrapper
+                            .getUpdatedWeightDate().monthOfYear().get() + "-" + weightWrapper.getUpdatedWeightDate().year()
+                            .get() + "");
+            ((TextView) dialogView.findViewById(R.id.service_date)).setText(
+                    getString(R.string.date_recorded) + heightWrapper.getUpdatedHeightDate().dayOfMonth()
+                            .get() + "-" + heightWrapper
+                            .getUpdatedHeightDate().monthOfYear().get() + "-" + heightWrapper.getUpdatedHeightDate().year()
+                            .get() + "");
         } else {
             dialogView.findViewById(R.id.service_date).setVisibility(View.GONE);
             weightDelete.setVisibility(View.GONE);
@@ -238,9 +285,10 @@ public class EditGrowthDialogFragment extends DialogFragment {
                 earlierDatePicker.requestFocus();
                 set.setVisibility(View.VISIBLE);
 
-                DatePickerUtils.themeDatePicker(earlierDatePicker, new char[]{'d', 'm', 'y'});
+                DatePickerUtils.themeDatePicker(earlierDatePicker, new char[] {'d', 'm', 'y'});
 
-                earlierDatePicker.updateDate(currentWeightDate.year().get(), currentWeightDate.monthOfYear().get() - 1, currentWeightDate.dayOfMonth().get());
+                earlierDatePicker.updateDate(currentWeightDate.year().get(), currentWeightDate.monthOfYear().get() - 1,
+                        currentWeightDate.dayOfMonth().get());
             }
         });
 
@@ -253,21 +301,6 @@ public class EditGrowthDialogFragment extends DialogFragment {
         });
 
         return dialogView;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        // Verify that the host activity implements the callback interface
-        try {
-            // Instantiate the GMActionListener so we can send events to the host
-            GMActionListener = (GMActionListener) activity;
-            GMActionListener = (GMActionListener) activity;
-        } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(activity.toString()
-                    + " must implement GMActionListener");
-        }
     }
 
     private void formatEditWeightView(EditText editWeight, String userInput) {
@@ -284,29 +317,5 @@ public class EditGrowthDialogFragment extends DialogFragment {
         editWeight.setText(stringBuilder.toString());
         // keeps the cursor always to the right
         Selection.setSelection(editWeight.getText(), stringBuilder.toString().length());
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // without a handler, the window sizes itself correctly
-        // but the keyboard does not show up
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                Window window = null;
-                if (getDialog() != null) {
-                    window = getDialog().getWindow();
-                }
-
-                if (window == null) {
-                    return;
-                }
-
-                window.setLayout(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-
-            }
-        });
-
     }
 }

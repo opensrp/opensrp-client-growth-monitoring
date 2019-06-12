@@ -21,11 +21,6 @@ public class GrowthMonitoringTabsAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public CharSequence getPageTitle(int position) {
-        return titleCollection.get(position);
-    }
-
-    @Override
     public Fragment getItem(int position) {
         return fragmentCollection.get(position);
     }
@@ -33,5 +28,10 @@ public class GrowthMonitoringTabsAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return fragmentCollection.size();
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return titleCollection.get(position);
     }
 }

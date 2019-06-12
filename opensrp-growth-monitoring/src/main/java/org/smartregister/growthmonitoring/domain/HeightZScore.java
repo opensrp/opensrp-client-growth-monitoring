@@ -61,39 +61,12 @@ public class HeightZScore {
         return (double) Math.round(value * scale) / scale;
     }
 
-    /**
-     * This method calculates Z (The z-score) using the formulae provided here https://www.cdc.gov/growthcharts/percentile_data_files.htm
-     *
-     * @param x The weight to use
-     * @return
-     */
-    public double getZ(double x) {
-        if (l != 0) {
-            return (Math.pow((x / m), l) - 1) / (l * s);
-        } else {
-            return Math.log(x / m) / s;
-        }
-    }
-
-    /**
-     * This method calculates X (weight) given the Z-Score
-     *
-     * @param z The z-score to use to calculate X
-     * @return
-     */
-    public double getX(double z) {
-        if (l != 0) {
-            return m * Math.pow(Math.E, Math.log((z * l * s) + 1) / l);
-        } else {
-            return m * Math.pow(Math.E, z * s);
-        }
-    }
-
     public static Double calculate(Gender gender, Date dateOfBirth, Date heightDate, double weight) {
         try {
             if (dateOfBirth != null && gender != null && heightDate != null) {
                 int ageInMonths = (int) Math.round(getAgeInMonths(dateOfBirth, heightDate));
-                List<HeightZScore> heightZScores = GrowthMonitoringLibrary.getInstance().heightZScoreRepository().findByGender(gender);
+                List<HeightZScore> heightZScores = GrowthMonitoringLibrary.getInstance().heightZScoreRepository()
+                        .findByGender(gender);
 
                 HeightZScore heightZScoreToUse = null;
                 for (HeightZScore curHeightZScore : heightZScores) {
@@ -115,33 +88,6 @@ public class HeightZScore {
         }
     }
 
-    /**
-     * This method calculates the expected weight given
-     *
-     * @param gender
-     * @param ageInMonthsDouble
-     * @param z
-     * @return
-     */
-    public static Double reverse(Gender gender, double ageInMonthsDouble, Double z) {
-        int ageInMonths = (int) Math.round(ageInMonthsDouble);
-        List<HeightZScore> heightZScores = GrowthMonitoringLibrary.getInstance().heightZScoreRepository().findByGender(gender);
-
-        HeightZScore heightZScoreToUse = null;
-        for (HeightZScore curHeightZScore : heightZScores) {
-            if (curHeightZScore.month == ageInMonths) {
-                heightZScoreToUse = curHeightZScore;
-                break;
-            }
-        }
-
-        if (heightZScoreToUse != null) {
-            return new Double(heightZScoreToUse.getX(z));
-        }
-
-        return null;
-    }
-
     public static double getAgeInMonths(Date dateOfBirth, Date heightDate) {
         Calendar dobCalendar = Calendar.getInstance();
         dobCalendar.setTime(dateOfBirth);
@@ -159,11 +105,67 @@ public class HeightZScore {
         return result;
     }
 
+    /**
+     * This method calculates Z (The z-score) using the formulae provided here https://www.cdc.gov/growthcharts/percentile_data_files.htm
+     *
+     * @param x The weight to use
+     * @return
+     */
+    public double getZ(double x) {
+        if (l != 0) {
+            return (Math.pow((x / m), l) - 1) / (l * s);
+        } else {
+            return Math.log(x / m) / s;
+        }
+    }
+
     private static void standardiseCalendarDate(Calendar calendarDate) {
         calendarDate.set(Calendar.HOUR_OF_DAY, 0);
         calendarDate.set(Calendar.MINUTE, 0);
         calendarDate.set(Calendar.SECOND, 0);
         calendarDate.set(Calendar.MILLISECOND, 0);
+    }
+
+    /**
+     * This method calculates the expected weight given
+     *
+     * @param gender
+     * @param ageInMonthsDouble
+     * @param z
+     * @return
+     */
+    public static Double reverse(Gender gender, double ageInMonthsDouble, Double z) {
+        int ageInMonths = (int) Math.round(ageInMonthsDouble);
+        List<HeightZScore> heightZScores = GrowthMonitoringLibrary.getInstance().heightZScoreRepository()
+                .findByGender(gender);
+
+        HeightZScore heightZScoreToUse = null;
+        for (HeightZScore curHeightZScore : heightZScores) {
+            if (curHeightZScore.month == ageInMonths) {
+                heightZScoreToUse = curHeightZScore;
+                break;
+            }
+        }
+
+        if (heightZScoreToUse != null) {
+            return new Double(heightZScoreToUse.getX(z));
+        }
+
+        return null;
+    }
+
+    /**
+     * This method calculates X (weight) given the Z-Score
+     *
+     * @param z The z-score to use to calculate X
+     * @return
+     */
+    public double getX(double z) {
+        if (l != 0) {
+            return m * Math.pow(Math.E, Math.log((z * l * s) + 1) / l);
+        } else {
+            return m * Math.pow(Math.E, z * s);
+        }
     }
 
     public Gender getGender() {

@@ -90,58 +90,6 @@ public class ZScoreRefreshIntentService extends IntentService {
         //startService(hia2Intent);
     }
 
-    private void fetchCSV(Gender gender) {
-        String urlString = null;
-        if (gender.equals(Gender.FEMALE)) {
-            urlString = GrowthMonitoringConstants.ZSCORE_FEMALE_URL;
-        } else if (gender.equals(Gender.MALE)) {
-            urlString = GrowthMonitoringConstants.ZSCORE_MALE_URL;
-        }
-
-        try {
-            URL url;
-
-            url = new URL(urlString);
-            URLConnection urlConnection = null;
-
-            int responseCode = 0;
-            if (url.getProtocol().equalsIgnoreCase("https")) {
-                urlConnection = url.openConnection();
-
-                // Sets the user agent for this request.
-                urlConnection.setRequestProperty("User-Agent", FileUtilities.getUserAgent(GrowthMonitoringLibrary.getInstance().context().applicationContext()));
-
-                // Gets a response code from the RSS server
-                responseCode = ((HttpsURLConnection) urlConnection).getResponseCode();
-
-            } else if (url.getProtocol().equalsIgnoreCase("http")) {
-                urlConnection = url.openConnection();
-
-                // Sets the user agent for this request.
-                urlConnection.setRequestProperty("User-Agent", FileUtilities.getUserAgent(GrowthMonitoringLibrary.getInstance().context().applicationContext()));
-
-                // Gets a response code from the RSS server
-                responseCode = ((HttpsURLConnection) urlConnection).getResponseCode();
-            }
-
-            switch (responseCode) {
-                // If the response is OK
-                case HttpURLConnection.HTTP_OK:
-                    // Gets the last modified data for the URL
-                    processResponse(urlConnection, gender);
-                    break;
-                default:
-                    Log.e(TAG, "Response code " + responseCode + " returned for Z-Score fetch from " + urlString);
-                    break;
-            }
-
-
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
-
-    }
-
     /**
      * This method dumps the WeightZScore CSV corresponding to the provided gender into the z_score table
      *
@@ -150,7 +98,8 @@ public class ZScoreRefreshIntentService extends IntentService {
      */
     private void dumpWeightCsv(Gender gender, boolean force) {
         try {
-            List<WeightZScore> existingScores = GrowthMonitoringLibrary.getInstance().weightZScoreRepository().findByGender(gender);
+            List<WeightZScore> existingScores = GrowthMonitoringLibrary.getInstance().weightZScoreRepository()
+                    .findByGender(gender);
             if (force
                     || existingScores.size() == 0) {
                 String filename = null;
@@ -208,7 +157,8 @@ public class ZScoreRefreshIntentService extends IntentService {
      */
     private void dumpHeightCsv(Gender gender, boolean force) {
         try {
-            List<HeightZScore> existingScores = GrowthMonitoringLibrary.getInstance().heightZScoreRepository().findByGender(gender);
+            List<HeightZScore> existingScores = GrowthMonitoringLibrary.getInstance().heightZScoreRepository()
+                    .findByGender(gender);
             if (force
                     || existingScores.size() == 0) {
                 String filename = null;
@@ -258,6 +208,56 @@ public class ZScoreRefreshIntentService extends IntentService {
         }
     }
 
+    /**
+     * This method retrieves all weight records that don't have ZScores and tries to calculate their
+     * corresponding ZScores
+     */
+    private void calculateChildWeightZScores() {
+        try {
+            HashMap<String, CommonPersonObjectClient> children = new HashMap<>();
+            List<Weight> weightsWithoutZScores = GrowthMonitoringLibrary.getInstance().weightRepository().findWithNoZScore();
+            for (Weight curWeight : weightsWithoutZScores) {
+                if (!TextUtils.isEmpty(curWeight.getBaseEntityId())) {
+                    if (!children.containsKey(curWeight.getBaseEntityId())) {
+                        CommonPersonObjectClient childDetails = getChildDetails(curWeight.getBaseEntityId());
+                        children.put(curWeight.getBaseEntityId(), childDetails);
+                    }
+
+                    CommonPersonObjectClient curChild = children.get(curWeight.getBaseEntityId());
+
+                    if (curChild != null) {
+                        Gender gender = Gender.UNKNOWN;
+                        String genderString = Utils.getValue(curChild.getColumnmaps(), "gender", false);
+                        if (genderString != null && genderString.equalsIgnoreCase("female")) {
+                            gender = Gender.FEMALE;
+                        } else if (genderString != null && genderString.equalsIgnoreCase("male")) {
+                            gender = Gender.MALE;
+                        }
+
+                        Date dob = null;
+                        String dobString = Utils.getValue(curChild.getColumnmaps(), "dob", false);
+                        if (!TextUtils.isEmpty(dobString)) {
+                            DateTime dateTime = new DateTime(dobString);
+                            dob = dateTime.toDate();
+                        }
+
+                        if (gender != Gender.UNKNOWN && dob != null) {
+                            GrowthMonitoringLibrary.getInstance().weightRepository().add(dob, gender, curWeight);
+                        } else {
+                            Log.w(TAG, "Could not get the date of birth or gender for child with base entity id " + curWeight
+                                    .getBaseEntityId());
+                        }
+                    } else {
+                        Log.w(TAG, "Could not get the details for child with base entity id " + curWeight.getBaseEntityId());
+                    }
+                } else {
+                    Log.w(TAG, "Current weight with id " + curWeight.getId() + " has no base entity id");
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
+    }
 
     /**
      * This method retrieves all height records that don't have ZScores and tries to calculate their
@@ -295,63 +295,14 @@ public class ZScoreRefreshIntentService extends IntentService {
                         if (gender != Gender.UNKNOWN && dob != null) {
                             GrowthMonitoringLibrary.getInstance().heightRepository().add(dob, gender, curHeight);
                         } else {
-                            Log.w(TAG, "Could not get the date of birth or gender for child with base entity id " + curHeight.getBaseEntityId());
+                            Log.w(TAG, "Could not get the date of birth or gender for child with base entity id " + curHeight
+                                    .getBaseEntityId());
                         }
                     } else {
                         Log.w(TAG, "Could not get the details for child with base entity id " + curHeight.getBaseEntityId());
                     }
                 } else {
                     Log.w(TAG, "Current weight with id " + curHeight.getId() + " has no base entity id");
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        }
-    }
-
-    /**
-     * This method retrieves all weight records that don't have ZScores and tries to calculate their
-     * corresponding ZScores
-     */
-    private void calculateChildWeightZScores() {
-        try {
-            HashMap<String, CommonPersonObjectClient> children = new HashMap<>();
-            List<Weight> weightsWithoutZScores = GrowthMonitoringLibrary.getInstance().weightRepository().findWithNoZScore();
-            for (Weight curWeight : weightsWithoutZScores) {
-                if (!TextUtils.isEmpty(curWeight.getBaseEntityId())) {
-                    if (!children.containsKey(curWeight.getBaseEntityId())) {
-                        CommonPersonObjectClient childDetails = getChildDetails(curWeight.getBaseEntityId());
-                        children.put(curWeight.getBaseEntityId(), childDetails);
-                    }
-
-                    CommonPersonObjectClient curChild = children.get(curWeight.getBaseEntityId());
-
-                    if (curChild != null) {
-                        Gender gender = Gender.UNKNOWN;
-                        String genderString = Utils.getValue(curChild.getColumnmaps(), "gender", false);
-                        if (genderString != null && genderString.equalsIgnoreCase("female")) {
-                            gender = Gender.FEMALE;
-                        } else if (genderString != null && genderString.equalsIgnoreCase("male")) {
-                            gender = Gender.MALE;
-                        }
-
-                        Date dob = null;
-                        String dobString = Utils.getValue(curChild.getColumnmaps(), "dob", false);
-                        if (!TextUtils.isEmpty(dobString)) {
-                            DateTime dateTime = new DateTime(dobString);
-                            dob = dateTime.toDate();
-                        }
-
-                        if (gender != Gender.UNKNOWN && dob != null) {
-                            GrowthMonitoringLibrary.getInstance().weightRepository().add(dob, gender, curWeight);
-                        } else {
-                            Log.w(TAG, "Could not get the date of birth or gender for child with base entity id " + curWeight.getBaseEntityId());
-                        }
-                    } else {
-                        Log.w(TAG, "Could not get the details for child with base entity id " + curWeight.getBaseEntityId());
-                    }
-                } else {
-                    Log.w(TAG, "Current weight with id " + curWeight.getId() + " has no base entity id");
                 }
             }
         } catch (Exception e) {
@@ -372,6 +323,60 @@ public class ZScoreRefreshIntentService extends IntentService {
         }
 
         return null;
+    }
+
+    private void fetchCSV(Gender gender) {
+        String urlString = null;
+        if (gender.equals(Gender.FEMALE)) {
+            urlString = GrowthMonitoringConstants.ZSCORE_FEMALE_URL;
+        } else if (gender.equals(Gender.MALE)) {
+            urlString = GrowthMonitoringConstants.ZSCORE_MALE_URL;
+        }
+
+        try {
+            URL url;
+
+            url = new URL(urlString);
+            URLConnection urlConnection = null;
+
+            int responseCode = 0;
+            if (url.getProtocol().equalsIgnoreCase("https")) {
+                urlConnection = url.openConnection();
+
+                // Sets the user agent for this request.
+                urlConnection.setRequestProperty("User-Agent",
+                        FileUtilities.getUserAgent(GrowthMonitoringLibrary.getInstance().context().applicationContext()));
+
+                // Gets a response code from the RSS server
+                responseCode = ((HttpsURLConnection) urlConnection).getResponseCode();
+
+            } else if (url.getProtocol().equalsIgnoreCase("http")) {
+                urlConnection = url.openConnection();
+
+                // Sets the user agent for this request.
+                urlConnection.setRequestProperty("User-Agent",
+                        FileUtilities.getUserAgent(GrowthMonitoringLibrary.getInstance().context().applicationContext()));
+
+                // Gets a response code from the RSS server
+                responseCode = ((HttpsURLConnection) urlConnection).getResponseCode();
+            }
+
+            switch (responseCode) {
+                // If the response is OK
+                case HttpURLConnection.HTTP_OK:
+                    // Gets the last modified data for the URL
+                    processResponse(urlConnection, gender);
+                    break;
+                default:
+                    Log.e(TAG, "Response code " + responseCode + " returned for Z-Score fetch from " + urlString);
+                    break;
+            }
+
+
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+
     }
 
     private void processResponse(URLConnection urlConnection, Gender gender) {

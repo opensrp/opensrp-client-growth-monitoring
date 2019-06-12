@@ -15,6 +15,7 @@ public class ZScoreRefreshIntentServiceJob extends BaseJob {
     protected Result onRunJob(@NonNull Params params) {
         Intent intent = new Intent(getApplicationContext(), ZScoreRefreshIntentService.class);
         getApplicationContext().startService(intent);
-        return params != null && params.getExtras().getBoolean(AllConstants.INTENT_KEY.TO_RESCHEDULE, false) ? Result.RESCHEDULE : Result.SUCCESS;
+        return params != null && params.getExtras()
+                .getBoolean(AllConstants.INTENT_KEY.TO_RESCHEDULE, false) ? Result.RESCHEDULE : Result.SUCCESS;
     }
 }

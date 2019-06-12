@@ -30,7 +30,8 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                     .withLocationId(weight.getLocationId())
                     .withProviderId(weight.getAnmId())
                     .withEntityType(entityType)
-                    .withFormSubmissionId(weight.getFormSubmissionId() == null ? generateRandomUUIDString() : weight.getFormSubmissionId())
+                    .withFormSubmissionId(
+                            weight.getFormSubmissionId() == null ? generateRandomUUIDString() : weight.getFormSubmissionId())
                     .withDateCreated(new Date());
 
             event.setTeam(weight.getTeam());
@@ -82,7 +83,8 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                     .withLocationId(height.getLocationId())
                     .withProviderId(height.getAnmId())
                     .withEntityType(entityType)
-                    .withFormSubmissionId(height.getFormSubmissionId() == null ? generateRandomUUIDString() : height.getFormSubmissionId())
+                    .withFormSubmissionId(
+                            height.getFormSubmissionId() == null ? generateRandomUUIDString() : height.getFormSubmissionId())
                     .withDateCreated(new Date());
 
             event.setTeam(height.getTeam());

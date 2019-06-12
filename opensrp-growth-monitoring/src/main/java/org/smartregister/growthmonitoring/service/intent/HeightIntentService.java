@@ -18,10 +18,10 @@ import java.util.List;
  * Created by keyman on 3/01/2017.
  */
 public class HeightIntentService extends IntentService {
-    private static final String TAG = HeightIntentService.class.getCanonicalName();
     public static final String EVENT_TYPE = "Growth Monitoring";
     public static final String EVENT_TYPE_OUT_OF_CATCHMENT = "Out of Area Service - Growth Monitoring";
     public static final String ENTITY_TYPE = "height";
+    private static final String TAG = HeightIntentService.class.getCanonicalName();
     private HeightRepository heightRepository;
 
 
@@ -30,10 +30,17 @@ public class HeightIntentService extends IntentService {
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
     protected void onHandleIntent(Intent intent) {
 
         try {
-            List<Height> heights = heightRepository.findUnSyncedBeforeTime(GrowthMonitoringConstants.GROWTH_MONITORING_SYNC_TIME);
+            List<Height> heights = heightRepository
+                    .findUnSyncedBeforeTime(GrowthMonitoringConstants.GROWTH_MONITORING_SYNC_TIME);
             if (!heights.isEmpty()) {
                 for (Height height : heights) {
 
@@ -41,7 +48,8 @@ public class HeightIntentService extends IntentService {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put(GrowthMonitoringConstants.JsonForm.KEY, "height_cm");
                     jsonObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY, "concept");
-                    jsonObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_ID, "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                    jsonObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_ID,
+                            "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                     jsonObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_PARENT, "");
                     jsonObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_DATA_TYPE, "decimal");
                     jsonObject.put(GrowthMonitoringConstants.JsonForm.VALUE, height.getCm());
@@ -50,7 +58,8 @@ public class HeightIntentService extends IntentService {
                     JSONObject zScoreObject = new JSONObject();
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.KEY, "Z_Score_Height_Age");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY, "concept");
-                    zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_ID, "162584AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                    zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_ID,
+                            "162584AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_PARENT, "");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_DATA_TYPE, "calculation");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.VALUE, height.getZScore());
@@ -59,9 +68,9 @@ public class HeightIntentService extends IntentService {
                     jsonArray.put(jsonObject);
                     jsonArray.put(zScoreObject);
 
-                    JsonFormUtils.createHeightEvent( height, EVENT_TYPE, ENTITY_TYPE, jsonArray);
+                    JsonFormUtils.createHeightEvent(height, EVENT_TYPE, ENTITY_TYPE, jsonArray);
                     if (height.getBaseEntityId() == null || height.getBaseEntityId().isEmpty()) {
-                        JsonFormUtils.createHeightEvent( height, EVENT_TYPE_OUT_OF_CATCHMENT, ENTITY_TYPE, jsonArray);
+                        JsonFormUtils.createHeightEvent(height, EVENT_TYPE_OUT_OF_CATCHMENT, ENTITY_TYPE, jsonArray);
 
                     }
                     heightRepository.close(height.getId());
@@ -70,11 +79,5 @@ public class HeightIntentService extends IntentService {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
-        return super.onStartCommand(intent, flags, startId);
     }
 }

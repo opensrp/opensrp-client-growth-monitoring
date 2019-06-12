@@ -22,7 +22,6 @@ import java.util.List;
  */
 
 public class WeightZScoreRepository extends BaseRepository {
-    private static final String TAG = WeightZScoreRepository.class.getName();
     public static final String TABLE_NAME = "weight_z_scores";
     public static final String COLUMN_SEX = "sex";
     public static final String COLUMN_MONTH = "month";
@@ -36,7 +35,7 @@ public class WeightZScoreRepository extends BaseRepository {
     public static final String COLUMN_SD1 = "sd1";
     public static final String COLUMN_SD2 = "sd2";
     public static final String COLUMN_SD3 = "sd3";
-
+    private static final String TAG = WeightZScoreRepository.class.getName();
     private static final String CREATE_TABLE_QUERY = "CREATE TABLE " + TABLE_NAME +
             " (_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_SEX + " VARCHAR NOT NULL, " +

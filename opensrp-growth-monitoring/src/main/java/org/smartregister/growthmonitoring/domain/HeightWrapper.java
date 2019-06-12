@@ -71,36 +71,36 @@ public class HeightWrapper implements Serializable {
         return updatedHeightDate != null ? updatedHeightDate.toString("yyyy-MM-dd") : "";
     }
 
-    public void setPhoto(Photo photo) {
-        this.photo = photo;
-    }
-
     public Photo getPhoto() {
         return photo;
     }
 
-    public void setHeight(Float height) {
-        this.height = height;
+    public void setPhoto(Photo photo) {
+        this.photo = photo;
     }
 
     public Float getHeight() {
         return height;
     }
 
-    public void setPatientAge(String patientAge) {
-        this.patientAge = patientAge;
+    public void setHeight(Float height) {
+        this.height = height;
     }
 
     public String getPatientAge() {
         return patientAge;
     }
 
-    public void setPmtctStatus(String pmtctStatus) {
-        this.pmtctStatus = pmtctStatus;
+    public void setPatientAge(String patientAge) {
+        this.patientAge = patientAge;
     }
 
     public String getPmtctStatus() {
         return pmtctStatus;
+    }
+
+    public void setPmtctStatus(String pmtctStatus) {
+        this.pmtctStatus = pmtctStatus;
     }
 
     public String getGender() {

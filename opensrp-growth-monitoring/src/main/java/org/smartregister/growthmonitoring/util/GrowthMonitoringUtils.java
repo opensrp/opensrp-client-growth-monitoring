@@ -10,13 +10,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class GrowthMonitoringUtils {
-    public static void standardiseCalendarDate(Calendar calendarDate) {
-        calendarDate.set(Calendar.HOUR_OF_DAY, 0);
-        calendarDate.set(Calendar.MINUTE, 0);
-        calendarDate.set(Calendar.SECOND, 0);
-        calendarDate.set(Calendar.MILLISECOND, 0);
-    }
-
     public static Calendar[] getMinAndMaxRecordingDates(Date dob) {
         Calendar minGraphTime = null;
         Calendar maxGraphTime = null;
@@ -50,6 +43,13 @@ public class GrowthMonitoringUtils {
         }
 
         return new Calendar[] {minGraphTime, maxGraphTime};
+    }
+
+    public static void standardiseCalendarDate(Calendar calendarDate) {
+        calendarDate.set(Calendar.HOUR_OF_DAY, 0);
+        calendarDate.set(Calendar.MINUTE, 0);
+        calendarDate.set(Calendar.SECOND, 0);
+        calendarDate.set(Calendar.MILLISECOND, 0);
     }
 
     public static void getHeight(final View view, final ViewMeasureListener viewMeasureListener) {
