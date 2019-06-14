@@ -1,12 +1,10 @@
 package org.smartregister.growthmonitoring.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
-import android.text.Selection;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +18,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.domain.HeightWrapper;
 import org.smartregister.growthmonitoring.domain.WeightWrapper;
-import org.smartregister.growthmonitoring.listener.GMActionListener;
+import org.smartregister.growthmonitoring.listener.GrowthMonitoringActionListener;
 import org.smartregister.growthmonitoring.util.ImageUtils;
 import org.smartregister.util.DatePickerUtils;
 import org.smartregister.util.OpenSRPImageLoader;
@@ -41,8 +40,20 @@ public class RecordGrowthDialogFragment extends DialogFragment {
     public static final String DATE_OF_BIRTH_TAG = "dob";
     private WeightWrapper weightWrapper;
     private HeightWrapper heightWrapper;
-    private GMActionListener GMActionListener;
+    private GrowthMonitoringActionListener GrowthMonitoringActionListener;
     private Date dateOfBirth;
+    private EditText editWeight;
+    private EditText editHeight;
+    private DatePicker earlierDatePicker;
+    private TextView nameView;
+    private TextView numberView;
+    private TextView ageView;
+    private TextView pmtctStatusView;
+    private ImageView mImageView;
+    private Button set;
+    private Button growthRecordDelete;
+    private Button cancel;
+    private Button growthRecordTakenEarlier;
 
     public static RecordGrowthDialogFragment newInstance(
             Date dateOfBirth, WeightWrapper weightWrapper, HeightWrapper heightWrapper) {
@@ -103,16 +114,16 @@ public class RecordGrowthDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         // Verify that the host activity implements the callback interface
         try {
-            // Instantiate the GMActionListener so we can send events to the host
-            GMActionListener = (GMActionListener) activity;
+            // Instantiate the GrowthMonitoringActionListener so we can send events to the host
+            GrowthMonitoringActionListener = (GrowthMonitoringActionListener) activity;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(activity.toString()
-                    + " must implement GMActionListener");
+                    + " must implement GrowthMonitoringActionListener");
         }
     }
 
@@ -120,85 +131,91 @@ public class RecordGrowthDialogFragment extends DialogFragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Bundle bundle = getArguments();
-        Serializable weightBundleSerializable = bundle.getSerializable(WEIGHT_WRAPPER_TAG);
-        Serializable heightBundleSerializable = bundle.getSerializable(HEIGHT_WRAPPER_TAG);
-        if (weightBundleSerializable instanceof WeightWrapper) {
-            weightWrapper = (WeightWrapper) weightBundleSerializable;
-        }
+        if (getBundle()) return null;
+        ViewGroup dialogView = setUpViews(inflater, container);
 
-        if (heightBundleSerializable instanceof HeightWrapper) {
-            heightWrapper = (HeightWrapper) heightBundleSerializable;
-        }
-
-        if (weightWrapper == null) {
-            return null;
-        }
-
-        if (heightWrapper == null) {
-            return null;
-        }
-
-        Serializable dateSerializable = bundle.getSerializable(DATE_OF_BIRTH_TAG);
-        if (dateSerializable instanceof Date) {
-            dateOfBirth = (Date) dateSerializable;
-        }
-
-        ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.record_growth_dialog_view, container, false);
-
-        final EditText editWeight = dialogView.findViewById(R.id.edit_weight);
         if (weightWrapper.getWeight() != null) {
             editWeight.setText(weightWrapper.getWeight().toString());
             editWeight.setSelection(editWeight.getText().length());
         }
         //formatEditWeightView(editWeight, "");
 
-        final EditText editHeight = dialogView.findViewById(R.id.edit_height);
         if (heightWrapper.getHeight() != null) {
             editHeight.setText(heightWrapper.getHeight().toString());
             editHeight.setSelection(editHeight.getText().length());
         }
 
-        final DatePicker earlierDatePicker = dialogView.findViewById(R.id.earlier_date_picker);
         earlierDatePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
         if (dateOfBirth != null) {
             earlierDatePicker.setMinDate(dateOfBirth.getTime());
         }
 
-        TextView nameView = dialogView.findViewById(R.id.child_name);
         nameView.setText(weightWrapper.getPatientName());
 
-        TextView numberView = dialogView.findViewById(R.id.child_zeir_id);
         if (StringUtils.isNotBlank(weightWrapper.getPatientNumber())) {
             numberView.setText(String.format("%s: %s", getString(R.string.label_zeir), weightWrapper.getPatientNumber()));
         } else {
             numberView.setText("");
         }
 
-        TextView ageView = dialogView.findViewById(R.id.child_age);
         if (StringUtils.isNotBlank(weightWrapper.getPatientAge())) {
             ageView.setText(String.format("%s: %s", getString(R.string.age), weightWrapper.getPatientAge()));
         } else {
             ageView.setText("");
         }
 
-        TextView pmtctStatusView = dialogView.findViewById(R.id.pmtct_status);
         pmtctStatusView.setText(weightWrapper.getPmtctStatus());
 
-        if (weightWrapper.getId() != null) {
-            ImageView mImageView = dialogView.findViewById(R.id.child_profilepic);
+        setClientImage();
+        setButtonAction();
+        growthRecordAction();
+        growthEarlierAction();
+        cancelAction();
 
-            if (weightWrapper.getId() != null) {//image already in local storage most likey ):
-                //set profile image by passing the client id.If the image doesn't exist in the image repository then download and save locally
-                mImageView.setTag(R.id.entity_id, weightWrapper.getId());
-                DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(weightWrapper.getId(),
-                        OpenSRPImageLoader.getStaticImageListener(mImageView,
-                                ImageUtils.profileImageResourceByGender(weightWrapper.getGender()),
-                                ImageUtils.profileImageResourceByGender(weightWrapper.getGender())));
-            }
+        return dialogView;
+    }
+
+    private boolean getBundle() {
+        Bundle bundle = getArguments();
+        if (getWeightBundle(bundle)) return true;
+        if (getHeightBundle(bundle)) return true;
+
+        getDateBundle(bundle);
+        return false;
+    }
+
+    @NotNull
+    private ViewGroup setUpViews(LayoutInflater inflater, ViewGroup container) {
+        ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.edit_growth_dialog_view, container, false);
+
+        editWeight = dialogView.findViewById(R.id.edit_weight);
+        editHeight = dialogView.findViewById(R.id.edit_height);
+        earlierDatePicker = dialogView.findViewById(R.id.earlier_date_picker);
+        nameView = dialogView.findViewById(R.id.child_name);
+        numberView = dialogView.findViewById(R.id.child_zeir_id);
+        ageView = dialogView.findViewById(R.id.child_age);
+        pmtctStatusView = dialogView.findViewById(R.id.pmtct_status);
+        mImageView = dialogView.findViewById(R.id.child_profilepic);
+        set = dialogView.findViewById(R.id.set);
+        growthRecordDelete = dialogView.findViewById(R.id.weight_delete);
+        cancel = dialogView.findViewById(R.id.cancel);
+        growthRecordTakenEarlier = dialogView.findViewById(R.id.weight_taken_earlier);
+
+        return dialogView;
+    }
+
+    private void setClientImage() {
+        if (weightWrapper.getId() != null) {//image already in local storage most likey ):
+            //set profile image by passing the client id.If the image doesn't exist in the image repository then download and save locally
+            mImageView.setTag(R.id.entity_id, weightWrapper.getId());
+            DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(weightWrapper.getId(),
+                    OpenSRPImageLoader.getStaticImageListener(mImageView,
+                            ImageUtils.profileImageResourceByGender(weightWrapper.getGender()),
+                            ImageUtils.profileImageResourceByGender(weightWrapper.getGender())));
         }
+    }
 
-        final Button set = dialogView.findViewById(R.id.set);
+    private void setButtonAction() {
         set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -230,14 +247,14 @@ public class RecordGrowthDialogFragment extends DialogFragment {
                 weightWrapper.setWeight(weight);
                 heightWrapper.setHeight(height);
 
-                GMActionListener.onWeightTaken(weightWrapper);
-                GMActionListener.onHeightTaken(heightWrapper);
+                GrowthMonitoringActionListener.onGrowthRecorded(weightWrapper, heightWrapper);
 
             }
         });
+    }
 
-        final Button weightTakenToday = dialogView.findViewById(R.id.weight_taken_today);
-        weightTakenToday.setOnClickListener(new Button.OnClickListener() {
+    private void growthRecordAction() {
+        growthRecordDelete.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String weightString = editWeight.getText().toString();
@@ -261,17 +278,17 @@ public class RecordGrowthDialogFragment extends DialogFragment {
                 weightWrapper.setWeight(weight);
                 heightWrapper.setHeight(height);
 
-                GMActionListener.onWeightTaken(weightWrapper);
-                GMActionListener.onHeightTaken(heightWrapper);
+                GrowthMonitoringActionListener.onGrowthRecorded(weightWrapper, heightWrapper);
 
             }
         });
+    }
 
-        final Button weightTakenEarlier = dialogView.findViewById(R.id.weight_taken_earlier);
-        weightTakenEarlier.setOnClickListener(new Button.OnClickListener() {
+    private void growthEarlierAction() {
+        growthRecordTakenEarlier.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                weightTakenEarlier.setVisibility(View.GONE);
+                growthRecordTakenEarlier.setVisibility(View.GONE);
 
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -283,19 +300,43 @@ public class RecordGrowthDialogFragment extends DialogFragment {
                 DatePickerUtils.themeDatePicker(earlierDatePicker, new char[] {'d', 'm', 'y'});
             }
         });
+    }
 
-        Button cancel = dialogView.findViewById(R.id.cancel);
+    private void cancelAction() {
         cancel.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dismiss();
             }
         });
-
-        return dialogView;
     }
 
-    private void formatEditWeightView(EditText editWeight, String userInput) {
+    private boolean getWeightBundle(Bundle bundle) {
+        Serializable weightBundleSerializable = bundle.getSerializable(WEIGHT_WRAPPER_TAG);
+        if (weightBundleSerializable instanceof WeightWrapper) {
+            weightWrapper = (WeightWrapper) weightBundleSerializable;
+        }
+
+        return weightWrapper == null;
+    }
+
+    private boolean getHeightBundle(Bundle bundle) {
+        Serializable heightBundleSerializable = bundle.getSerializable(HEIGHT_WRAPPER_TAG);
+        if (heightBundleSerializable instanceof HeightWrapper) {
+            heightWrapper = (HeightWrapper) heightBundleSerializable;
+        }
+
+        return heightWrapper == null;
+    }
+
+    private void getDateBundle(Bundle bundle) {
+        Serializable dateSerializable = bundle.getSerializable(DATE_OF_BIRTH_TAG);
+        if (dateSerializable instanceof Date) {
+            dateOfBirth = (Date) dateSerializable;
+        }
+    }
+
+   /* private void formatEditWeightView(EditText editWeight, String userInput) {
         StringBuilder stringBuilder = new StringBuilder(userInput);
 
         while (stringBuilder.length() > 2 && stringBuilder.charAt(0) == '0') {
@@ -309,5 +350,5 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         editWeight.setText(stringBuilder.toString());
         // keeps the cursor always to the right
         Selection.setSelection(editWeight.getText(), stringBuilder.toString().length());
-    }
+    }*/
 }

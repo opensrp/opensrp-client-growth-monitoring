@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
-import android.text.Selection;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +19,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.domain.HeightWrapper;
 import org.smartregister.growthmonitoring.domain.WeightWrapper;
-import org.smartregister.growthmonitoring.listener.GMActionListener;
+import org.smartregister.growthmonitoring.listener.GrowthMonitoringActionListener;
 import org.smartregister.growthmonitoring.repository.HeightRepository;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.util.ImageUtils;
@@ -41,12 +41,23 @@ public class EditGrowthDialogFragment extends DialogFragment {
     private final Context context;
     private final WeightWrapper weightWrapper;
     private final HeightWrapper heightWrapper;
-    private GMActionListener GMActionListener;
+    private GrowthMonitoringActionListener GrowthMonitoringActionListener;
     private DateTime currentWeightDate;
     private Float currentWeight;
     private Float currentHeight;
-
     private Date dateOfBirth;
+    private EditText editWeight;
+    private EditText editHeight;
+    private DatePicker earlierDatePicker;
+    private TextView nameView;
+    private TextView numberView;
+    private TextView ageView;
+    private TextView pmtctStatusView;
+    private ImageView mImageView;
+    private Button set;
+    private Button growthRecordDelete;
+    private Button cancel;
+    private Button growthRecordTakenEarlier;
 
     private EditGrowthDialogFragment(Context context, Date dateOfBirth, WeightWrapper weightWrapper,
                                      HeightWrapper heightWrapper) {
@@ -101,16 +112,16 @@ public class EditGrowthDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         // Verify that the host activity implements the callback interface
         try {
-            // Instantiate the GMActionListener so we can send events to the host
-            GMActionListener = (GMActionListener) activity;
+            // Instantiate the GrowthMonitoringActionListener so we can send events to the host
+            GrowthMonitoringActionListener = (GrowthMonitoringActionListener) activity;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(activity.toString()
-                    + " must implement GMActionListener");
+                    + " must implement GrowthMonitoringActionListener");
         }
     }
 
@@ -118,16 +129,14 @@ public class EditGrowthDialogFragment extends DialogFragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.edit_growth_dialog_view, container, false);
+        ViewGroup dialogView = setUpViews(inflater, container);
 
-        final EditText editWeight = dialogView.findViewById(R.id.edit_weight);
         if (weightWrapper.getWeight() != null) {
             editWeight.setText(weightWrapper.getWeight().toString());
             editWeight.setSelection(editWeight.getText().length());
             currentWeight = weightWrapper.getWeight();
         }
 
-        final EditText editHeight = dialogView.findViewById(R.id.edit_height);
         if (heightWrapper.getHeight() != null) {
             editHeight.setText(heightWrapper.getHeight().toString());
             editHeight.setSelection(editWeight.getText().length());
@@ -138,48 +147,70 @@ public class EditGrowthDialogFragment extends DialogFragment {
             currentWeightDate = weightWrapper.getUpdatedWeightDate();
         }
 
-        final DatePicker earlierDatePicker = dialogView.findViewById(R.id.earlier_date_picker);
         earlierDatePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
         if (dateOfBirth != null) {
             earlierDatePicker.setMinDate(dateOfBirth.getTime());
         }
 
-        TextView nameView = dialogView.findViewById(R.id.child_name);
         nameView.setText(weightWrapper.getPatientName());
 
-        TextView numberView = dialogView.findViewById(R.id.child_zeir_id);
         if (StringUtils.isNotBlank(weightWrapper.getPatientNumber())) {
             numberView.setText(String.format("%s: %s", getString(R.string.label_zeir), weightWrapper.getPatientNumber()));
         } else {
             numberView.setText("");
         }
 
-        TextView ageView = dialogView.findViewById(R.id.child_age);
         if (StringUtils.isNotBlank(weightWrapper.getPatientAge())) {
             ageView.setText(String.format("%s: %s", getString(R.string.age), weightWrapper.getPatientAge()));
         } else {
             ageView.setText("");
         }
 
-        TextView pmtctStatusView = dialogView.findViewById(R.id.pmtct_status);
         pmtctStatusView.setText(weightWrapper.getPmtctStatus());
 
-        if (weightWrapper.getId() != null) {
-            ImageView mImageView = dialogView.findViewById(R.id.child_profilepic);
+        setClientImage();
+        setButtonAction();
+        growthRecordDeleteAction();
+        setDateRecorded(dialogView);
+        growthRecordEalierAction();
+        cancelAction();
 
-            if (weightWrapper.getId() != null) {//image already in local storage most likely ):
-                //set profile image by passing the client id.If the image doesn't exist in the image repository then download and save locally
-                mImageView.setTag(R.id.entity_id, weightWrapper.getId());
-                DrishtiApplication.getCachedImageLoaderInstance()
-                        .getImageByClientId(weightWrapper.getId(), OpenSRPImageLoader.getStaticImageListener(
-                                mImageView, ImageUtils.profileImageResourceByGender(weightWrapper.getGender()),
-                                ImageUtils.profileImageResourceByGender(
-                                        weightWrapper.getGender())));
-            }
+        return dialogView;
+    }
+
+    @NotNull
+    private ViewGroup setUpViews(LayoutInflater inflater, ViewGroup container) {
+        ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.edit_growth_dialog_view, container, false);
+
+        editWeight = dialogView.findViewById(R.id.edit_weight);
+        editHeight = dialogView.findViewById(R.id.edit_height);
+        earlierDatePicker = dialogView.findViewById(R.id.earlier_date_picker);
+        nameView = dialogView.findViewById(R.id.child_name);
+        numberView = dialogView.findViewById(R.id.child_zeir_id);
+        ageView = dialogView.findViewById(R.id.child_age);
+        pmtctStatusView = dialogView.findViewById(R.id.pmtct_status);
+        mImageView = dialogView.findViewById(R.id.child_profilepic);
+        set = dialogView.findViewById(R.id.set);
+        growthRecordDelete = dialogView.findViewById(R.id.weight_delete);
+        cancel = dialogView.findViewById(R.id.cancel);
+        growthRecordTakenEarlier = dialogView.findViewById(R.id.weight_taken_earlier);
+
+        return dialogView;
+    }
+
+    private void setClientImage() {
+        if (weightWrapper.getId() != null) {//image already in local storage most likely ):
+            //set profile image by passing the client id.If the image doesn't exist in the image repository then download and save locally
+            mImageView.setTag(R.id.entity_id, weightWrapper.getId());
+            DrishtiApplication.getCachedImageLoaderInstance()
+                    .getImageByClientId(weightWrapper.getId(), OpenSRPImageLoader.getStaticImageListener(
+                            mImageView, ImageUtils.profileImageResourceByGender(weightWrapper.getGender()),
+                            ImageUtils.profileImageResourceByGender(
+                                    weightWrapper.getGender())));
         }
+    }
 
-
-        final Button set = dialogView.findViewById(R.id.set);
+    private void setButtonAction() {
         set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -220,38 +251,36 @@ public class EditGrowthDialogFragment extends DialogFragment {
                     weightChanged = true;
                 }
 
-                if (weightChanged || dateChanged) {
-                    GMActionListener.onWeightTaken(weightWrapper);
-                }
-
                 Float height = Float.valueOf(heightString);
                 if (!height.equals(currentHeight)) {
                     heightWrapper.setHeight(height);
                     heightChanged = true;
                 }
 
-                if (heightChanged || dateChanged) {
-                    GMActionListener.onHeightTaken(heightWrapper);
+                if (heightChanged || weightChanged || dateChanged) {
+                    GrowthMonitoringActionListener.onGrowthRecorded(weightWrapper, heightWrapper);
                 }
-
             }
         });
+    }
 
-        final Button weightDelete = dialogView.findViewById(R.id.weight_delete);
-        weightDelete.setOnClickListener(new Button.OnClickListener() {
+    private void growthRecordDeleteAction() {
+        growthRecordDelete.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dismiss();
                 WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
                 weightRepository.delete(String.valueOf(weightWrapper.getDbKey()));
-                GMActionListener.onWeightTaken(null);
 
                 HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
                 heightRepository.delete(String.valueOf(heightWrapper.getDbKey()));
-                GMActionListener.onHeightTaken(null);
 
+                GrowthMonitoringActionListener.onGrowthRecorded(null, null);
             }
         });
+    }
+
+    private void setDateRecorded(ViewGroup dialogView) {
         if (weightWrapper.getUpdatedWeightDate() != null || heightWrapper.getUpdatedHeightDate() != null) {
             ((TextView) dialogView.findViewById(R.id.service_date)).setText(
                     getString(R.string.date_recorded) + " " + weightWrapper.getUpdatedWeightDate().dayOfMonth()
@@ -265,14 +294,15 @@ public class EditGrowthDialogFragment extends DialogFragment {
                             .get() + "");
         } else {
             dialogView.findViewById(R.id.service_date).setVisibility(View.GONE);
-            weightDelete.setVisibility(View.GONE);
+            growthRecordDelete.setVisibility(View.GONE);
         }
+    }
 
-        final Button weightTakenEarlier = dialogView.findViewById(R.id.weight_taken_earlier);
-        weightTakenEarlier.setOnClickListener(new Button.OnClickListener() {
+    private void growthRecordEalierAction() {
+        growthRecordTakenEarlier.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                weightTakenEarlier.setVisibility(View.GONE);
+                growthRecordTakenEarlier.setVisibility(View.GONE);
 
                 InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -287,19 +317,18 @@ public class EditGrowthDialogFragment extends DialogFragment {
                         currentWeightDate.dayOfMonth().get());
             }
         });
+    }
 
-        Button cancel = dialogView.findViewById(R.id.cancel);
+    private void cancelAction() {
         cancel.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dismiss();
             }
         });
-
-        return dialogView;
     }
 
-    private void formatEditWeightView(EditText editWeight, String userInput) {
+   /* private void formatEditWeightView(EditText editWeight, String userInput) {
         StringBuilder stringBuilder = new StringBuilder(userInput);
 
         while (stringBuilder.length() > 2 && stringBuilder.charAt(0) == '0') {
@@ -313,5 +342,5 @@ public class EditGrowthDialogFragment extends DialogFragment {
         editWeight.setText(stringBuilder.toString());
         // keeps the cursor always to the right
         Selection.setSelection(editWeight.getText(), stringBuilder.toString().length());
-    }
+    }*/
 }

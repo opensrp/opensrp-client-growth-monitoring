@@ -60,7 +60,7 @@ public class WeightIntentService extends IntentService {
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.KEY, "Z_Score_Weight_Age");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY, "concept");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_ID,
-                            "162584AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                            "159428AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_PARENT, "");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_DATA_TYPE, "calculation");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.VALUE, weight.getZScore());

@@ -50,7 +50,7 @@ public class HeightIntentService extends IntentService {
                     jsonObject.put(GrowthMonitoringConstants.JsonForm.KEY, "height_cm");
                     jsonObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY, "concept");
                     jsonObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_ID,
-                            "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                            "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                     jsonObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_PARENT, "");
                     jsonObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_DATA_TYPE, "decimal");
                     jsonObject.put(GrowthMonitoringConstants.JsonForm.VALUE, height.getCm());
@@ -60,7 +60,7 @@ public class HeightIntentService extends IntentService {
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.KEY, "Z_Score_Height_Age");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY, "concept");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_ID,
-                            "162584AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                            "159429AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_PARENT, "");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_DATA_TYPE, "calculation");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.VALUE, height.getZScore());

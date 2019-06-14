@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.R;
@@ -62,6 +63,20 @@ public class WeightMonitoringFragment extends Fragment {
         final View weightTabView = inflater.inflate(R.layout.weight_monitoring_fragment, container, false);
         final ImageButton scrollButton = weightTabView.findViewById(R.id.scroll_button);
 
+        Date dob = getDate();
+        scrollButtonClickAction(weightTabView, scrollButton);
+        try {
+            refreshGrowthChart(weightTabView, getGender(), dob);
+            refreshPreviousWeightsTable(weightTabView, getGender(), dob);
+        } catch (Exception e) {
+            Timber.e(TAG, Log.getStackTraceString(e));
+        }
+
+        return weightTabView;
+    }
+
+    @Nullable
+    private Date getDate() {
         Date dob = null;
         if (StringUtils.isNotBlank(getDobString())) {
             DateTime dateTime = new DateTime(getDobString());
@@ -70,7 +85,10 @@ public class WeightMonitoringFragment extends Fragment {
             minWeighingDate = weighingDates[0];
             maxWeighingDate = weighingDates[1];
         }
+        return dob;
+    }
 
+    private void scrollButtonClickAction(final View weightTabView, final ImageButton scrollButton) {
         scrollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,23 +115,6 @@ public class WeightMonitoringFragment extends Fragment {
                 }
             }
         });
-
-        try {
-            refreshGrowthChart(weightTabView, getGender(), dob);
-        } catch (Exception e) {
-            Timber.e(TAG, Log.getStackTraceString(e));
-        }
-
-        try {
-            refreshPreviousWeightsTable(weightTabView, getGender(), dob);
-        } catch (Exception e) {
-            Timber.e(TAG, Log.getStackTraceString(e));
-        }
-        return weightTabView;
-    }
-
-    public String getDobString() {
-        return dobString;
     }
 
     private void refreshGrowthChart(View parent, Gender gender, Date dob) {
@@ -254,6 +255,10 @@ public class WeightMonitoringFragment extends Fragment {
         });
     }
 
+    public String getDobString() {
+        return dobString;
+    }
+
     private Line getZScoreLine(Gender gender, double startAgeInMonths, double endAgeInMonths, double z, int color) {
         List<PointValue> values = new ArrayList<>();
         while (startAgeInMonths <= endAgeInMonths) {
@@ -377,11 +382,11 @@ public class WeightMonitoringFragment extends Fragment {
         this.weights = weights;
     }
 
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
     public void setDobString(String dobString) {
         this.dobString = dobString;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 }

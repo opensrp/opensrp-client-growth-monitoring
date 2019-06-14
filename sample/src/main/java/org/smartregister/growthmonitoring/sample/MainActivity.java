@@ -21,10 +21,11 @@ import org.smartregister.growthmonitoring.domain.HeightWrapper;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.domain.WeightWrapper;
 import org.smartregister.growthmonitoring.fragment.GrowthDialogFragment;
-import org.smartregister.growthmonitoring.listener.GMActionListener;
+import org.smartregister.growthmonitoring.listener.GrowthMonitoringActionListener;
 import org.smartregister.growthmonitoring.repository.HeightRepository;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.sample.util.SampleUtil;
+import org.smartregister.growthmonitoring.service.intent.HeightIntentService;
 import org.smartregister.growthmonitoring.service.intent.WeightIntentService;
 import org.smartregister.growthmonitoring.util.HeightUtils;
 import org.smartregister.growthmonitoring.util.WeightUtils;
@@ -41,8 +42,7 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements GMActionListener {
-    private static final String TAG = MainActivity.class.getCanonicalName();
+public class MainActivity extends AppCompatActivity implements GrowthMonitoringActionListener {
 
     private static final String DIALOG_TAG = "DIALOG_TAG_DUUH";
 
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements GMActionListener 
         });
 
         refreshEditWeightLayout();
-
+        refreshEditHeightLayout();
         startServices();
     }
 
@@ -155,96 +155,6 @@ public class MainActivity extends AppCompatActivity implements GMActionListener 
         }
     }
 
-    public void startServices() {
-        Intent vaccineIntent = new Intent(this, WeightIntentService.class);
-        startService(vaccineIntent);
-    }
-
-    @Override
-    public void onWeightTaken(WeightWrapper weightWrapper) {
-        if (weightWrapper != null) {
-            final WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
-            Weight weight = new Weight();
-            if (weightWrapper.getDbKey() != null) {
-                weight = weightRepository.find(weightWrapper.getDbKey());
-            }
-            weight.setBaseEntityId(SampleUtil.ENTITY_ID);
-            weight.setKg(weightWrapper.getWeight());
-            weight.setDate(weightWrapper.getUpdatedWeightDate().toDate());
-            weight.setAnmId("sample");
-            weight.setLocationId("Kenya");
-            weight.setTeam("testTeam");
-            weight.setTeamId("testTeamId");
-            weight.setChildLocationId("testChildLocationId");
-
-            Gender gender = Gender.UNKNOWN;
-
-            String genderString = SampleUtil.GENDER;
-
-            if (genderString.toLowerCase().equals("female")) {
-                gender = Gender.FEMALE;
-            } else if (genderString.toLowerCase().equals("male")) {
-                gender = Gender.MALE;
-            }
-
-            Date dob = SampleUtil.getDateOfBirth();
-
-
-            if (dob != null && gender != Gender.UNKNOWN) {
-                weightRepository.add(dob, gender, weight);
-            } else {
-                weightRepository.add(weight);
-            }
-
-            weightWrapper.setDbKey(weight.getId());
-
-        }
-
-        refreshEditWeightLayout();
-    }
-
-    @Override
-    public void onHeightTaken(HeightWrapper heightWrapper) {
-        if (heightWrapper != null) {
-            final HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
-            Height height = new Height();
-            if (heightWrapper.getDbKey() != null) {
-                height = heightRepository.find(heightWrapper.getDbKey());
-            }
-            height.setBaseEntityId(SampleUtil.ENTITY_ID);
-            height.setCm(heightWrapper.getHeight());
-            height.setDate(heightWrapper.getUpdatedHeightDate().toDate());
-            height.setAnmId("sample");
-            height.setLocationId("Kenya");
-            height.setTeam("testTeam");
-            height.setTeamId("testTeamId");
-            height.setChildLocationId("testChildLocationId");
-
-            Gender gender = Gender.UNKNOWN;
-
-            String genderString = SampleUtil.GENDER;
-
-            if (genderString.toLowerCase().equals("female")) {
-                gender = Gender.FEMALE;
-            } else if (genderString.toLowerCase().equals("male")) {
-                gender = Gender.MALE;
-            }
-
-            Date dob = SampleUtil.getDateOfBirth();
-
-            if (dob != null && gender != Gender.UNKNOWN) {
-                heightRepository.add(dob, gender, height);
-            } else {
-                heightRepository.add(height);
-            }
-
-            heightWrapper.setDbKey(height.getId());
-
-        }
-
-        refreshEditHeightLayout();
-    }
-
     private void refreshEditHeightLayout() {
         View heightWidget = findViewById(R.id.height_widget);
 
@@ -301,6 +211,102 @@ public class MainActivity extends AppCompatActivity implements GMActionListener 
         }
     }
 
+    public void startServices() {
+        Intent vaccineIntent = new Intent(this, WeightIntentService.class);
+        startService(vaccineIntent);
+
+        Intent heightIntent = new Intent(this, HeightIntentService.class);
+        startService(heightIntent);
+    }
+
+    @Override
+    public void onGrowthRecorded(WeightWrapper weightWrapper, HeightWrapper heightWrapper) {
+        updateWeightWrapper(weightWrapper);
+        updateHeightWrapper(heightWrapper);
+
+        refreshEditHeightLayout();
+        refreshEditWeightLayout();
+    }
+
+    private void updateWeightWrapper(WeightWrapper weightWrapper) {
+        if (weightWrapper != null) {
+            final WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
+            Weight weight = new Weight();
+            if (weightWrapper.getDbKey() != null) {
+                weight = weightRepository.find(weightWrapper.getDbKey());
+            }
+            weight.setBaseEntityId(SampleUtil.ENTITY_ID);
+            weight.setKg(weightWrapper.getWeight());
+            weight.setDate(weightWrapper.getUpdatedWeightDate().toDate());
+            weight.setAnmId("sample");
+            weight.setLocationId("Kenya");
+            weight.setTeam("testTeam");
+            weight.setTeamId("testTeamId");
+            weight.setChildLocationId("testChildLocationId");
+
+            Gender gender = Gender.UNKNOWN;
+
+            String genderString = SampleUtil.GENDER;
+
+            if (genderString.toLowerCase().equals("female")) {
+                gender = Gender.FEMALE;
+            } else if (genderString.toLowerCase().equals("male")) {
+                gender = Gender.MALE;
+            }
+
+            Date dob = SampleUtil.getDateOfBirth();
+
+
+            if (dob != null && gender != Gender.UNKNOWN) {
+                weightRepository.add(dob, gender, weight);
+            } else {
+                weightRepository.add(weight);
+            }
+
+            weightWrapper.setDbKey(weight.getId());
+
+        }
+    }
+
+    private void updateHeightWrapper(HeightWrapper heightWrapper) {
+        if (heightWrapper != null) {
+            final HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
+            Height height = new Height();
+            if (heightWrapper.getDbKey() != null) {
+                height = heightRepository.find(heightWrapper.getDbKey());
+            }
+            height.setBaseEntityId(SampleUtil.ENTITY_ID);
+            height.setCm(heightWrapper.getHeight());
+            height.setDate(heightWrapper.getUpdatedHeightDate().toDate());
+            height.setAnmId("sample");
+            height.setLocationId("Kenya");
+            height.setTeam("testTeam");
+            height.setTeamId("testTeamId");
+            height.setChildLocationId("testChildLocationId");
+
+            Gender gender = Gender.UNKNOWN;
+
+            String genderString = SampleUtil.GENDER;
+
+            if (genderString.toLowerCase().equals("female")) {
+                gender = Gender.FEMALE;
+            } else if (genderString.toLowerCase().equals("male")) {
+                gender = Gender.MALE;
+            }
+
+            Date dob = SampleUtil.getDateOfBirth();
+
+            if (dob != null && gender != Gender.UNKNOWN) {
+                heightRepository.add(dob, gender, height);
+            } else {
+                heightRepository.add(height);
+            }
+
+            heightWrapper.setDbKey(height.getId());
+
+        }
+    }
+
     private class ShowGrowthChartTask extends AsyncTask<Void, Void, Map<String, List>> {
         public static final String WEIGHT = "weight";
         public static final String HEIGHT = "height";
@@ -308,33 +314,8 @@ public class MainActivity extends AppCompatActivity implements GMActionListener 
         @Override
         protected Map<String, List> doInBackground(Void... voids) {
             Map<String, List> growthMonitoring = new HashMap<>();
-            WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
-            List<Weight> allWeights = weightRepository.findByEntityId(SampleUtil.ENTITY_ID);
-            try {
-                DateTime dateTime = new DateTime(SampleUtil.getDateOfBirth());
-
-                Weight weight = new Weight(-1l, null, (float) SampleUtil.BIRTH_WEIGHT, dateTime.toDate(), null, null, null,
-                        Calendar.getInstance().getTimeInMillis(), null, null, 0);
-                allWeights.add(weight);
-            } catch (Exception e) {
-                Timber.e(Log.getStackTraceString(e));
-            }
-
-            growthMonitoring.put(WEIGHT, allWeights);
-
-
-            HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
-            List<Height> allHeights = heightRepository.findByEntityId(SampleUtil.ENTITY_ID);
-            try {
-                DateTime dateTime = new DateTime(SampleUtil.getDateOfBirth());
-
-                Height height = new Height(-1l, null, (float) SampleUtil.BIRTH_HEIGHT, dateTime.toDate(), null, null, null,
-                        Calendar.getInstance().getTimeInMillis(), null, null, 0);
-                allHeights.add(height);
-            } catch (Exception e) {
-                Timber.e(Log.getStackTraceString(e));
-            }
-            growthMonitoring.put(HEIGHT, allHeights);
+            growthMonitoring.put(WEIGHT, getWeights());
+            growthMonitoring.put(HEIGHT, getHeights());
 
             return growthMonitoring;
         }
@@ -368,6 +349,36 @@ public class MainActivity extends AppCompatActivity implements GMActionListener 
                 growthDialogFragment.show(SampleUtil.initFragmentTransaction(MainActivity.this, DIALOG_TAG), DIALOG_TAG);
             }
         }
+    }
+
+    private List<Weight> getWeights() {
+        WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
+        List<Weight> allWeights = weightRepository.findByEntityId(SampleUtil.ENTITY_ID);
+        try {
+            DateTime dateTime = new DateTime(SampleUtil.getDateOfBirth());
+
+            Weight weight = new Weight(-1l, null, (float) SampleUtil.BIRTH_WEIGHT, dateTime.toDate(), null, null, null,
+                    Calendar.getInstance().getTimeInMillis(), null, null, 0);
+            allWeights.add(weight);
+        } catch (Exception e) {
+            Timber.e(Log.getStackTraceString(e));
+        }
+        return allWeights;
+    }
+
+    private List<Height> getHeights() {
+        HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
+        List<Height> allHeights = heightRepository.findByEntityId(SampleUtil.ENTITY_ID);
+        try {
+            DateTime dateTime = new DateTime(SampleUtil.getDateOfBirth());
+
+            Height height = new Height(-1l, null, (float) SampleUtil.BIRTH_HEIGHT, dateTime.toDate(), null, null, null,
+                    Calendar.getInstance().getTimeInMillis(), null, null, 0);
+            allHeights.add(height);
+        } catch (Exception e) {
+            Timber.e(Log.getStackTraceString(e));
+        }
+        return allHeights;
     }
 
 }

@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
@@ -47,6 +48,14 @@ public class GrowthDialogFragment extends DialogFragment {
     private CommonPersonObjectClient personDetails;
     private List<Weight> weights;
     private List<Height> heights;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private TextView nameView;
+    private TextView numberView;
+    private ImageView profilePic;
+    private TextView ageView;
+    private TextView pmtctStatus;
+    private Button done;
 
     public static GrowthDialogFragment newInstance(CommonPersonObjectClient personDetails,
                                                    List<Weight> weights, List<Height> heights) {
@@ -169,13 +178,10 @@ public class GrowthDialogFragment extends DialogFragment {
         String firstName = Utils.getValue(personDetails.getColumnmaps(), GrowthMonitoringConstants.FIRST_NAME, true);
         String lastName = Utils.getValue(personDetails.getColumnmaps(), GrowthMonitoringConstants.LAST_NAME, true);
 
-        final ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.growth_dialog_view, container, false);
-
-        TextView nameView = dialogView.findViewById(R.id.child_name);
+        final ViewGroup dialogView = setUpViews(inflater, container);
         nameView.setText(Utils.getName(firstName, lastName));
 
         String personId = Utils.getValue(personDetails.getColumnmaps(), "zeir_id", false);
-        TextView numberView = dialogView.findViewById(R.id.child_zeir_id);
         if (StringUtils.isNotBlank(personId)) {
             numberView.setText(String.format("%s: %s", getString(R.string.label_zeir), personId));
         } else {
@@ -184,7 +190,6 @@ public class GrowthDialogFragment extends DialogFragment {
 
         String genderString = Utils.getValue(personDetails, "gender", false);
         String baseEntityId = personDetails.entityId();
-        ImageView profilePic = dialogView.findViewById(R.id.child_profilepic);
         profilePic.setTag(R.id.entity_id, baseEntityId);
         DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(baseEntityId,
                 OpenSRPImageLoader.getStaticImageListener(
@@ -204,14 +209,12 @@ public class GrowthDialogFragment extends DialogFragment {
             }
         }
 
-        TextView ageView = dialogView.findViewById(R.id.child_age);
         if (StringUtils.isNotBlank(formattedAge)) {
             ageView.setText(String.format("%s: %s", getString(R.string.age), formattedAge));
         } else {
             ageView.setText("");
         }
 
-        TextView pmtctStatus = dialogView.findViewById(R.id.pmtct_status);
         String pmtctStatusString = Utils.getValue(personDetails.getColumnmaps(), "pmtct_status", true);
         if (!TextUtils.isEmpty(pmtctStatusString)) {
             pmtctStatus.setText(pmtctStatusString);
@@ -219,20 +222,11 @@ public class GrowthDialogFragment extends DialogFragment {
             pmtctStatus.setText("");
         }
 
-        Gender gender = Gender.UNKNOWN;
-        if (genderString != null && genderString.equalsIgnoreCase(GrowthMonitoringConstants.FEMALE)) {
-            gender = Gender.FEMALE;
-        } else if (genderString != null && genderString.equalsIgnoreCase(GrowthMonitoringConstants.MALE)) {
-            gender = Gender.MALE;
-        }
-
+        Gender gender = getGender(genderString);
         int genderStringRes = R.string.boys;
         if (gender == Gender.FEMALE) {
             genderStringRes = R.string.girls;
         }
-
-        TabLayout tabLayout = dialogView.findViewById(R.id.growth_tab_layout);
-        ViewPager viewPager = dialogView.findViewById(R.id.growth_view_pager);
 
         GrowthMonitoringTabsAdapter adapter = new GrowthMonitoringTabsAdapter(getChildFragmentManager());
         adapter.addFragment(String.format(getString(R.string.weight_for_age), getString(genderStringRes).toUpperCase()),
@@ -243,14 +237,41 @@ public class GrowthDialogFragment extends DialogFragment {
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        Button done = dialogView.findViewById(R.id.done);
+        doneAction();
+        return dialogView;
+    }
+
+    @NotNull
+    private ViewGroup setUpViews(LayoutInflater inflater, ViewGroup container) {
+        final ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.growth_dialog_view, container, false);
+        tabLayout = dialogView.findViewById(R.id.growth_tab_layout);
+        viewPager = dialogView.findViewById(R.id.growth_view_pager);
+        nameView = dialogView.findViewById(R.id.child_name);
+        numberView = dialogView.findViewById(R.id.child_zeir_id);
+        profilePic = dialogView.findViewById(R.id.child_profilepic);
+        ageView = dialogView.findViewById(R.id.child_age);
+        pmtctStatus = dialogView.findViewById(R.id.pmtct_status);
+        done = dialogView.findViewById(R.id.done);
+        return dialogView;
+    }
+
+    @NotNull
+    private Gender getGender(String genderString) {
+        Gender gender = Gender.UNKNOWN;
+        if (genderString != null && genderString.equalsIgnoreCase(GrowthMonitoringConstants.FEMALE)) {
+            gender = Gender.FEMALE;
+        } else if (genderString != null && genderString.equalsIgnoreCase(GrowthMonitoringConstants.MALE)) {
+            gender = Gender.MALE;
+        }
+        return gender;
+    }
+
+    private void doneAction() {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GrowthDialogFragment.this.dismiss();
             }
         });
-
-        return dialogView;
     }
 }
