@@ -60,7 +60,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.5"
-                        android:background="@drawable/record_weight_bg"
+                        android:background="@drawable/record_growth_bg"
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:paddingTop="16dp"

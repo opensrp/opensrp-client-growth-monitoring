@@ -66,7 +66,7 @@ public class WeightZScoreRepository extends BaseRepository {
             getRepository().getWritableDatabase().execSQL(query);
             return true;
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Log.e(TAG, Log.getStackTraceString(e));
         }
 
         return false;
@@ -100,7 +100,7 @@ public class WeightZScoreRepository extends BaseRepository {
                 }
             }
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Log.e(TAG, Log.getStackTraceString(e));
         } finally {
             if (cursor != null) cursor.close();
         }

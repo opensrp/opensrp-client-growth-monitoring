@@ -11,8 +11,8 @@
     <string name="label_zeir">ID</string>
     <string name="age">Age</string>
 
-    <string name="edit_weight_data">Edit height data</string>
-    <string name="record_weight_with_nl">Record\nweight</string>
+    <string name="edit_growth_data">Edit growth data</string>
+    <string name="record_growth_with_nl">Record\ngrowth</string>
     <string name="record_growth">Record Growth</string>
     <string name="record_growth_notification">"Don't forget to record child's growth"</string>
     <string name="record_weight">Record weight</string>

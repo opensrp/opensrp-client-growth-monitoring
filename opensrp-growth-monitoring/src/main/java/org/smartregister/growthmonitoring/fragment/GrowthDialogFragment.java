@@ -60,32 +60,22 @@ public class GrowthDialogFragment extends DialogFragment {
     public static GrowthDialogFragment newInstance(CommonPersonObjectClient personDetails,
                                                    List<Weight> weights, List<Height> heights) {
 
-        GrowthDialogFragment vaccinationDialogFragment = new GrowthDialogFragment();
-        vaccinationDialogFragment.setPersonDetails(personDetails);
-        vaccinationDialogFragment.setWeights(weights);
-        vaccinationDialogFragment.setHeights(heights);
+        GrowthDialogFragment growthDialogFragment = new GrowthDialogFragment();
+        growthDialogFragment.setPersonDetails(personDetails);
+        growthDialogFragment.setWeights(weights);
+        growthDialogFragment.setHeights(heights);
 
-        return vaccinationDialogFragment;
+        return growthDialogFragment;
     }
 
     public void setPersonDetails(CommonPersonObjectClient personDetails) {
         this.personDetails = personDetails;
     }
 
-    public void setWeights(List<Weight> weights) {
-        this.weights = weights;
-        sortWeights();
-    }
-
-    public void setHeights(List<Height> heights) {
-        this.heights = heights;
-        sortHeights();
-    }
-
     private void sortWeights() {
         HashMap<Long, Weight> weightHashMap = new HashMap<>();
-        for (Weight curWeight : weights) {
-            if (curWeight.getDate() != null) {
+        for (Weight curWeight : getWeights()) {
+            if (curWeight.getDate() != null && curWeight.getBaseEntityId() != null) {
                 Calendar curCalendar = Calendar.getInstance();
                 curCalendar.setTime(curWeight.getDate());
                 GrowthMonitoringUtils.standardiseCalendarDate(curCalendar);
@@ -101,18 +91,18 @@ public class GrowthDialogFragment extends DialogFragment {
         List<Long> keys = new ArrayList<>(weightHashMap.keySet());
         Collections.sort(keys, Collections.<Long>reverseOrder());
 
-        List<Weight> result = new ArrayList<>();
+        List<Weight> weightList = new ArrayList<>();
         for (Long curKey : keys) {
-            result.add(weightHashMap.get(curKey));
+            weightList.add(weightHashMap.get(curKey));
         }
 
-        this.weights = result;
+        setWeights(weightList);
     }
 
     private void sortHeights() {
         HashMap<Long, Height> heightHashMap = new HashMap<>();
-        for (Height curHeight : heights) {
-            if (curHeight.getDate() != null) {
+        for (Height curHeight : getHeights()) {
+            if (curHeight.getDate() != null && curHeight.getBaseEntityId() != null) {
                 Calendar curCalendar = Calendar.getInstance();
                 curCalendar.setTime(curHeight.getDate());
                 GrowthMonitoringUtils.standardiseCalendarDate(curCalendar);
@@ -128,12 +118,12 @@ public class GrowthDialogFragment extends DialogFragment {
         List<Long> keys = new ArrayList<>(heightHashMap.keySet());
         Collections.sort(keys, Collections.<Long>reverseOrder());
 
-        List<Height> result = new ArrayList<>();
+        List<Height> heightList = new ArrayList<>();
         for (Long curKey : keys) {
-            result.add(heightHashMap.get(curKey));
+            heightList.add(heightHashMap.get(curKey));
         }
 
-        this.heights = result;
+        setHeights(heightList);
     }
 
     @Override
@@ -191,8 +181,7 @@ public class GrowthDialogFragment extends DialogFragment {
         String genderString = Utils.getValue(personDetails, "gender", false);
         String baseEntityId = personDetails.entityId();
         profilePic.setTag(R.id.entity_id, baseEntityId);
-        DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(baseEntityId,
-                OpenSRPImageLoader.getStaticImageListener(
+        DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(baseEntityId, OpenSRPImageLoader.getStaticImageListener(
                         profilePic,
                         ImageUtils.profileImageResourceByGender(genderString),
                         ImageUtils.profileImageResourceByGender(genderString)));
@@ -228,11 +217,14 @@ public class GrowthDialogFragment extends DialogFragment {
             genderStringRes = R.string.girls;
         }
 
+        sortWeights();
+        sortHeights();
+
         GrowthMonitoringTabsAdapter adapter = new GrowthMonitoringTabsAdapter(getChildFragmentManager());
         adapter.addFragment(String.format(getString(R.string.weight_for_age), getString(genderStringRes).toUpperCase()),
-                WeightMonitoringFragment.createInstance(dobString, gender, weights));
+                WeightMonitoringFragment.createInstance(dobString, gender, getWeights()));
         adapter.addFragment(String.format(getString(R.string.height_for_age), getString(genderStringRes).toUpperCase()),
-                HeightMonitoringFragment.createInstance(dobString, gender, heights));
+                HeightMonitoringFragment.createInstance(dobString, gender, getHeights()));
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -273,5 +265,21 @@ public class GrowthDialogFragment extends DialogFragment {
                 GrowthDialogFragment.this.dismiss();
             }
         });
+    }
+
+    public List<Weight> getWeights() {
+        return weights;
+    }
+
+    public void setWeights(List<Weight> weights) {
+        this.weights = weights;
+    }
+
+    public List<Height> getHeights() {
+        return heights;
+    }
+
+    public void setHeights(List<Height> heights) {
+        this.heights = heights;
     }
 }

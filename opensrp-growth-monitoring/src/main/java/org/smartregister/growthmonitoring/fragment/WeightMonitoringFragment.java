@@ -69,7 +69,7 @@ public class WeightMonitoringFragment extends Fragment {
             refreshGrowthChart(weightTabView, getGender(), dob);
             refreshPreviousWeightsTable(weightTabView, getGender(), dob);
         } catch (Exception e) {
-            Timber.e(TAG, Log.getStackTraceString(e));
+            Log.e(TAG, Log.getStackTraceString(e));
         }
 
         return weightTabView;

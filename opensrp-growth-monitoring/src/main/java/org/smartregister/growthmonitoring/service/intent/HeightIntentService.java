@@ -78,7 +78,7 @@ public class HeightIntentService extends IntentService {
                 }
             }
         } catch (Exception e) {
-            Timber.e(e, e.getMessage());
+            Timber.e(e);
         }
     }
 }
