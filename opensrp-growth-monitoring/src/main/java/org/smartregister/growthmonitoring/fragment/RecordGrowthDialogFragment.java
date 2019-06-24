@@ -50,10 +50,10 @@ public class RecordGrowthDialogFragment extends DialogFragment {
     private TextView ageView;
     private TextView pmtctStatusView;
     private ImageView mImageView;
-    private Button set;
-    private Button growthRecordDelete;
+    private Button weightTakenToday;
     private Button cancel;
     private Button growthRecordTakenEarlier;
+    private Button set;
 
     public static RecordGrowthDialogFragment newInstance(
             Date dateOfBirth, WeightWrapper weightWrapper, HeightWrapper heightWrapper) {
@@ -167,8 +167,8 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         pmtctStatusView.setText(weightWrapper.getPmtctStatus());
 
         setClientImage();
+        weightTakenTodayButtonAction();
         setButtonAction();
-        growthRecordAction();
         growthEarlierAction();
         cancelAction();
 
@@ -186,7 +186,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
 
     @NotNull
     private ViewGroup setUpViews(LayoutInflater inflater, ViewGroup container) {
-        ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.edit_growth_dialog_view, container, false);
+        ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.record_growth_dialog_view, container, false);
 
         editWeight = dialogView.findViewById(R.id.edit_weight);
         editHeight = dialogView.findViewById(R.id.edit_height);
@@ -196,9 +196,9 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         ageView = dialogView.findViewById(R.id.child_age);
         pmtctStatusView = dialogView.findViewById(R.id.pmtct_status);
         mImageView = dialogView.findViewById(R.id.child_profilepic);
-        set = dialogView.findViewById(R.id.set);
-        growthRecordDelete = dialogView.findViewById(R.id.weight_delete);
+        weightTakenToday = dialogView.findViewById(R.id.weight_taken_today);
         cancel = dialogView.findViewById(R.id.cancel);
+        set = dialogView.findViewById(R.id.set);
         growthRecordTakenEarlier = dialogView.findViewById(R.id.weight_taken_earlier);
 
         return dialogView;
@@ -206,7 +206,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
 
     private void setClientImage() {
         if (weightWrapper.getId() != null) {//image already in local storage most likey ):
-            //set profile image by passing the client id.If the image doesn't exist in the image repository then download and save locally
+            //weightTakenToday profile image by passing the client id.If the image doesn't exist in the image repository then download and save locally
             mImageView.setTag(R.id.entity_id, weightWrapper.getId());
             DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(weightWrapper.getId(),
                     OpenSRPImageLoader.getStaticImageListener(mImageView,
@@ -215,74 +215,58 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         }
     }
 
+    private void weightTakenTodayButtonAction() {
+        weightTakenToday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveGrowthRecord();
+
+            }
+        });
+    }
+
     private void setButtonAction() {
         set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String weightString = editWeight.getText().toString();
-                if (StringUtils.isBlank(weightString) || Float.valueOf(weightString) <= 0f) {
-                    return;
-                }
-
-                dismiss();
-
-                String heightString = editHeight.getText().toString();
-                if (StringUtils.isBlank(heightString) || Float.valueOf(heightString) <= 0f) {
-                    return;
-                }
-
-                dismiss();
-
-                int day = earlierDatePicker.getDayOfMonth();
-                int month = earlierDatePicker.getMonth();
-                int year = earlierDatePicker.getYear();
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(year, month, day);
-                weightWrapper.setUpdatedWeightDate(new DateTime(calendar.getTime()), false);
-                heightWrapper.setUpdatedHeightDate(new DateTime(calendar.getTime()), false);
-
-                Float weight = Float.valueOf(weightString);
-                Float height = Float.valueOf(heightString);
-                weightWrapper.setWeight(weight);
-                heightWrapper.setHeight(height);
-
-                GrowthMonitoringActionListener.onGrowthRecorded(weightWrapper, heightWrapper);
+                saveGrowthRecord();
 
             }
         });
     }
 
-    private void growthRecordAction() {
-        growthRecordDelete.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String weightString = editWeight.getText().toString();
-                if (StringUtils.isBlank(weightString) || Float.valueOf(weightString) <= 0f) {
-                    return;
-                }
+    private void saveGrowthRecord() {
+        String weightString = editWeight.getText().toString();
+        if (StringUtils.isBlank(weightString) || Float.valueOf(weightString) <= 0f) {
+            return;
+        }
 
-                String heightString = editHeight.getText().toString();
-                if (StringUtils.isBlank(heightString) || Float.valueOf(heightString) <= 0f) {
-                    return;
-                }
+        dismiss();
 
-                dismiss();
+        String heightString = editHeight.getText().toString();
+        if (StringUtils.isBlank(heightString) || Float.valueOf(heightString) <= 0f) {
+            return;
+        }
 
-                Calendar calendar = Calendar.getInstance();
-                weightWrapper.setUpdatedWeightDate(new DateTime(calendar.getTime()), true);
-                heightWrapper.setUpdatedHeightDate(new DateTime(calendar.getTime()), true);
+        dismiss();
 
-                Float weight = Float.valueOf(weightString);
-                Float height = Float.valueOf(heightString);
-                weightWrapper.setWeight(weight);
-                heightWrapper.setHeight(height);
+        int day = earlierDatePicker.getDayOfMonth();
+        int month = earlierDatePicker.getMonth();
+        int year = earlierDatePicker.getYear();
 
-                GrowthMonitoringActionListener.onGrowthRecorded(weightWrapper, heightWrapper);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        weightWrapper.setUpdatedWeightDate(new DateTime(calendar.getTime()), false);
+        heightWrapper.setUpdatedHeightDate(new DateTime(calendar.getTime()), false);
 
-            }
-        });
+        Float weight = Float.valueOf(weightString);
+        Float height = Float.valueOf(heightString);
+        weightWrapper.setWeight(weight);
+        heightWrapper.setHeight(height);
+
+        GrowthMonitoringActionListener.onGrowthRecorded(weightWrapper, heightWrapper);
     }
+
 
     private void growthEarlierAction() {
         growthRecordTakenEarlier.setOnClickListener(new Button.OnClickListener() {
@@ -295,6 +279,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
 
                 earlierDatePicker.setVisibility(View.VISIBLE);
                 earlierDatePicker.requestFocus();
+                weightTakenToday.setVisibility(View.VISIBLE);
                 set.setVisibility(View.VISIBLE);
 
                 DatePickerUtils.themeDatePicker(earlierDatePicker, new char[] {'d', 'm', 'y'});

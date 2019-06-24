@@ -28,7 +28,7 @@
     <string name="z_score"> Z-score</string>
 
     <string name="cancel">Annuler</string>
-    <string name="set"> Régler</string>
+    <string name="save_changes"> Régler</string>
     <string name="service_date"> date de service</string>
     <string name="edit_weight">Modifier le poids</string>
     <string name="growth_taken_today">Poids pris aujourd\'hui</string>

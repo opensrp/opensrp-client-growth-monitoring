@@ -168,11 +168,19 @@ public class EditGrowthDialogFragment extends DialogFragment {
 
         pmtctStatusView.setText(weightWrapper.getPmtctStatus());
 
+        earlierDatePicker.setVisibility(View.VISIBLE);
+        earlierDatePicker.requestFocus();
+        set.setVisibility(View.VISIBLE);
+
+        DatePickerUtils.themeDatePicker(earlierDatePicker, new char[] {'d', 'm', 'y'});
+
+        earlierDatePicker.updateDate(currentWeightDate.year().get(), currentWeightDate.monthOfYear().get() - 1,
+                currentWeightDate.dayOfMonth().get());
+
         setClientImage();
         setButtonAction();
         growthRecordDeleteAction();
         setDateRecorded(dialogView);
-        growthRecordEalierAction();
         cancelAction();
 
         return dialogView;
@@ -296,27 +304,6 @@ public class EditGrowthDialogFragment extends DialogFragment {
             dialogView.findViewById(R.id.service_date).setVisibility(View.GONE);
             growthRecordDelete.setVisibility(View.GONE);
         }
-    }
-
-    private void growthRecordEalierAction() {
-        growthRecordTakenEarlier.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                growthRecordTakenEarlier.setVisibility(View.GONE);
-
-                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
-                earlierDatePicker.setVisibility(View.VISIBLE);
-                earlierDatePicker.requestFocus();
-                set.setVisibility(View.VISIBLE);
-
-                DatePickerUtils.themeDatePicker(earlierDatePicker, new char[] {'d', 'm', 'y'});
-
-                earlierDatePicker.updateDate(currentWeightDate.year().get(), currentWeightDate.monthOfYear().get() - 1,
-                        currentWeightDate.dayOfMonth().get());
-            }
-        });
     }
 
     private void cancelAction() {

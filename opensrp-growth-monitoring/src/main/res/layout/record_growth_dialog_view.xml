@@ -97,46 +97,6 @@
                 android:background="@color/client_list_header_dark_grey" />
 
             <org.smartregister.view.customcontrols.CustomFontTextView
-                android:id="@+id/record_height"
-                style="@style/CustomFontTextViewStyle.ClientList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="23dp"
-                android:layout_marginBottom="20dp"
-                android:text="@string/record_height"
-                android:textColor="@color/text_black"
-                android:textSize="@dimen/record_weight_tv_text_size"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="20dp"
-                android:orientation="horizontal"
-                android:paddingStart="10dp"
-                android:paddingTop="20dp"
-                android:paddingEnd="10dp">
-
-                <EditText
-                    android:id="@+id/edit_height"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:inputType="number|numberDecimal"
-                    android:textSize="@dimen/record_weight_tv_text_size" />
-
-                <TextView
-                    android:id="@+id/height_value_unit_symbol"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="cm"
-                    android:textColor="@color/light_grey"
-                    android:textSize="@dimen/record_weight_tv_text_size" />
-            </LinearLayout>
-
-
-            <org.smartregister.view.customcontrols.CustomFontTextView
                 android:id="@+id/record_weight"
                 style="@style/CustomFontTextViewStyle.ClientList"
                 android:layout_width="wrap_content"
@@ -171,6 +131,46 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="kg"
+                    android:textColor="@color/light_grey"
+                    android:textSize="@dimen/record_weight_tv_text_size" />
+            </LinearLayout>
+
+
+            <org.smartregister.view.customcontrols.CustomFontTextView
+                android:id="@+id/record_height"
+                style="@style/CustomFontTextViewStyle.ClientList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="23dp"
+                android:layout_marginBottom="20dp"
+                android:text="@string/record_height"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/record_weight_tv_text_size"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp"
+                android:orientation="horizontal"
+                android:paddingStart="10dp"
+                android:paddingTop="20dp"
+                android:paddingEnd="10dp">
+
+                <EditText
+                    android:id="@+id/edit_height"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:inputType="number|numberDecimal"
+                    android:textSize="@dimen/record_weight_tv_text_size" />
+
+                <TextView
+                    android:id="@+id/height_value_unit_symbol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="cm"
                     android:textColor="@color/light_grey"
                     android:textSize="@dimen/record_weight_tv_text_size" />
             </LinearLayout>
@@ -253,7 +253,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/set"
+                    android:text="@string/save_changes"
                     android:textAllCaps="false"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/client_list_grey"

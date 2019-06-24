@@ -170,14 +170,14 @@ public class SampleUtil {
     }
 
     public static void createWeightWidget(Activity context, View fragmentContainer,
-                                          HashMap<Long, Pair<String, String>> last_five_weight_map,
+                                          HashMap<Long, Pair<String, String>> lastFiveWeightMap,
                                           ArrayList<View.OnClickListener> listeners, ArrayList<Boolean> editenabled) {
 
         LinearLayout tableLayout = fragmentContainer.findViewById(R.id.weightvalues);
         tableLayout.removeAllViews();
 
         int i = 0;
-        for (Map.Entry<Long, Pair<String, String>> entry : last_five_weight_map.entrySet()) {
+        for (Map.Entry<Long, Pair<String, String>> entry : lastFiveWeightMap.entrySet()) {
             Pair<String, String> pair = entry.getValue();
             View view = createTableRowForWeight(context, tableLayout, pair.first, pair.second, editenabled.get(i),
                     listeners.get(i));
@@ -205,14 +205,14 @@ public class SampleUtil {
     }
 
     public static void createHeightWidget(Activity context, View fragmentContainer,
-                                          HashMap<Long, Pair<String, String>> last_five_weight_map,
+                                          HashMap<Long, Pair<String, String>> lastFiveWeightMap,
                                           ArrayList<View.OnClickListener> listeners, ArrayList<Boolean> editenabled) {
 
         LinearLayout tableLayout = fragmentContainer.findViewById(R.id.heightvalues);
         tableLayout.removeAllViews();
 
         int i = 0;
-        for (Map.Entry<Long, Pair<String, String>> entry : last_five_weight_map.entrySet()) {
+        for (Map.Entry<Long, Pair<String, String>> entry : lastFiveWeightMap.entrySet()) {
             Pair<String, String> pair = entry.getValue();
             View view = createTableRowForHeight(context, tableLayout, pair.first, pair.second, editenabled.get(i),
                     listeners.get(i));

@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="20dp"
-    android:background="@android:color/white"
-    android:gravity="center_horizontal"
-    android:orientation="horizontal">
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_shape">
 
-    <FrameLayout
+    <ScrollView
+        android:id="@+id/edit_layout_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/dialog_shape">
-
+        android:background="@android:color/white"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,8 +50,7 @@
                         android:text="Child Name"
                         android:textColor="@color/black"
                         android:textSize="26sp"
-                        android:textStyle="bold"
-                        android:password="false" />
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="fill_parent"
@@ -100,55 +97,19 @@
                 android:background="@color/client_list_header_dark_grey" />
 
             <org.smartregister.view.customcontrols.CustomFontTextView
-                android:id="@+id/record_height"
-                style="@style/CustomFontTextViewStyle.ClientList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="23dp"
-                android:text="@string/edit_height"
-                android:textColor="@color/text_black"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="20dp"
-                android:orientation="horizontal"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:paddingTop="20dp">
-
-                <EditText
-                    android:id="@+id/edit_height"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:inputType="number|numberDecimal"
-                    android:textSize="50dp" />
-
-                <TextView
-                    android:id="@+id/height_value_unit_symbol"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/cm"
-                    android:textColor="@color/light_grey"
-                    android:textSize="50dp" />
-            </LinearLayout>
-
-            <org.smartregister.view.customcontrols.CustomFontTextView
                 android:id="@+id/record_weight"
                 style="@style/CustomFontTextViewStyle.ClientList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_gravity="start"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="23dp"
+                android:layout_marginBottom="5dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:text="@string/edit_weight"
                 android:textColor="@color/text_black"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textSize="25sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -156,8 +117,8 @@
                 android:layout_margin="20dp"
                 android:orientation="horizontal"
                 android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:paddingTop="20dp">
+                android:paddingTop="20dp"
+                android:paddingEnd="10dp">
 
                 <EditText
                     android:id="@+id/edit_weight"
@@ -166,7 +127,7 @@
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:inputType="number|numberDecimal"
-                    android:textSize="50dp" />
+                    android:textSize="40dp" />
 
                 <TextView
                     android:id="@+id/weight_value_unit_symbol"
@@ -174,7 +135,49 @@
                     android:layout_height="wrap_content"
                     android:text="@string/kg"
                     android:textColor="@color/light_grey"
-                    android:textSize="50dp" />
+                    android:textSize="40dp" />
+            </LinearLayout>
+
+            <org.smartregister.view.customcontrols.CustomFontTextView
+                android:id="@+id/record_height"
+                style="@style/CustomFontTextViewStyle.ClientList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="23dp"
+                android:layout_marginBottom="5dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="@string/edit_height"
+                android:textColor="@color/text_black"
+                android:textSize="25sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp"
+                android:orientation="horizontal"
+                android:paddingStart="10dp"
+                android:paddingTop="20dp"
+                android:paddingEnd="10dp">
+
+                <EditText
+                    android:id="@+id/edit_height"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:inputType="number|numberDecimal"
+                    android:textSize="40dp" />
+
+                <TextView
+                    android:id="@+id/height_value_unit_symbol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cm"
+                    android:textColor="@color/light_grey"
+                    android:textSize="40dp" />
             </LinearLayout>
 
             <org.smartregister.view.customcontrols.CustomFontTextView
@@ -182,28 +185,25 @@
                 style="@style/CustomFontTextViewStyle.ClientList.Light"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="@string/service_date"
                 android:textColor="@color/client_list_grey"
-                android:textSize="22sp"
-                android:gravity="center" />
+                android:textSize="22sp" />
 
-            <Button
-                android:id="@+id/weight_taken_earlier"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="match_parent"
+            <org.smartregister.view.customcontrols.CustomFontTextView
+                android:id="@+id/edit_date_textview"
+                style="@style/CustomFontTextViewStyle.ClientList"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/record_growth_earlier_bg"
-                android:text="@string/change_date_recorded"
-                android:textAllCaps="false"
-                android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@color/client_list_grey"
-                android:textSize="22sp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
+                android:layout_gravity="start"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp" />
+                android:layout_marginTop="23dp"
+                android:layout_marginBottom="5dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="@string/edit_date"
+                android:textColor="@color/text_black"
+                android:textSize="25sp" />
 
             <DatePicker
                 android:id="@+id/earlier_date_picker"
@@ -212,61 +212,92 @@
                 android:calendarViewShown="false"
                 android:descendantFocusability="blocksDescendants"
                 android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:visibility="gone" />
+                android:focusableInTouchMode="true" />
+
+            <org.smartregister.view.customcontrols.CustomFontTextView
+                android:id="@+id/delete_record"
+                style="@style/CustomFontTextViewStyle.ClientList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="23dp"
+                android:layout_marginBottom="5dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="@string/delete_record"
+                android:textColor="@color/text_black"
+                android:textSize="25sp" />
 
             <Button
                 android:id="@+id/weight_delete"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/record_growth_earlier_bg"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/delete_growth_bg"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
                 android:text="@string/delete_record"
                 android:textAllCaps="false"
                 android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@color/client_list_grey"
-                android:textSize="22sp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="10dp"
+                android:textColor="@color/record_weight_red_bg_stk"
+                android:textSize="22sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
                 android:layout_marginTop="10dp"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp" />
+                android:background="@color/client_list_header_dark_grey" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
+                android:paddingStart="5dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="5dp"
+                android:paddingBottom="10dp"
                 android:weightSum="2">
-
 
                 <Button
                     android:id="@+id/cancel"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
                     android:layout_weight="1"
+                    android:background="@drawable/record_growth_earlier_bg"
                     android:text="@string/cancel"
                     android:textAllCaps="false"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/client_list_grey"
-                    android:textSize="22sp" />
+                    android:textSize="20sp" />
 
                 <Button
                     android:id="@+id/set"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:layout_weight="1"
-                    android:text="@string/set"
+                    android:background="@drawable/record_growth_today_bg"
+                    android:text="@string/save_changes"
                     android:textAllCaps="false"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/client_list_grey"
-                    android:textSize="22sp" />
-
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
             </LinearLayout>
         </LinearLayout>
-    </FrameLayout>
-</ScrollView>
+    </ScrollView>
+</RelativeLayout>

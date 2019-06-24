@@ -23,8 +23,8 @@
     <string name="previous_heights">PREVIOUS HEIGHTS</string>
 
     <string name="months">Months</string>
-    <string name="kg">Kg</string>
-    <string name="cm">Cm</string>
+    <string name="kg">kg</string>
+    <string name="cm">cm</string>
     <string name="girls">Girls</string>
     <string name="boys">Boys</string>
     <string name="btn_layout_weight">2</string>
@@ -34,15 +34,15 @@
     <string name="done">Complete</string>
     <string name="z_score"> Z-score</string>
 
-
-    <string name="delete_record">Delete record</string>
     <string name="date_recorded">Date recorded</string>
     <string name="change_date_recorded">Change date recorded</string>
     <string name="cancel">Cancel</string>
-    <string name="set">Set</string>
+    <string name="save_changes">Save Changes</string>
     <string name="service_date">Service date</string>
     <string name="edit_weight">Edit Weight</string>
     <string name="edit_height">Edit Height</string>
+    <string name="edit_date">Edit Date</string>
+    <string name="delete_record">Delete Record</string>
     <string name="growth_taken_today">Growth taken today</string>
     <string name="growth_taken_earlier">Growth taken earlier</string>
     <string name="catchment_area">Catchment area</string>

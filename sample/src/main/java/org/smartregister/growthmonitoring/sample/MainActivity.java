@@ -98,22 +98,22 @@ public class MainActivity extends AppCompatActivity implements GrowthMonitoringA
     private void refreshEditWeightLayout() {
         View weightWidget = findViewById(R.id.weight_widget);
 
-        LinkedHashMap<Long, Pair<String, String>> weightmap = new LinkedHashMap<>();
-        ArrayList<Boolean> weighteditmode = new ArrayList<Boolean>();
+        LinkedHashMap<Long, Pair<String, String>> weightMap = new LinkedHashMap<>();
+        ArrayList<Boolean> weightedItMode = new ArrayList<>();
         ArrayList<View.OnClickListener> listeners = new ArrayList<>();
 
-        WeightRepository wp = GrowthMonitoringLibrary.getInstance().weightRepository();
-        List<Weight> weightlist = wp.findLast5(SampleUtil.ENTITY_ID);
+        WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
+        List<Weight> weightList = weightRepository.findLast5(SampleUtil.ENTITY_ID);
 
-        for (int i = 0; i < weightlist.size(); i++) {
-            Weight weight = weightlist.get(i);
+        for (int i = 0; i < weightList.size(); i++) {
+            Weight weight = weightList.get(i);
             String formattedAge = "";
             if (weight.getDate() != null) {
 
-                Date weighttaken = weight.getDate();
-                DateTime birthday = new DateTime(SampleUtil.getDateOfBirth());
-                Date birth = birthday.toDate();
-                long timeDiff = weighttaken.getTime() - birth.getTime();
+                Date weightDate = weight.getDate();
+                DateTime birthDate = new DateTime(SampleUtil.getDateOfBirth());
+                Date birth = birthDate.toDate();
+                long timeDiff = weightDate.getTime() - birth.getTime();
                 Timber.tag("timeDiff is ").v(timeDiff + "");
                 if (timeDiff >= 0) {
                     formattedAge = DateUtil.getDuration(timeDiff);
@@ -121,17 +121,17 @@ public class MainActivity extends AppCompatActivity implements GrowthMonitoringA
                 }
             }
             if (!formattedAge.equalsIgnoreCase("0d")) {
-                weightmap.put(weight.getId(), Pair.create(formattedAge, Utils.kgStringSuffix(weight.getKg())));
+                weightMap.put(weight.getId(), Pair.create(formattedAge, Utils.kgStringSuffix(weight.getKg())));
 
                 boolean lessThanThreeMonthsEventCreated = WeightUtils.lessThanThreeMonths(weight);
                 if (lessThanThreeMonthsEventCreated) {
-                    weighteditmode.add(true);
+                    weightedItMode.add(true);
                 } else {
-                    weighteditmode.add(false);
+                    weightedItMode.add(false);
                 }
 
                 final int finalI = i;
-                View.OnClickListener onclicklistener = new View.OnClickListener() {
+                View.OnClickListener onClickListener = new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
@@ -140,18 +140,18 @@ public class MainActivity extends AppCompatActivity implements GrowthMonitoringA
                         v.setEnabled(true);
                     }
                 };
-                listeners.add(onclicklistener);
+                listeners.add(onClickListener);
             }
 
         }
-        if (weightmap.size() < 5) {
-            weightmap.put(0l, Pair.create(DateUtil.getDuration(0), SampleUtil.BIRTH_WEIGHT + " kg"));
-            weighteditmode.add(false);
+        if (weightMap.size() < 5) {
+            weightMap.put(0L, Pair.create(DateUtil.getDuration(0), SampleUtil.BIRTH_WEIGHT + " kg"));
+            weightedItMode.add(false);
             listeners.add(null);
         }
 
-        if (weightmap.size() > 0) {
-            SampleUtil.createWeightWidget(MainActivity.this, weightWidget, weightmap, listeners, weighteditmode);
+        if (weightMap.size() > 0) {
+            SampleUtil.createWeightWidget(MainActivity.this, weightWidget, weightMap, listeners, weightedItMode);
         }
     }
 
@@ -307,6 +307,36 @@ public class MainActivity extends AppCompatActivity implements GrowthMonitoringA
         }
     }
 
+    private List<Weight> getWeights() {
+        WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
+        List<Weight> allWeights = weightRepository.findByEntityId(SampleUtil.ENTITY_ID);
+        try {
+            DateTime dateTime = new DateTime(SampleUtil.getDateOfBirth());
+
+            Weight weight = new Weight(-1l, null, (float) SampleUtil.BIRTH_WEIGHT, dateTime.toDate(), null, null, null,
+                    Calendar.getInstance().getTimeInMillis(), null, null, 0);
+            allWeights.add(weight);
+        } catch (Exception e) {
+            Timber.e(Log.getStackTraceString(e));
+        }
+        return allWeights;
+    }
+
+    private List<Height> getHeights() {
+        HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
+        List<Height> allHeights = heightRepository.findByEntityId(SampleUtil.ENTITY_ID);
+        try {
+            DateTime dateTime = new DateTime(SampleUtil.getDateOfBirth());
+
+            Height height = new Height(-1l, null, (float) SampleUtil.BIRTH_HEIGHT, dateTime.toDate(), null, null, null,
+                    Calendar.getInstance().getTimeInMillis(), null, null, 0);
+            allHeights.add(height);
+        } catch (Exception e) {
+            Timber.e(Log.getStackTraceString(e));
+        }
+        return allHeights;
+    }
+
     private class ShowGrowthChartTask extends AsyncTask<Void, Void, Map<String, List>> {
         public static final String WEIGHT = "weight";
         public static final String HEIGHT = "height";
@@ -349,36 +379,6 @@ public class MainActivity extends AppCompatActivity implements GrowthMonitoringA
                 growthDialogFragment.show(SampleUtil.initFragmentTransaction(MainActivity.this, DIALOG_TAG), DIALOG_TAG);
             }
         }
-    }
-
-    private List<Weight> getWeights() {
-        WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
-        List<Weight> allWeights = weightRepository.findByEntityId(SampleUtil.ENTITY_ID);
-        try {
-            DateTime dateTime = new DateTime(SampleUtil.getDateOfBirth());
-
-            Weight weight = new Weight(-1l, null, (float) SampleUtil.BIRTH_WEIGHT, dateTime.toDate(), null, null, null,
-                    Calendar.getInstance().getTimeInMillis(), null, null, 0);
-            allWeights.add(weight);
-        } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
-        }
-        return allWeights;
-    }
-
-    private List<Height> getHeights() {
-        HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
-        List<Height> allHeights = heightRepository.findByEntityId(SampleUtil.ENTITY_ID);
-        try {
-            DateTime dateTime = new DateTime(SampleUtil.getDateOfBirth());
-
-            Height height = new Height(-1l, null, (float) SampleUtil.BIRTH_HEIGHT, dateTime.toDate(), null, null, null,
-                    Calendar.getInstance().getTimeInMillis(), null, null, 0);
-            allHeights.add(height);
-        } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
-        }
-        return allHeights;
     }
 
 }

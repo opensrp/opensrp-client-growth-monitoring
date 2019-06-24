@@ -18,6 +18,10 @@
     <color name="record_weight_grey_bg_st">#f4f4f4</color>
     <color name="record_weight_grey_bg_end">#ebebeb</color>
 
+    <color name="record_weight_red_bg_stk">#CC413B</color>
+    <color name="record_weight_red_bg_st">#c53731</color>
+    <color name="record_weight_red_bg_end">#cf4640</color>
+
     <color name="growth_today_color">#008be6</color>
 
 </resources>
