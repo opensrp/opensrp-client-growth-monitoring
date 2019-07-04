@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -238,15 +239,10 @@ public class RecordGrowthDialogFragment extends DialogFragment {
     private void saveGrowthRecord() {
         String weightString = editWeight.getText().toString();
         if (StringUtils.isBlank(weightString) || Float.valueOf(weightString) <= 0f) {
+            Toast.makeText(getActivity(), R.string.weight_is_required, Toast.LENGTH_LONG).show();
             return;
         }
-
-        dismiss();
-
         String heightString = editHeight.getText().toString();
-        if (StringUtils.isBlank(heightString) || Float.valueOf(heightString) <= 0f) {
-            return;
-        }
 
         dismiss();
 
@@ -260,9 +256,13 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         heightWrapper.setUpdatedHeightDate(new DateTime(calendar.getTime()), false);
 
         Float weight = Float.valueOf(weightString);
-        Float height = Float.valueOf(heightString);
         weightWrapper.setWeight(weight);
-        heightWrapper.setHeight(height);
+        if (!heightString.isEmpty()) {
+            Float height = Float.valueOf(heightString);
+            heightWrapper.setHeight(height);
+        } else {
+            heightWrapper = null;
+        }
 
         GrowthMonitoringActionListener.onGrowthRecorded(weightWrapper, heightWrapper);
     }

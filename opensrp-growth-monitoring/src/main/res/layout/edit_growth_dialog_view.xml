@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@drawable/dialog_shape">
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/edit_layout_scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:scrollbars="vertical"
         android:background="@android:color/white"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:gravity="center_horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -252,52 +256,51 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/client_list_header_dark_grey" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="5dp"
-                android:background="@color/white"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingStart="5dp"
-                android:paddingTop="10dp"
-                android:paddingEnd="5dp"
-                android:paddingBottom="10dp"
-                android:weightSum="2">
-
-                <Button
-                    android:id="@+id/cancel"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/record_growth_earlier_bg"
-                    android:text="@string/cancel"
-                    android:textAllCaps="false"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/client_list_grey"
-                    android:textSize="20sp" />
-
-                <Button
-                    android:id="@+id/set"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/record_growth_today_bg"
-                    android:text="@string/save_changes"
-                    android:textAllCaps="false"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/white"
-                    android:textSize="20sp" />
-            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+    <LinearLayout
+        android:id="@+id/button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="2dp"
+        android:orientation="horizontal"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:paddingStart="5dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="5dp"
+        android:paddingBottom="10dp"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/cancel"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/record_growth_earlier_bg"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/client_list_grey"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/set"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/record_growth_today_bg"
+            android:text="@string/save_changes"
+            android:textAllCaps="false"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </LinearLayout>
+</LinearLayout>

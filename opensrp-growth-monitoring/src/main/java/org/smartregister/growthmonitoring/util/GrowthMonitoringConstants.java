@@ -19,6 +19,10 @@ public class GrowthMonitoringConstants {
     public static final String FEMALE = "female";
     public static final String MALE = "male";
     public static final int GRAPH_MONTHS_TIMELINE = 12;
+    public static final String ZEIR_ID = "zeir_id";
+    public static final String GENDER = "gender";
+    public static final String DOB = "dob";
+    public static final String PMTCT_STATUS = "pmtct_status";
 
     public static final class JsonForm {
         public static final String OPENMRS_ENTITY = "openmrs_entity";

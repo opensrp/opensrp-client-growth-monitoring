@@ -152,8 +152,8 @@ public class SampleUtil {
                                                   String gender, String zeirId, String duration, Photo photo) {
         HeightWrapper heightWrapper = new HeightWrapper();
         heightWrapper.setId(childDetails.entityId());
-        HeightRepository wp = GrowthMonitoringLibrary.getInstance().heightRepository();
-        List<Height> heightList = wp.findLast5(childDetails.entityId());
+        HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
+        List<Height> heightList = heightRepository.findLast5(childDetails.entityId());
         if (!heightList.isEmpty()) {
             heightWrapper.setHeight(heightList.get(i).getCm());
             heightWrapper.setUpdatedHeightDate(new DateTime(heightList.get(i).getDate()), false);

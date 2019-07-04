@@ -46,6 +46,7 @@
     <string name="growth_taken_today">Growth taken today</string>
     <string name="growth_taken_earlier">Growth taken earlier</string>
     <string name="catchment_area">Catchment area</string>
-
+    <string name="user_image">User Image</string>
+    <string name="weight_is_required">The patient weight cannot be empty</string>
 
 </resources>

@@ -1,7 +1,6 @@
 package org.smartregister.growthmonitoring.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,13 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +41,7 @@ public class EditGrowthDialogFragment extends DialogFragment {
     private final WeightWrapper weightWrapper;
     private final HeightWrapper heightWrapper;
     private GrowthMonitoringActionListener GrowthMonitoringActionListener;
-    private DateTime currentWeightDate;
+    private DateTime currentGrowthDate;
     private Float currentWeight;
     private Float currentHeight;
     private Date dateOfBirth;
@@ -144,7 +143,11 @@ public class EditGrowthDialogFragment extends DialogFragment {
         }
 
         if (weightWrapper.getUpdatedWeightDate() != null) {
-            currentWeightDate = weightWrapper.getUpdatedWeightDate();
+            currentGrowthDate = weightWrapper.getUpdatedWeightDate();
+        }
+
+        if (heightWrapper.getUpdatedHeightDate() != null) {
+            currentGrowthDate = heightWrapper.getUpdatedHeightDate();
         }
 
         earlierDatePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
@@ -174,8 +177,8 @@ public class EditGrowthDialogFragment extends DialogFragment {
 
         DatePickerUtils.themeDatePicker(earlierDatePicker, new char[] {'d', 'm', 'y'});
 
-        earlierDatePicker.updateDate(currentWeightDate.year().get(), currentWeightDate.monthOfYear().get() - 1,
-                currentWeightDate.dayOfMonth().get());
+        earlierDatePicker.updateDate(currentGrowthDate.year().get(), currentGrowthDate.monthOfYear().get() - 1,
+                currentGrowthDate.dayOfMonth().get());
 
         setClientImage();
         setButtonAction();
@@ -224,14 +227,11 @@ public class EditGrowthDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 String weightString = editWeight.getText().toString();
                 if (StringUtils.isBlank(weightString) || Float.valueOf(weightString) <= 0f) {
+                    Toast.makeText(getActivity(), R.string.weight_is_required, Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 String heightString = editHeight.getText().toString();
-                if (StringUtils.isBlank(heightString) || Float.valueOf(heightString) <= 0f) {
-                    return;
-                }
-
                 dismiss();
 
                 boolean weightChanged = false;
@@ -246,8 +246,11 @@ public class EditGrowthDialogFragment extends DialogFragment {
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(year, month, day);
 
-                    if (!org.apache.commons.lang3.time.DateUtils.isSameDay(calendar.getTime(), currentWeightDate.toDate())) {
-                        weightWrapper.setUpdatedWeightDate(new DateTime(calendar.getTime()), false);
+                    if (!org.apache.commons.lang3.time.DateUtils.isSameDay(calendar.getTime(), currentGrowthDate.toDate())) {
+                        DateTime updateTime = new DateTime(calendar.getTime());
+
+                        weightWrapper.setUpdatedWeightDate(updateTime, false);
+                        heightWrapper.setUpdatedHeightDate(updateTime, false);
                         dateChanged = true;
                     }
                 }
@@ -259,17 +262,27 @@ public class EditGrowthDialogFragment extends DialogFragment {
                     weightChanged = true;
                 }
 
-                Float height = Float.valueOf(heightString);
-                if (!height.equals(currentHeight)) {
-                    heightWrapper.setHeight(height);
-                    heightChanged = true;
+                if (!heightString.isEmpty()) {
+                    Float height = Float.valueOf(heightString);
+                    if (!height.equals(currentHeight)) {
+                        heightWrapper.setHeight(height);
+                        heightChanged = true;
+                    }
+                } else {
+                    deleteHeightOnEditToZero();
                 }
+
 
                 if (heightChanged || weightChanged || dateChanged) {
                     GrowthMonitoringActionListener.onGrowthRecorded(weightWrapper, heightWrapper);
                 }
             }
         });
+    }
+
+    private void deleteHeightOnEditToZero() {
+        HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
+        heightRepository.delete(String.valueOf(heightWrapper.getDbKey()));
     }
 
     private void growthRecordDeleteAction() {
@@ -294,11 +307,6 @@ public class EditGrowthDialogFragment extends DialogFragment {
                     getString(R.string.date_recorded) + " " + weightWrapper.getUpdatedWeightDate().dayOfMonth()
                             .get() + "-" + weightWrapper
                             .getUpdatedWeightDate().monthOfYear().get() + "-" + weightWrapper.getUpdatedWeightDate().year()
-                            .get() + "");
-            ((TextView) dialogView.findViewById(R.id.service_date)).setText(
-                    getString(R.string.date_recorded) + " " + heightWrapper.getUpdatedHeightDate().dayOfMonth()
-                            .get() + "-" + heightWrapper
-                            .getUpdatedHeightDate().monthOfYear().get() + "-" + heightWrapper.getUpdatedHeightDate().year()
                             .get() + "");
         } else {
             dialogView.findViewById(R.id.service_date).setVisibility(View.GONE);

@@ -5,7 +5,7 @@
     <dimen name="table_contents_text_height">20dp</dimen>
     <dimen name="table_divider_height">1dp</dimen>
     <dimen name="table_contents_text_size">14sp</dimen>
-    <dimen name="table_height">100dp</dimen>
+    <dimen name="table_height">150dp</dimen>
     <dimen name="record_weight_tv_text_size">15sp</dimen>
     <dimen name="record_weight_btn_text_size">14sp</dimen>
     <dimen name="child_details_tv_text_size">14sp</dimen>
