@@ -42,7 +42,7 @@ public class GrowthMonitoringUtils {
             }
         }
 
-        return new Calendar[] {minGraphTime, maxGraphTime};
+        return new Calendar[]{minGraphTime, maxGraphTime};
     }
 
     public static void standardiseCalendarDate(Calendar calendarDate) {

@@ -103,7 +103,7 @@ public class SampleUtil {
         HeightWrapper heightWrapper = getHeightWrapper(i, childDetails, childName, gender, zeirId, duration, photo);
 
         EditGrowthDialogFragment editGrowthDialogFragment = EditGrowthDialogFragment
-                .newInstance(context, getDateOfBirth(), weightWrapper, heightWrapper);
+                .newInstance(getDateOfBirth(), weightWrapper, heightWrapper);
         editGrowthDialogFragment.show(initFragmentTransaction(context, tag), tag);
 
     }

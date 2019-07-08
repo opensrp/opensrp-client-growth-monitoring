@@ -16,6 +16,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
 import org.opensrp.api.constants.Gender;
@@ -38,7 +39,6 @@ import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.view.LineChartView;
-import timber.log.Timber;
 
 public class HeightMonitoringFragment extends Fragment {
     private static final String TAG = HeightMonitoringFragment.class.getName();
@@ -99,8 +99,8 @@ public class HeightMonitoringFragment extends Fragment {
                 //Prior implementation
                 if (!isExpanded) {
                     isExpanded = true;
-                    GrowthMonitoringUtils.getHeight(heightTabView.findViewById(R.id.height_growth_chart),
-                            new ViewMeasureListener() {
+                    GrowthMonitoringUtils
+                            .getHeight(heightTabView.findViewById(R.id.height_growth_chart), new ViewMeasureListener() {
                                 @Override
                                 public void onCompletedMeasuring(int Height) {
                                     heightTabView.findViewById(R.id.growth_dialog_height_table_layout)
@@ -136,7 +136,7 @@ public class HeightMonitoringFragment extends Fragment {
                     Line curLine = getZScoreLine(gender, minAge, maxAge, z,
                             getActivity().getResources().getColor(HeightZScore.getZScoreColor(z)));
                     if (z == -3) {
-                        curLine.setPathEffect(new DashPathEffect(new float[] {10, 20}, 0));
+                        curLine.setPathEffect(new DashPathEffect(new float[]{10, 20}, 0));
                     }
                     lines.add(curLine);
                 }
@@ -186,6 +186,10 @@ public class HeightMonitoringFragment extends Fragment {
         return gender;
     }
 
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
     private void refreshPreviousHeightsTable(final View heightTabView, Gender gender, Date dob) {
         if (minRecordingDate == null || maxRecordingDate == null) {
             return;
@@ -209,8 +213,8 @@ public class HeightMonitoringFragment extends Fragment {
 
             TextView ageTextView = new TextView(heightTabView.getContext());
             ageTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
-            ageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    getResources().getDimension(R.dimen.table_contents_text_size));
+            ageTextView
+                    .setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.table_contents_text_size));
             ageTextView.setText(DateUtil.getDuration(height.getDate().getTime() - dob.getTime()));
             ageTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             ageTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
@@ -218,18 +222,17 @@ public class HeightMonitoringFragment extends Fragment {
 
             TextView heightTextView = new TextView(heightTabView.getContext());
             heightTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
-            heightTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    getResources().getDimension(R.dimen.table_contents_text_size));
+            heightTextView
+                    .setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.table_contents_text_size));
             heightTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
-            heightTextView.setText(
-                    String.format("%s %s", String.valueOf(height.getCm()), getString(R.string.cm)));
+            heightTextView.setText(String.format("%s %s", String.valueOf(height.getCm()), getString(R.string.cm)));
             heightTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
             curRow.addView(heightTextView);
 
             TextView zScoreTextView = new TextView(heightTabView.getContext());
             zScoreTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
-            zScoreTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    getResources().getDimension(R.dimen.table_contents_text_size));
+            zScoreTextView
+                    .setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.table_contents_text_size));
             zScoreTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             if (height.getDate().compareTo(maxRecordingDate.getTime()) > 0) {
                 zScoreTextView.setText("");
@@ -263,23 +266,33 @@ public class HeightMonitoringFragment extends Fragment {
         return dobString;
     }
 
+    public void setDobString(String dobString) {
+        this.dobString = dobString;
+    }
+
     private Line getZScoreLine(Gender gender, double startAgeInMonths, double endAgeInMonths, double z, int color) {
         List<PointValue> values = new ArrayList<>();
-        while (startAgeInMonths <= endAgeInMonths) {
-            Double height = HeightZScore.reverse(gender, startAgeInMonths, z);
+        double ageInMonths = startAgeInMonths;
+        while (ageInMonths <= endAgeInMonths) {
+            Double height = HeightZScore.reverse(gender, ageInMonths, z);
 
             if (height != null) {
-                values.add(new PointValue((float) startAgeInMonths, (float) height.doubleValue()));
+                values.add(new PointValue((float) ageInMonths, (float) height.doubleValue()));
             }
 
-            startAgeInMonths++;
+            ageInMonths++;
         }
 
+        return getLine(color, values, true, 2);
+    }
+
+    @NotNull
+    private Line getLine(int color, List<PointValue> values, boolean hasLabel, int strokeWidth) {
         Line line = new Line(values);
         line.setColor(color);
         line.setHasPoints(false);
-        line.setHasLabels(true);
-        line.setStrokeWidth(2);
+        line.setHasLabels(hasLabel);
+        line.setStrokeWidth(strokeWidth);
         return line;
     }
 
@@ -296,13 +309,7 @@ public class HeightMonitoringFragment extends Fragment {
         values.add(new PointValue((float) personsAgeInMonthsToday, (float) minY));
         values.add(new PointValue((float) personsAgeInMonthsToday, (float) maxY));
 
-        Line todayLine = new Line(values);
-        todayLine.setColor(getResources().getColor(R.color.growth_today_color));
-        todayLine.setHasPoints(false);
-        todayLine.setHasLabels(false);
-        todayLine.setStrokeWidth(4);
-
-        return todayLine;
+        return getLine(getResources().getColor(R.color.growth_today_color), values, false, 4);
     }
 
     private Line getPersonHeightLine(Date dob) {
@@ -332,6 +339,10 @@ public class HeightMonitoringFragment extends Fragment {
 
     public List<Height> getHeights() {
         return heights;
+    }
+
+    public void setHeights(List<Height> heights) {
+        this.heights = heights;
     }
 
     private double getMaxY(double maxAge, Gender gender) {
@@ -367,29 +378,16 @@ public class HeightMonitoringFragment extends Fragment {
     }
 
     private boolean isHeightOkToDisplay(Calendar minRecordingDate, Calendar maxRecordingDate, Height height) {
-        if (minRecordingDate != null && maxRecordingDate != null
-                && minRecordingDate.getTimeInMillis() <= maxRecordingDate.getTimeInMillis()
-                && height.getDate() != null) {
+        if (minRecordingDate != null && maxRecordingDate != null &&
+                minRecordingDate.getTimeInMillis() <= maxRecordingDate.getTimeInMillis() && height.getDate() != null) {
             Calendar recordingDate = Calendar.getInstance();
             recordingDate.setTime(height.getDate());
             GrowthMonitoringUtils.standardiseCalendarDate(recordingDate);
 
-            return recordingDate.getTimeInMillis() >= minRecordingDate.getTimeInMillis()
-                    && recordingDate.getTimeInMillis() <= maxRecordingDate.getTimeInMillis();
+            return recordingDate.getTimeInMillis() >= minRecordingDate.getTimeInMillis() &&
+                    recordingDate.getTimeInMillis() <= maxRecordingDate.getTimeInMillis();
         }
 
         return false;
-    }
-
-    public void setHeights(List<Height> heights) {
-        this.heights = heights;
-    }
-
-    public void setDobString(String dobString) {
-        this.dobString = dobString;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
     }
 }

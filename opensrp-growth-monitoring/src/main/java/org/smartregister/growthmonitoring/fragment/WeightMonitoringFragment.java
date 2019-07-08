@@ -39,7 +39,6 @@ import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.view.LineChartView;
-import timber.log.Timber;
 
 public class WeightMonitoringFragment extends Fragment {
     private static final String TAG = WeightMonitoringFragment.class.getName();
@@ -95,8 +94,8 @@ public class WeightMonitoringFragment extends Fragment {
                 //Prior implementation
                 if (!isExpanded) {
                     isExpanded = true;
-                    GrowthMonitoringUtils.getHeight(weightTabView.findViewById(R.id.weight_growth_chart),
-                            new ViewMeasureListener() {
+                    GrowthMonitoringUtils
+                            .getHeight(weightTabView.findViewById(R.id.weight_growth_chart), new ViewMeasureListener() {
                                 @Override
                                 public void onCompletedMeasuring(int weight) {
                                     weightTabView.findViewById(R.id.growth_dialog_weight_table_layout)
@@ -132,7 +131,7 @@ public class WeightMonitoringFragment extends Fragment {
                     Line curLine = getZScoreLine(gender, minAge, maxAge, z,
                             getActivity().getResources().getColor(WeightZScore.getZScoreColor(z)));
                     if (z == -3) {
-                        curLine.setPathEffect(new DashPathEffect(new float[] {10, 20}, 0));
+                        curLine.setPathEffect(new DashPathEffect(new float[]{10, 20}, 0));
                     }
                     lines.add(curLine);
                 }
@@ -182,6 +181,10 @@ public class WeightMonitoringFragment extends Fragment {
         return gender;
     }
 
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
     private void refreshPreviousWeightsTable(final View weightTabView, Gender gender, Date dob) {
         if (minWeighingDate == null || maxWeighingDate == null) {
             return;
@@ -205,8 +208,8 @@ public class WeightMonitoringFragment extends Fragment {
 
             TextView ageTextView = new TextView(weightTabView.getContext());
             ageTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
-            ageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    getResources().getDimension(R.dimen.table_contents_text_size));
+            ageTextView
+                    .setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.table_contents_text_size));
             ageTextView.setText(DateUtil.getDuration(weight.getDate().getTime() - dob.getTime()));
             ageTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
             ageTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
@@ -214,18 +217,17 @@ public class WeightMonitoringFragment extends Fragment {
 
             TextView weightTextView = new TextView(weightTabView.getContext());
             weightTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
-            weightTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    getResources().getDimension(R.dimen.table_contents_text_size));
+            weightTextView
+                    .setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.table_contents_text_size));
             weightTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-            weightTextView.setText(
-                    String.format("%s %s", String.valueOf(weight.getKg()), getString(R.string.kg)));
+            weightTextView.setText(String.format("%s %s", String.valueOf(weight.getKg()), getString(R.string.kg)));
             weightTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
             curRow.addView(weightTextView);
 
             TextView zScoreTextView = new TextView(weightTabView.getContext());
             zScoreTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
-            zScoreTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    getResources().getDimension(R.dimen.table_contents_text_size));
+            zScoreTextView
+                    .setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.table_contents_text_size));
             zScoreTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
             if (weight.getDate().compareTo(maxWeighingDate.getTime()) > 0) {
                 zScoreTextView.setText("");
@@ -259,23 +261,33 @@ public class WeightMonitoringFragment extends Fragment {
         return dobString;
     }
 
+    public void setDobString(String dobString) {
+        this.dobString = dobString;
+    }
+
     private Line getZScoreLine(Gender gender, double startAgeInMonths, double endAgeInMonths, double z, int color) {
         List<PointValue> values = new ArrayList<>();
-        while (startAgeInMonths <= endAgeInMonths) {
-            Double weight = WeightZScore.reverse(gender, startAgeInMonths, z);
+        double ageInMonths = startAgeInMonths;
+        while (ageInMonths <= endAgeInMonths) {
+            Double weight = WeightZScore.reverse(gender, ageInMonths, z);
 
             if (weight != null) {
-                values.add(new PointValue((float) startAgeInMonths, (float) weight.doubleValue()));
+                values.add(new PointValue((float) ageInMonths, (float) weight.doubleValue()));
             }
 
-            startAgeInMonths++;
+            ageInMonths++;
         }
 
+        return getLine(color, values, true, 2);
+    }
+
+    @NotNull
+    private Line getLine(int color, List<PointValue> values, boolean hasLabels, int strokeWidth) {
         Line line = new Line(values);
         line.setColor(color);
         line.setHasPoints(false);
-        line.setHasLabels(true);
-        line.setStrokeWidth(2);
+        line.setHasLabels(hasLabels);
+        line.setStrokeWidth(strokeWidth);
         return line;
     }
 
@@ -292,13 +304,7 @@ public class WeightMonitoringFragment extends Fragment {
         values.add(new PointValue((float) personsAgeInMonthsToday, (float) minY));
         values.add(new PointValue((float) personsAgeInMonthsToday, (float) maxY));
 
-        Line todayLine = new Line(values);
-        todayLine.setColor(getResources().getColor(R.color.growth_today_color));
-        todayLine.setHasPoints(false);
-        todayLine.setHasLabels(false);
-        todayLine.setStrokeWidth(4);
-
-        return todayLine;
+        return getLine(getResources().getColor(R.color.growth_today_color), values, false, 4);
     }
 
     private Line getPersonWeightLine(Date dob) {
@@ -328,6 +334,10 @@ public class WeightMonitoringFragment extends Fragment {
 
     public List<Weight> getWeights() {
         return weights;
+    }
+
+    public void setWeights(List<Weight> weights) {
+        this.weights = weights;
     }
 
     private double getMaxY(double maxAge, Gender gender) {
@@ -362,31 +372,17 @@ public class WeightMonitoringFragment extends Fragment {
         return minY;
     }
 
-    private boolean isWeightOkToDisplay(Calendar minWeighingDate, Calendar maxWeighingDate,
-                                        Weight weight) {
-        if (minWeighingDate != null && maxWeighingDate != null
-                && minWeighingDate.getTimeInMillis() <= maxWeighingDate.getTimeInMillis()
-                && weight.getDate() != null) {
+    private boolean isWeightOkToDisplay(Calendar minWeighingDate, Calendar maxWeighingDate, Weight weight) {
+        if (minWeighingDate != null && maxWeighingDate != null &&
+                minWeighingDate.getTimeInMillis() <= maxWeighingDate.getTimeInMillis() && weight.getDate() != null) {
             Calendar weighingDate = Calendar.getInstance();
             weighingDate.setTime(weight.getDate());
             GrowthMonitoringUtils.standardiseCalendarDate(weighingDate);
 
-            return weighingDate.getTimeInMillis() >= minWeighingDate.getTimeInMillis()
-                    && weighingDate.getTimeInMillis() <= maxWeighingDate.getTimeInMillis();
+            return weighingDate.getTimeInMillis() >= minWeighingDate.getTimeInMillis() &&
+                    weighingDate.getTimeInMillis() <= maxWeighingDate.getTimeInMillis();
         }
 
         return false;
-    }
-
-    public void setWeights(List<Weight> weights) {
-        this.weights = weights;
-    }
-
-    public void setDobString(String dobString) {
-        this.dobString = dobString;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
     }
 }

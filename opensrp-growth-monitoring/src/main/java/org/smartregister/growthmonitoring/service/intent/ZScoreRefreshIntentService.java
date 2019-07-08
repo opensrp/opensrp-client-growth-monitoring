@@ -105,10 +105,9 @@ public class ZScoreRefreshIntentService extends IntentService {
      */
     private void dumpWeightCsv(Gender gender, boolean force) {
         try {
-            List<WeightZScore> existingScores = GrowthMonitoringLibrary.getInstance().weightZScoreRepository()
-                    .findByGender(gender);
-            if (force
-                    || existingScores.size() == 0) {
+            List<WeightZScore> existingScores =
+                    GrowthMonitoringLibrary.getInstance().weightZScoreRepository().findByGender(gender);
+            if (force || existingScores.size() == 0) {
                 String filename = null;
                 if (gender.equals(Gender.FEMALE)) {
                     filename = GrowthMonitoringLibrary.getInstance().getConfig().getFemaleWeightZScoreFile();
@@ -117,11 +116,12 @@ public class ZScoreRefreshIntentService extends IntentService {
                 }
 
                 if (filename != null) {
-                    CSVParser csvParser = CSVParser.parse(Utils.readAssetContents(this, filename),
-                            CSVFormat.newFormat('\t'));
+                    CSVParser csvParser =
+                            CSVParser.parse(Utils.readAssetContents(this, filename), CSVFormat.newFormat('\t'));
 
                     HashMap<Integer, Boolean> columnStatus = new HashMap<>();
-                    String query = "INSERT INTO `" + WeightZScoreRepository.TABLE_NAME + "` ( `" + ColumnHeaders.COLUMN_SEX + "`";
+                    String query =
+                            "INSERT INTO `" + WeightZScoreRepository.TABLE_NAME + "` ( `" + ColumnHeaders.COLUMN_SEX + "`";
                     for (CSVRecord record : csvParser) {
                         if (csvParser.getCurrentLineNumber() == 2) {// The second line
                             query = query + ")\n VALUES (\"" + gender.name() + "\"";
@@ -164,10 +164,9 @@ public class ZScoreRefreshIntentService extends IntentService {
      */
     private void dumpHeightCsv(Gender gender, boolean force) {
         try {
-            List<HeightZScore> existingScores = GrowthMonitoringLibrary.getInstance().heightZScoreRepository()
-                    .findByGender(gender);
-            if (force
-                    || existingScores.size() == 0) {
+            List<HeightZScore> existingScores =
+                    GrowthMonitoringLibrary.getInstance().heightZScoreRepository().findByGender(gender);
+            if (force || existingScores.size() == 0) {
                 String filename = null;
                 if (gender.equals(Gender.FEMALE)) {
                     filename = GrowthMonitoringLibrary.getInstance().getConfig().getFemaleHeightZScoreFile();
@@ -176,11 +175,12 @@ public class ZScoreRefreshIntentService extends IntentService {
                 }
 
                 if (filename != null) {
-                    CSVParser csvParser = CSVParser.parse(Utils.readAssetContents(this, filename),
-                            CSVFormat.newFormat('\t'));
+                    CSVParser csvParser =
+                            CSVParser.parse(Utils.readAssetContents(this, filename), CSVFormat.newFormat('\t'));
 
                     HashMap<Integer, Boolean> columnStatus = new HashMap<>();
-                    String query = "INSERT INTO `" + HeightZScoreRepository.TABLE_NAME + "` ( `" + ColumnHeaders.COLUMN_SEX + "`";
+                    String query =
+                            "INSERT INTO `" + HeightZScoreRepository.TABLE_NAME + "` ( `" + ColumnHeaders.COLUMN_SEX + "`";
                     for (CSVRecord record : csvParser) {
                         if (csvParser.getCurrentLineNumber() == 2) {// The second line
                             query = query + ")\n VALUES (\"" + gender.name() + "\"";
@@ -216,8 +216,7 @@ public class ZScoreRefreshIntentService extends IntentService {
     }
 
     /**
-     * This method retrieves all weight records that don't have ZScores and tries to calculate their
-     * corresponding ZScores
+     * This method retrieves all weight records that don't have ZScores and tries to calculate their corresponding ZScores
      */
     private void calculateChildWeightZScores() {
         try {
@@ -251,8 +250,8 @@ public class ZScoreRefreshIntentService extends IntentService {
                         if (gender != Gender.UNKNOWN && dob != null) {
                             GrowthMonitoringLibrary.getInstance().weightRepository().add(dob, gender, curWeight);
                         } else {
-                            Log.w(TAG, "Could not get the date of birth or gender for child with base entity id " + curWeight
-                                    .getBaseEntityId());
+                            Log.w(TAG, "Could not get the date of birth or gender for child with base entity id " +
+                                    curWeight.getBaseEntityId());
                         }
                     } else {
                         Log.w(TAG, "Could not get the details for child with base entity id " + curWeight.getBaseEntityId());
@@ -267,8 +266,7 @@ public class ZScoreRefreshIntentService extends IntentService {
     }
 
     /**
-     * This method retrieves all height records that don't have ZScores and tries to calculate their
-     * corresponding ZScores
+     * This method retrieves all height records that don't have ZScores and tries to calculate their corresponding ZScores
      */
     private void calculateChildHeightZScores() {
         try {
@@ -302,8 +300,8 @@ public class ZScoreRefreshIntentService extends IntentService {
                         if (gender != Gender.UNKNOWN && dob != null) {
                             GrowthMonitoringLibrary.getInstance().heightRepository().add(dob, gender, curHeight);
                         } else {
-                            Log.w(TAG, "Could not get the date of birth or gender for child with base entity id " + curHeight
-                                    .getBaseEntityId());
+                            Log.w(TAG, "Could not get the date of birth or gender for child with base entity id " +
+                                    curHeight.getBaseEntityId());
                         }
                     } else {
                         Log.w(TAG, "Could not get the details for child with base entity id " + curHeight.getBaseEntityId());
@@ -318,13 +316,14 @@ public class ZScoreRefreshIntentService extends IntentService {
     }
 
     private CommonPersonObjectClient getChildDetails(String baseEntityId) {
-        CommonPersonObject rawDetails = GrowthMonitoringLibrary.getInstance().context()
-                .commonrepository(GrowthMonitoringConstants.CHILD_TABLE_NAME).findByBaseEntityId(baseEntityId);
+        CommonPersonObject rawDetails =
+                GrowthMonitoringLibrary.getInstance().context().commonrepository(GrowthMonitoringConstants.CHILD_TABLE_NAME)
+                        .findByBaseEntityId(baseEntityId);
         if (rawDetails != null) {
             // Get extra child details
             CommonPersonObjectClient childDetails = Utils.convert(rawDetails);
-            childDetails.getColumnmaps().putAll(GrowthMonitoringLibrary.getInstance().context()
-                    .detailsRepository().getAllDetailsForClient(baseEntityId));
+            childDetails.getColumnmaps().putAll(GrowthMonitoringLibrary.getInstance().context().detailsRepository()
+                    .getAllDetailsForClient(baseEntityId));
 
             return childDetails;
         }
@@ -392,11 +391,10 @@ public class ZScoreRefreshIntentService extends IntentService {
     }
 
     /**
-     * @param connection object; note: before calling this function,
-     *                   ensure that the connection is already be open, and any writes to
-     *                   the connection's output stream should have already been completed.
-     * @return String containing the body of the connection response or
-     * null if the input stream could not be read correctly
+     * @param connection object; note: before calling this function, ensure that the connection is already be open, and any
+     *                   writes to the connection's output stream should have already been completed.
+     *
+     * @return String containing the body of the connection response or null if the input stream could not be read correctly
      */
     private String readInputStreamToString(URLConnection connection) {
         String result = null;

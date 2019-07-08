@@ -35,9 +35,8 @@ import org.smartregister.view.activity.DrishtiApplication;
 import java.util.Calendar;
 import java.util.Date;
 
-@SuppressLint ("ValidFragment")
+@SuppressLint("ValidFragment")
 public class EditGrowthDialogFragment extends DialogFragment {
-    private final Context context;
     private final WeightWrapper weightWrapper;
     private final HeightWrapper heightWrapper;
     private GrowthMonitoringActionListener GrowthMonitoringActionListener;
@@ -56,11 +55,8 @@ public class EditGrowthDialogFragment extends DialogFragment {
     private Button set;
     private Button growthRecordDelete;
     private Button cancel;
-    private Button growthRecordTakenEarlier;
 
-    private EditGrowthDialogFragment(Context context, Date dateOfBirth, WeightWrapper weightWrapper,
-                                     HeightWrapper heightWrapper) {
-        this.context = context;
+    private EditGrowthDialogFragment(Date dateOfBirth, WeightWrapper weightWrapper, HeightWrapper heightWrapper) {
         this.dateOfBirth = dateOfBirth;
         if (weightWrapper == null) {
             this.weightWrapper = new WeightWrapper();
@@ -75,9 +71,9 @@ public class EditGrowthDialogFragment extends DialogFragment {
         }
     }
 
-    public static EditGrowthDialogFragment newInstance(Context context, Date dateOfBirth, WeightWrapper weightWrapper,
+    public static EditGrowthDialogFragment newInstance(Date dateOfBirth, WeightWrapper weightWrapper,
                                                        HeightWrapper heightWrapper) {
-        return new EditGrowthDialogFragment(context, dateOfBirth, weightWrapper, heightWrapper);
+        return new EditGrowthDialogFragment(dateOfBirth, weightWrapper, heightWrapper);
     }
 
     @Override
@@ -119,14 +115,12 @@ public class EditGrowthDialogFragment extends DialogFragment {
             GrowthMonitoringActionListener = (GrowthMonitoringActionListener) activity;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(activity.toString()
-                    + " must implement GrowthMonitoringActionListener");
+            throw new ClassCastException(activity.toString() + " must implement GrowthMonitoringActionListener");
         }
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         ViewGroup dialogView = setUpViews(inflater, container);
 
@@ -175,7 +169,7 @@ public class EditGrowthDialogFragment extends DialogFragment {
         earlierDatePicker.requestFocus();
         set.setVisibility(View.VISIBLE);
 
-        DatePickerUtils.themeDatePicker(earlierDatePicker, new char[] {'d', 'm', 'y'});
+        DatePickerUtils.themeDatePicker(earlierDatePicker, new char[]{'d', 'm', 'y'});
 
         earlierDatePicker.updateDate(currentGrowthDate.year().get(), currentGrowthDate.monthOfYear().get() - 1,
                 currentGrowthDate.dayOfMonth().get());
@@ -204,20 +198,18 @@ public class EditGrowthDialogFragment extends DialogFragment {
         set = dialogView.findViewById(R.id.set);
         growthRecordDelete = dialogView.findViewById(R.id.weight_delete);
         cancel = dialogView.findViewById(R.id.cancel);
-        growthRecordTakenEarlier = dialogView.findViewById(R.id.weight_taken_earlier);
 
         return dialogView;
     }
 
     private void setClientImage() {
         if (weightWrapper.getId() != null) {//image already in local storage most likely ):
-            //set profile image by passing the client id.If the image doesn't exist in the image repository then download and save locally
+            //set profile image by passing the client id.If the image doesn't exist in the image repository then download
+            // and save locally
             mImageView.setTag(R.id.entity_id, weightWrapper.getId());
-            DrishtiApplication.getCachedImageLoaderInstance()
-                    .getImageByClientId(weightWrapper.getId(), OpenSRPImageLoader.getStaticImageListener(
-                            mImageView, ImageUtils.profileImageResourceByGender(weightWrapper.getGender()),
-                            ImageUtils.profileImageResourceByGender(
-                                    weightWrapper.getGender())));
+            DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(weightWrapper.getId(), OpenSRPImageLoader
+                    .getStaticImageListener(mImageView, ImageUtils.profileImageResourceByGender(weightWrapper.getGender()),
+                            ImageUtils.profileImageResourceByGender(weightWrapper.getGender())));
         }
     }
 
@@ -258,29 +250,33 @@ public class EditGrowthDialogFragment extends DialogFragment {
                     }
                 }
 
-
-                Float weight = Float.valueOf(weightString);
-                if (!weight.equals(currentWeight)) {
-                    weightWrapper.setWeight(weight);
-                    weightChanged = true;
-                }
-
-                if (!heightString.isEmpty()) {
-                    Float height = Float.valueOf(heightString);
-                    if (!height.equals(currentHeight)) {
-                        heightWrapper.setHeight(height);
-                        heightChanged = true;
-                    }
-                } else {
-                    deleteHeightOnEditToZero();
-                }
-
-
-                if (heightChanged || weightChanged || dateChanged) {
-                    GrowthMonitoringActionListener.onGrowthRecorded(weightWrapper, heightWrapper);
-                }
+                setGrowthVariables(weightString, heightString, weightChanged, heightChanged, dateChanged);
             }
         });
+    }
+
+    private void setGrowthVariables(String weightString, String heightString, boolean weightChanged, boolean heightChanged,
+                                    boolean dateChanged) {
+        Float weight = Float.valueOf(weightString);
+        if (!weight.equals(currentWeight)) {
+            weightWrapper.setWeight(weight);
+            weightChanged = true;
+        }
+
+        if (!heightString.isEmpty()) {
+            Float height = Float.valueOf(heightString);
+            if (!height.equals(currentHeight)) {
+                heightWrapper.setHeight(height);
+                heightChanged = true;
+            }
+        } else {
+            deleteHeightOnEditToZero();
+        }
+
+
+        if (heightChanged || weightChanged || dateChanged) {
+            GrowthMonitoringActionListener.onGrowthRecorded(weightWrapper, heightWrapper);
+        }
     }
 
     private void updateHeightWrapperForBlankHeightEdit(DateTime updateTime) {
@@ -299,8 +295,7 @@ public class EditGrowthDialogFragment extends DialogFragment {
     }
 
     private void deleteHeightOnEditToZero() {
-        HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
-        heightRepository.delete(String.valueOf(heightWrapper.getDbKey()));
+        deleteHeight();
     }
 
     private void growthRecordDeleteAction() {
@@ -308,24 +303,30 @@ public class EditGrowthDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 dismiss();
-                WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
-                weightRepository.delete(String.valueOf(weightWrapper.getDbKey()));
-
-                HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
-                heightRepository.delete(String.valueOf(heightWrapper.getDbKey()));
+                deleteWeight();
+                deleteHeight();
 
                 GrowthMonitoringActionListener.onGrowthRecorded(null, null);
             }
         });
     }
 
+    private void deleteHeight() {
+        HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
+        heightRepository.delete(String.valueOf(heightWrapper.getDbKey()));
+    }
+
+    private void deleteWeight() {
+        WeightRepository weightRepository = GrowthMonitoringLibrary.getInstance().weightRepository();
+        weightRepository.delete(String.valueOf(weightWrapper.getDbKey()));
+    }
+
     private void setDateRecorded(ViewGroup dialogView) {
         if (weightWrapper.getUpdatedWeightDate() != null || heightWrapper.getUpdatedHeightDate() != null) {
             ((TextView) dialogView.findViewById(R.id.service_date)).setText(
-                    getString(R.string.date_recorded) + " " + weightWrapper.getUpdatedWeightDate().dayOfMonth()
-                            .get() + "-" + weightWrapper
-                            .getUpdatedWeightDate().monthOfYear().get() + "-" + weightWrapper.getUpdatedWeightDate().year()
-                            .get() + "");
+                    getString(R.string.date_recorded) + " " + weightWrapper.getUpdatedWeightDate().dayOfMonth().get() + "-" +
+                            weightWrapper.getUpdatedWeightDate().monthOfYear().get() + "-" +
+                            weightWrapper.getUpdatedWeightDate().year().get() + "");
         } else {
             dialogView.findViewById(R.id.service_date).setVisibility(View.GONE);
             growthRecordDelete.setVisibility(View.GONE);

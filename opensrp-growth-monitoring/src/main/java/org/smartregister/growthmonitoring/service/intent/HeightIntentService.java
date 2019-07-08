@@ -22,7 +22,6 @@ public class HeightIntentService extends IntentService {
     public static final String EVENT_TYPE = "Growth Monitoring";
     public static final String EVENT_TYPE_OUT_OF_CATCHMENT = "Out of Area Service - Growth Monitoring";
     public static final String ENTITY_TYPE = "height";
-    private static final String TAG = HeightIntentService.class.getCanonicalName();
     private HeightRepository heightRepository;
 
 
@@ -40,8 +39,8 @@ public class HeightIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
         try {
-            List<Height> heights = heightRepository
-                    .findUnSyncedBeforeTime(GrowthMonitoringConstants.GROWTH_MONITORING_SYNC_TIME);
+            List<Height> heights =
+                    heightRepository.findUnSyncedBeforeTime(GrowthMonitoringConstants.GROWTH_MONITORING_SYNC_TIME);
             if (!heights.isEmpty()) {
                 for (Height height : heights) {
 

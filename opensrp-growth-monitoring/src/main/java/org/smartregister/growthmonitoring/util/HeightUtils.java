@@ -11,8 +11,8 @@ public class HeightUtils {
 
     public static boolean lessThanThreeMonths(Height height) {
         ////////////////////////check 3 months///////////////////////////////
-        return height == null || height.getCreatedAt() == null || !DateUtil
-                .checkIfDateThreeMonthsOlder(height.getCreatedAt());
+        return height == null || height.getCreatedAt() == null ||
+                !DateUtil.checkIfDateThreeMonthsOlder(height.getCreatedAt());
         ///////////////////////////////////////////////////////////////////////
     }
 }

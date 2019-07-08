@@ -34,7 +34,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
-@SuppressLint ("ValidFragment")
+@SuppressLint("ValidFragment")
 public class RecordGrowthDialogFragment extends DialogFragment {
     public static final String WEIGHT_WRAPPER_TAG = "weightWrapper";
     public static final String HEIGHT_WRAPPER_TAG = "heightWrapper";
@@ -56,8 +56,8 @@ public class RecordGrowthDialogFragment extends DialogFragment {
     private Button growthRecordTakenEarlier;
     private Button set;
 
-    public static RecordGrowthDialogFragment newInstance(
-            Date dateOfBirth, WeightWrapper weightWrapper, HeightWrapper heightWrapper) {
+    public static RecordGrowthDialogFragment newInstance(Date dateOfBirth, WeightWrapper weightWrapper,
+                                                         HeightWrapper heightWrapper) {
 
         WeightWrapper weightToSend;
         if (weightWrapper == null) {
@@ -123,14 +123,12 @@ public class RecordGrowthDialogFragment extends DialogFragment {
             GrowthMonitoringActionListener = (GrowthMonitoringActionListener) activity;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(activity.toString()
-                    + " must implement GrowthMonitoringActionListener");
+            throw new ClassCastException(activity.toString() + " must implement GrowthMonitoringActionListener");
         }
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         if (getBundle()) return null;
         ViewGroup dialogView = setUpViews(inflater, container);
@@ -207,11 +205,11 @@ public class RecordGrowthDialogFragment extends DialogFragment {
 
     private void setClientImage() {
         if (weightWrapper.getId() != null) {//image already in local storage most likey ):
-            //weightTakenToday profile image by passing the client id.If the image doesn't exist in the image repository then download and save locally
+            //weightTakenToday profile image by passing the client id.If the image doesn't exist in the image repository
+            // then download and save locally
             mImageView.setTag(R.id.entity_id, weightWrapper.getId());
-            DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(weightWrapper.getId(),
-                    OpenSRPImageLoader.getStaticImageListener(mImageView,
-                            ImageUtils.profileImageResourceByGender(weightWrapper.getGender()),
+            DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(weightWrapper.getId(), OpenSRPImageLoader
+                    .getStaticImageListener(mImageView, ImageUtils.profileImageResourceByGender(weightWrapper.getGender()),
                             ImageUtils.profileImageResourceByGender(weightWrapper.getGender())));
         }
     }
@@ -282,7 +280,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
                 weightTakenToday.setVisibility(View.VISIBLE);
                 set.setVisibility(View.VISIBLE);
 
-                DatePickerUtils.themeDatePicker(earlierDatePicker, new char[] {'d', 'm', 'y'});
+                DatePickerUtils.themeDatePicker(earlierDatePicker, new char[]{'d', 'm', 'y'});
             }
         });
     }

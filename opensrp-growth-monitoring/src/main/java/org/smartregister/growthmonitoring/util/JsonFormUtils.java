@@ -17,22 +17,16 @@ import timber.log.Timber;
  * Created by keyman on 26/07/2017.
  */
 public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
-    public static void createWeightEvent(Weight weight, String eventType, String entityType,
-                                         JSONArray fields) {
+    public static void createWeightEvent(Weight weight, String eventType, String entityType, JSONArray fields) {
         try {
             EventClientRepository db = GrowthMonitoringLibrary.getInstance().eventClientRepository();
 
-            Event event = (Event) new Event()
-                    .withBaseEntityId(weight.getBaseEntityId())
-                    .withIdentifiers(weight.getIdentifiers())
-                    .withEventDate(weight.getDate())
-                    .withEventType(eventType)
-                    .withLocationId(weight.getLocationId())
-                    .withProviderId(weight.getAnmId())
-                    .withEntityType(entityType)
-                    .withFormSubmissionId(
-                            weight.getFormSubmissionId() == null ? generateRandomUUIDString() : weight.getFormSubmissionId())
-                    .withDateCreated(new Date());
+            Event event =
+                    (Event) new Event().withBaseEntityId(weight.getBaseEntityId()).withIdentifiers(weight.getIdentifiers())
+                            .withEventDate(weight.getDate()).withEventType(eventType).withLocationId(weight.getLocationId())
+                            .withProviderId(weight.getAnmId()).withEntityType(entityType).withFormSubmissionId(
+                                    weight.getFormSubmissionId() == null ? generateRandomUUIDString() :
+                                            weight.getFormSubmissionId()).withDateCreated(new Date());
 
             event.setTeam(weight.getTeam());
             event.setTeamId(weight.getTeamId());
@@ -41,14 +35,13 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             event.setClientApplicationVersion(GrowthMonitoringLibrary.getInstance().getApplicationVersion());
             event.setClientDatabaseVersion(GrowthMonitoringLibrary.getInstance().getDatabaseVersion());
 
-            if (fields != null && fields.length() != 0)
-                for (int i = 0; i < fields.length(); i++) {
-                    JSONObject jsonObject = getJSONObject(fields, i);
-                    String value = getString(jsonObject, VALUE);
-                    if (StringUtils.isNotBlank(value)) {
-                        addObservation(event, jsonObject);
-                    }
+            if (fields != null && fields.length() != 0) for (int i = 0; i < fields.length(); i++) {
+                JSONObject jsonObject = getJSONObject(fields, i);
+                String value = getString(jsonObject, VALUE);
+                if (StringUtils.isNotBlank(value)) {
+                    addObservation(event, jsonObject);
                 }
+            }
 
 
             if (event != null) {
@@ -69,22 +62,16 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
         }
     }
 
-    public static void createHeightEvent(Height height, String eventType, String entityType,
-                                         JSONArray fields) {
+    public static void createHeightEvent(Height height, String eventType, String entityType, JSONArray fields) {
         try {
             EventClientRepository db = GrowthMonitoringLibrary.getInstance().eventClientRepository();
 
-            Event event = (Event) new Event()
-                    .withBaseEntityId(height.getBaseEntityId())
-                    .withIdentifiers(height.getIdentifiers())
-                    .withEventDate(height.getDate())
-                    .withEventType(eventType)
-                    .withLocationId(height.getLocationId())
-                    .withProviderId(height.getAnmId())
-                    .withEntityType(entityType)
-                    .withFormSubmissionId(
-                            height.getFormSubmissionId() == null ? generateRandomUUIDString() : height.getFormSubmissionId())
-                    .withDateCreated(new Date());
+            Event event =
+                    (Event) new Event().withBaseEntityId(height.getBaseEntityId()).withIdentifiers(height.getIdentifiers())
+                            .withEventDate(height.getDate()).withEventType(eventType).withLocationId(height.getLocationId())
+                            .withProviderId(height.getAnmId()).withEntityType(entityType).withFormSubmissionId(
+                                    height.getFormSubmissionId() == null ? generateRandomUUIDString() :
+                                            height.getFormSubmissionId()).withDateCreated(new Date());
 
             event.setTeam(height.getTeam());
             event.setTeamId(height.getTeamId());
@@ -93,14 +80,13 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             event.setClientApplicationVersion(GrowthMonitoringLibrary.getInstance().getApplicationVersion());
             event.setClientDatabaseVersion(GrowthMonitoringLibrary.getInstance().getDatabaseVersion());
 
-            if (fields != null && fields.length() != 0)
-                for (int i = 0; i < fields.length(); i++) {
-                    JSONObject jsonObject = getJSONObject(fields, i);
-                    String value = getString(jsonObject, VALUE);
-                    if (StringUtils.isNotBlank(value)) {
-                        addObservation(event, jsonObject);
-                    }
+            if (fields != null && fields.length() != 0) for (int i = 0; i < fields.length(); i++) {
+                JSONObject jsonObject = getJSONObject(fields, i);
+                String value = getString(jsonObject, VALUE);
+                if (StringUtils.isNotBlank(value)) {
+                    addObservation(event, jsonObject);
                 }
+            }
 
 
             if (event != null) {

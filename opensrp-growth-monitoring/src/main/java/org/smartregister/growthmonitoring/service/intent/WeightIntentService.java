@@ -22,7 +22,6 @@ public class WeightIntentService extends IntentService {
     public static final String EVENT_TYPE = "Growth Monitoring";
     public static final String EVENT_TYPE_OUT_OF_CATCHMENT = "Out of Area Service - Growth Monitoring";
     public static final String ENTITY_TYPE = "weight";
-    private static final String TAG = WeightIntentService.class.getCanonicalName();
     private WeightRepository weightRepository;
 
 
@@ -40,8 +39,8 @@ public class WeightIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
         try {
-            List<Weight> weights = weightRepository
-                    .findUnSyncedBeforeTime(GrowthMonitoringConstants.GROWTH_MONITORING_SYNC_TIME);
+            List<Weight> weights =
+                    weightRepository.findUnSyncedBeforeTime(GrowthMonitoringConstants.GROWTH_MONITORING_SYNC_TIME);
             if (!weights.isEmpty()) {
                 for (Weight weight : weights) {
 

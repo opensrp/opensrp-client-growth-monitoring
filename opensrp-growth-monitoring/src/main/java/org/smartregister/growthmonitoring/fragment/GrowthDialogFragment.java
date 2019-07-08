@@ -43,7 +43,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-@SuppressLint ("ValidFragment")
+@SuppressLint("ValidFragment")
 public class GrowthDialogFragment extends DialogFragment {
     private CommonPersonObjectClient personDetails;
     private List<Weight> weights;
@@ -57,8 +57,8 @@ public class GrowthDialogFragment extends DialogFragment {
     private TextView pmtctStatus;
     private Button done;
 
-    public static GrowthDialogFragment newInstance(CommonPersonObjectClient personDetails,
-                                                   List<Weight> weights, List<Height> heights) {
+    public static GrowthDialogFragment newInstance(CommonPersonObjectClient personDetails, List<Weight> weights,
+                                                   List<Height> heights) {
 
         GrowthDialogFragment growthDialogFragment = new GrowthDialogFragment();
         growthDialogFragment.setPersonDetails(personDetails);
@@ -154,8 +154,6 @@ public class GrowthDialogFragment extends DialogFragment {
                 Display display = window.getWindowManager().getDefaultDisplay();
                 display.getSize(size);
 
-                int width = size.x;
-
                 window.setLayout(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
                 window.setGravity(Gravity.CENTER);
             }
@@ -163,8 +161,7 @@ public class GrowthDialogFragment extends DialogFragment {
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         String firstName = Utils.getValue(personDetails.getColumnmaps(), GrowthMonitoringConstants.FIRST_NAME, true);
         String lastName = Utils.getValue(personDetails.getColumnmaps(), GrowthMonitoringConstants.LAST_NAME, true);
 
@@ -181,9 +178,8 @@ public class GrowthDialogFragment extends DialogFragment {
         String genderString = Utils.getValue(personDetails, GrowthMonitoringConstants.GENDER, false);
         String baseEntityId = personDetails.entityId();
         profilePic.setTag(R.id.entity_id, baseEntityId);
-        DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(baseEntityId, OpenSRPImageLoader.getStaticImageListener(
-                        profilePic,
-                        ImageUtils.profileImageResourceByGender(genderString),
+        DrishtiApplication.getCachedImageLoaderInstance().getImageByClientId(baseEntityId, OpenSRPImageLoader
+                .getStaticImageListener(profilePic, ImageUtils.profileImageResourceByGender(genderString),
                         ImageUtils.profileImageResourceByGender(genderString)));
 
         String formattedAge = "";
@@ -204,7 +200,8 @@ public class GrowthDialogFragment extends DialogFragment {
             ageView.setText("");
         }
 
-        String pmtctStatusString = Utils.getValue(personDetails.getColumnmaps(), GrowthMonitoringConstants.PMTCT_STATUS, true);
+        String pmtctStatusString =
+                Utils.getValue(personDetails.getColumnmaps(), GrowthMonitoringConstants.PMTCT_STATUS, true);
         if (!TextUtils.isEmpty(pmtctStatusString)) {
             pmtctStatus.setText(pmtctStatusString);
         } else {

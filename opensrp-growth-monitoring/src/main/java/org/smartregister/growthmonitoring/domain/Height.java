@@ -29,9 +29,8 @@ public class Height {
     public Height() {
     }
 
-    public Height(Long id, String baseEntityId, Float cm, Date date, String anmId, String
-            locationId, String syncStatus, Long updatedAt, String eventId, String
-                          formSubmissionId, Integer outOfCatchment) {
+    public Height(Long id, String baseEntityId, Float cm, Date date, String anmId, String locationId, String syncStatus,
+                  Long updatedAt, String eventId, String formSubmissionId, Integer outOfCatchment) {
         this.id = id;
         this.baseEntityId = baseEntityId;
         this.programClientId = null;
@@ -46,9 +45,9 @@ public class Height {
         this.outOfCatchment = outOfCatchment;
     }
 
-    public Height(Long id, String baseEntityId, String programClientId, Float cm, Date date,
-                  String anmId, String locationId, String syncStatus, Long updatedAt, String
-                          eventId, String formSubmissionId, Double zScore, Integer outOfCatchment, Date createdAt) {
+    public Height(Long id, String baseEntityId, String programClientId, Float cm, Date date, String anmId, String locationId,
+                  String syncStatus, Long updatedAt, String eventId, String formSubmissionId, Double zScore,
+                  Integer outOfCatchment, Date createdAt) {
         this.id = id;
         this.baseEntityId = baseEntityId;
         this.programClientId = programClientId;
