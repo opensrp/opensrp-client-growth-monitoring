@@ -246,12 +246,15 @@ public class EditGrowthDialogFragment extends DialogFragment {
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(year, month, day);
 
+                    DateTime updateTime = new DateTime(calendar.getTime());
                     if (!org.apache.commons.lang3.time.DateUtils.isSameDay(calendar.getTime(), currentGrowthDate.toDate())) {
-                        DateTime updateTime = new DateTime(calendar.getTime());
-
                         weightWrapper.setUpdatedWeightDate(updateTime, false);
                         heightWrapper.setUpdatedHeightDate(updateTime, false);
                         dateChanged = true;
+                    }
+
+                    if (heightString != null && !heightString.isEmpty()) {
+                        updateHeightWrapperForBlankHeightEdit(updateTime);
                     }
                 }
 
@@ -278,6 +281,21 @@ public class EditGrowthDialogFragment extends DialogFragment {
                 }
             }
         });
+    }
+
+    private void updateHeightWrapperForBlankHeightEdit(DateTime updateTime) {
+        if (heightWrapper.getDbKey() == null) {
+            heightWrapper.setUpdatedHeightDate(updateTime, false);
+            heightWrapper.setDob(weightWrapper.getDob());
+            heightWrapper.setGender(weightWrapper.getGender());
+            heightWrapper.setId(weightWrapper.getId());
+            heightWrapper.setPatientAge(weightWrapper.getPatientAge());
+            heightWrapper.setPatientName(weightWrapper.getPatientName());
+            heightWrapper.setPatientNumber(weightWrapper.getPatientNumber());
+            heightWrapper.setPhoto(weightWrapper.getPhoto());
+            heightWrapper.setPmtctStatus(weightWrapper.getPmtctStatus());
+
+        }
     }
 
     private void deleteHeightOnEditToZero() {
