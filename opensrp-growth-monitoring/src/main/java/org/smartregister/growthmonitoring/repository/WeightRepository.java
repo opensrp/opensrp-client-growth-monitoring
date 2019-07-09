@@ -31,7 +31,7 @@ public class WeightRepository extends BaseRepository {
     public static final String BASE_ENTITY_ID = "base_entity_id";
     public static final String EVENT_ID = "event_id";
     public static final String PROGRAM_CLIENT_ID = "program_client_id";
-// ID to be used to identify entity when base_entity_id is unavailable
+    // ID to be used to identify entity when base_entity_id is unavailable
     public static final String FORMSUBMISSION_ID = "formSubmissionId";
     public static final String OUT_OF_AREA = "out_of_area";
     public static final String KG = "kg";
@@ -74,7 +74,6 @@ public class WeightRepository extends BaseRepository {
             "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + TEAM_ID + " VARCHAR;";
     public static final String UPDATE_TABLE_ADD_CHILD_LOCATION_ID_COL =
             "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + CHILD_LOCATION_ID + " VARCHAR;";
-    private static final String TAG = WeightRepository.class.getCanonicalName();
     private static final String WEIGHT_SQL = "CREATE TABLE weights (_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
             "base_entity_id VARCHAR NOT NULL,program_client_id VARCHAR NULL,kg REAL NOT NULL,date DATETIME NOT NULL,anmid " +
             "VARCHAR NULL,location_id VARCHAR NULL,sync_status VARCHAR,updated_at INTEGER NULL)";

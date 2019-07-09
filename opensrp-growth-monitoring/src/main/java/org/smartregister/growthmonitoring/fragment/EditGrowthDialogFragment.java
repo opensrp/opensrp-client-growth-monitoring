@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.joda.time.DateTime;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.domain.HeightWrapper;
@@ -257,12 +256,12 @@ public class EditGrowthDialogFragment extends DialogFragment {
 
     private void setGrowthVariables(String weightString, String heightString, boolean weightChanged, boolean heightChanged,
                                     boolean dateChanged) {
-        Float weight = Float.valueOf(weightString);
-        if (!weight.equals(currentWeight)) {
-            weightWrapper.setWeight(weight);
-            weightChanged = true;
+        if (isHeightChanged(heightString, heightChanged) || isWeightChanged(weightString, weightChanged) || dateChanged) {
+            GrowthMonitoringActionListener.onGrowthRecorded(weightWrapper, heightWrapper);
         }
+    }
 
+    private boolean isHeightChanged(String heightString, boolean heightChanged) {
         if (!heightString.isEmpty()) {
             Float height = Float.valueOf(heightString);
             if (!height.equals(currentHeight)) {
@@ -272,11 +271,16 @@ public class EditGrowthDialogFragment extends DialogFragment {
         } else {
             deleteHeightOnEditToZero();
         }
+        return heightChanged;
+    }
 
-
-        if (heightChanged || weightChanged || dateChanged) {
-            GrowthMonitoringActionListener.onGrowthRecorded(weightWrapper, heightWrapper);
+    private boolean isWeightChanged(String weightString, boolean weightChanged) {
+        Float weight = Float.valueOf(weightString);
+        if (!weight.equals(currentWeight)) {
+            weightWrapper.setWeight(weight);
+            weightChanged = true;
         }
+        return weightChanged;
     }
 
     private void updateHeightWrapperForBlankHeightEdit(DateTime updateTime) {

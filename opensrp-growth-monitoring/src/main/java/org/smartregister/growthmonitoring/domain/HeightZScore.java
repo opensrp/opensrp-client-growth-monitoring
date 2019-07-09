@@ -18,9 +18,6 @@ import timber.log.Timber;
 public class HeightZScore extends ZScore {
     public static double MAX_REPRESENTED_AGE = 60d;
 
-    public HeightZScore() {
-    }
-
     public static int getZScoreColor(final double zScore) {
         double absScore = Math.abs(zScore);
         if (absScore < 2.0) {
