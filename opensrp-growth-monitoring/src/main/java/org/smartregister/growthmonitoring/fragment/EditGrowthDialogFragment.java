@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.joda.time.DateTime;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.domain.HeightWrapper;
@@ -262,25 +263,27 @@ public class EditGrowthDialogFragment extends DialogFragment {
     }
 
     private boolean isHeightChanged(String heightString, boolean heightChanged) {
+        boolean isHeightChanged = heightChanged;
         if (!heightString.isEmpty()) {
             Float height = Float.valueOf(heightString);
             if (!height.equals(currentHeight)) {
                 heightWrapper.setHeight(height);
-                heightChanged = true;
+                isHeightChanged = true;
             }
         } else {
             deleteHeightOnEditToZero();
         }
-        return heightChanged;
+        return isHeightChanged;
     }
 
     private boolean isWeightChanged(String weightString, boolean weightChanged) {
+        boolean isWeightChanged = weightChanged;
         Float weight = Float.valueOf(weightString);
         if (!weight.equals(currentWeight)) {
             weightWrapper.setWeight(weight);
-            weightChanged = true;
+            isWeightChanged = true;
         }
-        return weightChanged;
+        return isWeightChanged;
     }
 
     private void updateHeightWrapperForBlankHeightEdit(DateTime updateTime) {

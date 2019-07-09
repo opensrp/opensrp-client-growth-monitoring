@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
@@ -312,9 +313,7 @@ public class MainActivity extends AppCompatActivity implements GrowthMonitoringA
         List<Weight> allWeights = weightRepository.findByEntityId(SampleUtil.ENTITY_ID);
         try {
             DateTime dateTime = new DateTime(SampleUtil.getDateOfBirth());
-
-            Weight weight = new Weight(-1l, null, (float) SampleUtil.BIRTH_WEIGHT, dateTime.toDate(), null, null, null,
-                    Calendar.getInstance().getTimeInMillis(), null, null, 0);
+            Weight weight = getWeight(dateTime);
             allWeights.add(weight);
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
@@ -322,19 +321,51 @@ public class MainActivity extends AppCompatActivity implements GrowthMonitoringA
         return allWeights;
     }
 
+    @NotNull
+    private Weight getWeight(DateTime dateTime) {
+        Weight weight = new Weight();
+        weight.setId(-1L);
+        weight.setBaseEntityId(null);
+        weight.setKg((float) SampleUtil.BIRTH_WEIGHT);
+        weight.setDate(dateTime.toDate());
+        weight.setAnmId(null);
+        weight.setLocationId(null);
+        weight.setSyncStatus(null);
+        weight.setUpdatedAt(Calendar.getInstance().getTimeInMillis());
+        weight.setEventId(null);
+        weight.setFormSubmissionId(null);
+        weight.setOutOfCatchment(0);
+        return weight;
+    }
+
     private List<Height> getHeights() {
         HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
         List<Height> allHeights = heightRepository.findByEntityId(SampleUtil.ENTITY_ID);
         try {
             DateTime dateTime = new DateTime(SampleUtil.getDateOfBirth());
-
-            Height height = new Height(-1l, null, (float) SampleUtil.BIRTH_HEIGHT, dateTime.toDate(), null, null, null,
-                    Calendar.getInstance().getTimeInMillis(), null, null, 0);
+            Height height = getHeight(dateTime);
             allHeights.add(height);
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
         }
         return allHeights;
+    }
+
+    @NotNull
+    private Height getHeight(DateTime dateTime) {
+        Height height = new Height();
+        height.setId(-1L);
+        height.setBaseEntityId(null);
+        height.setCm((float) SampleUtil.BIRTH_HEIGHT);
+        height.setDate(dateTime.toDate());
+        height.setAnmId(null);
+        height.setLocationId(null);
+        height.setSyncStatus(null);
+        height.setUpdatedAt(Calendar.getInstance().getTimeInMillis());
+        height.setEventId(null);
+        height.setFormSubmissionId(null);
+        height.setOutOfCatchment(0);
+        return height;
     }
 
     private class ShowGrowthChartTask extends AsyncTask<Void, Void, Map<String, List>> {

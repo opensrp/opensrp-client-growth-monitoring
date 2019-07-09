@@ -191,13 +191,13 @@ public class WeightRepository extends BaseRepository {
             String[] selectionArgs = null;
             if (StringUtils.isNotBlank(weight.getFormSubmissionId()) && StringUtils.isNotBlank(weight.getEventId())) {
                 selection = FORMSUBMISSION_ID + " = ? " + COLLATE_NOCASE + " OR " + EVENT_ID + " = ? " + COLLATE_NOCASE;
-                selectionArgs = new String[]{weight.getFormSubmissionId(), weight.getEventId()};
+                selectionArgs = new String[] {weight.getFormSubmissionId(), weight.getEventId()};
             } else if (StringUtils.isNotBlank(weight.getEventId())) {
                 selection = EVENT_ID + " = ? " + COLLATE_NOCASE;
-                selectionArgs = new String[]{weight.getEventId()};
+                selectionArgs = new String[] {weight.getEventId()};
             } else if (StringUtils.isNotBlank(weight.getFormSubmissionId())) {
                 selection = FORMSUBMISSION_ID + " = ? " + COLLATE_NOCASE;
-                selectionArgs = new String[]{weight.getFormSubmissionId()};
+                selectionArgs = new String[] {weight.getFormSubmissionId()};
             }
 
             Cursor cursor = database.query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, selection, selectionArgs, null, null,
@@ -227,7 +227,7 @@ public class WeightRepository extends BaseRepository {
             }
 
             String idSelection = ID_COLUMN + " = ?";
-            db.update(WEIGHT_TABLE_NAME, createValuesFor(weight), idSelection, new String[]{weight.getId().toString()});
+            db.update(WEIGHT_TABLE_NAME, createValuesFor(weight), idSelection, new String[] {weight.getId().toString()});
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
         }
@@ -276,23 +276,24 @@ public class WeightRepository extends BaseRepository {
                         }
                     }
 
-                    Weight weight = new Weight(cursor.getLong(cursor.getColumnIndex(ID_COLUMN)),
-                            cursor.getString(cursor.getColumnIndex(BASE_ENTITY_ID)),
-                            cursor.getString(cursor.getColumnIndex(PROGRAM_CLIENT_ID)),
-                            cursor.getFloat(cursor.getColumnIndex(KG)),
-                            new Date(cursor.getLong(cursor.getColumnIndex(DATE))),
-                            cursor.getString(cursor.getColumnIndex(ANMID)),
-                            cursor.getString(cursor.getColumnIndex(LOCATIONID)),
-                            cursor.getString(cursor.getColumnIndex(SYNC_STATUS)),
-                            cursor.getLong(cursor.getColumnIndex(UPDATED_AT_COLUMN)),
-                            cursor.getString(cursor.getColumnIndex(EVENT_ID)),
-                            cursor.getString(cursor.getColumnIndex(FORMSUBMISSION_ID)), zScore,
-                            cursor.getInt(cursor.getColumnIndex(OUT_OF_AREA)), createdAt);
-
+                    Weight weight = new Weight();
+                    weight.setId(cursor.getLong(cursor.getColumnIndex(ID_COLUMN)));
+                    weight.setBaseEntityId(cursor.getString(cursor.getColumnIndex(BASE_ENTITY_ID)));
+                    weight.setProgramClientId(cursor.getString(cursor.getColumnIndex(PROGRAM_CLIENT_ID)));
+                    weight.setKg(cursor.getFloat(cursor.getColumnIndex(KG)));
+                    weight.setDate(new Date(cursor.getLong(cursor.getColumnIndex(DATE))));
+                    weight.setAnmId(cursor.getString(cursor.getColumnIndex(ANMID)));
+                    weight.setLocationId(cursor.getString(cursor.getColumnIndex(LOCATIONID)));
+                    weight.setSyncStatus(cursor.getString(cursor.getColumnIndex(SYNC_STATUS)));
+                    weight.setUpdatedAt(cursor.getLong(cursor.getColumnIndex(UPDATED_AT_COLUMN)));
+                    weight.setEventId(cursor.getString(cursor.getColumnIndex(EVENT_ID)));
+                    weight.setFormSubmissionId(cursor.getString(cursor.getColumnIndex(FORMSUBMISSION_ID)));
+                    weight.setZScore(zScore);
+                    weight.setOutOfCatchment(cursor.getInt(cursor.getColumnIndex(OUT_OF_AREA)));
+                    weight.setCreatedAt(createdAt);
                     weight.setTeam(cursor.getString(cursor.getColumnIndex(TEAM)));
                     weight.setTeamId(cursor.getString(cursor.getColumnIndex(TEAM_ID)));
                     weight.setChildLocationId(cursor.getString(cursor.getColumnIndex(CHILD_LOCATION_ID)));
-
                     weights.add(weight);
 
                     cursor.moveToNext();
@@ -321,7 +322,7 @@ public class WeightRepository extends BaseRepository {
 
             cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS,
                     UPDATED_AT_COLUMN + " < ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? " + COLLATE_NOCASE,
-                    new String[]{Long.toString(time), TYPE_Unsynced}, null, null, null, null);
+                    new String[] {Long.toString(time), TYPE_Unsynced}, null, null, null, null);
             weights = readAllWeights(cursor);
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
@@ -340,7 +341,7 @@ public class WeightRepository extends BaseRepository {
 
             cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS,
                     BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? ",
-                    new String[]{entityId, TYPE_Unsynced}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
+                    new String[] {entityId, TYPE_Unsynced}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
             List<Weight> weights = readAllWeights(cursor);
             if (!weights.isEmpty()) {
                 weight = weights.get(0);
@@ -361,7 +362,7 @@ public class WeightRepository extends BaseRepository {
         try {
             cursor = getRepository().getReadableDatabase()
                     .query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE,
-                            new String[]{entityId}, null, null, null, null);
+                            new String[] {entityId}, null, null, null, null);
             weights = readAllWeights(cursor);
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
@@ -398,7 +399,7 @@ public class WeightRepository extends BaseRepository {
         Cursor cursor = null;
         try {
             cursor = getRepository().getReadableDatabase()
-                    .query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, ID_COLUMN + " = ?", new String[]{caseId.toString()},
+                    .query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, ID_COLUMN + " = ?", new String[] {caseId.toString()},
                             null, null, null, null);
             List<Weight> weights = readAllWeights(cursor);
             if (!weights.isEmpty()) {
@@ -420,7 +421,7 @@ public class WeightRepository extends BaseRepository {
         try {
             cursor = getRepository().getReadableDatabase()
                     .query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE,
-                            new String[]{entityid}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
+                            new String[] {entityid}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
             weightList = readAllWeights(cursor);
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
@@ -436,7 +437,7 @@ public class WeightRepository extends BaseRepository {
         try {
             getRepository().getWritableDatabase()
                     .delete(WEIGHT_TABLE_NAME, ID_COLUMN + " = ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? ",
-                            new String[]{id, TYPE_Unsynced});
+                            new String[] {id, TYPE_Unsynced});
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
         }
@@ -447,7 +448,7 @@ public class WeightRepository extends BaseRepository {
             ContentValues values = new ContentValues();
             values.put(SYNC_STATUS, TYPE_Synced);
             getRepository().getWritableDatabase()
-                    .update(WEIGHT_TABLE_NAME, values, ID_COLUMN + " = ?", new String[]{caseId.toString()});
+                    .update(WEIGHT_TABLE_NAME, values, ID_COLUMN + " = ?", new String[] {caseId.toString()});
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
         }

@@ -26,45 +26,6 @@ public class Height {
     private Double zScore;
     private Date createdAt;
 
-    public Height() {
-    }
-
-    public Height(Long id, String baseEntityId, Float cm, Date date, String anmId, String locationId, String syncStatus,
-                  Long updatedAt, String eventId, String formSubmissionId, Integer outOfCatchment) {
-        this.id = id;
-        this.baseEntityId = baseEntityId;
-        this.programClientId = null;
-        this.cm = cm;
-        this.date = date;
-        this.anmId = anmId;
-        this.locationId = locationId;
-        this.syncStatus = syncStatus;
-        this.updatedAt = updatedAt;
-        this.eventId = eventId;
-        this.formSubmissionId = formSubmissionId;
-        this.outOfCatchment = outOfCatchment;
-    }
-
-    public Height(Long id, String baseEntityId, String programClientId, Float cm, Date date, String anmId, String locationId,
-                  String syncStatus, Long updatedAt, String eventId, String formSubmissionId, Double zScore,
-                  Integer outOfCatchment, Date createdAt) {
-        this.id = id;
-        this.baseEntityId = baseEntityId;
-        this.programClientId = programClientId;
-        this.cm = cm;
-        this.date = date;
-        this.anmId = anmId;
-        this.locationId = locationId;
-        this.syncStatus = syncStatus;
-        this.updatedAt = updatedAt;
-        this.eventId = eventId;
-        this.formSubmissionId = formSubmissionId;
-        this.outOfCatchment = outOfCatchment;
-        this.zScore = zScore;
-        this.createdAt = createdAt;
-
-    }
-
     public Long getId() {
         return id;
     }
@@ -205,5 +166,17 @@ public class Height {
 
     public void setTeamId(String teamId) {
         this.teamId = teamId;
+    }
+
+    public static String getZeirId() {
+        return ZEIR_ID;
+    }
+
+    public Double getzScore() {
+        return zScore;
+    }
+
+    public void setzScore(Double zScore) {
+        this.zScore = zScore;
     }
 }
