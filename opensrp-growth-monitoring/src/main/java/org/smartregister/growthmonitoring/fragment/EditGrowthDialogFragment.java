@@ -140,10 +140,6 @@ public class EditGrowthDialogFragment extends DialogFragment {
             currentGrowthDate = weightWrapper.getUpdatedWeightDate();
         }
 
-        if (heightWrapper.getUpdatedHeightDate() != null) {
-            currentGrowthDate = heightWrapper.getUpdatedHeightDate();
-        }
-
         earlierDatePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
         if (dateOfBirth != null) {
             earlierDatePicker.setMinDate(dateOfBirth.getTime());
