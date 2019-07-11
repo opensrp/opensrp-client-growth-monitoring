@@ -27,6 +27,7 @@ import org.smartregister.growthmonitoring.listener.ViewMeasureListener;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringUtils;
 import org.smartregister.util.DateUtil;
+import org.smartregister.view.customcontrols.CustomFontTextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,7 +64,7 @@ public class HeightMonitoringFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final ViewGroup heightTabView = (ViewGroup) inflater.inflate(R.layout.height_monitoring_fragment, container, false);
+        final ViewGroup heightTabView = (ViewGroup) inflater.inflate(R.layout.growth_monitoring_fragment, container, false);
         final ImageButton scrollButton = heightTabView.findViewById(R.id.scroll_button);
 
         Date dob = getDate();
@@ -99,22 +100,11 @@ public class HeightMonitoringFragment extends Fragment {
                 //Prior implementation
                 if (!isExpanded) {
                     isExpanded = true;
-                    GrowthMonitoringUtils
-                            .getHeight(heightTabView.findViewById(R.id.height_growth_chart), new ViewMeasureListener() {
-                                @Override
-                                public void onCompletedMeasuring(int Height) {
-                                    heightTabView.findViewById(R.id.growth_dialog_height_table_layout)
-                                            .getLayoutParams().height =
-                                            getResources().getDimensionPixelSize(R.dimen.table_height) + Height;
-                                }
-                            });
-                    heightTabView.findViewById(R.id.height_growth_chart).setVisibility(View.GONE);
+                    heightTabView.findViewById(R.id.growth_chart_layout).setVisibility(View.GONE);
                     scrollButton.setImageResource(R.drawable.ic_icon_expand);
                 } else {
                     isExpanded = false;
-                    heightTabView.findViewById(R.id.height_growth_chart).setVisibility(View.VISIBLE);
-                    heightTabView.findViewById(R.id.growth_dialog_height_table_layout).getLayoutParams().height =
-                            getResources().getDimensionPixelSize(R.dimen.table_height);
+                    heightTabView.findViewById(R.id.growth_chart_layout).setVisibility(View.VISIBLE);
                     scrollButton.setImageResource(R.drawable.ic_icon_collapse);
                 }
             }
@@ -127,7 +117,7 @@ public class HeightMonitoringFragment extends Fragment {
         }
 
         if (gender != Gender.UNKNOWN && dob != null) {
-            LineChartView growthChart = parent.findViewById(R.id.height_growth_chart);
+            LineChartView growthChart = parent.findViewById(R.id.growth_chart);
             double minAge = HeightZScore.getAgeInMonths(dob, minRecordingDate.getTime());
             double maxAge = minAge + GrowthMonitoringConstants.GRAPH_MONTHS_TIMELINE;
             List<Line> lines = new ArrayList<>();
@@ -194,8 +184,10 @@ public class HeightMonitoringFragment extends Fragment {
         if (minRecordingDate == null || maxRecordingDate == null) {
             return;
         }
+        CustomFontTextView customFontTextView = heightTabView.findViewById(R.id.growth_table_header);
+        customFontTextView.setText(R.string.previous_heights);
 
-        TableLayout tableLayout = heightTabView.findViewById(R.id.heights_table);
+        TableLayout tableLayout = heightTabView.findViewById(R.id.growth_table);
         for (Height height : getHeights()) {
             TableRow dividerRow = new TableRow(heightTabView.getContext());
             View divider = new View(heightTabView.getContext());
@@ -247,7 +239,7 @@ public class HeightMonitoringFragment extends Fragment {
         }
 
         //Now set the expand button if items are too many
-        final ScrollView heightsTableScrollView = heightTabView.findViewById(R.id.height_scroll_view);
+        final ScrollView heightsTableScrollView = heightTabView.findViewById(R.id.growth_scroll_view);
         GrowthMonitoringUtils.getHeight(heightsTableScrollView, new ViewMeasureListener() {
             @Override
             public void onCompletedMeasuring(int height) {

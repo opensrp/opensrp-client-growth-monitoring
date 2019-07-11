@@ -2,45 +2,54 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/height_growth_chart_layout"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/growth_chart_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <lecho.lib.hellocharts.view.LineChartView
-            android:id="@+id/height_growth_chart"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/growth_chart"
             android:layout_width="match_parent"
             android:layout_height="@dimen/growth_chart_height"
             android:layout_margin="10dp" />
 
         <View
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/client_list_header_dark_grey" />
-    </LinearLayout>
-    <!-- Height table section -->
-    <LinearLayout
-        android:id="@+id/growth_dialog_height_table_layout"
+    </android.support.constraint.ConstraintLayout>
+    <!-- Weight table section -->
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/growth_dialog_table_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/table_height"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/height_growth_chart_layout">
+        app:layout_constraintTop_toBottomOf="@+id/growth_chart_layout">
 
         <ScrollView
-            android:id="@+id/height_scroll_view"
+            android:id="@+id/growth_scroll_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,6 +62,7 @@
 
                     <org.smartregister.view.customcontrols.CustomFontTextView
                         style="@style/CustomFontTextViewStyle.ClientList.Light"
+                        android:id="@+id/growth_table_header"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -61,7 +71,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="20dp"
-                        android:text="@string/previous_heights"
+                        android:text="@string/previous_weights"
                         android:textColor="@color/black"
                         android:textSize="@dimen/record_weight_tv_text_size" />
 
@@ -80,9 +90,9 @@
                 </RelativeLayout>
 
                 <TableLayout
-                    android:id="@+id/heights_table"
+                    android:id="@+id/growth_table"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="30dp"
@@ -116,7 +126,7 @@
                             android:gravity="start|center_vertical"
                             android:minWidth="@dimen/weight_table_column_min_width"
                             android:paddingStart="0dp"
-                            android:text="@string/height"
+                            android:text="@string/weight"
                             android:textColor="@color/client_list_grey"
                             android:textSize="@dimen/record_weight_tv_text_size"
                             android:textStyle="bold" />
@@ -138,5 +148,6 @@
                 </TableLayout>
             </LinearLayout>
         </ScrollView>
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
+
 </android.support.constraint.ConstraintLayout>

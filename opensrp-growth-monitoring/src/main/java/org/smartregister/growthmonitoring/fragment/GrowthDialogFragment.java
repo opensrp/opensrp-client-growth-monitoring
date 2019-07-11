@@ -154,7 +154,7 @@ public class GrowthDialogFragment extends DialogFragment {
                 Display display = window.getWindowManager().getDefaultDisplay();
                 display.getSize(size);
 
-                window.setLayout(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+                window.setLayout(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
                 window.setGravity(Gravity.CENTER);
             }
         });

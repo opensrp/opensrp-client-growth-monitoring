@@ -1,37 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="20dp"
-    android:background="@android:color/white"
-    android:orientation="vertical">
+    android:background="@android:color/white">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/child_profile_info_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/client_profile_pic_dialog_height"
         android:layout_margin="20dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="horizontal">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/child_profilepic"
             android:layout_width="@dimen/client_profile_pic_dialog_width"
             android:layout_height="@dimen/client_profile_pic_dialog_height"
             android:adjustViewBounds="true"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@string/user_image"
             android:scaleType="centerCrop"
             android:src="@drawable/child_boy_infant"
-            android:contentDescription="@string/user_image" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="15dp"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/client_profile_pic_dialog_height"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/child_profilepic"
+            app:layout_constraintTop_toTopOf="parent">
 
             <org.smartregister.view.customcontrols.CustomFontTextView
                 android:id="@+id/child_name"
@@ -80,13 +84,12 @@
                 android:textSize="@dimen/child_details_tv_text_size" />
 
         </LinearLayout>
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
     <!-- Growth tabs section -->
     <LinearLayout
         android:id="@+id/tabs_layout"
         android:layout_width="match_parent"
-        android:layout_height="480dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/button_layout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -94,6 +97,7 @@
         app:layout_constraintTop_toBottomOf="@id/child_profile_info_layout">
 
         <View
+            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/client_list_header_dark_grey" />
@@ -113,10 +117,10 @@
         android:id="@+id/button_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="vertical">
+        app:layout_constraintStart_toStartOf="parent">
 
         <View
             android:layout_width="match_parent"

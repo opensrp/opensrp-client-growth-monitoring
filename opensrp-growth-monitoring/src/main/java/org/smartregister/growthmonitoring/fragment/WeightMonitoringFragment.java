@@ -27,6 +27,7 @@ import org.smartregister.growthmonitoring.listener.ViewMeasureListener;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringUtils;
 import org.smartregister.util.DateUtil;
+import org.smartregister.view.customcontrols.CustomFontTextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,7 +60,7 @@ public class WeightMonitoringFragment extends Fragment {
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View weightTabView = inflater.inflate(R.layout.weight_monitoring_fragment, container, false);
+        final View weightTabView = inflater.inflate(R.layout.growth_monitoring_fragment, container, false);
         final ImageButton scrollButton = weightTabView.findViewById(R.id.scroll_button);
 
         Date dob = getDate();
@@ -94,22 +95,11 @@ public class WeightMonitoringFragment extends Fragment {
                 //Prior implementation
                 if (!isExpanded) {
                     isExpanded = true;
-                    GrowthMonitoringUtils
-                            .getHeight(weightTabView.findViewById(R.id.weight_growth_chart), new ViewMeasureListener() {
-                                @Override
-                                public void onCompletedMeasuring(int weight) {
-                                    weightTabView.findViewById(R.id.growth_dialog_weight_table_layout)
-                                            .getLayoutParams().height =
-                                            getResources().getDimensionPixelSize(R.dimen.table_height) + weight;
-                                }
-                            });
-                    weightTabView.findViewById(R.id.weight_growth_chart).setVisibility(View.GONE);
+                    weightTabView.findViewById(R.id.growth_chart_layout).setVisibility(View.GONE);
                     scrollButton.setImageResource(R.drawable.ic_icon_expand);
                 } else {
                     isExpanded = false;
-                    weightTabView.findViewById(R.id.weight_growth_chart).setVisibility(View.VISIBLE);
-                    weightTabView.findViewById(R.id.growth_dialog_weight_table_layout).getLayoutParams().height =
-                            getResources().getDimensionPixelSize(R.dimen.table_height);
+                    weightTabView.findViewById(R.id.growth_chart_layout).setVisibility(View.VISIBLE);
                     scrollButton.setImageResource(R.drawable.ic_icon_collapse);
                 }
             }
@@ -122,7 +112,7 @@ public class WeightMonitoringFragment extends Fragment {
         }
 
         if (gender != Gender.UNKNOWN && dob != null && minWeighingDate != null) {
-            LineChartView growthChart = parent.findViewById(R.id.weight_growth_chart);
+            LineChartView growthChart = parent.findViewById(R.id.growth_chart);
             double minAge = WeightZScore.getAgeInMonths(dob, minWeighingDate.getTime());
             double maxAge = minAge + GrowthMonitoringConstants.GRAPH_MONTHS_TIMELINE;
             List<Line> lines = new ArrayList<>();
@@ -190,7 +180,10 @@ public class WeightMonitoringFragment extends Fragment {
             return;
         }
 
-        TableLayout tableLayout = weightTabView.findViewById(R.id.weights_table);
+        CustomFontTextView customFontTextView = weightTabView.findViewById(R.id.growth_table_header);
+        customFontTextView.setText(R.string.previous_weights);
+
+        TableLayout tableLayout = weightTabView.findViewById(R.id.growth_table);
         for (Weight weight : getWeights()) {
             TableRow dividerRow = new TableRow(weightTabView.getContext());
             View divider = new View(weightTabView.getContext());
@@ -242,7 +235,7 @@ public class WeightMonitoringFragment extends Fragment {
         }
 
         //Now set the expand button if items are too many
-        final ScrollView weightsTableScrollView = weightTabView.findViewById(R.id.weight_scroll_view);
+        final ScrollView weightsTableScrollView = weightTabView.findViewById(R.id.growth_scroll_view);
         GrowthMonitoringUtils.getHeight(weightsTableScrollView, new ViewMeasureListener() {
             @Override
             public void onCompletedMeasuring(int height) {
