@@ -344,20 +344,4 @@ public class EditGrowthDialogFragment extends DialogFragment {
             }
         });
     }
-
-   /* private void formatEditWeightView(EditText editWeight, String userInput) {
-        StringBuilder stringBuilder = new StringBuilder(userInput);
-
-        while (stringBuilder.length() > 2 && stringBuilder.charAt(0) == '0') {
-            stringBuilder.deleteCharAt(0);
-        }
-        while (stringBuilder.length() < 2) {
-            stringBuilder.insert(0, '0');
-        }
-        stringBuilder.insert(stringBuilder.length() - 1, '.');
-
-        editWeight.setText(stringBuilder.toString());
-        // keeps the cursor always to the right
-        Selection.setSelection(editWeight.getText(), stringBuilder.toString().length());
-    }*/
 }
