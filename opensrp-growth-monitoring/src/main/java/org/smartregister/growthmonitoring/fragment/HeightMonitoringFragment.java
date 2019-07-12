@@ -9,12 +9,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ScrollView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-
+import android.widget.*;
+import lecho.lib.hellocharts.model.*;
+import lecho.lib.hellocharts.view.LineChartView;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,13 +29,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import lecho.lib.hellocharts.model.Axis;
-import lecho.lib.hellocharts.model.AxisValue;
-import lecho.lib.hellocharts.model.Line;
-import lecho.lib.hellocharts.model.LineChartData;
-import lecho.lib.hellocharts.model.PointValue;
-import lecho.lib.hellocharts.view.LineChartView;
 
 public class HeightMonitoringFragment extends Fragment {
     private static final String TAG = HeightMonitoringFragment.class.getName();
@@ -283,14 +273,14 @@ public class HeightMonitoringFragment extends Fragment {
             ageInMonths++;
         }
 
-        return getLine(color, values, true, 2);
+        return getLine(color, values, true, 2, false);
     }
 
     @NotNull
-    private Line getLine(int color, List<PointValue> values, boolean hasLabel, int strokeWidth) {
+    private Line getLine(int color, List<PointValue> values, boolean hasLabel, int strokeWidth, boolean hasPoints) {
         Line line = new Line(values);
         line.setColor(color);
-        line.setHasPoints(false);
+        line.setHasPoints(hasPoints);
         line.setHasLabels(hasLabel);
         line.setStrokeWidth(strokeWidth);
         return line;
@@ -309,7 +299,7 @@ public class HeightMonitoringFragment extends Fragment {
         values.add(new PointValue((float) personsAgeInMonthsToday, (float) minY));
         values.add(new PointValue((float) personsAgeInMonthsToday, (float) maxY));
 
-        return getLine(getResources().getColor(R.color.growth_today_color), values, false, 4);
+        return getLine(getResources().getColor(R.color.growth_today_color), values, false, 4, false);
     }
 
     private Line getPersonHeightLine(Date dob) {
@@ -328,13 +318,7 @@ public class HeightMonitoringFragment extends Fragment {
                 values.add(new PointValue((float) x, (float) y));
             }
         }
-
-        Line line = new Line(values);
-        line.setColor(getResources().getColor(android.R.color.black));
-        line.setStrokeWidth(4);
-        line.setHasPoints(true);
-        line.setHasLabels(false);
-        return line;
+        return getLine(getResources().getColor(android.R.color.black), values, false, 4, true);
     }
 
     public List<Height> getHeights() {
