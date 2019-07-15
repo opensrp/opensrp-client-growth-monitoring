@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,10 +28,12 @@ import org.smartregister.growthmonitoring.domain.WeightWrapper;
 import org.smartregister.growthmonitoring.listener.GrowthMonitoringActionListener;
 import org.smartregister.growthmonitoring.repository.HeightRepository;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
+import org.smartregister.growthmonitoring.util.AppProperties;
 import org.smartregister.growthmonitoring.util.ImageUtils;
 import org.smartregister.util.DatePickerUtils;
 import org.smartregister.util.OpenSRPImageLoader;
 import org.smartregister.view.activity.DrishtiApplication;
+import org.smartregister.view.customcontrols.CustomFontTextView;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -55,8 +58,18 @@ public class EditGrowthDialogFragment extends DialogFragment {
     private Button set;
     private Button growthRecordDelete;
     private Button cancel;
+    private LinearLayout heightEntryLayout;
+    private CustomFontTextView recordHeight;
+    private static Boolean hasProperty;
+    private static Boolean monitorGrowth = false;
 
     private EditGrowthDialogFragment(Date dateOfBirth, WeightWrapper weightWrapper, HeightWrapper heightWrapper) {
+        HeightWrapper heightWrapperTemp;
+        hasProperty = GrowthMonitoringLibrary.getInstance().getAppProperties().hasProperty(AppProperties.KEY.MONITOR_GROWTH);
+        if (hasProperty) {
+            monitorGrowth = GrowthMonitoringLibrary.getInstance().getAppProperties().getPropertyBoolean(AppProperties.KEY.MONITOR_GROWTH);
+        }
+
         this.dateOfBirth = dateOfBirth;
         if (weightWrapper == null) {
             this.weightWrapper = new WeightWrapper();
@@ -64,11 +77,15 @@ public class EditGrowthDialogFragment extends DialogFragment {
             this.weightWrapper = weightWrapper;
         }
 
-        if (heightWrapper == null) {
-            this.heightWrapper = new HeightWrapper();
-        } else {
-            this.heightWrapper = heightWrapper;
+        heightWrapperTemp = null;
+        if (hasProperty && monitorGrowth) {
+            if (heightWrapper == null) {
+                heightWrapperTemp = new HeightWrapper();
+            } else {
+                heightWrapperTemp = heightWrapper;
+            }
         }
+        this.heightWrapper = heightWrapperTemp;
     }
 
     public static EditGrowthDialogFragment newInstance(Date dateOfBirth, WeightWrapper weightWrapper,
@@ -123,17 +140,21 @@ public class EditGrowthDialogFragment extends DialogFragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         ViewGroup dialogView = setUpViews(inflater, container);
+        if (hasProperty && monitorGrowth) {
+            recordHeight.setVisibility(View.VISIBLE);
+            heightEntryLayout.setVisibility(View.VISIBLE);
+
+            if (heightWrapper.getHeight() != null) {
+                editHeight.setText(heightWrapper.getHeight().toString());
+                editHeight.setSelection(editWeight.getText().length());
+                currentHeight = heightWrapper.getHeight();
+            }
+        }
 
         if (weightWrapper.getWeight() != null) {
             editWeight.setText(weightWrapper.getWeight().toString());
             editWeight.setSelection(editWeight.getText().length());
             currentWeight = weightWrapper.getWeight();
-        }
-
-        if (heightWrapper.getHeight() != null) {
-            editHeight.setText(heightWrapper.getHeight().toString());
-            editHeight.setSelection(editWeight.getText().length());
-            currentHeight = heightWrapper.getHeight();
         }
 
         if (weightWrapper.getUpdatedWeightDate() != null) {
@@ -194,6 +215,8 @@ public class EditGrowthDialogFragment extends DialogFragment {
         set = dialogView.findViewById(R.id.set);
         growthRecordDelete = dialogView.findViewById(R.id.weight_delete);
         cancel = dialogView.findViewById(R.id.cancel);
+        heightEntryLayout = dialogView.findViewById(R.id.edit_height_layout);
+        recordHeight = dialogView.findViewById(R.id.record_height);
 
         return dialogView;
     }
@@ -218,8 +241,10 @@ public class EditGrowthDialogFragment extends DialogFragment {
                     Toast.makeText(getActivity(), R.string.weight_is_required, Toast.LENGTH_LONG).show();
                     return;
                 }
-
-                String heightString = editHeight.getText().toString();
+                String heightString = null;
+                if (hasProperty & monitorGrowth) {
+                    heightString = editHeight.getText().toString();
+                }
                 dismiss();
 
                 boolean weightChanged = false;
@@ -237,12 +262,16 @@ public class EditGrowthDialogFragment extends DialogFragment {
                     DateTime updateTime = new DateTime(calendar.getTime());
                     if (!org.apache.commons.lang3.time.DateUtils.isSameDay(calendar.getTime(), currentGrowthDate.toDate())) {
                         weightWrapper.setUpdatedWeightDate(updateTime, false);
-                        heightWrapper.setUpdatedHeightDate(updateTime, false);
+                        if (hasProperty && monitorGrowth) {
+                            heightWrapper.setUpdatedHeightDate(updateTime, false);
+                        }
                         dateChanged = true;
                     }
 
-                    if (heightString != null && !heightString.isEmpty()) {
-                        updateHeightWrapperForBlankHeightEdit(updateTime);
+                    if (hasProperty & monitorGrowth) {
+                        if (heightString != null && !heightString.isEmpty()) {
+                            updateHeightWrapperForBlankHeightEdit(updateTime);
+                        }
                     }
                 }
 
@@ -260,14 +289,14 @@ public class EditGrowthDialogFragment extends DialogFragment {
 
     private boolean isHeightChanged(String heightString, boolean heightChanged) {
         boolean isHeightChanged = heightChanged;
-        if (!heightString.isEmpty()) {
+        if (heightString != null && !heightString.isEmpty()) {
             Float height = Float.valueOf(heightString);
             if (!height.equals(currentHeight)) {
                 heightWrapper.setHeight(height);
                 isHeightChanged = true;
             }
         } else {
-            deleteHeightOnEditToZero();
+            deleteHeight();
         }
         return isHeightChanged;
     }
@@ -297,9 +326,6 @@ public class EditGrowthDialogFragment extends DialogFragment {
         }
     }
 
-    private void deleteHeightOnEditToZero() {
-        deleteHeight();
-    }
 
     private void growthRecordDeleteAction() {
         growthRecordDelete.setOnClickListener(new Button.OnClickListener() {
@@ -315,8 +341,10 @@ public class EditGrowthDialogFragment extends DialogFragment {
     }
 
     private void deleteHeight() {
-        HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
-        heightRepository.delete(String.valueOf(heightWrapper.getDbKey()));
+        if (heightWrapper != null) {
+            HeightRepository heightRepository = GrowthMonitoringLibrary.getInstance().heightRepository();
+            heightRepository.delete(String.valueOf(heightWrapper.getDbKey()));
+        }
     }
 
     private void deleteWeight() {
@@ -344,20 +372,4 @@ public class EditGrowthDialogFragment extends DialogFragment {
             }
         });
     }
-
-   /* private void formatEditWeightView(EditText editWeight, String userInput) {
-        StringBuilder stringBuilder = new StringBuilder(userInput);
-
-        while (stringBuilder.length() > 2 && stringBuilder.charAt(0) == '0') {
-            stringBuilder.deleteCharAt(0);
-        }
-        while (stringBuilder.length() < 2) {
-            stringBuilder.insert(0, '0');
-        }
-        stringBuilder.insert(stringBuilder.length() - 1, '.');
-
-        editWeight.setText(stringBuilder.toString());
-        // keeps the cursor always to the right
-        Selection.setSelection(editWeight.getText(), stringBuilder.toString().length());
-    }*/
 }

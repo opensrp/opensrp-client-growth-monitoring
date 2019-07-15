@@ -5,6 +5,8 @@ import org.smartregister.growthmonitoring.repository.HeightRepository;
 import org.smartregister.growthmonitoring.repository.HeightZScoreRepository;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.repository.WeightZScoreRepository;
+import org.smartregister.growthmonitoring.util.AppProperties;
+import org.smartregister.growthmonitoring.util.GrowthMonitoringUtils;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Repository;
 
@@ -24,12 +26,14 @@ public class GrowthMonitoringLibrary {
     private EventClientRepository eventClientRepository;
     private int applicationVersion;
     private int databaseVersion;
+    private AppProperties appProperties;
 
     private GrowthMonitoringLibrary(Context context, Repository repository, int applicationVersion, int databaseVersion) {
         this.repository = repository;
         this.context = context;
         this.applicationVersion = applicationVersion;
         this.databaseVersion = databaseVersion;
+        this.appProperties = GrowthMonitoringUtils.getProperties(this.context.applicationContext());
     }
 
     public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion,
@@ -112,5 +116,13 @@ public class GrowthMonitoringLibrary {
 
     public GrowthMonitoringConfig getConfig() {
         return config;
+    }
+
+    public AppProperties getAppProperties() {
+        return appProperties;
+    }
+
+    public void setAppProperties(AppProperties appProperties) {
+        this.appProperties = appProperties;
     }
 }

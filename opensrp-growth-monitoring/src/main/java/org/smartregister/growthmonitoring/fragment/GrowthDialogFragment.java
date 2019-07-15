@@ -24,10 +24,12 @@ import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.adapter.GrowthMonitoringTabsAdapter;
 import org.smartregister.growthmonitoring.domain.Height;
 import org.smartregister.growthmonitoring.domain.Weight;
+import org.smartregister.growthmonitoring.util.AppProperties;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringUtils;
 import org.smartregister.growthmonitoring.util.ImageUtils;
@@ -56,14 +58,23 @@ public class GrowthDialogFragment extends DialogFragment {
     private TextView ageView;
     private TextView pmtctStatus;
     private Button done;
+    private static Boolean hasProperty;
+    private static Boolean monitorGrowth = false;
 
     public static GrowthDialogFragment newInstance(CommonPersonObjectClient personDetails, List<Weight> weights,
                                                    List<Height> heights) {
 
+        hasProperty = GrowthMonitoringLibrary.getInstance().getAppProperties().hasProperty(AppProperties.KEY.MONITOR_GROWTH);
+        if (hasProperty) {
+            monitorGrowth = GrowthMonitoringLibrary.getInstance().getAppProperties().getPropertyBoolean(AppProperties.KEY.MONITOR_GROWTH);
+        }
+
         GrowthDialogFragment growthDialogFragment = new GrowthDialogFragment();
         growthDialogFragment.setPersonDetails(personDetails);
         growthDialogFragment.setWeights(weights);
-        growthDialogFragment.setHeights(heights);
+        if (hasProperty && monitorGrowth) {
+            growthDialogFragment.setHeights(heights);
+        }
 
         return growthDialogFragment;
     }
@@ -214,14 +225,17 @@ public class GrowthDialogFragment extends DialogFragment {
             genderStringRes = R.string.girls;
         }
 
-        sortWeights();
-        sortHeights();
-
         GrowthMonitoringTabsAdapter adapter = new GrowthMonitoringTabsAdapter(getChildFragmentManager());
+
+        sortWeights();
         adapter.addFragment(String.format(getString(R.string.weight_for_age), getString(genderStringRes).toUpperCase()),
                 WeightMonitoringFragment.createInstance(dobString, gender, getWeights()));
-        adapter.addFragment(String.format(getString(R.string.height_for_age), getString(genderStringRes).toUpperCase()),
-                HeightMonitoringFragment.createInstance(dobString, gender, getHeights()));
+
+        if (hasProperty && monitorGrowth) {
+            sortHeights();
+            adapter.addFragment(String.format(getString(R.string.height_for_age), getString(genderStringRes).toUpperCase()),
+                    HeightMonitoringFragment.createInstance(dobString, gender, getHeights()));
+        }
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

@@ -1,17 +1,21 @@
 package org.smartregister.growthmonitoring.util;
 
+import android.content.res.AssetManager;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.ImageButton;
 
-import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.domain.WeightZScore;
 import org.smartregister.growthmonitoring.listener.ViewMeasureListener;
 
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 
+import timber.log.Timber;
+
 public class GrowthMonitoringUtils {
+    public static final String APP_PROPERTIES_FILE = "app.properties";
+
     public static Calendar[] getMinAndMaxRecordingDates(Date dob) {
         Calendar minGraphTime = null;
         Calendar maxGraphTime = null;
@@ -82,5 +86,18 @@ public class GrowthMonitoringUtils {
                 view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
+    }
+
+    public static AppProperties getProperties(android.content.Context context) {
+        AppProperties properties = new AppProperties();
+        try {
+            AssetManager assetManager = context.getAssets();
+            InputStream inputStream = assetManager.open(APP_PROPERTIES_FILE);
+            properties.load(inputStream);
+        } catch (Exception e) {
+            Timber.e(e, "GrowthMonitoringUtils --> Get properties failed");
+        }
+        return properties;
+
     }
 }
