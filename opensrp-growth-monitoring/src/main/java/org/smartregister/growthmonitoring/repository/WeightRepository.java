@@ -276,26 +276,7 @@ public class WeightRepository extends BaseRepository {
                         }
                     }
 
-                    Weight weight = new Weight();
-                    weight.setId(cursor.getLong(cursor.getColumnIndex(ID_COLUMN)));
-                    weight.setBaseEntityId(cursor.getString(cursor.getColumnIndex(BASE_ENTITY_ID)));
-                    weight.setProgramClientId(cursor.getString(cursor.getColumnIndex(PROGRAM_CLIENT_ID)));
-                    weight.setKg(cursor.getFloat(cursor.getColumnIndex(KG)));
-                    weight.setDate(new Date(cursor.getLong(cursor.getColumnIndex(DATE))));
-                    weight.setAnmId(cursor.getString(cursor.getColumnIndex(ANMID)));
-                    weight.setLocationId(cursor.getString(cursor.getColumnIndex(LOCATIONID)));
-                    weight.setSyncStatus(cursor.getString(cursor.getColumnIndex(SYNC_STATUS)));
-                    weight.setUpdatedAt(cursor.getLong(cursor.getColumnIndex(UPDATED_AT_COLUMN)));
-                    weight.setEventId(cursor.getString(cursor.getColumnIndex(EVENT_ID)));
-                    weight.setFormSubmissionId(cursor.getString(cursor.getColumnIndex(FORMSUBMISSION_ID)));
-                    weight.setZScore(zScore);
-                    weight.setOutOfCatchment(cursor.getInt(cursor.getColumnIndex(OUT_OF_AREA)));
-                    weight.setCreatedAt(createdAt);
-                    weight.setTeam(cursor.getString(cursor.getColumnIndex(TEAM)));
-                    weight.setTeamId(cursor.getString(cursor.getColumnIndex(TEAM_ID)));
-                    weight.setChildLocationId(cursor.getString(cursor.getColumnIndex(CHILD_LOCATION_ID)));
-                    weights.add(weight);
-
+                    getWeight(cursor, weights, zScore, createdAt);
                     cursor.moveToNext();
                 }
             }
@@ -308,6 +289,28 @@ public class WeightRepository extends BaseRepository {
         }
         return weights;
 
+    }
+
+    private void getWeight(Cursor cursor, List<Weight> weights, Double zScore, Date createdAt) {
+        Weight weight = new Weight();
+        weight.setId(cursor.getLong(cursor.getColumnIndex(ID_COLUMN)));
+        weight.setBaseEntityId(cursor.getString(cursor.getColumnIndex(BASE_ENTITY_ID)));
+        weight.setProgramClientId(cursor.getString(cursor.getColumnIndex(PROGRAM_CLIENT_ID)));
+        weight.setKg(cursor.getFloat(cursor.getColumnIndex(KG)));
+        weight.setDate(new Date(cursor.getLong(cursor.getColumnIndex(DATE))));
+        weight.setAnmId(cursor.getString(cursor.getColumnIndex(ANMID)));
+        weight.setLocationId(cursor.getString(cursor.getColumnIndex(LOCATIONID)));
+        weight.setSyncStatus(cursor.getString(cursor.getColumnIndex(SYNC_STATUS)));
+        weight.setUpdatedAt(cursor.getLong(cursor.getColumnIndex(UPDATED_AT_COLUMN)));
+        weight.setEventId(cursor.getString(cursor.getColumnIndex(EVENT_ID)));
+        weight.setFormSubmissionId(cursor.getString(cursor.getColumnIndex(FORMSUBMISSION_ID)));
+        weight.setZScore(zScore);
+        weight.setOutOfCatchment(cursor.getInt(cursor.getColumnIndex(OUT_OF_AREA)));
+        weight.setCreatedAt(createdAt);
+        weight.setTeam(cursor.getString(cursor.getColumnIndex(TEAM)));
+        weight.setTeamId(cursor.getString(cursor.getColumnIndex(TEAM_ID)));
+        weight.setChildLocationId(cursor.getString(cursor.getColumnIndex(CHILD_LOCATION_ID)));
+        weights.add(weight);
     }
 
     public List<Weight> findUnSyncedBeforeTime(int hours) {

@@ -277,26 +277,7 @@ public class HeightRepository extends BaseRepository {
                         }
                     }
 
-                    Height height = new Height();
-                    height.setId(cursor.getLong(cursor.getColumnIndex(ID_COLUMN)));
-                    height.setBaseEntityId(cursor.getString(cursor.getColumnIndex(BASE_ENTITY_ID)));
-                    height.setProgramClientId(cursor.getString(cursor.getColumnIndex(PROGRAM_CLIENT_ID)));
-                    height.setCm(cursor.getFloat(cursor.getColumnIndex(CM)));
-                    height.setDate(new Date(cursor.getLong(cursor.getColumnIndex(DATE))));
-                    height.setAnmId(cursor.getString(cursor.getColumnIndex(ANMID)));
-                    height.setLocationId(cursor.getString(cursor.getColumnIndex(LOCATIONID)));
-                    height.setSyncStatus(cursor.getString(cursor.getColumnIndex(SYNC_STATUS)));
-                    height.setUpdatedAt(cursor.getLong(cursor.getColumnIndex(UPDATED_AT_COLUMN)));
-                    height.setEventId(cursor.getString(cursor.getColumnIndex(EVENT_ID)));
-                    height.setFormSubmissionId(cursor.getString(cursor.getColumnIndex(FORMSUBMISSION_ID)));
-                    height.setZScore(zScore);
-                    height.setOutOfCatchment(cursor.getInt(cursor.getColumnIndex(OUT_OF_AREA)));
-                    height.setCreatedAt(createdAt);
-                    height.setTeam(cursor.getString(cursor.getColumnIndex(TEAM)));
-                    height.setTeamId(cursor.getString(cursor.getColumnIndex(TEAM_ID)));
-                    height.setChildLocationId(cursor.getString(cursor.getColumnIndex(CHILD_LOCATION_ID)));
-                    heights.add(height);
-
+                    getHeight(cursor, heights, zScore, createdAt);
                     cursor.moveToNext();
                 }
             }
@@ -309,6 +290,28 @@ public class HeightRepository extends BaseRepository {
         }
         return heights;
 
+    }
+
+    private void getHeight(Cursor cursor, List<Height> heights, Double zScore, Date createdAt) {
+        Height height = new Height();
+        height.setId(cursor.getLong(cursor.getColumnIndex(ID_COLUMN)));
+        height.setBaseEntityId(cursor.getString(cursor.getColumnIndex(BASE_ENTITY_ID)));
+        height.setProgramClientId(cursor.getString(cursor.getColumnIndex(PROGRAM_CLIENT_ID)));
+        height.setCm(cursor.getFloat(cursor.getColumnIndex(CM)));
+        height.setDate(new Date(cursor.getLong(cursor.getColumnIndex(DATE))));
+        height.setAnmId(cursor.getString(cursor.getColumnIndex(ANMID)));
+        height.setLocationId(cursor.getString(cursor.getColumnIndex(LOCATIONID)));
+        height.setSyncStatus(cursor.getString(cursor.getColumnIndex(SYNC_STATUS)));
+        height.setUpdatedAt(cursor.getLong(cursor.getColumnIndex(UPDATED_AT_COLUMN)));
+        height.setEventId(cursor.getString(cursor.getColumnIndex(EVENT_ID)));
+        height.setFormSubmissionId(cursor.getString(cursor.getColumnIndex(FORMSUBMISSION_ID)));
+        height.setZScore(zScore);
+        height.setOutOfCatchment(cursor.getInt(cursor.getColumnIndex(OUT_OF_AREA)));
+        height.setCreatedAt(createdAt);
+        height.setTeam(cursor.getString(cursor.getColumnIndex(TEAM)));
+        height.setTeamId(cursor.getString(cursor.getColumnIndex(TEAM_ID)));
+        height.setChildLocationId(cursor.getString(cursor.getColumnIndex(CHILD_LOCATION_ID)));
+        heights.add(height);
     }
 
     public List<Height> findUnSyncedBeforeTime(int hours) {
