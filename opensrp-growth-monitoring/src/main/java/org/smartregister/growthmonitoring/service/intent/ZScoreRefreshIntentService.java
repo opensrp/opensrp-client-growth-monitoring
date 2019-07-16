@@ -38,6 +38,8 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import timber.log.Timber;
+
 import static org.smartregister.growthmonitoring.util.GrowthMonitoringConstants.ColumnHeaders;
 
 /**
@@ -148,11 +150,11 @@ public class ZScoreRefreshIntentService extends IntentService {
                     query = query + ");";
 
                     boolean result = GrowthMonitoringLibrary.getInstance().weightZScoreRepository().runRawQuery(query);
-                    Log.d(TAG, "Result is " + result);
+                    Timber.d("ZScoreRefreshIntentService --> dumpWeightCsv --> Result%s", result);
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(e,"ZScoreRefreshIntentService --> dumpWeightCsv");
         }
     }
 
@@ -207,11 +209,13 @@ public class ZScoreRefreshIntentService extends IntentService {
                     query = query + ");";
 
                     boolean result = GrowthMonitoringLibrary.getInstance().heightZScoreRepository().runRawQuery(query);
-                    Log.d(TAG, "Result is " + result);
+                    Timber.d("ZScoreRefreshIntentService --> dumpHeightCsv --> Result%s", result);
+
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(e,"ZScoreRefreshIntentService --> dumpHeightCsv");
+
         }
     }
 
@@ -261,7 +265,7 @@ public class ZScoreRefreshIntentService extends IntentService {
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(e,"ZScoreRefreshIntentService --> calculateChildWeightZScores");
         }
     }
 

@@ -60,8 +60,8 @@ public class EditGrowthDialogFragment extends DialogFragment {
     private Button cancel;
     private LinearLayout heightEntryLayout;
     private CustomFontTextView recordHeight;
-    private static Boolean hasProperty;
-    private static Boolean monitorGrowth = false;
+    private boolean hasProperty;
+    private boolean monitorGrowth = false;
 
     private EditGrowthDialogFragment(Date dateOfBirth, WeightWrapper weightWrapper, HeightWrapper heightWrapper) {
         HeightWrapper heightWrapperTemp;
@@ -268,10 +268,8 @@ public class EditGrowthDialogFragment extends DialogFragment {
                         dateChanged = true;
                     }
 
-                    if (hasProperty & monitorGrowth) {
-                        if (heightString != null && !heightString.isEmpty()) {
-                            updateHeightWrapperForBlankHeightEdit(updateTime);
-                        }
+                    if (hasProperty & monitorGrowth && heightString != null && !heightString.isEmpty()) {
+                        updateHeightWrapperForBlankHeightEdit(updateTime);
                     }
                 }
 

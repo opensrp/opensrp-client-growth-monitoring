@@ -58,7 +58,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
 
             }
         } catch (Exception e) {
-            Timber.e(e, e.toString());
+            Timber.e(e, "JsonFormUtils --> createWeightEvent");
         }
     }
 
@@ -102,7 +102,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
 
             }
         } catch (Exception e) {
-            Timber.e(e, e.toString());
+            Timber.e(e, "JsonFormUtils --> createHeightEvent");
         }
     }
 

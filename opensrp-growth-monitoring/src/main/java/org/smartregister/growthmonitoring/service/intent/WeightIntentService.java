@@ -77,7 +77,7 @@ public class WeightIntentService extends IntentService {
                 }
             }
         } catch (Exception e) {
-            Timber.e(e);
+            Timber.e(e,"WeightIntentService --> onHandleIntent");
         }
     }
 }

@@ -149,23 +149,9 @@ public class RecordGrowthDialogFragment extends DialogFragment {
 
         if (getBundle()) return null;
         ViewGroup dialogView = setUpViews(inflater, container);
-        if (hasProperty && monitorGrowth) {
-            recordHeight.setVisibility(View.VISIBLE);
-            heightEntryLayout.setVisibility(View.VISIBLE);
-        }
-
-        if (weightWrapper.getWeight() != null) {
-            editWeight.setText(weightWrapper.getWeight().toString());
-            editWeight.setSelection(editWeight.getText().length());
-        }
-        //formatEditWeightView(editWeight, "");
-
-        if (hasProperty && monitorGrowth) {
-            if (heightWrapper.getHeight() != null) {
-                editHeight.setText(heightWrapper.getHeight().toString());
-                editHeight.setSelection(editHeight.getText().length());
-            }
-        }
+        setVisibility();
+        setWeight();
+        setHeight();
 
         earlierDatePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
         if (dateOfBirth != null) {
@@ -197,11 +183,32 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         return dialogView;
     }
 
+    private void setHeight() {
+        if (hasProperty && monitorGrowth && heightWrapper.getHeight() != null) {
+            editHeight.setText(heightWrapper.getHeight().toString());
+            editHeight.setSelection(editHeight.getText().length());
+        }
+    }
+
+    private void setWeight() {
+        if (weightWrapper.getWeight() != null) {
+            editWeight.setText(weightWrapper.getWeight().toString());
+            editWeight.setSelection(editWeight.getText().length());
+        }
+    }
+
+    private void setVisibility() {
+        if (hasProperty && monitorGrowth) {
+            recordHeight.setVisibility(View.VISIBLE);
+            heightEntryLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
     private boolean getBundle() {
         Bundle bundle = getArguments();
         if (getWeightBundle(bundle)) return true;
-        if (hasProperty && monitorGrowth) {
-            if (getHeightBundle(bundle)) return true;
+        if (hasProperty && monitorGrowth && getHeightBundle(bundle)) {
+            return true;
         }
 
         getDateBundle(bundle);

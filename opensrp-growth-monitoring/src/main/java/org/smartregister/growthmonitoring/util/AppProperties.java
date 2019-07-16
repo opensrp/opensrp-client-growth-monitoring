@@ -8,17 +8,14 @@ import java.util.Properties;
 public class AppProperties extends Properties {
 
     public Boolean getPropertyBoolean(String key) {
-
         return Boolean.valueOf(getProperty(key));
     }
 
     public Boolean hasProperty(String key) {
-
         return getProperty(key) != null;
     }
 
     public static class KEY {
-        //Notifications
         public static final String MONITOR_GROWTH = "monitor.height";
     }
 }

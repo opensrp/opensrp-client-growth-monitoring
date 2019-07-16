@@ -95,7 +95,7 @@ public class GrowthMonitoringUtils {
             InputStream inputStream = assetManager.open(APP_PROPERTIES_FILE);
             properties.load(inputStream);
         } catch (Exception e) {
-            Timber.e(e, "GrowthMonitoringUtils --> Get properties failed");
+            Timber.e(e, "GrowthMonitoringUtils --> getProperties");
         }
         return properties;
 

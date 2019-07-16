@@ -9,9 +9,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import lecho.lib.hellocharts.model.*;
-import lecho.lib.hellocharts.view.LineChartView;
+import android.widget.ImageButton;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,6 +33,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.view.LineChartView;
 
 public class HeightMonitoringFragment extends Fragment {
     private static final String TAG = HeightMonitoringFragment.class.getName();
