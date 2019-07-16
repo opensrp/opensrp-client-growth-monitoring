@@ -24,7 +24,7 @@ public class HeightZScoreTests extends BaseUnitTest {
     @Rule
     public PowerMockRule rule = new PowerMockRule();
     @Spy
-    List<HeightZScore> heightZScores = new ArrayList<>();
+    private List<HeightZScore> heightZScores = new ArrayList<>();
     @Mock
     private GrowthMonitoringLibrary growthMonitoringLibrary;
     @Mock
