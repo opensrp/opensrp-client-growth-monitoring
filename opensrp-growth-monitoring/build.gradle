@@ -38,11 +38,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "int", "GROWTH_MONITORING_SYNC_TIME", '12'
+            buildConfigField "int", "GROWTH_MONITORING_SYNC_TIME", '15'
         }
 
         debug {
-            buildConfigField "int", "GROWTH_MONITORING_SYNC_TIME", '0'
+            buildConfigField "int", "GROWTH_MONITORING_SYNC_TIME", '15'
             testCoverageEnabled true
         }
     }
