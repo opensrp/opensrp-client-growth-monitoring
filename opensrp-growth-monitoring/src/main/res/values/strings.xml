@@ -2,6 +2,7 @@
 <resources>
 
     <string name="Last_five_weights">LAST FIVE WEIGHTS</string>
+    <string name="Last_five_heights">LAST FIVE HEIGHTS</string>
     <string name="see_all">see all</string>
     <string name="edit">edit</string>
 
@@ -10,33 +11,42 @@
     <string name="label_zeir">ID</string>
     <string name="age">Age</string>
 
-    <string name="edit_weight_data">Edit weight data</string>
-    <string name="record_weight_with_nl">Record\nweigh</string>
+    <string name="edit_growth_data">Edit growth data</string>
+    <string name="record_growth_with_nl">Record\ngrowth</string>
+    <string name="record_growth">Record Growth</string>
+    <string name="record_growth_notification">"Don't forget to record child's growth"</string>
     <string name="record_weight">Record weight</string>
-    <string name="record_weight_notification">"Don't forget to record child's weight"</string>
+    <string name="record_height">Record height</string>
     <string name="weight_for_age">Weight-for-age %1$s</string>
+    <string name="height_for_age">Height-for-age %1$s</string>
     <string name="previous_weights">PREVIOUS WEIGHTS</string>
+    <string name="previous_heights">PREVIOUS HEIGHTS</string>
 
     <string name="months">Months</string>
-    <string name="kg">Kg</string>
+    <string name="kg">kg</string>
+    <string name="cm">cm</string>
     <string name="girls">Girls</string>
     <string name="boys">Boys</string>
     <string name="btn_layout_weight">2</string>
 
     <string name="weight">Weight</string>
+    <string name="height">Height</string>
     <string name="done">Complete</string>
     <string name="z_score"> Z-score</string>
 
-
-    <string name="delete_weight">Delete weight</string>
-    <string name="change_date_weighed">Change date weighed</string>
+    <string name="date_recorded">Date recorded</string>
+    <string name="change_date_recorded">Change date recorded</string>
     <string name="cancel">Cancel</string>
-    <string name="set">Set</string>
+    <string name="save_changes">Save Changes</string>
     <string name="service_date">Service date</string>
     <string name="edit_weight">Edit Weight</string>
-    <string name="weight_taken_today">Weight taken today</string>
-    <string name="weight_taken_earlier">Weight taken earlier</string>
+    <string name="edit_height">Edit Height</string>
+    <string name="edit_date">Edit Date</string>
+    <string name="delete_record">Delete Record</string>
+    <string name="growth_taken_today">Growth taken today</string>
+    <string name="growth_taken_earlier">Growth taken earlier</string>
     <string name="catchment_area">Catchment area</string>
-
+    <string name="user_image">User Image</string>
+    <string name="weight_is_required">The patient weight cannot be empty</string>
 
 </resources>

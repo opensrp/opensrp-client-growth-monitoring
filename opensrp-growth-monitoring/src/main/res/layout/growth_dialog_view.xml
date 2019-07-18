@@ -1,263 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_margin="20dp"
-    android:background="@android:color/white"
-    android:gravity="center_horizontal"
-    android:orientation="horizontal">
+    android:background="@android:color/white">
 
-    <FrameLayout
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/child_profile_info_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/dialog_shape">
+        android:layout_height="@dimen/client_profile_pic_dialog_height"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/child_profilepic"
+            android:layout_width="@dimen/client_profile_pic_dialog_width"
+            android:layout_height="@dimen/client_profile_pic_dialog_height"
+            android:adjustViewBounds="true"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@string/user_image"
+            android:scaleType="centerCrop"
+            android:src="@drawable/child_boy_infant"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/child_profile_info_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/child_profilepic"
-                    android:layout_width="@dimen/client_profile_pic_dialog_width"
-                    android:layout_height="@dimen/client_profile_pic_dialog_height"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/child_boy_infant" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="15dp"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
-
-                    <org.smartregister.view.customcontrols.CustomFontTextView
-                        android:id="@+id/child_name"
-                        style="@style/CustomFontTextViewStyle.ClientList.Medium"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:text="Child Name"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/child_name_tv_text_size"
-                        android:textStyle="bold" />
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:orientation="horizontal">
-
-                        <org.smartregister.view.customcontrols.CustomFontTextView
-                            android:id="@+id/child_zeir_id"
-                            style="@style/CustomFontTextViewStyle.ClientList.Light"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="EIR"
-                            android:textColor="@color/client_list_grey"
-                            android:textSize="@dimen/child_details_tv_text_size" />
-
-                        <org.smartregister.view.customcontrols.CustomFontTextView
-                            android:id="@+id/child_age"
-                            style="@style/CustomFontTextViewStyle.ClientList.Light"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:text="Age"
-                            android:textColor="@color/client_list_grey"
-                            android:textSize="@dimen/child_details_tv_text_size" />
-                    </LinearLayout>
-
-                    <org.smartregister.view.customcontrols.CustomFontTextView
-                        android:id="@+id/pmtct_status"
-                        style="@style/CustomFontTextViewStyle.ClientList.Light"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="pmtct_status"
-                        android:textColor="@color/client_list_grey"
-                        android:textSize="@dimen/child_details_tv_text_size" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/client_list_header_dark_grey" />
-
-            <!-- Growth Chart section -->
+            android:layout_width="0dp"
+            android:layout_height="@dimen/client_profile_pic_dialog_height"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/child_profilepic"
+            app:layout_constraintTop_toTopOf="parent">
 
             <org.smartregister.view.customcontrols.CustomFontTextView
-                android:id="@+id/weight_for_age"
+                android:id="@+id/child_name"
                 style="@style/CustomFontTextViewStyle.ClientList.Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="Child Name"
                 android:textColor="@color/black"
-                android:textSize="@dimen/record_weight_tv_text_size"
+                android:textSize="@dimen/child_name_tv_text_size"
                 android:textStyle="bold" />
 
-            <lecho.lib.hellocharts.view.LineChartView
-                android:id="@+id/growth_chart"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/growth_chart_height"
-                android:layout_margin="10dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/client_list_header_dark_grey" />
-
-            <!-- Weight table section -->
-
             <LinearLayout
-                android:id="@+id/ll_growthDialogView_weightTableLayout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/weight_table_height"
-                android:orientation="vertical">
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal">
 
-                <ScrollView
-                    android:id="@+id/weight_scroll_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <org.smartregister.view.customcontrols.CustomFontTextView
+                    android:id="@+id/child_zeir_id"
+                    style="@style/CustomFontTextViewStyle.ClientList.Light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="EIR"
+                    android:textColor="@color/client_list_grey"
+                    android:textSize="@dimen/child_details_tv_text_size" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <org.smartregister.view.customcontrols.CustomFontTextView
-                                style="@style/CustomFontTextViewStyle.ClientList.Light"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentStart="true"
-                                android:layout_centerVertical="true"
-                                android:layout_gravity="start"
-                                android:layout_marginStart="20dp"
-                                android:layout_marginEnd="20dp"
-                                android:layout_marginTop="10dp"
-                                android:text="@string/previous_weights"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/record_weight_tv_text_size" />
-
-                            <ImageButton
-                                android:id="@+id/scroll_button"
-                                android:layout_width="@dimen/scroll_btn_dimen"
-                                android:layout_height="@dimen/scroll_btn_dimen"
-                                android:scaleType="centerInside"
-                                android:padding="5dp"
-                                android:visibility="gone"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginEnd="20dp"
-                                android:background="@null"
-                                android:src="@drawable/ic_icon_collapse" />
-                        </RelativeLayout>
-
-                        <TableLayout
-                            android:id="@+id/weights_table"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="10dp"
-                            android:layout_marginStart="30dp"
-                            android:layout_marginEnd="30dp"
-                            android:layout_marginTop="10dp"
-                            android:stretchColumns="2">
-
-                            <TableRow
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <org.smartregister.view.customcontrols.CustomFontTextView
-                                    style="@style/CustomFontTextViewStyle.ClientList.Medium"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="0dp"
-                                    android:layout_marginEnd="10dp"
-                                    android:gravity="start|center_vertical"
-                                    android:minWidth="@dimen/weight_table_column_min_width"
-                                    android:paddingStart="0dp"
-                                    android:text="@string/age"
-                                    android:textColor="@color/client_list_grey"
-                                    android:textSize="@dimen/record_weight_tv_text_size"
-                                    android:textStyle="bold" />
-
-                                <org.smartregister.view.customcontrols.CustomFontTextView
-                                    style="@style/CustomFontTextViewStyle.ClientList.Medium"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="0dp"
-                                    android:layout_marginEnd="10dp"
-                                    android:gravity="start|center_vertical"
-                                    android:minWidth="@dimen/weight_table_column_min_width"
-                                    android:paddingStart="0dp"
-                                    android:text="@string/weight"
-                                    android:textColor="@color/client_list_grey"
-                                    android:textSize="@dimen/record_weight_tv_text_size"
-                                    android:textStyle="bold" />
-
-                                <org.smartregister.view.customcontrols.CustomFontTextView
-                                    style="@style/CustomFontTextViewStyle.ClientList.Medium"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="0dp"
-                                    android:layout_marginEnd="10dp"
-                                    android:gravity="start|center_vertical"
-                                    android:minWidth="@dimen/weight_table_column_min_width"
-                                    android:paddingStart="0dp"
-                                    android:text="@string/z_score"
-                                    android:textColor="@color/client_list_grey"
-                                    android:textSize="@dimen/record_weight_tv_text_size"
-                                    android:textStyle="bold" />
-                            </TableRow>
-                        </TableLayout>
-                    </LinearLayout>
-                </ScrollView>
+                <org.smartregister.view.customcontrols.CustomFontTextView
+                    android:id="@+id/child_age"
+                    style="@style/CustomFontTextViewStyle.ClientList.Light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="Age"
+                    android:textColor="@color/client_list_grey"
+                    android:textSize="@dimen/child_details_tv_text_size" />
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/client_list_header_dark_grey" />
-
-            <!-- Done button section -->
-
-            <Button
-                android:id="@+id/done"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="match_parent"
+            <org.smartregister.view.customcontrols.CustomFontTextView
+                android:id="@+id/pmtct_status"
+                style="@style/CustomFontTextViewStyle.ClientList.Light"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/done_btn_layout_margin"
-                android:background="@drawable/record_weight_earlier_bg"
-                android:paddingBottom="@dimen/weight_graph_btn_padding"
-                android:paddingTop="@dimen/weight_graph_btn_padding"
-                android:text="@string/done"
-                android:textAllCaps="false"
-                android:textAppearance="?android:textAppearanceSmall"
+                android:text="pmtct_status"
                 android:textColor="@color/client_list_grey"
-                android:textSize="@dimen/record_weight_btn_text_size" />
+                android:textSize="@dimen/child_details_tv_text_size" />
 
         </LinearLayout>
-    </FrameLayout>
-</FrameLayout>
+    </android.support.constraint.ConstraintLayout>
+    <!-- Growth tabs section -->
+    <LinearLayout
+        android:id="@+id/tabs_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/button_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/child_profile_info_layout">
+
+        <View
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/client_list_header_dark_grey" />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/growth_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/growth_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/client_list_header_dark_grey" />
+        <!-- Done button section -->
+        <Button
+            android:id="@+id/done"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/done_btn_layout_margin"
+            android:background="@drawable/record_growth_earlier_bg"
+            android:paddingTop="@dimen/weight_graph_btn_padding"
+            android:paddingBottom="@dimen/weight_graph_btn_padding"
+            android:text="@string/done"
+            android:textAllCaps="false"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/client_list_grey"
+            android:textSize="@dimen/record_weight_btn_text_size" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

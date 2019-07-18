@@ -5,32 +5,58 @@ package org.smartregister.growthmonitoring;
  */
 public class GrowthMonitoringConfig {
 
-    private String maleZScoreFile;
-    private String femaleZScoreFile;
+    private String maleWeightZScoreFile;
+    private String maleHeightZScoreFile;
+    private String femaleWeightZScoreFile;
+    private String femaleHeightZScoreFile;
     private String genderNeutralZScoreFile;
 
-    public String getMaleZScoreFile() {
-        if (maleZScoreFile != null) {
-            return maleZScoreFile;
+    public String getMaleWeightZScoreFile() {
+        if (maleWeightZScoreFile != null) {
+            return maleWeightZScoreFile;
         } else {
-            return "zscores_male.csv";
+            return "weight_z_scores_male.csv";
         }
     }
 
-    public void setMaleZScoreFile(String maleZScoreFile) {
-        this.maleZScoreFile = maleZScoreFile;
+    public void setMaleWeightZScoreFile(String maleWeightZScoreFile) {
+        this.maleWeightZScoreFile = maleWeightZScoreFile;
     }
 
-    public String getFemaleZScoreFile() {
-        if (femaleZScoreFile != null) {
-            return femaleZScoreFile;
+    public String getMaleHeightZScoreFile() {
+        if (maleHeightZScoreFile != null) {
+            return maleHeightZScoreFile;
         } else {
-            return "zscores_female.csv";
+            return "height_z_scores_male.csv";
         }
     }
 
-    public void setFemaleZScoreFile(String femaleZScoreFile) {
-        this.femaleZScoreFile = femaleZScoreFile;
+    public void setMaleHeightZScoreFile(String maleHeightZScoreFile) {
+        this.maleHeightZScoreFile = maleHeightZScoreFile;
+    }
+
+    public String getFemaleWeightZScoreFile() {
+        if (femaleWeightZScoreFile != null) {
+            return femaleWeightZScoreFile;
+        } else {
+            return "weight_z_scores_female.csv";
+        }
+    }
+
+    public void setFemaleWeightZScoreFile(String femaleWeightZScoreFile) {
+        this.femaleWeightZScoreFile = femaleWeightZScoreFile;
+    }
+
+    public String getFemaleHeightZScoreFile() {
+        if (femaleHeightZScoreFile != null) {
+            return femaleHeightZScoreFile;
+        } else {
+            return "height_z_scores_female.csv";
+        }
+    }
+
+    public void setFemaleHeightZScoreFile(String femaleHeightZScoreFile) {
+        this.femaleHeightZScoreFile = femaleHeightZScoreFile;
     }
 
     public String getGenderNeutralZScoreFile() {

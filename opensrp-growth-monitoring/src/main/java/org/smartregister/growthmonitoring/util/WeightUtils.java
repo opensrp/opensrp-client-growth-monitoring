@@ -11,7 +11,8 @@ public class WeightUtils {
 
     public static boolean lessThanThreeMonths(Weight weight) {
         ////////////////////////check 3 months///////////////////////////////
-        return weight == null || weight.getCreatedAt() == null || !DateUtil.checkIfDateThreeMonthsOlder(weight.getCreatedAt());
+        return weight == null || weight.getCreatedAt() == null ||
+                !DateUtil.checkIfDateThreeMonthsOlder(weight.getCreatedAt());
         ///////////////////////////////////////////////////////////////////////
     }
 }

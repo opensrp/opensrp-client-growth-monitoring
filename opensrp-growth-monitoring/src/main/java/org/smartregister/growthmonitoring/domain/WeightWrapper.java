@@ -71,36 +71,36 @@ public class WeightWrapper implements Serializable {
         return updatedWeightDate != null ? updatedWeightDate.toString("yyyy-MM-dd") : "";
     }
 
-    public void setPhoto(Photo photo) {
-        this.photo = photo;
-    }
-
     public Photo getPhoto() {
         return photo;
     }
 
-    public void setWeight(Float weight) {
-        this.weight = weight;
+    public void setPhoto(Photo photo) {
+        this.photo = photo;
     }
 
     public Float getWeight() {
         return weight;
     }
 
-    public void setPatientAge(String patientAge) {
-        this.patientAge = patientAge;
+    public void setWeight(Float weight) {
+        this.weight = weight;
     }
 
     public String getPatientAge() {
         return patientAge;
     }
 
-    public void setPmtctStatus(String pmtctStatus) {
-        this.pmtctStatus = pmtctStatus;
+    public void setPatientAge(String patientAge) {
+        this.patientAge = patientAge;
     }
 
     public String getPmtctStatus() {
         return pmtctStatus;
+    }
+
+    public void setPmtctStatus(String pmtctStatus) {
+        this.pmtctStatus = pmtctStatus;
     }
 
     public String getGender() {

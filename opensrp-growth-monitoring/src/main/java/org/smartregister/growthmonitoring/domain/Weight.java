@@ -26,46 +26,6 @@ public class Weight {
     private Double zScore;
     private Date createdAt;
 
-    public Weight() {
-    }
-
-    public Weight(Long id, String baseEntityId, Float kg, Date date, String anmId, String
-            locationId, String syncStatus, Long updatedAt, String eventId, String
-                          formSubmissionId, Integer outOfCatchment) {
-        this.id = id;
-        this.baseEntityId = baseEntityId;
-        this.programClientId = null;
-        this.kg = kg;
-        this.date = date;
-        this.anmId = anmId;
-        this.locationId = locationId;
-        this.syncStatus = syncStatus;
-        this.updatedAt = updatedAt;
-        this.eventId = eventId;
-        this.formSubmissionId = formSubmissionId;
-        this.outOfCatchment = outOfCatchment;
-    }
-
-    public Weight(Long id, String baseEntityId, String programClientId, Float kg, Date date,
-                  String anmId, String locationId, String syncStatus, Long updatedAt, String
-                          eventId, String formSubmissionId, Double zScore, Integer outOfCatchment, Date createdAt) {
-        this.id = id;
-        this.baseEntityId = baseEntityId;
-        this.programClientId = programClientId;
-        this.kg = kg;
-        this.date = date;
-        this.anmId = anmId;
-        this.locationId = locationId;
-        this.syncStatus = syncStatus;
-        this.updatedAt = updatedAt;
-        this.eventId = eventId;
-        this.formSubmissionId = formSubmissionId;
-        this.outOfCatchment = outOfCatchment;
-        this.zScore = zScore;
-        this.createdAt = createdAt;
-
-    }
-
     public Long getId() {
         return id;
     }
@@ -176,12 +136,12 @@ public class Weight {
         this.zScore = zScore;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public Date getCreatedAt() {
         return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getChildLocationId() {

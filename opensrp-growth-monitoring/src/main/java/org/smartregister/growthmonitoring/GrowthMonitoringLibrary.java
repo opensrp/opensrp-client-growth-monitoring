@@ -1,8 +1,12 @@
 package org.smartregister.growthmonitoring;
 
 import org.smartregister.Context;
+import org.smartregister.growthmonitoring.repository.HeightRepository;
+import org.smartregister.growthmonitoring.repository.HeightZScoreRepository;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
-import org.smartregister.growthmonitoring.repository.ZScoreRepository;
+import org.smartregister.growthmonitoring.repository.WeightZScoreRepository;
+import org.smartregister.growthmonitoring.util.AppProperties;
+import org.smartregister.growthmonitoring.util.GrowthMonitoringUtils;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Repository;
 
@@ -11,24 +15,29 @@ import org.smartregister.repository.Repository;
  */
 public class GrowthMonitoringLibrary {
 
+    private static GrowthMonitoringConfig config = new GrowthMonitoringConfig();
+    private static GrowthMonitoringLibrary instance;
     private final Repository repository;
     private final Context context;
-
     private WeightRepository weightRepository;
-    private ZScoreRepository zScoreRepository;
+    private HeightRepository heightRepository;
+    private WeightZScoreRepository weightZScoreRepository;
+    private HeightZScoreRepository heightZScoreRepository;
     private EventClientRepository eventClientRepository;
     private int applicationVersion;
     private int databaseVersion;
-    private static GrowthMonitoringConfig config = new GrowthMonitoringConfig();
-    private static GrowthMonitoringLibrary instance;
+    private AppProperties appProperties;
 
-    public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion) {
-        if (instance == null) {
-            instance = new GrowthMonitoringLibrary(context, repository, applicationVersion, databaseVersion);
-        }
+    private GrowthMonitoringLibrary(Context context, Repository repository, int applicationVersion, int databaseVersion) {
+        this.repository = repository;
+        this.context = context;
+        this.applicationVersion = applicationVersion;
+        this.databaseVersion = databaseVersion;
+        this.appProperties = GrowthMonitoringUtils.getProperties(this.context.applicationContext());
     }
 
-    public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion, GrowthMonitoringConfig growthMonitoringConfig) {
+    public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion,
+                            GrowthMonitoringConfig growthMonitoringConfig) {
 
         init(context, repository, applicationVersion, databaseVersion);
 
@@ -36,22 +45,18 @@ public class GrowthMonitoringLibrary {
 
     }
 
+    public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion) {
+        if (instance == null) {
+            instance = new GrowthMonitoringLibrary(context, repository, applicationVersion, databaseVersion);
+        }
+    }
+
     public static GrowthMonitoringLibrary getInstance() {
         if (instance == null) {
-            throw new IllegalStateException(" Instance does not exist!!! Call " + GrowthMonitoringLibrary.class.getName() + ".init method in the onCreate method of your Application class ");
+            throw new IllegalStateException(" Instance does not exist!!! Call " + GrowthMonitoringLibrary.class.getName() +
+                    ".init method in the onCreate method of your Application class ");
         }
         return instance;
-    }
-
-    private GrowthMonitoringLibrary(Context context, Repository repository, int applicationVersion, int databaseVersion) {
-        this.repository = repository;
-        this.context = context;
-        this.applicationVersion = applicationVersion;
-        this.databaseVersion = databaseVersion;
-    }
-
-    public Repository getRepository() {
-        return repository;
     }
 
     public WeightRepository weightRepository() {
@@ -61,13 +66,32 @@ public class GrowthMonitoringLibrary {
         return weightRepository;
     }
 
+    public Repository getRepository() {
+        return repository;
+    }
 
-    public ZScoreRepository zScoreRepository() {
-        if (zScoreRepository == null) {
-            zScoreRepository = new ZScoreRepository(getRepository());
+    public HeightRepository heightRepository() {
+        if (heightRepository == null) {
+            heightRepository = new HeightRepository(getRepository());
+        }
+        return heightRepository;
+    }
+
+
+    public WeightZScoreRepository weightZScoreRepository() {
+        if (weightZScoreRepository == null) {
+            weightZScoreRepository = new WeightZScoreRepository(getRepository());
         }
 
-        return zScoreRepository;
+        return weightZScoreRepository;
+    }
+
+    public HeightZScoreRepository heightZScoreRepository() {
+        if (heightZScoreRepository == null) {
+            heightZScoreRepository = new HeightZScoreRepository(getRepository());
+        }
+
+        return heightZScoreRepository;
     }
 
     public EventClientRepository eventClientRepository() {
@@ -92,5 +116,13 @@ public class GrowthMonitoringLibrary {
 
     public GrowthMonitoringConfig getConfig() {
         return config;
+    }
+
+    public AppProperties getAppProperties() {
+        return appProperties;
+    }
+
+    public void setAppProperties(AppProperties appProperties) {
+        this.appProperties = appProperties;
     }
 }

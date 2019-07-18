@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="20dp"
@@ -12,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/dialog_shape">
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,9 +49,8 @@
                         android:layout_marginBottom="5dp"
                         android:text="Child Name"
                         android:textColor="@color/black"
-                        android:textSize="26sp"
-                        android:textStyle="bold"
-                        android:password="false" />
+                        android:textSize="@dimen/child_name_tv_text_size"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="fill_parent"
@@ -68,7 +65,7 @@
                             android:layout_height="wrap_content"
                             android:text="EIR"
                             android:textColor="@color/client_list_grey"
-                            android:textSize="22sp" />
+                            android:textSize="@dimen/child_details_tv_text_size" />
 
                         <org.smartregister.view.customcontrols.CustomFontTextView
                             android:id="@+id/child_age"
@@ -76,9 +73,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
-                            android:text="@string/age"
+                            android:text="Age"
                             android:textColor="@color/client_list_grey"
-                            android:textSize="22sp" />
+                            android:textSize="@dimen/child_details_tv_text_size" />
                     </LinearLayout>
 
                     <org.smartregister.view.customcontrols.CustomFontTextView
@@ -88,7 +85,7 @@
                         android:layout_height="wrap_content"
                         android:text="pmtct_status"
                         android:textColor="@color/client_list_grey"
-                        android:textSize="22sp" />
+                        android:textSize="@dimen/child_details_tv_text_size" />
 
                 </LinearLayout>
 
@@ -104,11 +101,11 @@
                 style="@style/CustomFontTextViewStyle.ClientList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
                 android:layout_marginTop="23dp"
-                android:text="@string/edit_weight"
+                android:layout_marginBottom="20dp"
+                android:text="@string/record_weight"
                 android:textColor="@color/text_black"
-                android:textSize="30sp"
+                android:textSize="@dimen/record_weight_tv_text_size"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -117,8 +114,8 @@
                 android:layout_margin="20dp"
                 android:orientation="horizontal"
                 android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:paddingTop="20dp">
+                android:paddingTop="20dp"
+                android:paddingEnd="10dp">
 
                 <EditText
                     android:id="@+id/edit_weight"
@@ -127,7 +124,7 @@
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:inputType="number|numberDecimal"
-                    android:textSize="100dp" />
+                    android:textSize="@dimen/record_weight_tv_text_size" />
 
                 <TextView
                     android:id="@+id/value_unit_symbol"
@@ -135,63 +132,102 @@
                     android:layout_height="wrap_content"
                     android:text="kg"
                     android:textColor="@color/light_grey"
-                    android:textSize="100dp" />
+                    android:textSize="@dimen/record_weight_tv_text_size" />
             </LinearLayout>
-            <org.smartregister.view.customcontrols.CustomFontTextView
-                android:id="@+id/service_date"
-                style="@style/CustomFontTextViewStyle.ClientList.Light"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/service_date"
-                android:textColor="@color/client_list_grey"
-                android:textSize="22sp"
-                android:gravity="center" />
 
-            <Button
-                android:id="@+id/weight_taken_earlier"
-                style="?android:attr/borderlessButtonStyle"
+
+            <org.smartregister.view.customcontrols.CustomFontTextView
+                android:id="@+id/record_height"
+                style="@style/CustomFontTextViewStyle.ClientList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="23dp"
+                android:layout_marginBottom="20dp"
+                android:text="@string/record_height"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/record_weight_tv_text_size"
+                android:visibility="gone"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/record_height_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp"
+                android:orientation="horizontal"
+                android:paddingStart="10dp"
+                android:paddingTop="20dp"
+                android:paddingEnd="10dp"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/edit_height"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:inputType="number|numberDecimal"
+                    android:textSize="@dimen/record_weight_tv_text_size" />
+
+                <TextView
+                    android:id="@+id/height_value_unit_symbol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="cm"
+                    android:textColor="@color/light_grey"
+                    android:textSize="@dimen/record_weight_tv_text_size" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/record_weight_earlier_bg"
-                android:text="@string/change_date_weighed"
-                android:textAllCaps="false"
-                android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@color/client_list_grey"
-                android:textSize="22sp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp" />
+                android:layout_margin="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/weight_taken_today"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/record_growth_today_bg"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp"
+                    android:text="@string/growth_taken_today"
+                    android:textAllCaps="false"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/record_weight_btn_text_size" />
+
+                <Button
+                    android:id="@+id/weight_taken_earlier"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/record_growth_earlier_bg"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp"
+                    android:text="@string/growth_taken_earlier"
+                    android:textAllCaps="false"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textColor="@color/client_list_grey"
+                    android:textSize="@dimen/record_weight_btn_text_size" />
+            </LinearLayout>
 
             <DatePicker
                 android:id="@+id/earlier_date_picker"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/date_picker_height"
                 android:calendarViewShown="false"
                 android:descendantFocusability="blocksDescendants"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:visibility="gone" />
-
-            <Button
-                android:id="@+id/weight_delete"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/record_weight_earlier_bg"
-                android:text="@string/delete_weight"
-                android:textAllCaps="false"
-                android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@color/client_list_grey"
-                android:textSize="22sp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -212,7 +248,7 @@
                     android:textAllCaps="false"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/client_list_grey"
-                    android:textSize="22sp" />
+                    android:textSize="@dimen/record_weight_btn_text_size" />
 
                 <Button
                     android:id="@+id/set"
@@ -220,13 +256,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/set"
+                    android:text="@string/save_changes"
                     android:textAllCaps="false"
                     android:textAppearance="?android:textAppearanceSmall"
                     android:textColor="@color/client_list_grey"
-                    android:textSize="22sp" />
-
+                    android:textSize="@dimen/record_weight_btn_text_size"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>
-</FrameLayout>
+</ScrollView>

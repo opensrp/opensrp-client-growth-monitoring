@@ -7,8 +7,10 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.smartregister.AllConstants;
 import org.smartregister.domain.db.Column;
+import org.smartregister.growthmonitoring.repository.HeightRepository;
+import org.smartregister.growthmonitoring.repository.HeightZScoreRepository;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
-import org.smartregister.growthmonitoring.repository.ZScoreRepository;
+import org.smartregister.growthmonitoring.repository.WeightZScoreRepository;
 import org.smartregister.growthmonitoring.sample.BuildConfig;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Repository;
@@ -17,8 +19,6 @@ import org.smartregister.repository.Repository;
  * Created by keyman on 28/07/2017.
  */
 public class SampleRepository extends Repository {
-
-
     private static final String TAG = SampleRepository.class.getCanonicalName();
     protected SQLiteDatabase readableDatabase;
     protected SQLiteDatabase writableDatabase;
@@ -26,24 +26,34 @@ public class SampleRepository extends Repository {
     private String password = "Sample_PASS";
 
     public SampleRepository(Context context, org.smartregister.Context openSRPContext) {
-        super(context, AllConstants.DATABASE_NAME, BuildConfig.DATABASE_VERSION, openSRPContext.session(), null, openSRPContext.sharedRepositoriesArray());
+        super(context, AllConstants.DATABASE_NAME, BuildConfig.DATABASE_VERSION, openSRPContext.session(), null,
+                openSRPContext.sharedRepositoriesArray());
         this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase database) {
         super.onCreate(database);
-        EventClientRepository.createTable(database, EventClientRepository.Table.client, EventClientRepository.client_column.values());
-        EventClientRepository.createTable(database, EventClientRepository.Table.event, EventClientRepository.event_column.values());
+        EventClientRepository
+                .createTable(database, EventClientRepository.Table.client, EventClientRepository.client_column.values());
+        EventClientRepository
+                .createTable(database, EventClientRepository.Table.event, EventClientRepository.event_column.values());
 
         WeightRepository.createTable(database);
         database.execSQL(WeightRepository.UPDATE_TABLE_ADD_EVENT_ID_COL);
         database.execSQL(WeightRepository.EVENT_ID_INDEX);
         database.execSQL(WeightRepository.UPDATE_TABLE_ADD_FORMSUBMISSION_ID_COL);
         database.execSQL(WeightRepository.FORMSUBMISSION_INDEX);
-
         database.execSQL(WeightRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL);
         database.execSQL(WeightRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL_INDEX);
+
+        HeightRepository.createTable(database);
+        database.execSQL(HeightRepository.UPDATE_TABLE_ADD_EVENT_ID_COL);
+        database.execSQL(HeightRepository.EVENT_ID_INDEX);
+        database.execSQL(HeightRepository.UPDATE_TABLE_ADD_FORMSUBMISSION_ID_COL);
+        database.execSQL(HeightRepository.FORMSUBMISSION_INDEX);
+        database.execSQL(HeightRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL);
+        database.execSQL(HeightRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL_INDEX);
 
         onUpgrade(database, 1, BuildConfig.DATABASE_VERSION);
 
@@ -74,38 +84,6 @@ public class SampleRepository extends Repository {
         }
     }
 
-    private void upgradeToVersion2(SQLiteDatabase db) {
-        try {
-            ZScoreRepository.createTable(db);
-            db.execSQL(WeightRepository.ALTER_ADD_Z_SCORE_COLUMN);
-        } catch (Exception e) {
-            Log.e(TAG, "upgradeToVersion2 " + e.getMessage());
-        }
-    }
-
-    private void upgradeToVersion3(SQLiteDatabase db) {
-        try {
-            Column[] columns = {EventClientRepository.event_column.formSubmissionId};
-            EventClientRepository.createIndex(db, EventClientRepository.Table.event, columns);
-
-            db.execSQL(WeightRepository.ALTER_ADD_CREATED_AT_COLUMN);
-            WeightRepository.migrateCreatedAt(db);
-        } catch (Exception e) {
-            Log.e(TAG, "upgradeToVersion3 " + e.getMessage());
-        }
-
-    }
-
-    private void upgradeToVersion4(SQLiteDatabase db) {
-        try {
-            db.execSQL(WeightRepository.UPDATE_TABLE_ADD_TEAM_COL);
-            db.execSQL(WeightRepository.UPDATE_TABLE_ADD_TEAM_ID_COL);
-            db.execSQL(WeightRepository.UPDATE_TABLE_ADD_CHILD_LOCATION_ID_COL);
-        } catch (Exception e) {
-            Log.e(TAG, "upgradeToVersion4 " + Log.getStackTraceString(e));
-        }
-    }
-
     @Override
     public SQLiteDatabase getReadableDatabase() {
         return getReadableDatabase(password);
@@ -114,6 +92,17 @@ public class SampleRepository extends Repository {
     @Override
     public SQLiteDatabase getWritableDatabase() {
         return getWritableDatabase(password);
+    }
+
+    @Override
+    public synchronized SQLiteDatabase getWritableDatabase(String password) {
+        if (writableDatabase == null || !writableDatabase.isOpen()) {
+            if (writableDatabase != null) {
+                writableDatabase.close();
+            }
+            writableDatabase = super.getWritableDatabase(password);
+        }
+        return writableDatabase;
     }
 
     @Override
@@ -134,17 +123,6 @@ public class SampleRepository extends Repository {
     }
 
     @Override
-    public synchronized SQLiteDatabase getWritableDatabase(String password) {
-        if (writableDatabase == null || !writableDatabase.isOpen()) {
-            if (writableDatabase != null) {
-                writableDatabase.close();
-            }
-            writableDatabase = super.getWritableDatabase(password);
-        }
-        return writableDatabase;
-    }
-
-    @Override
     public synchronized void close() {
         if (readableDatabase != null) {
             readableDatabase.close();
@@ -154,6 +132,48 @@ public class SampleRepository extends Repository {
             writableDatabase.close();
         }
         super.close();
+    }
+
+    private void upgradeToVersion2(SQLiteDatabase db) {
+        try {
+            WeightZScoreRepository.createTable(db);
+            HeightZScoreRepository.createTable(db);
+
+            db.execSQL(WeightRepository.ALTER_ADD_Z_SCORE_COLUMN);
+            db.execSQL(HeightRepository.ALTER_ADD_Z_SCORE_COLUMN);
+        } catch (Exception e) {
+            Log.e(TAG, "upgradeToVersion2 " + e.getMessage());
+        }
+    }
+
+    private void upgradeToVersion3(SQLiteDatabase db) {
+        try {
+            Column[] columns = {EventClientRepository.event_column.formSubmissionId};
+            EventClientRepository.createIndex(db, EventClientRepository.Table.event, columns);
+
+            db.execSQL(WeightRepository.ALTER_ADD_CREATED_AT_COLUMN);
+            db.execSQL(HeightRepository.ALTER_ADD_CREATED_AT_COLUMN);
+
+            WeightRepository.migrateCreatedAt(db);
+            HeightRepository.migrateCreatedAt(db);
+        } catch (Exception e) {
+            Log.e(TAG, "upgradeToVersion3 " + e.getMessage());
+        }
+
+    }
+
+    private void upgradeToVersion4(SQLiteDatabase db) {
+        try {
+            db.execSQL(WeightRepository.UPDATE_TABLE_ADD_TEAM_COL);
+            db.execSQL(WeightRepository.UPDATE_TABLE_ADD_TEAM_ID_COL);
+            db.execSQL(WeightRepository.UPDATE_TABLE_ADD_CHILD_LOCATION_ID_COL);
+
+            db.execSQL(HeightRepository.UPDATE_TABLE_ADD_TEAM_COL);
+            db.execSQL(HeightRepository.UPDATE_TABLE_ADD_TEAM_ID_COL);
+            db.execSQL(HeightRepository.UPDATE_TABLE_ADD_CHILD_LOCATION_ID_COL);
+        } catch (Exception e) {
+            Log.e(TAG, "upgradeToVersion4 " + Log.getStackTraceString(e));
+        }
     }
 
 

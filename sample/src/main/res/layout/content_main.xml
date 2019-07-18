@@ -1,118 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingStart="@dimen/activity_horizontal_margin"
-    android:paddingEnd="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="org.smartregister.growthmonitoring.sample.MainActivity"
-    tools:showIn="@layout/activity_main">
+    android:layout_height="match_parent">
 
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:clickable="false"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:minHeight="135dp"
-        app:cardCornerRadius="@dimen/card_view_corner_radius"
-        app:cardElevation="@dimen/card_elevation">
+        android:orientation="vertical"
+        android:layout_marginTop="35dp"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="org.smartregister.growthmonitoring.sample.MainActivity"
+        tools:showIn="@layout/activity_main">
 
-        <LinearLayout
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingTop="10dp">
-
-            <org.smartregister.view.customcontrols.CustomFontTextView
-                style="@style/CustomFontTextViewStyle.ClientList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="WEIGHT-FOR-AGE"
-                android:textColor="@color/text_black"
-                android:textSize="@dimen/activity_sub_title_size" />
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:clickable="false"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:minHeight="135dp"
+            app:cardCornerRadius="@dimen/card_view_corner_radius"
+            app:cardElevation="@dimen/card_elevation">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="10dp">
+
+                <org.smartregister.view.customcontrols.CustomFontTextView
+                    style="@style/CustomFontTextViewStyle.ClientList"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WEIGHT-FOR-AGE"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/activity_sub_title_size" />
 
                 <LinearLayout
-                    android:id="@+id/record_weight"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.5"
-                    android:background="@drawable/record_weight_bg"
-                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="16dp"
-                    android:paddingTop="16dp">
+                    android:weightSum="2">
 
-                    <TextView
-                        android:id="@+id/record_weight_text"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/record_weight"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:background="@drawable/record_growth_bg"
                         android:gravity="center"
-                        android:text="@string/record_weight"
-                        android:textAllCaps="false"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/text_black"
-                        android:textSize="19sp" />
+                        android:orientation="horizontal"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp">
+
+                        <TextView
+                            android:id="@+id/record_weight_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/record_growth"
+                            android:textAllCaps="false"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textColor="@color/text_black"
+                            android:textSize="19sp" />
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/growth_chart_button"
+                        android:layout_width="0dp"
+                        android:layout_height="70dp"
+                        android:layout_marginStart="@dimen/card_category_horizontal_margin"
+                        android:layout_weight="0.5"
+                        android:background="@null"
+                        android:src="@drawable/ic_icon_growth_chart" />
                 </LinearLayout>
-
-                <ImageButton
-                    android:id="@+id/growth_chart_button"
-                    android:layout_width="0dp"
-                    android:layout_height="70dp"
-                    android:layout_marginStart="@dimen/card_category_horizontal_margin"
-                    android:layout_weight="0.5"
-                    android:background="@null"
-                    android:src="@drawable/ic_icon_growth_chart" />
             </LinearLayout>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+        </android.support.v7.widget.CardView>
 
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/weight_widget"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/card_view"
-        android:layout_marginTop="20dp"
-        android:background="@color/white"
-        android:clickable="false"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:minHeight="135dp"
-        app:cardCornerRadius="@dimen/card_view_corner_radius"
-        app:cardElevation="@dimen/card_elevation">
-
-        <LinearLayout
+        <android.support.v7.widget.CardView
+            android:id="@+id/weight_widget"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingTop="10dp">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/card_view"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:clickable="false"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:minHeight="135dp"
+            app:cardCornerRadius="@dimen/card_view_corner_radius"
+            app:cardElevation="@dimen/card_elevation">
 
-            <include
-                layout="@layout/weightwidget"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/card_view" />
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="10dp">
 
-</RelativeLayout>
+                <include
+                    android:id="@+id/weight_widget_layout"
+                    layout="@layout/weightwidget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/height_widget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/card_view"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:clickable="false"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:minHeight="135dp"
+            app:cardCornerRadius="@dimen/card_view_corner_radius"
+            app:cardElevation="@dimen/card_elevation">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="10dp">
+
+                <include
+                    android:id="@+id/height_widget_layout"
+                    layout="@layout/heightwidget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/weight_widget_layout" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+</ScrollView>
