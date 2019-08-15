@@ -37,8 +37,7 @@ public class WeightZScore extends ZScore {
         try {
             if (dateOfBirth != null && gender != null && weighingDate != null) {
                 int ageInMonths = (int) Math.round(getAgeInMonths(dateOfBirth, weighingDate));
-                List<WeightZScore> weightZScores =
-                        GrowthMonitoringLibrary.getInstance().weightZScoreRepository().findByGender(gender);
+                List<WeightZScore> weightZScores = GrowthMonitoringLibrary.getInstance().weightZScoreRepository().findByGender(gender);
 
                 WeightZScore weightZScoreToUse = null;
                 for (WeightZScore curWeightZScore : weightZScores) {

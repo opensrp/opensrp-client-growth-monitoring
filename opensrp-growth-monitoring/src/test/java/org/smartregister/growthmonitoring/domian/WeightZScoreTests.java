@@ -1,5 +1,6 @@
 package org.smartregister.growthmonitoring.domian;
 
+import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -53,7 +54,11 @@ public class WeightZScoreTests extends BaseUnitTest {
         PowerMockito.when(growthMonitoringLibrary.weightZScoreRepository()).thenReturn(weightZScoreRepository);
         PowerMockito.when(weightZScoreRepository.findByGender(gender)).thenReturn(weightZScores);
 
-        Double calculation = WeightZScore.calculate(gender, new Date(1550707200000L), new Date(), weight);
+        LocalDate baseLocalDate = new LocalDate("2019-02-20");
+        Date birthDate = baseLocalDate.toDate();
+        Date weightRecordDate = baseLocalDate.plusMonths(5).toDate();
+
+        Double calculation = WeightZScore.calculate(gender, birthDate, weightRecordDate, weight);
         Assert.assertNotNull(calculation);
         Assert.assertEquals("9.471972731395528", calculation.toString());
     }
@@ -77,7 +82,7 @@ public class WeightZScoreTests extends BaseUnitTest {
     }
 
     private List<WeightZScore> createWeightZScore(Gender gender) {
-        List<WeightZScore> heightZScoreList = new ArrayList<>();
+        List<WeightZScore> weightZScoreList = new ArrayList<>();
         WeightZScore weightZScore10 = new WeightZScore();
         weightZScore10.setGender(gender);
         weightZScore10.setMonth(10);
@@ -94,7 +99,7 @@ public class WeightZScoreTests extends BaseUnitTest {
         weightZScore10.setSd1(10.2);
         weightZScore10.setSd2(11.4);
         weightZScore10.setSd3(12.7);
-        heightZScoreList.add(weightZScore10);
+        weightZScoreList.add(weightZScore10);
 
         WeightZScore weightZScore5 = new WeightZScore();
         weightZScore5.setGender(gender);
@@ -109,9 +114,9 @@ public class WeightZScoreTests extends BaseUnitTest {
         weightZScore5.setSd1(8.4);
         weightZScore5.setSd2(9.3);
         weightZScore5.setSd3(10.4);
-        heightZScoreList.add(weightZScore5);
+        weightZScoreList.add(weightZScore5);
 
-        return heightZScoreList;
+        return weightZScoreList;
     }
 }
 
