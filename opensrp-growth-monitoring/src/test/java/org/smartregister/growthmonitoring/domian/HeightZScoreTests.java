@@ -1,5 +1,6 @@
 package org.smartregister.growthmonitoring.domian;
 
+import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -45,7 +46,7 @@ public class HeightZScoreTests extends BaseUnitTest {
     @PrepareForTest(GrowthMonitoringLibrary.class)
     public void calculateTest() {
         Gender gender = Gender.MALE;
-        double weight = 20.0;
+        double height = 20.0;
 
         heightZScores = createHeightZScore(gender);
         PowerMockito.mockStatic(GrowthMonitoringLibrary.class);
@@ -53,7 +54,12 @@ public class HeightZScoreTests extends BaseUnitTest {
         PowerMockito.when(growthMonitoringLibrary.heightZScoreRepository()).thenReturn(heightZScoreRepository);
         PowerMockito.when(heightZScoreRepository.findByGender(gender)).thenReturn(heightZScores);
 
-        Double calculation = HeightZScore.calculate(gender, new Date(1550707200000L), new Date(), weight);
+
+        LocalDate baseLocalDate = new LocalDate("2019-02-20");
+        Date birthDate = baseLocalDate.toDate();
+        Date heightRecordDate = baseLocalDate.plusMonths(5).toDate();
+
+        Double calculation = HeightZScore.calculate(gender, birthDate, heightRecordDate, height);
         Assert.assertNotNull(calculation);
         Assert.assertEquals("-21.73913348224829", calculation.toString());
     }
