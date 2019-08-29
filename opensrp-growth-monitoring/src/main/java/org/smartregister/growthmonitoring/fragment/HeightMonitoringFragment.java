@@ -66,6 +66,8 @@ public class HeightMonitoringFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final ViewGroup heightTabView = (ViewGroup) inflater.inflate(R.layout.growth_monitoring_fragment, container, false);
         final ImageButton scrollButton = heightTabView.findViewById(R.id.scroll_button);
+        CustomFontTextView txt_metric_label = heightTabView.findViewById(R.id.metric_label);
+        txt_metric_label.setText(getString(R.string.height));
 
         Date dob = getDate();
         scrollButtonClickAction(heightTabView, scrollButton);
