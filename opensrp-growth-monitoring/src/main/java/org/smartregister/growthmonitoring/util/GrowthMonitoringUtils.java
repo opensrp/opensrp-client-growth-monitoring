@@ -27,6 +27,9 @@ public class GrowthMonitoringUtils {
             minGraphTime = Calendar.getInstance();
             maxGraphTime = Calendar.getInstance();
 
+            minGraphTime.add(Calendar.DAY_OF_MONTH, 1);
+            maxGraphTime.add(Calendar.DAY_OF_MONTH, 1);
+
             if (WeightZScore.getAgeInMonths(dob, maxGraphTime.getTime()) > WeightZScore.MAX_REPRESENTED_AGE) {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(dob);
