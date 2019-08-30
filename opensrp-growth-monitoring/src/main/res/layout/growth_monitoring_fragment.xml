@@ -129,6 +129,7 @@
                             android:text="@string/weight"
                             android:textColor="@color/client_list_grey"
                             android:textSize="@dimen/record_weight_tv_text_size"
+                            android:id="@+id/metric_label"
                             android:textStyle="bold" />
 
                         <org.smartregister.view.customcontrols.CustomFontTextView

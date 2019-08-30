@@ -62,7 +62,8 @@ public class WeightMonitoringFragment extends Fragment {
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View weightTabView = inflater.inflate(R.layout.growth_monitoring_fragment, container, false);
         final ImageButton scrollButton = weightTabView.findViewById(R.id.scroll_button);
-
+        CustomFontTextView txt_metric_label = weightTabView.findViewById(R.id.metric_label);
+        txt_metric_label.setText(getString(R.string.weight));
         Date dob = getDate();
         scrollButtonClickAction(weightTabView, scrollButton);
         try {
