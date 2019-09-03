@@ -188,8 +188,9 @@ public class EditGrowthDialogFragment extends DialogFragment {
 
         DatePickerUtils.themeDatePicker(earlierDatePicker, new char[]{'d', 'm', 'y'});
 
-        earlierDatePicker.updateDate(currentGrowthDate.year().get(), currentGrowthDate.monthOfYear().get() - 1,
-                currentGrowthDate.dayOfMonth().get());
+        if (currentGrowthDate != null) {
+            earlierDatePicker.updateDate(currentGrowthDate.year().get(), currentGrowthDate.monthOfYear().get() - 1, currentGrowthDate.dayOfMonth().get());
+        }
 
         setClientImage();
         setButtonAction();
