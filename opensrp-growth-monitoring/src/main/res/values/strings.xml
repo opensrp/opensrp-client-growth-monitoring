@@ -34,7 +34,7 @@
     <string name="done">Complete</string>
     <string name="z_score"> Z-score</string>
 
-    <string name="date_recorded">Date recorded</string>
+    <string name="date_recorded">Date recorded %1$s</string>
     <string name="change_date_recorded">Change date recorded</string>
     <string name="cancel">Cancel</string>
     <string name="save_changes">Save Changes</string>

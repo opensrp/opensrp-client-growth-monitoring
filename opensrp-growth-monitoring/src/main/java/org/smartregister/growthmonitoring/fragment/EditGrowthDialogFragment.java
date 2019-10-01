@@ -161,6 +161,11 @@ public class EditGrowthDialogFragment extends DialogFragment {
             currentGrowthDate = weightWrapper.getUpdatedWeightDate();
         }
 
+        //Will be removed once height and weight features are decoupled
+        if (this.heightWrapper != null && heightWrapper.getUpdatedHeightDate() != null) {
+            currentGrowthDate = heightWrapper.getUpdatedHeightDate();
+        }
+
         earlierDatePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
         if (dateOfBirth != null) {
             earlierDatePicker.setMinDate(dateOfBirth.getTime());
@@ -352,11 +357,12 @@ public class EditGrowthDialogFragment extends DialogFragment {
     }
 
     private void setDateRecorded(ViewGroup dialogView) {
-        if (weightWrapper.getUpdatedWeightDate() != null || heightWrapper.getUpdatedHeightDate() != null) {
+        if (weightWrapper.getUpdatedWeightDate() != null) {
             ((TextView) dialogView.findViewById(R.id.service_date)).setText(
-                    getString(R.string.date_recorded) + " " + weightWrapper.getUpdatedWeightDate().dayOfMonth().get() + "-" +
-                            weightWrapper.getUpdatedWeightDate().monthOfYear().get() + "-" +
-                            weightWrapper.getUpdatedWeightDate().year().get() + "");
+                    getString(R.string.date_recorded, weightWrapper.getUpdatedWeightDate().dayOfMonth().get() + "-" + weightWrapper.getUpdatedWeightDate().monthOfYear().get() + "-" + weightWrapper.getUpdatedWeightDate().year().get() + ""));
+        } else if (heightWrapper.getUpdatedHeightDate() != null) {
+            ((TextView) dialogView.findViewById(R.id.service_date)).setText(
+                    getString(R.string.date_recorded, heightWrapper.getUpdatedHeightDate().dayOfMonth().get() + "-" + heightWrapper.getUpdatedHeightDate().monthOfYear().get() + "-" + heightWrapper.getUpdatedHeightDate().year().get() + ""));
         } else {
             dialogView.findViewById(R.id.service_date).setVisibility(View.GONE);
             growthRecordDelete.setVisibility(View.GONE);
