@@ -83,7 +83,7 @@ public class GrowthDialogFragment extends DialogFragment {
         this.personDetails = personDetails;
     }
 
-    private void sortWeights() {
+    protected void sortWeights() {
         HashMap<Long, Weight> weightHashMap = new HashMap<>();
         for (Weight curWeight : getWeights()) {
             if (curWeight.getDate() != null && curWeight.getBaseEntityId() != null) {
@@ -110,7 +110,7 @@ public class GrowthDialogFragment extends DialogFragment {
         setWeights(weightList);
     }
 
-    private void sortHeights() {
+    protected void sortHeights() {
         HashMap<Long, Height> heightHashMap = new HashMap<>();
         for (Height curHeight : getHeights()) {
             if (curHeight.getDate() != null && curHeight.getBaseEntityId() != null) {

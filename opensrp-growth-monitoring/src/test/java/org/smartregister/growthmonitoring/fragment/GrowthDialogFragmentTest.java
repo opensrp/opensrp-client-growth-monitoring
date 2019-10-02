@@ -18,6 +18,7 @@ import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.util.AppProperties;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,8 +31,10 @@ public class GrowthDialogFragmentTest {
     protected static final String TEST_STRING = "teststring";
     @Rule
     public PowerMockRule rule = new PowerMockRule();
+
     @Mock
     private GrowthMonitoringLibrary growthMonitoringLibrary;
+
     @Mock
     private AppProperties appProperties;
 
@@ -76,14 +79,52 @@ public class GrowthDialogFragmentTest {
     private List<Height> getHeights() {
         List<Height> heightArrayList = new ArrayList<>();
 
-        Height height = new Height();
-        height.setDate(new Date());
+        Height height;
+//recorded April
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.MONTH, 3);
+        height = new Height();
+        height.setDate(cal.getTime());
         height.setAnmId("demo");
         height.setBaseEntityId(DUMMY_BASE_ENTITY_ID);
         height.setChildLocationId(TEST_STRING);
-        height.setCm(50.4f);
-
+        height.setCm(30.4f);
         heightArrayList.add(height);
+
+//recorded March
+        height = new Height();
+        cal = Calendar.getInstance();
+        cal.set(Calendar.MONTH, 2);
+        height.setDate(cal.getTime());
+        height.setAnmId("demo");
+        height.setBaseEntityId(DUMMY_BASE_ENTITY_ID);
+        height.setChildLocationId(TEST_STRING);
+        height.setCm(10.0f);
+        heightArrayList.add(height);
+
+//recorded August
+        height = new Height();
+        cal = Calendar.getInstance();
+        cal.set(Calendar.MONTH, 9);
+        height.setDate(cal.getTime());
+        height.setAnmId("demo");
+        height.setBaseEntityId(DUMMY_BASE_ENTITY_ID);
+        height.setChildLocationId(TEST_STRING);
+        height.setCm(50.2f);
+        heightArrayList.add(height);
+
+//recorded May
+        height = new Height();
+        cal = Calendar.getInstance();
+        cal.set(Calendar.MONTH, 6);
+        height.setDate(cal.getTime());
+        height.setAnmId("demo");
+        height.setBaseEntityId(DUMMY_BASE_ENTITY_ID);
+        height.setChildLocationId(TEST_STRING);
+        height.setCm(40.3f);
+        heightArrayList.add(height);
+
+
         return heightArrayList;
     }
 
@@ -100,5 +141,38 @@ public class GrowthDialogFragmentTest {
 
         weightArrayList.add(weight);
         return weightArrayList;
+    }
+
+    @PrepareForTest({GrowthMonitoringLibrary.class})
+    @Test
+    public void testSortHeightsOrdersItemsCorrectly() {
+
+        PowerMockito.mockStatic(GrowthMonitoringLibrary.class);
+        PowerMockito.when(GrowthMonitoringLibrary.getInstance()).thenReturn(growthMonitoringLibrary);
+        PowerMockito.when(growthMonitoringLibrary.getAppProperties()).thenReturn(appProperties);
+        PowerMockito.when(appProperties.hasProperty(AppProperties.KEY.MONITOR_GROWTH)).thenReturn(true);
+        PowerMockito.when(appProperties.getPropertyBoolean(AppProperties.KEY.MONITOR_GROWTH)).thenReturn(true);
+
+        GrowthDialogFragment growthDialogFragment = GrowthDialogFragment.newInstance(dummydetails(), getWeights(), getHeights());
+        List<Height> unsortedHeights = growthDialogFragment.getHeights();
+
+        Assert.assertNotNull(unsortedHeights);
+
+        //Verify prior order
+        Assert.assertEquals(Float.valueOf("30.4"), unsortedHeights.get(0).getCm());
+        Assert.assertEquals(Float.valueOf("10.0"), unsortedHeights.get(1).getCm());
+        Assert.assertEquals(Float.valueOf("50.2"), unsortedHeights.get(2).getCm());
+        Assert.assertEquals(Float.valueOf("40.3"), unsortedHeights.get(3).getCm());
+
+        growthDialogFragment.sortHeights();
+
+        List<Height> sortedHeights = growthDialogFragment.getHeights();
+        Assert.assertNotNull(unsortedHeights);
+
+        //Verify sorted order
+        Assert.assertEquals(Float.valueOf("50.2"), sortedHeights.get(0).getCm());
+        Assert.assertEquals(Float.valueOf("40.3"), sortedHeights.get(1).getCm());
+        Assert.assertEquals(Float.valueOf("30.4"), sortedHeights.get(2).getCm());
+        Assert.assertEquals(Float.valueOf("10.0"), sortedHeights.get(3).getCm());
     }
 }

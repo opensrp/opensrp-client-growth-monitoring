@@ -25,10 +25,17 @@
     <string name="cancel">إلغاء</string>
     <string name="save_changes">مجموعة</string>
     <string name="service_date">تاريخ الخدمة</string>
-    <string name="edit_weight">تحرير الوزن</string>
+    <string name="edit_weight">تعديل الوزن</string>
     <string name="growth_taken_today">الوزن مأخوذ اليوم</string>
     <string name="growth_taken_earlier">الوزن ماخوذ سابقا</string>
     <string name="catchment_area">منطقة التغطية</string>
+    `<string name="record_weight">تسجيل الوزن</string>
+    <string name="kg">كلغ</string>
+    <string name="weight">وزن</string>
+    <string name="date_recorded">التاريخ المسجل</string>
+    <string name="change_date_recorded">تغيير التاريخ المسجل</string>
+    <string name="edit_date">تعديل التاريخ</string>
+    <string name="delete_record">حذف السجل</string>`
 
 
 </resources>
