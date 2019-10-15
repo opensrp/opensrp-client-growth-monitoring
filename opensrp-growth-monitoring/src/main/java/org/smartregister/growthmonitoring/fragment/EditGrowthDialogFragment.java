@@ -266,7 +266,7 @@ public class EditGrowthDialogFragment extends DialogFragment {
                     calendar.set(year, month, day);
 
                     DateTime updateTime = new DateTime(calendar.getTime());
-                    if (!org.apache.commons.lang3.time.DateUtils.isSameDay(calendar.getTime(), currentGrowthDate.toDate())) {
+                    if (currentGrowthDate != null && !org.apache.commons.lang3.time.DateUtils.isSameDay(calendar.getTime(), currentGrowthDate.toDate())) {
                         weightWrapper.setUpdatedWeightDate(updateTime, false);
                         if (hasProperty && monitorGrowth) {
                             heightWrapper.setUpdatedHeightDate(updateTime, false);
@@ -360,7 +360,7 @@ public class EditGrowthDialogFragment extends DialogFragment {
         if (weightWrapper.getUpdatedWeightDate() != null) {
             ((TextView) dialogView.findViewById(R.id.service_date)).setText(
                     getString(R.string.date_recorded, weightWrapper.getUpdatedWeightDate().dayOfMonth().get() + "-" + weightWrapper.getUpdatedWeightDate().monthOfYear().get() + "-" + weightWrapper.getUpdatedWeightDate().year().get() + ""));
-        } else if (heightWrapper.getUpdatedHeightDate() != null) {
+        } else if (heightWrapper != null && heightWrapper.getUpdatedHeightDate() != null) {
             ((TextView) dialogView.findViewById(R.id.service_date)).setText(
                     getString(R.string.date_recorded, heightWrapper.getUpdatedHeightDate().dayOfMonth().get() + "-" + heightWrapper.getUpdatedHeightDate().monthOfYear().get() + "-" + heightWrapper.getUpdatedHeightDate().year().get() + ""));
         } else {
