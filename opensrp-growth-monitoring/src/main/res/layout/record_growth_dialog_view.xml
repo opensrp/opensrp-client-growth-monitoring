@@ -130,7 +130,7 @@
                     android:id="@+id/value_unit_symbol"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="kg"
+                    android:text="@string/kg"
                     android:textColor="@color/light_grey"
                     android:textSize="@dimen/record_weight_tv_text_size" />
             </LinearLayout>
