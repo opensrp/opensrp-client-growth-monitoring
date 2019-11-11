@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -217,7 +218,9 @@ public class RecordGrowthDialogFragment extends DialogFragment {
 
     @NotNull
     private ViewGroup setUpViews(LayoutInflater inflater, ViewGroup container) {
+
         ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.record_growth_dialog_view, container, false);
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         editWeight = dialogView.findViewById(R.id.edit_weight);
         earlierDatePicker = dialogView.findViewById(R.id.earlier_date_picker);
