@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -247,6 +248,8 @@ public class GrowthDialogFragment extends DialogFragment {
     @NotNull
     private ViewGroup setUpViews(LayoutInflater inflater, ViewGroup container) {
         final ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.growth_dialog_view, container, false);
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
         tabLayout = dialogView.findViewById(R.id.growth_tab_layout);
         viewPager = dialogView.findViewById(R.id.growth_view_pager);
         nameView = dialogView.findViewById(R.id.child_name);

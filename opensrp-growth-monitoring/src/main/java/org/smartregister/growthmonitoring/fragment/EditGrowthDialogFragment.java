@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -140,6 +141,7 @@ public class EditGrowthDialogFragment extends DialogFragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         ViewGroup dialogView = setUpViews(inflater, container);
+
         if (hasProperty && monitorGrowth) {
             recordHeight.setVisibility(View.VISIBLE);
             heightEntryLayout.setVisibility(View.VISIBLE);
@@ -209,6 +211,7 @@ public class EditGrowthDialogFragment extends DialogFragment {
     @NotNull
     private ViewGroup setUpViews(LayoutInflater inflater, ViewGroup container) {
         ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.edit_growth_dialog_view, container, false);
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         editWeight = dialogView.findViewById(R.id.edit_weight);
         editHeight = dialogView.findViewById(R.id.edit_height);
