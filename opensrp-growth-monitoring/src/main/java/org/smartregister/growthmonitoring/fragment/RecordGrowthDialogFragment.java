@@ -38,6 +38,7 @@ import org.smartregister.view.customcontrols.CustomFontTextView;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 @SuppressLint("ValidFragment")
 public class RecordGrowthDialogFragment extends DialogFragment {
@@ -89,6 +90,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
             }
         }
 
+        Locale.setDefault(Locale.ENGLISH);
         RecordGrowthDialogFragment recordGrowthDialogFragment = new RecordGrowthDialogFragment();
 
         Bundle args = new Bundle();
