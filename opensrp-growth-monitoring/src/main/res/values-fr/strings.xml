@@ -47,6 +47,6 @@
     <string name="growth_taken_earlier">Croissance enregistrée plus tôt</string>
     <string name="catchment_area">Zone de captage</string>
     <string name="user_image">Image utilisateur</string>
-    <string name="weight_is_required">Le poids du patient ne peut pas être vide</string>
+    <string name="weight_is_required">Le poids du patient ne peut pas être vide.</string>
 
 </resources>
