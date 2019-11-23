@@ -2,18 +2,19 @@ package org.smartregister.growthmonitoring.repository;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.domain.WeightZScore;
 import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.AllSharedPreferences;
-import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Repository;
 
@@ -25,7 +26,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public class WeightRepository extends BaseRepository {
+public class WeightRepository extends GrowthRepository {
     public static final String WEIGHT_TABLE_NAME = "weights";
     public static final String ID_COLUMN = "_id";
     public static final String BASE_ENTITY_ID = "base_entity_id";
@@ -125,20 +126,37 @@ public class WeightRepository extends BaseRepository {
         add(weight);
     }
 
+    @Nullable
+    public static String getChildLocationId(@NonNull String defaultLocationId, @NonNull AllSharedPreferences allSharedPreferences) {
+        try {
+            String currentLocality = allSharedPreferences.fetchCurrentLocality();
+
+            if (currentLocality != null) {
+                String currentLocalityId = LocationHelper.getInstance().getOpenMrsLocationId(currentLocality);
+                if (currentLocalityId != null && !defaultLocationId.equals(currentLocalityId)) {
+                    return currentLocalityId;
+                }
+            }
+
+            return null;
+        } catch (Exception e) {
+            Timber.e(Log.getStackTraceString(e));
+            return null;
+        }
+    }
+
     public void add(Weight weight) {
         try {
             if (weight == null) {
                 return;
             }
 
-            AllSharedPreferences allSharedPreferences =
-                    GrowthMonitoringLibrary.getInstance().context().allSharedPreferences();
+            AllSharedPreferences allSharedPreferences = GrowthMonitoringLibrary.getInstance().context().allSharedPreferences();
             String providerId = allSharedPreferences.fetchRegisteredANM();
             weight.setTeam(allSharedPreferences.fetchDefaultTeam(providerId));
             weight.setTeamId(allSharedPreferences.fetchDefaultTeamId(providerId));
             weight.setLocationId(allSharedPreferences.fetchDefaultLocalityId(providerId));
-            weight.setChildLocationId(LocationHelper.getInstance().getChildLocationId());
-
+            weight.setChildLocationId(getChildLocationId(weight.getLocationId(), allSharedPreferences));
 
             if (StringUtils.isBlank(weight.getSyncStatus())) {
                 weight.setSyncStatus(TYPE_Unsynced);
@@ -191,13 +209,42 @@ public class WeightRepository extends BaseRepository {
             String[] selectionArgs = null;
             if (StringUtils.isNotBlank(weight.getFormSubmissionId()) && StringUtils.isNotBlank(weight.getEventId())) {
                 selection = FORMSUBMISSION_ID + " = ? " + COLLATE_NOCASE + " OR " + EVENT_ID + " = ? " + COLLATE_NOCASE;
-                selectionArgs = new String[] {weight.getFormSubmissionId(), weight.getEventId()};
+                selectionArgs = new String[]{weight.getFormSubmissionId(), weight.getEventId()};
             } else if (StringUtils.isNotBlank(weight.getEventId())) {
                 selection = EVENT_ID + " = ? " + COLLATE_NOCASE;
-                selectionArgs = new String[] {weight.getEventId()};
+                selectionArgs = new String[]{weight.getEventId()};
             } else if (StringUtils.isNotBlank(weight.getFormSubmissionId())) {
                 selection = FORMSUBMISSION_ID + " = ? " + COLLATE_NOCASE;
-                selectionArgs = new String[] {weight.getFormSubmissionId()};
+                selectionArgs = new String[]{weight.getFormSubmissionId()};
+            }
+            Cursor cursor = database.query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, selection, selectionArgs, null, null,
+                    ID_COLUMN + " DESC ", null);
+            List<Weight> weightList = readAllWeights(cursor);
+            if (!weightList.isEmpty()) {
+                return weightList.get(0);
+            }
+        } catch (Exception e) {
+            Timber.e(Log.getStackTraceString(e));
+        }
+
+        return null;
+    }
+
+    public Weight findUniqueByDate(SQLiteDatabase db, String baseEntityId, Date encounterDate) {
+
+        try {
+
+            SQLiteDatabase database = db;
+            if (database == null) {
+                database = getRepository().getReadableDatabase();
+            }
+
+            String selection = null;
+            String[] selectionArgs = null;
+
+            if (StringUtils.isNotBlank(baseEntityId) && encounterDate != null) {
+                selection = BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE + " AND strftime('%d-%m-%Y', datetime(" + DATE + "/1000, 'unixepoch')) = strftime('%d-%m-%Y', datetime(?/1000, 'unixepoch')) " + COLLATE_NOCASE;
+                selectionArgs = new String[]{baseEntityId, String.valueOf(encounterDate.getTime())};
             }
 
             Cursor cursor = database.query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, selection, selectionArgs, null, null,
@@ -206,6 +253,7 @@ public class WeightRepository extends BaseRepository {
             if (!weightList.isEmpty()) {
                 return weightList.get(0);
             }
+
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
         }
@@ -227,7 +275,7 @@ public class WeightRepository extends BaseRepository {
             }
 
             String idSelection = ID_COLUMN + " = ?";
-            db.update(WEIGHT_TABLE_NAME, createValuesFor(weight), idSelection, new String[] {weight.getId().toString()});
+            db.update(WEIGHT_TABLE_NAME, createValuesFor(weight), idSelection, new String[]{weight.getId().toString()});
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
         }
@@ -325,7 +373,7 @@ public class WeightRepository extends BaseRepository {
 
             cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS,
                     UPDATED_AT_COLUMN + " < ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? " + COLLATE_NOCASE,
-                    new String[] {Long.toString(time), TYPE_Unsynced}, null, null, null, null);
+                    new String[]{Long.toString(time), TYPE_Unsynced}, null, null, null, null);
             weights = readAllWeights(cursor);
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
@@ -344,7 +392,7 @@ public class WeightRepository extends BaseRepository {
 
             cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS,
                     BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? ",
-                    new String[] {entityId, TYPE_Unsynced}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
+                    new String[]{entityId, TYPE_Unsynced}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
             List<Weight> weights = readAllWeights(cursor);
             if (!weights.isEmpty()) {
                 weight = weights.get(0);
@@ -365,7 +413,7 @@ public class WeightRepository extends BaseRepository {
         try {
             cursor = getRepository().getReadableDatabase()
                     .query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE,
-                            new String[] {entityId}, null, null, null, null);
+                            new String[]{entityId}, null, null, null, null);
             weights = readAllWeights(cursor);
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
@@ -402,7 +450,7 @@ public class WeightRepository extends BaseRepository {
         Cursor cursor = null;
         try {
             cursor = getRepository().getReadableDatabase()
-                    .query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, ID_COLUMN + " = ?", new String[] {caseId.toString()},
+                    .query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, ID_COLUMN + " = ?", new String[]{caseId.toString()},
                             null, null, null, null);
             List<Weight> weights = readAllWeights(cursor);
             if (!weights.isEmpty()) {
@@ -424,7 +472,7 @@ public class WeightRepository extends BaseRepository {
         try {
             cursor = getRepository().getReadableDatabase()
                     .query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE,
-                            new String[] {entityid}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
+                            new String[]{entityid}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
             weightList = readAllWeights(cursor);
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
@@ -440,7 +488,7 @@ public class WeightRepository extends BaseRepository {
         try {
             getRepository().getWritableDatabase()
                     .delete(WEIGHT_TABLE_NAME, ID_COLUMN + " = ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? ",
-                            new String[] {id, TYPE_Unsynced});
+                            new String[]{id, TYPE_Unsynced});
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
         }
@@ -451,7 +499,7 @@ public class WeightRepository extends BaseRepository {
             ContentValues values = new ContentValues();
             values.put(SYNC_STATUS, TYPE_Synced);
             getRepository().getWritableDatabase()
-                    .update(WEIGHT_TABLE_NAME, values, ID_COLUMN + " = ?", new String[] {caseId.toString()});
+                    .update(WEIGHT_TABLE_NAME, values, ID_COLUMN + " = ?", new String[]{caseId.toString()});
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));
         }
