@@ -14,7 +14,7 @@
     <string name="edit_growth_data">Edit Growth Data</string>
     <string name="record_growth_with_nl">Record\nGrowth</string>
     <string name="record_growth">Record Growth</string>
-    <string name="record_growth_notification">"Don't forget to record child's growth."</string>
+    <string name="record_growth_notification">"Don\'t forget to record child\'s growth."</string>
     <string name="record_weight">Record Weight</string>
     <string name="record_height">Record Height</string>
     <string name="weight_for_age">Weight-for-Age %1$s</string>
