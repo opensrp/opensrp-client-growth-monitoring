@@ -2,18 +2,15 @@ package org.smartregister.growthmonitoring.repository;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.Nullable;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.domain.WeightZScore;
-import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Repository;
@@ -124,25 +121,6 @@ public class WeightRepository extends GrowthRepository {
     public void add(Date dateOfBirth, Gender gender, Weight weight) {
         weight.setZScore(WeightZScore.calculate(gender, dateOfBirth, weight.getDate(), weight.getKg()));
         add(weight);
-    }
-
-    @Nullable
-    public static String getChildLocationId(@NonNull String defaultLocationId, @NonNull AllSharedPreferences allSharedPreferences) {
-        try {
-            String currentLocality = allSharedPreferences.fetchCurrentLocality();
-
-            if (currentLocality != null) {
-                String currentLocalityId = LocationHelper.getInstance().getOpenMrsLocationId(currentLocality);
-                if (currentLocalityId != null && !defaultLocationId.equals(currentLocalityId)) {
-                    return currentLocalityId;
-                }
-            }
-
-            return null;
-        } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
-            return null;
-        }
     }
 
     public void add(Weight weight) {
