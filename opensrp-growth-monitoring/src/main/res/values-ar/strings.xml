@@ -29,7 +29,7 @@
     <string name="growth_taken_today">الوزن مأخوذ اليوم</string>
     <string name="growth_taken_earlier">الوزن ماخوذ سابقا</string>
     <string name="catchment_area">منطقة التغطية</string>
-    `<string name="record_weight">تسجيل الوزن</string>
+    <string name="record_weight">تسجيل الوزن</string>
     <string name="kg">كلغ</string>
     <string name="weight">وزن</string>
     <string name="date_recorded">التاريخ المسجل</string>

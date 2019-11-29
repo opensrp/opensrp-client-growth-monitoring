@@ -14,4 +14,5 @@ import org.robolectric.annotation.Config;
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.O_MR1)
 @PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*"})
 public abstract class BaseUnitTest {
+    protected static final String TEST_BASE_ENTITY_ID = "test-base-entity-id";
 }

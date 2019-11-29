@@ -319,7 +319,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
 
                 earlierDatePicker.setVisibility(View.VISIBLE);
                 earlierDatePicker.requestFocus();
-                growthTakenToday.setVisibility(View.VISIBLE);
+                growthTakenToday.setVisibility(View.GONE);
                 set.setVisibility(View.VISIBLE);
 
                 DatePickerUtils.themeDatePicker(earlierDatePicker, new char[]{'d', 'm', 'y'});
