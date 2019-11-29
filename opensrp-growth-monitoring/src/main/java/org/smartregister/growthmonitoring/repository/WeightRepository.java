@@ -103,10 +103,10 @@ public class WeightRepository extends GrowthRepository {
     public static void migrateCreatedAt(SQLiteDatabase database) {
         try {
             String sql = "UPDATE " + WEIGHT_TABLE_NAME + " SET " + CREATED_AT + " = " + " ( SELECT " +
-                    EventClientRepository.event_column.dateCreated.name() + "   FROM " +
-                    EventClientRepository.Table.event.name() + "   WHERE " +
+                    EventClientRepository.event_column.dateCreated.name() + " FROM " +
+                    EventClientRepository.Table.event.name() + " WHERE " +
                     EventClientRepository.event_column.eventId.name() + " = " + WEIGHT_TABLE_NAME + "." + EVENT_ID +
-                    "   OR " + EventClientRepository.event_column.formSubmissionId.name() + " = " + WEIGHT_TABLE_NAME + "." +
+                    " OR " + EventClientRepository.event_column.formSubmissionId.name() + " = " + WEIGHT_TABLE_NAME + "." +
                     FORMSUBMISSION_ID + " ) " + " WHERE " + CREATED_AT + " is null ";
             database.execSQL(sql);
         } catch (Exception e) {
@@ -232,6 +232,10 @@ public class WeightRepository extends GrowthRepository {
 
     public Weight findUniqueByDate(SQLiteDatabase db, String baseEntityId, Date encounterDate) {
 
+        if (StringUtils.isBlank(baseEntityId) || encounterDate == null) {
+            return null;
+        }
+
         try {
 
             SQLiteDatabase database = db;
@@ -239,16 +243,10 @@ public class WeightRepository extends GrowthRepository {
                 database = getRepository().getReadableDatabase();
             }
 
-            String selection = null;
-            String[] selectionArgs = null;
+            String selection = BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE + " AND strftime('%d-%m-%Y', datetime(" + DATE + "/1000, 'unixepoch')) = strftime('%d-%m-%Y', datetime(?/1000, 'unixepoch')) " + COLLATE_NOCASE;
+            String[] selectionArgs = new String[]{baseEntityId, String.valueOf(encounterDate.getTime())};
 
-            if (StringUtils.isNotBlank(baseEntityId) && encounterDate != null) {
-                selection = BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE + " AND strftime('%d-%m-%Y', datetime(" + DATE + "/1000, 'unixepoch')) = strftime('%d-%m-%Y', datetime(?/1000, 'unixepoch')) " + COLLATE_NOCASE;
-                selectionArgs = new String[]{baseEntityId, String.valueOf(encounterDate.getTime())};
-            }
-
-            Cursor cursor = database.query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, selection, selectionArgs, null, null,
-                    ID_COLUMN + " DESC ", null);
+            Cursor cursor = database.query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, selection, selectionArgs, null, null, ID_COLUMN + " DESC ", null);
             List<Weight> weightList = readAllWeights(cursor);
             if (!weightList.isEmpty()) {
                 return weightList.get(0);
