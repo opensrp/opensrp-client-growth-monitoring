@@ -9,7 +9,6 @@ import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.domain.WeightZScore;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
 import org.smartregister.repository.BaseRepository;
-import org.smartregister.repository.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,10 +47,6 @@ public class WeightZScoreRepository extends BaseRepository {
             "CREATE INDEX " + TABLE_NAME + "_" + GrowthMonitoringConstants.ColumnHeaders.COLUMN_MONTH + "_index ON " +
                     TABLE_NAME + "(" + GrowthMonitoringConstants.ColumnHeaders.COLUMN_MONTH + " COLLATE NOCASE);";
 
-    public WeightZScoreRepository(Repository repository) {
-        super(repository);
-    }
-
     public static void createTable(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE_QUERY);
         database.execSQL(CREATE_INDEX_SEX_QUERY);
@@ -60,12 +55,11 @@ public class WeightZScoreRepository extends BaseRepository {
 
     /**
      * @param query
-     *
      * @return
      */
     public boolean runRawQuery(String query) {
         try {
-            getRepository().getWritableDatabase().execSQL(query);
+            getWritableDatabase().execSQL(query);
             return true;
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));
@@ -78,7 +72,7 @@ public class WeightZScoreRepository extends BaseRepository {
         List<WeightZScore> result = new ArrayList<>();
         Cursor cursor = null;
         try {
-            SQLiteDatabase database = getRepository().getReadableDatabase();
+            SQLiteDatabase database = getReadableDatabase();
             cursor = database.query(TABLE_NAME, null,
                     GrowthMonitoringConstants.ColumnHeaders.COLUMN_SEX + " = ? " + COLLATE_NOCASE,
                     new String[]{gender.name()}, null, null, null, null);

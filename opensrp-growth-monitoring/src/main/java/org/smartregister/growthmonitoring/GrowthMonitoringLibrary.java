@@ -61,7 +61,7 @@ public class GrowthMonitoringLibrary {
 
     public WeightRepository weightRepository() {
         if (weightRepository == null) {
-            weightRepository = new WeightRepository(getRepository());
+            weightRepository = new WeightRepository();
         }
         return weightRepository;
     }
@@ -72,7 +72,7 @@ public class GrowthMonitoringLibrary {
 
     public HeightRepository heightRepository() {
         if (heightRepository == null) {
-            heightRepository = new HeightRepository(getRepository());
+            heightRepository = new HeightRepository();
         }
         return heightRepository;
     }
@@ -80,7 +80,7 @@ public class GrowthMonitoringLibrary {
 
     public WeightZScoreRepository weightZScoreRepository() {
         if (weightZScoreRepository == null) {
-            weightZScoreRepository = new WeightZScoreRepository(getRepository());
+            weightZScoreRepository = new WeightZScoreRepository();
         }
 
         return weightZScoreRepository;
@@ -88,7 +88,7 @@ public class GrowthMonitoringLibrary {
 
     public HeightZScoreRepository heightZScoreRepository() {
         if (heightZScoreRepository == null) {
-            heightZScoreRepository = new HeightZScoreRepository(getRepository());
+            heightZScoreRepository = new HeightZScoreRepository();
         }
 
         return heightZScoreRepository;
@@ -96,7 +96,7 @@ public class GrowthMonitoringLibrary {
 
     public EventClientRepository eventClientRepository() {
         if (eventClientRepository == null) {
-            eventClientRepository = new EventClientRepository(getRepository());
+            eventClientRepository = new EventClientRepository();
         }
 
         return eventClientRepository;

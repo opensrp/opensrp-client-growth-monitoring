@@ -13,7 +13,6 @@ import org.smartregister.growthmonitoring.domain.Height;
 import org.smartregister.growthmonitoring.domain.HeightZScore;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.EventClientRepository;
-import org.smartregister.repository.Repository;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -86,11 +85,6 @@ public class HeightRepository extends GrowthRepository {
             "CREATE INDEX " + HEIGHT_TABLE_NAME + "_" + UPDATED_AT_COLUMN + "_index ON " + HEIGHT_TABLE_NAME + "(" +
                     UPDATED_AT_COLUMN + ");";
 
-
-    public HeightRepository(Repository repository) {
-        super(repository);
-    }
-
     public static void createTable(SQLiteDatabase database) {
         database.execSQL(HEIGHT_SQL);
         database.execSQL(BASE_ENTITY_ID_INDEX);
@@ -150,7 +144,7 @@ public class HeightRepository extends GrowthRepository {
                 height.setUpdatedAt(Calendar.getInstance().getTimeInMillis());
             }
 
-            SQLiteDatabase database = getRepository().getWritableDatabase();
+            SQLiteDatabase database = getWritableDatabase();
             if (height.getId() == null) {
                 Height sameheight = findUnique(database, height);
                 if (sameheight != null) {
@@ -182,7 +176,7 @@ public class HeightRepository extends GrowthRepository {
         try {
             SQLiteDatabase database = db;
             if (database == null) {
-                database = getRepository().getReadableDatabase();
+                database = getReadableDatabase();
             }
 
             String selection = null;
@@ -219,7 +213,7 @@ public class HeightRepository extends GrowthRepository {
         try {
             SQLiteDatabase db;
             if (database == null) {
-                db = getRepository().getWritableDatabase();
+                db = getWritableDatabase();
             } else {
                 db = database;
             }
@@ -321,7 +315,7 @@ public class HeightRepository extends GrowthRepository {
 
             Long time = calendar.getTimeInMillis();
 
-            cursor = getRepository().getReadableDatabase().query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS,
+            cursor = getReadableDatabase().query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS,
                     UPDATED_AT_COLUMN + " < ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? " + COLLATE_NOCASE,
                     new String[]{time.toString(), TYPE_Unsynced}, null, null, null, null);
             heights = readAllHeights(cursor);
@@ -340,7 +334,7 @@ public class HeightRepository extends GrowthRepository {
         Cursor cursor = null;
         try {
 
-            cursor = getRepository().getReadableDatabase().query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS,
+            cursor = getReadableDatabase().query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS,
                     BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? ",
                     new String[]{entityId, TYPE_Unsynced}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
             List<Height> heights = readAllHeights(cursor);
@@ -361,7 +355,7 @@ public class HeightRepository extends GrowthRepository {
         List<Height> heights = null;
         Cursor cursor = null;
         try {
-            cursor = getRepository().getReadableDatabase()
+            cursor = getReadableDatabase()
                     .query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE,
                             new String[]{entityId}, null, null, null, null);
             heights = readAllHeights(cursor);
@@ -380,7 +374,7 @@ public class HeightRepository extends GrowthRepository {
         List<Height> result = new ArrayList<>();
         Cursor cursor = null;
         try {
-            cursor = getRepository().getReadableDatabase()
+            cursor = getReadableDatabase()
                     .query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS, Z_SCORE + " = " + DEFAULT_Z_SCORE, null, null, null,
                             null, null);
             result = readAllHeights(cursor);
@@ -399,7 +393,7 @@ public class HeightRepository extends GrowthRepository {
         Height height = null;
         Cursor cursor = null;
         try {
-            cursor = getRepository().getReadableDatabase()
+            cursor = getReadableDatabase()
                     .query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS, ID_COLUMN + " = ?", new String[]{caseId.toString()},
                             null, null, null, null);
             List<Height> heights = readAllHeights(cursor);
@@ -420,7 +414,7 @@ public class HeightRepository extends GrowthRepository {
         List<Height> heightList = new ArrayList<>();
         Cursor cursor = null;
         try {
-            cursor = getRepository().getReadableDatabase()
+            cursor = getReadableDatabase()
                     .query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE,
                             new String[]{entityId}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
             heightList = readAllHeights(cursor);
@@ -436,7 +430,7 @@ public class HeightRepository extends GrowthRepository {
 
     public void delete(String id) {
         try {
-            getRepository().getWritableDatabase()
+            getWritableDatabase()
                     .delete(HEIGHT_TABLE_NAME, ID_COLUMN + " = ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? ",
                             new String[]{id, TYPE_Unsynced});
         } catch (Exception e) {
@@ -448,7 +442,7 @@ public class HeightRepository extends GrowthRepository {
         try {
             ContentValues values = new ContentValues();
             values.put(SYNC_STATUS, TYPE_Synced);
-            getRepository().getWritableDatabase()
+            getWritableDatabase()
                     .update(HEIGHT_TABLE_NAME, values, ID_COLUMN + " = ?", new String[]{caseId.toString()});
         } catch (Exception e) {
             Timber.e(Log.getStackTraceString(e));

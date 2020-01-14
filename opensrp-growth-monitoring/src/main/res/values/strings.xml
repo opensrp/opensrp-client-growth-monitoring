@@ -42,7 +42,7 @@
     <string name="edit_weight">Edit Weight</string>
     <string name="edit_height">Edit Height</string>
     <string name="edit_date">Edit Date</string>
-    <string name="delete_record">Delete Record</string>
+    <string name="delete_record">Delete Weight</string>
     <string name="growth_taken_today">Growth Taken Today</string>
     <string name="growth_taken_earlier">Growth Taken Earlier</string>
     <string name="catchment_area">Catchment Area</string>
