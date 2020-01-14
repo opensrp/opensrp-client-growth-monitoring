@@ -13,7 +13,6 @@ import org.mockito.MockitoAnnotations;
 import org.smartregister.growthmonitoring.BaseUnitTest;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.repository.EventClientRepository;
-import org.smartregister.repository.Repository;
 
 import java.util.Calendar;
 
@@ -25,9 +24,6 @@ public class WeightRepositoryTest extends BaseUnitTest {
 
     @Mock
     private SQLiteDatabase sqliteDatabase;
-
-    @Mock
-    private Repository repository;
 
     @Mock
     private Cursor cursor;
@@ -62,7 +58,7 @@ public class WeightRepositoryTest extends BaseUnitTest {
     @Test
     public void testFindUniqueByDateReturnsNullIfParametersAreNull() {
 
-        WeightRepository weightRepository = new WeightRepository(repository);
+        WeightRepository weightRepository = new WeightRepository();
 
         Weight weight = weightRepository.findUniqueByDate(sqliteDatabase, null, null);
         Assert.assertNull(weight);
@@ -80,7 +76,7 @@ public class WeightRepositoryTest extends BaseUnitTest {
     @Test
     public void testFindUniqueByDateInvokesQueryMethodCorrectly() {
 
-        WeightRepository weightRepository = new WeightRepository(repository);
+        WeightRepository weightRepository = new WeightRepository();
 
         Mockito.doReturn(cursor).when(sqliteDatabase).query(ArgumentMatchers.anyString(), ArgumentMatchers.any(String[].class), ArgumentMatchers.anyString(), ArgumentMatchers.any(String[].class), (String) ArgumentMatchers.isNull(), (String) ArgumentMatchers.isNull(), ArgumentMatchers.anyString(), (String) ArgumentMatchers.isNull());
 
