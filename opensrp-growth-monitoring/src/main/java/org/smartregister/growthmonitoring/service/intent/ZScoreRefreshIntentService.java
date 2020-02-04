@@ -154,7 +154,7 @@ public class ZScoreRefreshIntentService extends IntentService {
                 }
             }
         } catch (Exception e) {
-            Timber.e(e,"ZScoreRefreshIntentService --> dumpWeightCsv");
+            Timber.e(e, "ZScoreRefreshIntentService --> dumpWeightCsv");
         }
     }
 
@@ -214,7 +214,7 @@ public class ZScoreRefreshIntentService extends IntentService {
                 }
             }
         } catch (Exception e) {
-            Timber.e(e,"ZScoreRefreshIntentService --> dumpHeightCsv");
+            Timber.e(e, "ZScoreRefreshIntentService --> dumpHeightCsv");
 
         }
     }
@@ -265,7 +265,7 @@ public class ZScoreRefreshIntentService extends IntentService {
                 }
             }
         } catch (Exception e) {
-            Timber.e(e,"ZScoreRefreshIntentService --> calculateChildWeightZScores");
+            Timber.e(e, "ZScoreRefreshIntentService --> calculateChildWeightZScores");
         }
     }
 
@@ -321,7 +321,7 @@ public class ZScoreRefreshIntentService extends IntentService {
 
     private CommonPersonObjectClient getChildDetails(String baseEntityId) {
         CommonPersonObject rawDetails =
-                GrowthMonitoringLibrary.getInstance().context().commonrepository(GrowthMonitoringConstants.CHILD_TABLE_NAME)
+                GrowthMonitoringLibrary.getInstance().context().commonrepository(GrowthMonitoringLibrary.getInstance().getConfig().getChildTable())
                         .findByBaseEntityId(baseEntityId);
         if (rawDetails != null) {
             // Get extra child details
@@ -397,7 +397,6 @@ public class ZScoreRefreshIntentService extends IntentService {
     /**
      * @param connection object; note: before calling this function, ensure that the connection is already be open, and any
      *                   writes to the connection's output stream should have already been completed.
-     *
      * @return String containing the body of the connection response or null if the input stream could not be read correctly
      */
     private String readInputStreamToString(URLConnection connection) {

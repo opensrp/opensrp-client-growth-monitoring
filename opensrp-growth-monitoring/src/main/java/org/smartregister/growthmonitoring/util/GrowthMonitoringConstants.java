@@ -10,8 +10,7 @@ public class GrowthMonitoringConstants {
     public static final String ZSCORE_MALE_URL = "http://www.who.int/childgrowth/standards/wfa_boys_0_5_zscores.txt";
     public static final String ZSCORE_FEMALE_URL = "http://www.who.int/childgrowth/standards/wfa_girls_0_5_zscores.txt";
 
-    public static final String CHILD_TABLE_NAME = "ec_child";
-    public static final String MOTHER_TABLE_NAME = "ec_mother";
+    public static final String CHILD_TABLE_NAME = "ec_client";
 
     public static final int GROWTH_MONITORING_SYNC_TIME = BuildConfig.GROWTH_MONITORING_SYNC_TIME;
     public static final String FIRST_NAME = "first_name";
