@@ -1,19 +1,11 @@
 package org.smartregister.growthmonitoring.util;
 
-import java.util.Properties;
+import com.vijay.jsonwizard.utils.NativeFormsProperties;
 
 /**
  * Created by ndegwamartin on 2019-06-07.
  */
-public class AppProperties extends Properties {
-
-    public Boolean getPropertyBoolean(String key) {
-        return Boolean.valueOf(getProperty(key));
-    }
-
-    public Boolean hasProperty(String key) {
-        return getProperty(key) != null;
-    }
+public class AppProperties extends NativeFormsProperties {
 
     public static class KEY {
         public static final String MONITOR_GROWTH = "monitor.height";
