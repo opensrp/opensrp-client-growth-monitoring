@@ -1,5 +1,7 @@
 package org.smartregister.growthmonitoring;
 
+import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
+
 /**
  * Created by ndegwamartin on 2019-05-28.
  */
@@ -10,6 +12,11 @@ public class GrowthMonitoringConfig {
     private String femaleWeightZScoreFile;
     private String femaleHeightZScoreFile;
     private String genderNeutralZScoreFile;
+    private String childTable;
+
+    public GrowthMonitoringConfig() {
+        setChildTable(GrowthMonitoringConstants.CHILD_TABLE_NAME);
+    }
 
     public String getMaleWeightZScoreFile() {
         if (maleWeightZScoreFile != null) {
@@ -65,5 +72,13 @@ public class GrowthMonitoringConfig {
 
     public void setGenderNeutralZScoreFile(String genderNeutralZScoreFile) {
         this.genderNeutralZScoreFile = genderNeutralZScoreFile;
+    }
+
+    public String getChildTable() {
+        return childTable;
+    }
+
+    public void setChildTable(String childTable) {
+        this.childTable = childTable;
     }
 }
