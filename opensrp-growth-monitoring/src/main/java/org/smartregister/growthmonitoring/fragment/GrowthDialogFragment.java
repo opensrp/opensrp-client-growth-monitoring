@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
@@ -84,6 +85,7 @@ public class GrowthDialogFragment extends DialogFragment {
         this.personDetails = personDetails;
     }
 
+    @VisibleForTesting
     protected void sortWeights() {
         HashMap<Long, Weight> weightHashMap = new HashMap<>();
         for (Weight curWeight : getWeights()) {
@@ -111,6 +113,7 @@ public class GrowthDialogFragment extends DialogFragment {
         setWeights(weightList);
     }
 
+    @VisibleForTesting
     protected void sortHeights() {
         HashMap<Long, Height> heightHashMap = new HashMap<>();
         for (Height curHeight : getHeights()) {
