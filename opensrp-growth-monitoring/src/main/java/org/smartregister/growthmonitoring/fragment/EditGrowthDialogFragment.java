@@ -214,7 +214,6 @@ public class EditGrowthDialogFragment extends DialogFragment {
         editWeight = dialogView.findViewById(R.id.edit_weight);
         editHeight = dialogView.findViewById(R.id.edit_height);
         earlierDatePicker = dialogView.findViewById(isNumericDatePicker ? R.id.earlier_date_picker_numeric :R.id.earlier_date_picker);
-        earlierDatePicker.setVisibility(View.VISIBLE);
         nameView = dialogView.findViewById(R.id.child_name);
         numberView = dialogView.findViewById(R.id.child_zeir_id);
         ageView = dialogView.findViewById(R.id.child_age);
