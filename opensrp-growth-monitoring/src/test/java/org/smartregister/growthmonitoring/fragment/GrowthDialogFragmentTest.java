@@ -19,7 +19,6 @@ import org.smartregister.growthmonitoring.util.AppProperties;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -133,11 +132,24 @@ public class GrowthDialogFragmentTest {
         List<Weight> weightArrayList = new ArrayList<>();
 
         Weight weight = new Weight();
-        weight.setDate(new Date());
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.MONTH, 3);
+        weight.setDate(cal.getTime());
         weight.setAnmId("demo");
         weight.setBaseEntityId(DUMMY_BASE_ENTITY_ID);
         weight.setChildLocationId(TEST_STRING);
         weight.setKg(3.4f);
+
+        weightArrayList.add(weight);
+
+        weight = new Weight();
+        cal = Calendar.getInstance();
+        cal.set(Calendar.MONTH, 9);
+        weight.setDate(cal.getTime());
+        weight.setAnmId("demo");
+        weight.setBaseEntityId(DUMMY_BASE_ENTITY_ID);
+        weight.setChildLocationId(TEST_STRING);
+        weight.setKg(5.2f);
 
         weightArrayList.add(weight);
         return weightArrayList;
@@ -174,5 +186,37 @@ public class GrowthDialogFragmentTest {
         Assert.assertEquals(Float.valueOf("40.3"), sortedHeights.get(1).getCm());
         Assert.assertEquals(Float.valueOf("30.4"), sortedHeights.get(2).getCm());
         Assert.assertEquals(Float.valueOf("10.0"), sortedHeights.get(3).getCm());
+    }
+
+    @PrepareForTest({GrowthMonitoringLibrary.class})
+    @Test
+    public void testSortWeightsOrdersItemsCorrectly() {
+
+        PowerMockito.mockStatic(GrowthMonitoringLibrary.class);
+        PowerMockito.when(GrowthMonitoringLibrary.getInstance()).thenReturn(growthMonitoringLibrary);
+        PowerMockito.when(growthMonitoringLibrary.getAppProperties()).thenReturn(appProperties);
+        PowerMockito.when(appProperties.hasProperty(AppProperties.KEY.MONITOR_GROWTH)).thenReturn(true);
+        PowerMockito.when(appProperties.getPropertyBoolean(AppProperties.KEY.MONITOR_GROWTH)).thenReturn(true);
+
+        GrowthDialogFragment growthDialogFragment = GrowthDialogFragment.newInstance(dummydetails(), getWeights(), getHeights());
+        Assert.assertNotNull(growthDialogFragment);
+
+
+        List<Weight> unsortedWeights = growthDialogFragment.getWeights();
+
+        Assert.assertNotNull(unsortedWeights);
+
+        //Verify prior order
+        Assert.assertEquals(Float.valueOf("3.4"), unsortedWeights.get(0).getKg());
+        Assert.assertEquals(Float.valueOf("5.2"), unsortedWeights.get(1).getKg());
+
+        growthDialogFragment.sortWeights();
+
+        List<Weight> sortedWeights = growthDialogFragment.getWeights();
+        Assert.assertNotNull(unsortedWeights);
+
+        //Verify sorted order
+        Assert.assertEquals(Float.valueOf("5.2"), sortedWeights.get(0).getKg());
+        Assert.assertEquals(Float.valueOf("3.4"), sortedWeights.get(1).getKg());
     }
 }

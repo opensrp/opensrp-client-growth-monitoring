@@ -20,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vijay.jsonwizard.utils.NativeFormsProperties;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
@@ -62,16 +64,10 @@ public class RecordGrowthDialogFragment extends DialogFragment {
     private Button set;
     private LinearLayout heightEntryLayout;
     private CustomFontTextView recordHeight;
-    private static Boolean hasProperty;
-    private static Boolean monitorGrowth = false;
+    private static final boolean monitorGrowth = GrowthMonitoringLibrary.getInstance().getAppProperties().isTrue(AppProperties.KEY.MONITOR_GROWTH);
+    private static final boolean isNumericDatePicker = GrowthMonitoringLibrary.getInstance().getAppProperties().isTrue(NativeFormsProperties.KEY.WIDGET_DATEPICKER_IS_NUMERIC);
 
-    public static RecordGrowthDialogFragment newInstance(Date dateOfBirth, WeightWrapper weightWrapper,
-                                                         HeightWrapper heightWrapper) {
-
-        hasProperty = GrowthMonitoringLibrary.getInstance().getAppProperties().hasProperty(AppProperties.KEY.MONITOR_GROWTH);
-        if (hasProperty) {
-            monitorGrowth = GrowthMonitoringLibrary.getInstance().getAppProperties().getPropertyBoolean(AppProperties.KEY.MONITOR_GROWTH);
-        }
+    public static RecordGrowthDialogFragment newInstance(Date dateOfBirth, WeightWrapper weightWrapper, HeightWrapper heightWrapper) {
 
         WeightWrapper weightToSend;
         if (weightWrapper == null) {
@@ -81,7 +77,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         }
 
         HeightWrapper heightToSend = null;
-        if (hasProperty && monitorGrowth) {
+        if (monitorGrowth) {
             if (heightWrapper == null) {
                 heightToSend = new HeightWrapper();
             } else {
@@ -94,7 +90,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         Bundle args = new Bundle();
         args.putSerializable(DATE_OF_BIRTH_TAG, dateOfBirth);
         args.putSerializable(WEIGHT_WRAPPER_TAG, weightToSend);
-        if (hasProperty && monitorGrowth) {
+        if (monitorGrowth) {
             args.putSerializable(HEIGHT_WRAPPER_TAG, heightToSend);
         }
         recordGrowthDialogFragment.setArguments(args);
@@ -185,7 +181,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
     }
 
     private void setHeight() {
-        if (hasProperty && monitorGrowth && heightWrapper.getHeight() != null) {
+        if (monitorGrowth && heightWrapper.getHeight() != null) {
             editHeight.setText(heightWrapper.getHeight().toString());
             editHeight.setSelection(editHeight.getText().length());
         }
@@ -199,7 +195,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
     }
 
     private void setVisibility() {
-        if (hasProperty && monitorGrowth) {
+        if (monitorGrowth) {
             recordHeight.setVisibility(View.VISIBLE);
             heightEntryLayout.setVisibility(View.VISIBLE);
         }
@@ -208,7 +204,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
     private boolean getBundle() {
         Bundle bundle = getArguments();
         if (getWeightBundle(bundle)) return true;
-        if (hasProperty && monitorGrowth && getHeightBundle(bundle)) {
+        if (monitorGrowth && getHeightBundle(bundle)) {
             return true;
         }
 
@@ -223,7 +219,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         editWeight = dialogView.findViewById(R.id.edit_weight);
-        earlierDatePicker = dialogView.findViewById(R.id.earlier_date_picker);
+        earlierDatePicker = dialogView.findViewById(isNumericDatePicker ? R.id.earlier_date_picker_numeric : R.id.earlier_date_picker);
         nameView = dialogView.findViewById(R.id.child_name);
         numberView = dialogView.findViewById(R.id.child_zeir_id);
         ageView = dialogView.findViewById(R.id.child_age);
@@ -287,14 +283,14 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
         weightWrapper.setUpdatedWeightDate(new DateTime(calendar.getTime()), false);
-        if (hasProperty && monitorGrowth) {
+        if (monitorGrowth) {
             heightWrapper.setUpdatedHeightDate(new DateTime(calendar.getTime()), false);
         }
 
         Float weight = Float.valueOf(weightString);
         weightWrapper.setWeight(weight);
 
-        if (hasProperty && monitorGrowth) {
+        if (monitorGrowth) {
             String heightString = editHeight.getText().toString();
             if (!heightString.isEmpty()) {
                 Float height = Float.valueOf(heightString);

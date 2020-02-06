@@ -19,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vijay.jsonwizard.utils.NativeFormsProperties;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
@@ -61,15 +63,11 @@ public class EditGrowthDialogFragment extends DialogFragment {
     private Button cancel;
     private LinearLayout heightEntryLayout;
     private CustomFontTextView recordHeight;
-    private boolean hasProperty;
-    private boolean monitorGrowth = false;
+    private final boolean monitorGrowth = GrowthMonitoringLibrary.getInstance().getAppProperties().isTrue(AppProperties.KEY.MONITOR_GROWTH);
+    private boolean isNumericDatePicker = GrowthMonitoringLibrary.getInstance().getAppProperties().isTrue(NativeFormsProperties.KEY.WIDGET_DATEPICKER_IS_NUMERIC);
 
     private EditGrowthDialogFragment(Date dateOfBirth, WeightWrapper weightWrapper, HeightWrapper heightWrapper) {
         HeightWrapper heightWrapperTemp;
-        hasProperty = GrowthMonitoringLibrary.getInstance().getAppProperties().hasProperty(AppProperties.KEY.MONITOR_GROWTH);
-        if (hasProperty) {
-            monitorGrowth = GrowthMonitoringLibrary.getInstance().getAppProperties().getPropertyBoolean(AppProperties.KEY.MONITOR_GROWTH);
-        }
 
         this.dateOfBirth = dateOfBirth;
         if (weightWrapper == null) {
@@ -79,7 +77,7 @@ public class EditGrowthDialogFragment extends DialogFragment {
         }
 
         heightWrapperTemp = null;
-        if (hasProperty && monitorGrowth) {
+        if (monitorGrowth) {
             if (heightWrapper == null) {
                 heightWrapperTemp = new HeightWrapper();
             } else {
@@ -142,7 +140,7 @@ public class EditGrowthDialogFragment extends DialogFragment {
 
         ViewGroup dialogView = setUpViews(inflater, container);
 
-        if (hasProperty && monitorGrowth) {
+        if (monitorGrowth) {
             recordHeight.setVisibility(View.VISIBLE);
             heightEntryLayout.setVisibility(View.VISIBLE);
 
@@ -215,7 +213,7 @@ public class EditGrowthDialogFragment extends DialogFragment {
 
         editWeight = dialogView.findViewById(R.id.edit_weight);
         editHeight = dialogView.findViewById(R.id.edit_height);
-        earlierDatePicker = dialogView.findViewById(R.id.earlier_date_picker);
+        earlierDatePicker = dialogView.findViewById(isNumericDatePicker ? R.id.earlier_date_picker_numeric :R.id.earlier_date_picker);
         nameView = dialogView.findViewById(R.id.child_name);
         numberView = dialogView.findViewById(R.id.child_zeir_id);
         ageView = dialogView.findViewById(R.id.child_age);
@@ -251,7 +249,7 @@ public class EditGrowthDialogFragment extends DialogFragment {
                     return;
                 }
                 String heightString = null;
-                if (hasProperty & monitorGrowth) {
+                if (monitorGrowth) {
                     heightString = editHeight.getText().toString();
                 }
                 dismiss();
@@ -271,13 +269,13 @@ public class EditGrowthDialogFragment extends DialogFragment {
                     DateTime updateTime = new DateTime(calendar.getTime());
                     if (currentGrowthDate != null && !org.apache.commons.lang3.time.DateUtils.isSameDay(calendar.getTime(), currentGrowthDate.toDate())) {
                         weightWrapper.setUpdatedWeightDate(updateTime, false);
-                        if (hasProperty && monitorGrowth) {
+                        if (monitorGrowth) {
                             heightWrapper.setUpdatedHeightDate(updateTime, false);
                         }
                         dateChanged = true;
                     }
 
-                    if (hasProperty & monitorGrowth && heightString != null && !heightString.isEmpty()) {
+                    if (monitorGrowth && heightString != null && !heightString.isEmpty()) {
                         updateHeightWrapperForBlankHeightEdit(updateTime);
                     }
                 }

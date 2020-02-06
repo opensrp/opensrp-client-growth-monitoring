@@ -219,7 +219,18 @@
                 android:calendarViewShown="false"
                 android:descendantFocusability="blocksDescendants"
                 android:focusable="true"
-                android:focusableInTouchMode="true" />
+                android:focusableInTouchMode="true"
+                android:visibility="gone" />
+
+            <com.vijay.jsonwizard.customviews.NumericDatePicker
+                android:id="@+id/earlier_date_picker_numeric"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:calendarViewShown="false"
+                android:descendantFocusability="blocksDescendants"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/weight_delete"
