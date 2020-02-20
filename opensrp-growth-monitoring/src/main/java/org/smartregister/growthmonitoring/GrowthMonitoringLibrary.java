@@ -28,6 +28,8 @@ public class GrowthMonitoringLibrary {
     private int databaseVersion;
     private AppProperties appProperties;
 
+    private int growthMonitoringSyncTime = BuildConfig.GROWTH_MONITORING_SYNC_TIME;
+
     private GrowthMonitoringLibrary(Context context, Repository repository, int applicationVersion, int databaseVersion) {
         this.repository = repository;
         this.context = context;
@@ -124,5 +126,13 @@ public class GrowthMonitoringLibrary {
 
     public void setAppProperties(AppProperties appProperties) {
         this.appProperties = appProperties;
+    }
+
+    public int getGrowthMonitoringSyncTime() {
+        return growthMonitoringSyncTime;
+    }
+
+    public void setGrowthMonitoringSyncTime(int growthMonitoringSyncTime) {
+        this.growthMonitoringSyncTime = growthMonitoringSyncTime;
     }
 }

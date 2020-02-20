@@ -40,7 +40,7 @@ public class HeightIntentService extends IntentService {
 
         try {
             List<Height> heights =
-                    heightRepository.findUnSyncedBeforeTime(GrowthMonitoringConstants.GROWTH_MONITORING_SYNC_TIME);
+                    heightRepository.findUnSyncedBeforeTime(GrowthMonitoringLibrary.getInstance().getGrowthMonitoringSyncTime());
             if (!heights.isEmpty()) {
                 for (Height height : heights) {
 

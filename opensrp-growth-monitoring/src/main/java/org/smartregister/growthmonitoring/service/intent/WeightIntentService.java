@@ -40,7 +40,7 @@ public class WeightIntentService extends IntentService {
 
         try {
             List<Weight> weights =
-                    weightRepository.findUnSyncedBeforeTime(GrowthMonitoringConstants.GROWTH_MONITORING_SYNC_TIME);
+                    weightRepository.findUnSyncedBeforeTime(GrowthMonitoringLibrary.getInstance().getGrowthMonitoringSyncTime());
             if (!weights.isEmpty()) {
                 for (Weight weight : weights) {
 
