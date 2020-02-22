@@ -1,5 +1,7 @@
 package org.smartregister.growthmonitoring;
 
+import android.support.annotation.NonNull;
+
 import org.smartregister.Context;
 import org.smartregister.growthmonitoring.repository.HeightRepository;
 import org.smartregister.growthmonitoring.repository.HeightZScoreRepository;
@@ -9,6 +11,8 @@ import org.smartregister.growthmonitoring.util.AppProperties;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringUtils;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Repository;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by koros on 2/3/16.
@@ -28,7 +32,7 @@ public class GrowthMonitoringLibrary {
     private int databaseVersion;
     private AppProperties appProperties;
 
-    private int growthMonitoringSyncTime = BuildConfig.GROWTH_MONITORING_SYNC_TIME;
+    private long growthMonitoringSyncTime = -1;
 
     private GrowthMonitoringLibrary(Context context, Repository repository, int applicationVersion, int databaseVersion) {
         this.repository = repository;
@@ -128,11 +132,19 @@ public class GrowthMonitoringLibrary {
         this.appProperties = appProperties;
     }
 
-    public int getGrowthMonitoringSyncTime() {
+    public long getGrowthMonitoringSyncTime() {
+        if (growthMonitoringSyncTime == -1) {
+            setGrowthMonitoringSyncTime(BuildConfig.GROWTH_MONITORING_SYNC_TIME);
+        }
+
         return growthMonitoringSyncTime;
     }
 
-    public void setGrowthMonitoringSyncTime(int growthMonitoringSyncTime) {
-        this.growthMonitoringSyncTime = growthMonitoringSyncTime;
+    public void setGrowthMonitoringSyncTime(int growthMonitoringSyncTimeInHours) {
+        setGrowthMonitoringSyncTime(growthMonitoringSyncTimeInHours, TimeUnit.HOURS);
+    }
+
+    public void setGrowthMonitoringSyncTime(int growthMonitoringSyncTime, @NonNull TimeUnit timeUnit) {
+        this.growthMonitoringSyncTime = timeUnit.toMinutes(growthMonitoringSyncTime);
     }
 }

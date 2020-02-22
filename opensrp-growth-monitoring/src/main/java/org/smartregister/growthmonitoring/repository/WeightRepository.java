@@ -331,13 +331,13 @@ public class WeightRepository extends GrowthRepository {
         weights.add(weight);
     }
 
-    public List<Weight> findUnSyncedBeforeTime(int hours) {
+    public List<Weight> findUnSyncedBeforeTime(int minutes) {
         List<Weight> weights = new ArrayList<>();
         Cursor cursor = null;
         try {
 
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.HOUR_OF_DAY, -hours);
+            calendar.add(Calendar.MINUTE, -minutes);
 
             long time = calendar.getTimeInMillis();
 
