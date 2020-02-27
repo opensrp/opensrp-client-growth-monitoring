@@ -40,7 +40,7 @@ public class HeightIntentService extends IntentService {
 
         try {
             List<Height> heights =
-                    heightRepository.findUnSyncedBeforeTime(GrowthMonitoringConstants.GROWTH_MONITORING_SYNC_TIME);
+                    heightRepository.findUnSyncedBeforeTime((int) GrowthMonitoringLibrary.getInstance().getGrowthMonitoringSyncTime());
             if (!heights.isEmpty()) {
                 for (Height height : heights) {
 
@@ -57,9 +57,9 @@ public class HeightIntentService extends IntentService {
                     //Zscore
                     JSONObject zScoreObject = new JSONObject();
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.KEY, "Z_Score_Height_Age");
-                    zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY, "concept");
+                    zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY, "");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_ID,
-                            "159429AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                            "");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_PARENT, "");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_DATA_TYPE, "calculation");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.VALUE, height.getZScore());

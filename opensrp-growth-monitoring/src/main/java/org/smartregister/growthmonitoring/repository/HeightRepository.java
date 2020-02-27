@@ -305,13 +305,13 @@ public class HeightRepository extends GrowthRepository {
         heights.add(height);
     }
 
-    public List<Height> findUnSyncedBeforeTime(int hours) {
+    public List<Height> findUnSyncedBeforeTime(int minutes) {
         List<Height> heights = new ArrayList<>();
         Cursor cursor = null;
-        try {
 
+        try {
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.HOUR_OF_DAY, -hours);
+            calendar.add(Calendar.MINUTE, -minutes);
 
             Long time = calendar.getTimeInMillis();
 

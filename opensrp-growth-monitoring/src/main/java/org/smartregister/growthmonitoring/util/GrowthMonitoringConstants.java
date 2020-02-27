@@ -1,6 +1,5 @@
 package org.smartregister.growthmonitoring.util;
 
-import org.smartregister.growthmonitoring.BuildConfig;
 
 /**
  * Created by keyman on 26/07/2017.
@@ -12,7 +11,6 @@ public class GrowthMonitoringConstants {
 
     public static final String CHILD_TABLE_NAME = "ec_client";
 
-    public static final int GROWTH_MONITORING_SYNC_TIME = BuildConfig.GROWTH_MONITORING_SYNC_TIME;
     public static final String FIRST_NAME = "first_name";
     public static final String LAST_NAME = "last_name";
     public static final String FEMALE = "female";

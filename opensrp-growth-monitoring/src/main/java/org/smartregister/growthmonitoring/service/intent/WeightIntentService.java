@@ -40,7 +40,7 @@ public class WeightIntentService extends IntentService {
 
         try {
             List<Weight> weights =
-                    weightRepository.findUnSyncedBeforeTime(GrowthMonitoringConstants.GROWTH_MONITORING_SYNC_TIME);
+                    weightRepository.findUnSyncedBeforeTime((int) GrowthMonitoringLibrary.getInstance().getGrowthMonitoringSyncTime());
             if (!weights.isEmpty()) {
                 for (Weight weight : weights) {
 
@@ -59,7 +59,7 @@ public class WeightIntentService extends IntentService {
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.KEY, "Z_Score_Weight_Age");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY, "concept");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_ID,
-                            "159428AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                            "1854AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_ENTITY_PARENT, "");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.OPENMRS_DATA_TYPE, "calculation");
                     zScoreObject.put(GrowthMonitoringConstants.JsonForm.VALUE, weight.getZScore());
