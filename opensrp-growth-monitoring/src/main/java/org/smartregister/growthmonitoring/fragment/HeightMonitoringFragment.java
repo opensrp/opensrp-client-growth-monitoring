@@ -65,6 +65,7 @@ public class HeightMonitoringFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final ViewGroup heightTabView = (ViewGroup) inflater.inflate(R.layout.growth_monitoring_fragment, container, false);
+        heightTabView.setFilterTouchesWhenObscured(true);
         final ImageButton scrollButton = heightTabView.findViewById(R.id.scroll_button);
         CustomFontTextView txt_metric_label = heightTabView.findViewById(R.id.metric_label);
         txt_metric_label.setText(getString(R.string.height));

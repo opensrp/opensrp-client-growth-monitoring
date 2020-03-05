@@ -61,6 +61,7 @@ public class WeightMonitoringFragment extends Fragment {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View weightTabView = inflater.inflate(R.layout.growth_monitoring_fragment, container, false);
+        weightTabView.setFilterTouchesWhenObscured(true);
         final ImageButton scrollButton = weightTabView.findViewById(R.id.scroll_button);
         CustomFontTextView txt_metric_label = weightTabView.findViewById(R.id.metric_label);
         txt_metric_label.setText(getString(R.string.weight));

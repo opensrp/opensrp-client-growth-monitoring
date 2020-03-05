@@ -139,6 +139,7 @@ public class EditGrowthDialogFragment extends DialogFragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         ViewGroup dialogView = setUpViews(inflater, container);
+        dialogView.setFilterTouchesWhenObscured(true);
 
         if (monitorGrowth) {
             recordHeight.setVisibility(View.VISIBLE);

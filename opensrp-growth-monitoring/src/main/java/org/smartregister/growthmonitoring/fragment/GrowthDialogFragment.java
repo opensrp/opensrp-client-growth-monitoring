@@ -181,6 +181,7 @@ public class GrowthDialogFragment extends DialogFragment {
         String lastName = Utils.getValue(personDetails.getColumnmaps(), GrowthMonitoringConstants.LAST_NAME, true);
 
         final ViewGroup dialogView = setUpViews(inflater, container);
+        dialogView.setFilterTouchesWhenObscured(true);
         nameView.setText(Utils.getName(firstName, lastName));
 
         String personId = Utils.getValue(personDetails.getColumnmaps(), GrowthMonitoringConstants.ZEIR_ID, false);
