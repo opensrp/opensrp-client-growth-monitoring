@@ -56,7 +56,7 @@ public class HeightZScore extends ZScore {
 
             return 0.0;
         } catch (Exception e) {
-            Timber.e(e.getMessage());
+            Timber.e(e);
             return null;
         }
     }
@@ -115,12 +115,9 @@ public class HeightZScore extends ZScore {
      *
      * @return
      */
+    @Override
     public double getZ(double x) {
-        if (getL() != 0) {
-            return (Math.pow((x / getM()), getL()) - 1) / (getL() * getS());
-        } else {
-            return Math.log(x / getM()) / getS();
-        }
+        return super.getZ(x);
     }
 
     /**

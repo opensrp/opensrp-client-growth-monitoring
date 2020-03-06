@@ -114,4 +114,20 @@ public class ZScore {
     public void setSd3(double sd3) {
         this.sd3 = sd3;
     }
+
+    /**
+     * This method calculates Z (The z-score) using the formulae provided here https://www.cdc
+     * .gov/growthcharts/percentile_data_files.htm
+     *
+     * @param x The height/weight to use
+     *
+     * @return
+     */
+    public double getZ(double x) {
+        if (getL() != 0) {
+            return (Math.pow((x / getM()), getL()) - 1) / (getL() * getS());
+        } else {
+            return Math.log(x / getM()) / getS();
+        }
+    }
 }

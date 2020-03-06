@@ -1,7 +1,6 @@
 package org.smartregister.growthmonitoring.repository;
 
 import android.database.Cursor;
-import android.util.Log;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
@@ -12,6 +11,8 @@ import org.smartregister.repository.BaseRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Stores child z-scores obtained from: - http://www.who.int/childgrowth/standards/wfa_boys_0_5_zscores.txt -
@@ -64,7 +65,7 @@ public class HeightZScoreRepository extends BaseRepository {
             getWritableDatabase().execSQL(query);
             return true;
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(e, TAG);
         }
 
         return false;
@@ -86,7 +87,7 @@ public class HeightZScoreRepository extends BaseRepository {
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(e, TAG);
         } finally {
             if (cursor != null) cursor.close();
         }

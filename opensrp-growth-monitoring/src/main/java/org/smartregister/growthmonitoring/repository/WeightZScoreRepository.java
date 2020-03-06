@@ -13,6 +13,8 @@ import org.smartregister.repository.BaseRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Stores child z-scores obtained from: - http://www.who.int/childgrowth/standards/wfa_boys_0_5_zscores.txt -
  * http://www.who.int/childgrowth/standards/wfa_girls_0_5_zscores.txt
@@ -62,7 +64,7 @@ public class WeightZScoreRepository extends BaseRepository {
             getWritableDatabase().execSQL(query);
             return true;
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(e);
         }
 
         return false;
@@ -84,7 +86,7 @@ public class WeightZScoreRepository extends BaseRepository {
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(e);
         } finally {
             if (cursor != null) cursor.close();
         }

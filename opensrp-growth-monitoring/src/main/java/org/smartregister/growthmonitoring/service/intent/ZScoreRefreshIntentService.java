@@ -106,7 +106,7 @@ public class ZScoreRefreshIntentService extends IntentService {
      * @param force
      */
     private void dumpWeightCsv(Gender gender, boolean force) {
-        try {
+            try {
             List<WeightZScore> existingScores =
                     GrowthMonitoringLibrary.getInstance().weightZScoreRepository().findByGender(gender);
             if (force || existingScores.size() == 0) {
