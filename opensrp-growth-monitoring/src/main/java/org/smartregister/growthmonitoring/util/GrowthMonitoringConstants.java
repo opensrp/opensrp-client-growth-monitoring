@@ -33,6 +33,7 @@ public class GrowthMonitoringConstants {
     public static final class ColumnHeaders {
         public static final String COLUMN_SEX = "sex";
         public static final String COLUMN_MONTH = "month";
+        public static final String HEIGHT = "height";
         public static final String COLUMN_L = "l";
         public static final String COLUMN_M = "m";
         public static final String COLUMN_S = "s";

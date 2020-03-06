@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import org.smartregister.Context;
 import org.smartregister.growthmonitoring.repository.HeightRepository;
 import org.smartregister.growthmonitoring.repository.HeightZScoreRepository;
+import org.smartregister.growthmonitoring.repository.WeightForHeightRepository;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.repository.WeightZScoreRepository;
 import org.smartregister.growthmonitoring.util.AppProperties;
@@ -27,6 +28,7 @@ public class GrowthMonitoringLibrary {
     private HeightRepository heightRepository;
     private WeightZScoreRepository weightZScoreRepository;
     private HeightZScoreRepository heightZScoreRepository;
+    private WeightForHeightRepository weightForHeightRepository;
     private EventClientRepository eventClientRepository;
     private int applicationVersion;
     private int databaseVersion;
@@ -98,6 +100,13 @@ public class GrowthMonitoringLibrary {
         }
 
         return heightZScoreRepository;
+    }
+
+    public WeightForHeightRepository weightForHeightRepository() {
+        if (weightForHeightRepository == null) {
+            weightForHeightRepository = new WeightForHeightRepository();
+        }
+        return weightForHeightRepository;
     }
 
     public EventClientRepository eventClientRepository() {
