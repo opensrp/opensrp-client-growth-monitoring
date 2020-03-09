@@ -26,6 +26,8 @@
         <service android:name="org.smartregister.growthmonitoring.service.intent.HeightIntentService" />
         <service android:name="org.smartregister.growthmonitoring.service.intent.WeightIntentService" />
         <service android:name="org.smartregister.growthmonitoring.service.intent.ZScoreRefreshIntentService" />
+        <service android:name="org.smartregister.growthmonitoring.service.intent.WeightForHeightIntentService" />
+
     </application>
 
 </manifest>

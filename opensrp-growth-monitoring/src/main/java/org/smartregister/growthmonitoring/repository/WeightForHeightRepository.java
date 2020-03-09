@@ -30,8 +30,10 @@ public class WeightForHeightRepository extends BaseRepository {
             GrowthMonitoringConstants.ColumnHeaders.HEIGHT + ") ON CONFLICT REPLACE)";
     private static final String CREATE_INDEX_SEX_QUERY = "CREATE INDEX " + TABLE_NAME + "_" + GrowthMonitoringConstants.ColumnHeaders.COLUMN_SEX + "_index ON " +
             TABLE_NAME + "(" + GrowthMonitoringConstants.ColumnHeaders.COLUMN_SEX + " COLLATE NOCASE);";
-    private static final String CREATE_INDEX_HEIGHT_QUERY = "CREATE INDEX " + TABLE_NAME + "_" + GrowthMonitoringConstants.ColumnHeaders.COLUMN_MONTH + "_index ON " +
-            TABLE_NAME + "(" + GrowthMonitoringConstants.ColumnHeaders.COLUMN_MONTH + " COLLATE NOCASE);";
+    private static final String CREATE_INDEX_HEIGHT_QUERY = "CREATE INDEX " + TABLE_NAME + "_" + GrowthMonitoringConstants.ColumnHeaders.HEIGHT + "_index ON " +
+            TABLE_NAME + "(" + GrowthMonitoringConstants.ColumnHeaders.HEIGHT + " COLLATE NOCASE);";
+
+    public static final double NO_HEIGHT_DEFAULT = 0.0;
 
     public static void createTable(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE_QUERY);
@@ -51,9 +53,16 @@ public class WeightForHeightRepository extends BaseRepository {
         List<ZScore> zScoreVariables = new ArrayList<>();
         try {
             SQLiteDatabase database = getReadableDatabase();
-            
-            String selection = GrowthMonitoringConstants.ColumnHeaders.COLUMN_SEX + " = ? AND " + GrowthMonitoringConstants.ColumnHeaders.HEIGHT + " = ? ";
-            String[] selectionArgs = new String[]{gender, String.valueOf(height)};
+            String selection;
+            String[] selectionArgs;
+
+            if (height == NO_HEIGHT_DEFAULT) {
+                selection = GrowthMonitoringConstants.ColumnHeaders.COLUMN_SEX + " = ? AND " + GrowthMonitoringConstants.ColumnHeaders.HEIGHT + " = ? ";
+                selectionArgs = new String[]{gender, String.valueOf(height)};
+            } else {
+                selection = GrowthMonitoringConstants.ColumnHeaders.COLUMN_SEX + " = ? ";
+                selectionArgs = new String[]{gender};
+            }
 
             cursor = database.query(TABLE_NAME, null,
                     selection + COLLATE_NOCASE, selectionArgs, null, null, null, null);
@@ -70,6 +79,38 @@ public class WeightForHeightRepository extends BaseRepository {
             if (cursor != null) cursor.close();
         }
         return zScoreVariables;
+    }
+
+    public boolean isTableEmpty(String tableName) {
+        Cursor cursor = null;
+        String query = "SELECT count(1) WHERE NOT EXISTS (SELECT * FROM " + tableName + ");";
+        int result = 1;
+        try {
+            SQLiteDatabase database = getReadableDatabase();
+            cursor = database.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    result = cursor.getInt(cursor.getColumnIndex("count(1)"));
+                    cursor.moveToNext();
+                }
+            }
+        } catch (Exception ex) {
+            Timber.e(ex);
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return result == 1;
+    }
+
+    public boolean runRawQuery(String query) {
+        try {
+            getWritableDatabase().execSQL(query);
+            return true;
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+
+        return false;
     }
 
     private ZScore getZScoreValuesFromCursor(Cursor cursor) {
