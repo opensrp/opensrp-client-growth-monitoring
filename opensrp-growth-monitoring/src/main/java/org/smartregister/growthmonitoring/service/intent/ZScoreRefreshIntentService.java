@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 import org.joda.time.DateTime;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.commonregistry.CommonPersonObject;
@@ -20,6 +17,7 @@ import org.smartregister.growthmonitoring.domain.WeightZScore;
 import org.smartregister.growthmonitoring.repository.HeightZScoreRepository;
 import org.smartregister.growthmonitoring.repository.WeightZScoreRepository;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
+import org.smartregister.growthmonitoring.util.GrowthMonitoringUtils;
 import org.smartregister.util.FileUtilities;
 import org.smartregister.util.Utils;
 
@@ -106,7 +104,7 @@ public class ZScoreRefreshIntentService extends IntentService {
      * @param force
      */
     private void dumpWeightCsv(Gender gender, boolean force) {
-            try {
+        try {
             List<WeightZScore> existingScores =
                     GrowthMonitoringLibrary.getInstance().weightZScoreRepository().findByGender(gender);
             if (force || existingScores.size() == 0) {
@@ -116,41 +114,12 @@ public class ZScoreRefreshIntentService extends IntentService {
                 } else if (gender.equals(Gender.MALE)) {
                     filename = GrowthMonitoringLibrary.getInstance().getConfig().getMaleWeightZScoreFile();
                 }
-
                 if (filename != null) {
-                    CSVParser csvParser =
-                            CSVParser.parse(Utils.readAssetContents(this, filename), CSVFormat.newFormat('\t'));
-
-                    HashMap<Integer, Boolean> columnStatus = new HashMap<>();
-                    String query =
-                            "INSERT INTO `" + WeightZScoreRepository.TABLE_NAME + "` ( `" + ColumnHeaders.COLUMN_SEX + "`";
-                    for (CSVRecord record : csvParser) {
-                        if (csvParser.getCurrentLineNumber() == 2) {// The second line
-                            query = query + ")\n VALUES (\"" + gender.name() + "\"";
-                        } else if (csvParser.getCurrentLineNumber() > 2) {
-                            query = query + "),\n (\"" + gender.name() + "\"";
-                        }
-
-                        for (int columnIndex = 0; columnIndex < record.size(); columnIndex++) {
-                            String curColumn = record.get(columnIndex);
-                            if (csvParser.getCurrentLineNumber() == 1) {
-                                if (CSV_HEADING_SQL_COLUMN_MAP.containsKey(curColumn)) {
-                                    columnStatus.put(columnIndex, true);
-                                    query = query + ", `" + CSV_HEADING_SQL_COLUMN_MAP.get(curColumn) + "`";
-                                } else {
-                                    columnStatus.put(columnIndex, false);
-                                }
-                            } else {
-                                if (columnStatus.get(columnIndex)) {
-                                    query = query + ", \"" + curColumn + "\"";
-                                }
-                            }
-                        }
+                    String query = GrowthMonitoringUtils.dumpCsvQueryBuilder(gender, this, filename, WeightZScoreRepository.TABLE_NAME, CSV_HEADING_SQL_COLUMN_MAP);
+                    if (query != null) {
+                        boolean result = GrowthMonitoringLibrary.getInstance().weightZScoreRepository().runRawQuery(query);
+                        Timber.d("ZScoreRefreshIntentService --> dumpWeightCsv --> Result%s", result);
                     }
-                    query = query + ");";
-
-                    boolean result = GrowthMonitoringLibrary.getInstance().weightZScoreRepository().runRawQuery(query);
-                    Timber.d("ZScoreRefreshIntentService --> dumpWeightCsv --> Result%s", result);
                 }
             }
         } catch (Exception e) {
@@ -175,42 +144,12 @@ public class ZScoreRefreshIntentService extends IntentService {
                 } else if (gender.equals(Gender.MALE)) {
                     filename = GrowthMonitoringLibrary.getInstance().getConfig().getMaleHeightZScoreFile();
                 }
-
                 if (filename != null) {
-                    CSVParser csvParser =
-                            CSVParser.parse(Utils.readAssetContents(this, filename), CSVFormat.newFormat('\t'));
-
-                    HashMap<Integer, Boolean> columnStatus = new HashMap<>();
-                    String query =
-                            "INSERT INTO `" + HeightZScoreRepository.TABLE_NAME + "` ( `" + ColumnHeaders.COLUMN_SEX + "`";
-                    for (CSVRecord record : csvParser) {
-                        if (csvParser.getCurrentLineNumber() == 2) {// The second line
-                            query = query + ")\n VALUES (\"" + gender.name() + "\"";
-                        } else if (csvParser.getCurrentLineNumber() > 2) {
-                            query = query + "),\n (\"" + gender.name() + "\"";
-                        }
-
-                        for (int columnIndex = 0; columnIndex < record.size(); columnIndex++) {
-                            String curColumn = record.get(columnIndex);
-                            if (csvParser.getCurrentLineNumber() == 1) {
-                                if (HEIGHT_CSV_HEADING_SQL_COLUMN_MAP.containsKey(curColumn)) {
-                                    columnStatus.put(columnIndex, true);
-                                    query = query + ", `" + HEIGHT_CSV_HEADING_SQL_COLUMN_MAP.get(curColumn) + "`";
-                                } else {
-                                    columnStatus.put(columnIndex, false);
-                                }
-                            } else {
-                                if (columnStatus.get(columnIndex)) {
-                                    query = query + ", \"" + curColumn + "\"";
-                                }
-                            }
-                        }
+                    String query = GrowthMonitoringUtils.dumpCsvQueryBuilder(gender, this, filename, HeightZScoreRepository.TABLE_NAME, HEIGHT_CSV_HEADING_SQL_COLUMN_MAP);
+                    if (query != null) {
+                        boolean result = GrowthMonitoringLibrary.getInstance().heightZScoreRepository().runRawQuery(query);
+                        Timber.d("ZScoreRefreshIntentService --> dumpHeightCsv --> Result%s", result);
                     }
-                    query = query + ");";
-
-                    boolean result = GrowthMonitoringLibrary.getInstance().heightZScoreRepository().runRawQuery(query);
-                    Timber.d("ZScoreRefreshIntentService --> dumpHeightCsv --> Result%s", result);
-
                 }
             }
         } catch (Exception e) {
