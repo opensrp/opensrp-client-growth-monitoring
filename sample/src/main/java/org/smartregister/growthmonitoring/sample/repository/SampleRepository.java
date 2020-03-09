@@ -9,10 +9,11 @@ import org.smartregister.AllConstants;
 import org.smartregister.domain.db.Column;
 import org.smartregister.growthmonitoring.repository.HeightRepository;
 import org.smartregister.growthmonitoring.repository.HeightZScoreRepository;
+import org.smartregister.growthmonitoring.repository.WeightForHeightRepository;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.repository.WeightZScoreRepository;
-import org.smartregister.growthmonitoring.sample.BuildConfig;
 import org.smartregister.repository.EventClientRepository;
+import org.smartregister.growthmonitoring.sample.BuildConfig;
 import org.smartregister.repository.Repository;
 
 /**
@@ -54,6 +55,8 @@ public class SampleRepository extends Repository {
         database.execSQL(HeightRepository.FORMSUBMISSION_INDEX);
         database.execSQL(HeightRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL);
         database.execSQL(HeightRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL_INDEX);
+
+        WeightForHeightRepository.createTable(database);
 
         onUpgrade(database, 1, BuildConfig.DATABASE_VERSION);
 

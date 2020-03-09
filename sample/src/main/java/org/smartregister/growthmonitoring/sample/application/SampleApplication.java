@@ -8,6 +8,7 @@ import org.smartregister.growthmonitoring.GrowthMonitoringConfig;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.sample.BuildConfig;
 import org.smartregister.growthmonitoring.sample.repository.SampleRepository;
+import org.smartregister.growthmonitoring.service.intent.WeightForHeightIntentService;
 import org.smartregister.growthmonitoring.service.intent.ZScoreRefreshIntentService;
 import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.Repository;
@@ -41,7 +42,6 @@ public class SampleApplication extends DrishtiApplication {
 
         context.updateApplicationContext(getApplicationContext());
 
-
         //Initialize Modules
         CoreLibrary.init(context);
 
@@ -49,12 +49,12 @@ public class SampleApplication extends DrishtiApplication {
 
         GrowthMonitoringConfig config = new GrowthMonitoringConfig();
         config.setFemaleWeightZScoreFile("zscores/custom_female_zscore_file.txt");
+        config.setWeightForHeightZScoreFile("weight_for_height.csv");
         GrowthMonitoringLibrary
                 .init(context, getRepository(), BuildConfig.VERSION_CODE, BuildConfig.DATABASE_VERSION, config);
 
-
+        startWeightForHeightIntentService();
         startZscoreRefreshService();
-
     }
 
     @Override
@@ -78,6 +78,10 @@ public class SampleApplication extends DrishtiApplication {
     public void startZscoreRefreshService() {
         Intent intent = new Intent(this.getApplicationContext(), ZScoreRefreshIntentService.class);
         this.getApplicationContext().startService(intent);
+    }
+
+    public void startWeightForHeightIntentService() {
+        WeightForHeightIntentService.startParseWFHZScores(this);
     }
 
     public static synchronized SampleApplication getInstance() {
