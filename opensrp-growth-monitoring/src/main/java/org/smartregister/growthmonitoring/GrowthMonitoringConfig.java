@@ -12,6 +12,7 @@ public class GrowthMonitoringConfig {
     private String femaleWeightZScoreFile;
     private String femaleHeightZScoreFile;
     private String genderNeutralZScoreFile;
+    private String weightForHeightZScoreFile;
     private String childTable;
 
     public GrowthMonitoringConfig() {
@@ -60,6 +61,14 @@ public class GrowthMonitoringConfig {
         } else {
             return "height_z_scores_female.csv";
         }
+    }
+
+    public void setWeightForHeightZScoreFile(String weightForHeightZScoreFile) {
+        this.weightForHeightZScoreFile = weightForHeightZScoreFile;
+    }
+
+    public String getWeightForHeightZScoreFile() {
+        return this.weightForHeightZScoreFile;
     }
 
     public void setFemaleHeightZScoreFile(String femaleHeightZScoreFile) {
