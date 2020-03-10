@@ -13,6 +13,7 @@ public class GrowthMonitoringConfigTest {
     private static final String BOYCHILD_WEIGHT_ZSCORE_FILE = "weight_z_scores_male.csv";
     private static final String FEMALE_HEIGHT_ZSCORE_FILE = "height_z_scores_female.csv";
     private static final String BOYCHILD_HEIGHT_ZSCORE_FILE = "height_z_scores_male.csv";
+    private static final String WEIGHT_FOR_HEIGHT_Z_SCORE_FILE = "weight_for_height.csv";
 
     @Test
     public void testGrowthMonitoringConfigInstantiatesCorrectly() {
@@ -43,5 +44,13 @@ public class GrowthMonitoringConfigTest {
 
         config.setGenderNeutralZScoreFile(CUSTOM_ZSCORE_FILE);
         Assert.assertEquals(CUSTOM_ZSCORE_FILE, config.getGenderNeutralZScoreFile());
+    }
+
+    @Test
+    public void weightForHeightConfigInstantiatesCorrectly() {
+        GrowthMonitoringConfig growthMonitoringConfig = new GrowthMonitoringConfig();
+        growthMonitoringConfig.setWeightForHeightZScoreFile(WEIGHT_FOR_HEIGHT_Z_SCORE_FILE);
+
+        Assert.assertEquals(WEIGHT_FOR_HEIGHT_Z_SCORE_FILE, growthMonitoringConfig.getWeightForHeightZScoreFile());
     }
 }
