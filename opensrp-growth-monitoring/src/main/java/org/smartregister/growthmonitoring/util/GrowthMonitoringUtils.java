@@ -121,7 +121,7 @@ public class GrowthMonitoringUtils {
      * @param csvHeadingColumnMap CSV Headings map
      * @return Query String
      */
-    public static String dumpCsvQueryBuilder(Gender gender, Context context, String filename, String tableName, Map<String, String> csvHeadingColumnMap) {
+    public static String getDumpCsvQuery(Gender gender, Context context, String filename, String tableName, Map<String, String> csvHeadingColumnMap) {
         StringBuilder queryString;
         try {
             if (filename != null) {

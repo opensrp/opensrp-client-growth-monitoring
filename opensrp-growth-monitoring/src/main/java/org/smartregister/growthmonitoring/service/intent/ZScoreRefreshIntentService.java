@@ -115,7 +115,7 @@ public class ZScoreRefreshIntentService extends IntentService {
                     filename = GrowthMonitoringLibrary.getInstance().getConfig().getMaleWeightZScoreFile();
                 }
                 if (filename != null) {
-                    String query = GrowthMonitoringUtils.dumpCsvQueryBuilder(gender, this, filename, WeightZScoreRepository.TABLE_NAME, CSV_HEADING_SQL_COLUMN_MAP);
+                    String query = GrowthMonitoringUtils.getDumpCsvQuery(gender, this, filename, WeightZScoreRepository.TABLE_NAME, CSV_HEADING_SQL_COLUMN_MAP);
                     if (query != null) {
                         boolean result = GrowthMonitoringLibrary.getInstance().weightZScoreRepository().runRawQuery(query);
                         Timber.d("ZScoreRefreshIntentService --> dumpWeightCsv --> Result%s", result);
@@ -145,7 +145,7 @@ public class ZScoreRefreshIntentService extends IntentService {
                     filename = GrowthMonitoringLibrary.getInstance().getConfig().getMaleHeightZScoreFile();
                 }
                 if (filename != null) {
-                    String query = GrowthMonitoringUtils.dumpCsvQueryBuilder(gender, this, filename, HeightZScoreRepository.TABLE_NAME, HEIGHT_CSV_HEADING_SQL_COLUMN_MAP);
+                    String query = GrowthMonitoringUtils.getDumpCsvQuery(gender, this, filename, HeightZScoreRepository.TABLE_NAME, HEIGHT_CSV_HEADING_SQL_COLUMN_MAP);
                     if (query != null) {
                         boolean result = GrowthMonitoringLibrary.getInstance().heightZScoreRepository().runRawQuery(query);
                         Timber.d("ZScoreRefreshIntentService --> dumpHeightCsv --> Result%s", result);

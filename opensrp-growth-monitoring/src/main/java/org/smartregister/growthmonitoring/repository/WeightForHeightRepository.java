@@ -56,7 +56,7 @@ public class WeightForHeightRepository extends BaseRepository {
             String selection;
             String[] selectionArgs;
 
-            if (height == NO_HEIGHT_DEFAULT) {
+            if (height != NO_HEIGHT_DEFAULT) {
                 selection = GrowthMonitoringConstants.ColumnHeaders.COLUMN_SEX + " = ? AND " + GrowthMonitoringConstants.ColumnHeaders.HEIGHT + " = ? ";
                 selectionArgs = new String[]{gender, String.valueOf(height)};
             } else {
