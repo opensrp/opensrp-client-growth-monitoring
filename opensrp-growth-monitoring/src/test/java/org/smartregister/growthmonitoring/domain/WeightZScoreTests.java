@@ -1,4 +1,4 @@
-package org.smartregister.growthmonitoring.domian;
+package org.smartregister.growthmonitoring.domain;
 
 import org.joda.time.LocalDate;
 import org.junit.Assert;
@@ -14,7 +14,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.smartregister.growthmonitoring.BaseUnitTest;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
-import org.smartregister.growthmonitoring.domain.WeightZScore;
 import org.smartregister.growthmonitoring.repository.WeightZScoreRepository;
 
 import java.util.ArrayList;
