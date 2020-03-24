@@ -84,7 +84,6 @@ public class HeightZScore extends ZScore {
      * @param gender
      * @param ageInMonthsDouble
      * @param z
-     *
      * @return
      */
     public static Double reverse(Gender gender, double ageInMonthsDouble, Double z) {
@@ -108,23 +107,9 @@ public class HeightZScore extends ZScore {
     }
 
     /**
-     * This method calculates Z (The z-score) using the formulae provided here https://www.cdc
-     * .gov/growthcharts/percentile_data_files.htm
-     *
-     * @param x The height to use
-     *
-     * @return
-     */
-    @Override
-    public double getZ(double x) {
-        return super.getZ(x);
-    }
-
-    /**
      * This method calculates X (height) given the Z-Score
      *
      * @param z The z-score to use to calculate X
-     *
      * @return
      */
     public double getX(double z) {

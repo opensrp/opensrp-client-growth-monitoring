@@ -19,16 +19,4 @@ public class WeightForHeightZscore extends ZScore {
         return 0.0;
     }
 
-    /**
-     * This method calculates Z (The z-score) using the formulae provided here https://www.cdc
-     * .gov/growthcharts/percentile_data_files.htm
-     *
-     * @param x The weight to use
-     * @return The Z-Score value
-     */
-    @Override
-    public double getZ(double x) {
-        return super.getZ(x);
-    }
-
 }
