@@ -45,7 +45,7 @@ public class WeightForHeightRepositoryTest extends BaseUnitTest {
         Mockito.verify(sqliteDatabase, Mockito.times(1)).query(
                 ArgumentMatchers.eq(WeightForHeightRepository.TABLE_NAME),
                 ArgumentMatchers.isNull(String[].class),
-                ArgumentMatchers.eq(GrowthMonitoringConstants.ColumnHeaders.COLUMN_SEX + " = ? AND " + GrowthMonitoringConstants.ColumnHeaders.HEIGHT + " = ? " + COLLATE_NOCASE),
+                ArgumentMatchers.eq(GrowthMonitoringConstants.ColumnHeaders.COLUMN_SEX + " = ? AND " + GrowthMonitoringConstants.ColumnHeaders.HEIGHT + " = ? "),
                 ArgumentMatchers.eq(new String[]{"1", "60.0"}),
                 ArgumentMatchers.isNull(String.class), ArgumentMatchers.isNull(String.class), ArgumentMatchers.isNull(String.class), ArgumentMatchers.isNull(String.class));
     }
