@@ -39,14 +39,14 @@ public class GrowthMonitoringUtilsTest {
     @Test
     public void getDumpCsvQueryReturnsCorrectQueryString() {
         Map<String, String> CSV_HEADING_COLUMN_MAP = new HashMap<>();
-        CSV_HEADING_COLUMN_MAP.put("sex", GrowthMonitoringConstants.ColumnHeaders.COLUMN_SEX);
-        CSV_HEADING_COLUMN_MAP.put("height", GrowthMonitoringConstants.ColumnHeaders.HEIGHT);
-        CSV_HEADING_COLUMN_MAP.put("l", GrowthMonitoringConstants.ColumnHeaders.COLUMN_L);
-        CSV_HEADING_COLUMN_MAP.put("m", GrowthMonitoringConstants.ColumnHeaders.COLUMN_M);
-        String queryStringStart = "INSERT INTO `test_table` ( `sex`, `sex`, `height`, `l`, `m`)\n" +
-                " VALUES (\"MALE\", \"1\", \"65\", \"-0.3521\", \"7.4327\"),";
+        CSV_HEADING_COLUMN_MAP.put("Month", GrowthMonitoringConstants.ColumnHeaders.COLUMN_MONTH);
+        CSV_HEADING_COLUMN_MAP.put("L", GrowthMonitoringConstants.ColumnHeaders.COLUMN_L);
+        CSV_HEADING_COLUMN_MAP.put("M", GrowthMonitoringConstants.ColumnHeaders.COLUMN_M);
+        CSV_HEADING_COLUMN_MAP.put("S", GrowthMonitoringConstants.ColumnHeaders.COLUMN_S);
+        String queryStringStart = "INSERT INTO `test_table` ( `sex`, `month`, `l`, `m`, `s`)\n" +
+                " VALUES (\"MALE\", \"0\", \"0.3487\", \"3.3464\", \"0.14602\"),";
 
-        String sqlQueryString = GrowthMonitoringUtils.getDumpCsvQuery(Gender.MALE, RuntimeEnvironment.application.getApplicationContext(), "weight_for_height.csv", "test_table", CSV_HEADING_COLUMN_MAP);
+        String sqlQueryString = GrowthMonitoringUtils.getDumpCsvQuery(Gender.MALE, RuntimeEnvironment.application.getApplicationContext(), "weight_z_scores_male.csv", "test_table", CSV_HEADING_COLUMN_MAP);
         Assert.assertTrue(sqlQueryString.startsWith(queryStringStart));
     }
 }
