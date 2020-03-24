@@ -65,7 +65,7 @@ public class WeightForHeightRepository extends BaseRepository {
             }
 
             cursor = database.query(TABLE_NAME, null,
-                    selection + COLLATE_NOCASE, selectionArgs, null, null, null, null);
+                    selection, selectionArgs, null, null, null, null);
 
             if (cursor != null && cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {

@@ -87,7 +87,7 @@ public class HeightZScoreRepository extends BaseRepository {
                 }
             }
         } catch (Exception e) {
-            Timber.e(e, TAG);
+            Timber.e(e);
         } finally {
             if (cursor != null) cursor.close();
         }
