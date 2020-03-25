@@ -1,15 +1,23 @@
 package org.smartregister.growthmonitoring.util;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.domain.WeightZScore;
 import org.smartregister.growthmonitoring.listener.ViewMeasureListener;
+import org.smartregister.util.Utils;
 
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -102,5 +110,56 @@ public class GrowthMonitoringUtils {
         }
         return properties;
 
+    }
+
+    /**
+     * Parse CSV file and build query String for persisting values in the DB
+     * @param gender Gender for which the chart values belong to
+     * @param context
+     * @param filename CSV file name
+     * @param tableName Table where values will be stored
+     * @param csvHeadingColumnMap CSV Headings map
+     * @return Query String
+     */
+    public static String getDumpCsvQuery(Gender gender, Context context, String filename, String tableName, Map<String, String> csvHeadingColumnMap) {
+        StringBuilder queryString;
+        try {
+            if (filename != null) {
+                CSVParser csvParser =
+                        CSVParser.parse(Utils.readAssetContents(context, filename), CSVFormat.newFormat('\t'));
+
+                HashMap<Integer, Boolean> columnStatus = new HashMap<>();
+
+                   queryString = new StringBuilder("INSERT INTO `" + tableName + "` ( `" + GrowthMonitoringConstants.ColumnHeaders.COLUMN_SEX + "`");
+                for (CSVRecord record : csvParser) {
+                    if (csvParser.getCurrentLineNumber() == 2) {// The second line
+                        queryString.append(")\n VALUES (\"").append(gender.name()).append("\"");
+                    } else if (csvParser.getCurrentLineNumber() > 2) {
+                        queryString.append("),\n (\"").append(gender.name()).append("\"");
+                    }
+
+                    for (int columnIndex = 0; columnIndex < record.size(); columnIndex++) {
+                        String curColumn = record.get(columnIndex);
+                        if (csvParser.getCurrentLineNumber() == 1) {
+                            if (csvHeadingColumnMap.containsKey(curColumn)) {
+                                columnStatus.put(columnIndex, true);
+                                queryString.append(", `").append(csvHeadingColumnMap.get(curColumn)).append("`");
+                            } else {
+                                columnStatus.put(columnIndex, false);
+                            }
+                        } else {
+                            if (columnStatus.get(columnIndex)) {
+                                queryString.append(", \"").append(curColumn).append("\"");
+                            }
+                        }
+                    }
+                }
+                queryString.append(");");
+                return queryString.toString();
+            }
+        } catch (Exception e) {
+            Timber.e(e, "GrowthMonitoringUtils --> Dump CSV");
+        }
+        return null;
     }
 }
