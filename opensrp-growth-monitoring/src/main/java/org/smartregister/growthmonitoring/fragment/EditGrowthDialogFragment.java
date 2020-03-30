@@ -267,8 +267,8 @@ public class EditGrowthDialogFragment extends DialogFragment {
                     calendar.set(year, month, day);
 
                     DateTime updateTime = new DateTime(calendar.getTime());
+                    weightWrapper.setUpdatedWeightDate(updateTime, false);
                     if (currentGrowthDate != null && !org.apache.commons.lang3.time.DateUtils.isSameDay(calendar.getTime(), currentGrowthDate.toDate())) {
-                        weightWrapper.setUpdatedWeightDate(updateTime, false);
                         if (monitorGrowth) {
                             heightWrapper.setUpdatedHeightDate(updateTime, false);
                         }
