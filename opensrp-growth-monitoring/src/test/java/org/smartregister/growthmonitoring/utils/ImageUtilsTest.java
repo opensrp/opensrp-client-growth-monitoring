@@ -1,5 +1,6 @@
 package org.smartregister.growthmonitoring.utils;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,12 +25,12 @@ public class ImageUtilsTest {
 
     @Test
     public void assertProfileImageResourceByGenderWithEmptyStringParameterReturnsDefaultResource() {
-        org.junit.Assert.assertEquals(ImageUtils.profileImageResourceByGender(""), R.drawable.child_boy_infant);
+        Assert.assertEquals(ImageUtils.profileImageResourceByGender(""), R.drawable.child_boy_infant);
     }
 
     @Test
     public void assertProfileImageResourceByGenderWithMaleParameterReturnsMaleResource() {
-        org.junit.Assert.assertEquals(ImageUtils.profileImageResourceByGender("male"), R.drawable.child_boy_infant);
+        Assert.assertEquals(ImageUtils.profileImageResourceByGender("male"), R.drawable.child_boy_infant);
     }
 
 }
