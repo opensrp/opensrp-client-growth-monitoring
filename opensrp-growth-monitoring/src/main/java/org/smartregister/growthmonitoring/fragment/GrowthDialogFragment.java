@@ -181,12 +181,11 @@ public class GrowthDialogFragment extends DialogFragment {
         String lastName = Utils.getValue(personDetails.getColumnmaps(), GrowthMonitoringConstants.LAST_NAME, true);
 
         final ViewGroup dialogView = setUpViews(inflater, container);
-        dialogView.setFilterTouchesWhenObscured(true);
         nameView.setText(Utils.getName(firstName, lastName));
 
         String personId = Utils.getValue(personDetails.getColumnmaps(), GrowthMonitoringConstants.ZEIR_ID, false);
         if (StringUtils.isNotBlank(personId)) {
-            numberView.setText(String.format("%s: %s", getString(R.string.label_zeir), personId));
+            numberView.setText(String.format("%s: %s", getActivity().getString(R.string.label_zeir), personId));
         } else {
             numberView.setText("");
         }
@@ -252,6 +251,7 @@ public class GrowthDialogFragment extends DialogFragment {
     @NotNull
     private ViewGroup setUpViews(LayoutInflater inflater, ViewGroup container) {
         final ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.growth_dialog_view, container, false);
+        dialogView.setFilterTouchesWhenObscured(true);
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         tabLayout = dialogView.findViewById(R.id.growth_tab_layout);

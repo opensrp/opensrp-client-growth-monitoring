@@ -93,7 +93,7 @@ dependencies {
         exclude group: 'com.github.bmelnychuk', module: 'atv'
     }
 
-    implementation('org.smartregister:opensrp-client-native-form:1.7.29-SNAPSHOT@aar') { 
+    implementation('org.smartregister:opensrp-client-native-form:1.7.32-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'recyclerview-v7'
         exclude group: 'com.google.code.gson', module: 'gson'
@@ -109,32 +109,22 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 
-    testImplementation('org.robolectric:robolectric:3.8') {
 
-        exclude group: 'com.google.guava', module: 'guava'
-        exclude group: 'org.apache.maven', module: 'maven-model'
-        exclude group: 'org.apache.maven', module: 'maven-ant-tasks'
-        exclude group: 'com.android.support'
-        exclude group: 'com.thoughtworks.xstream', module: 'xstream'
+    def robolectricVersion = '3.8'
+    testImplementation("org.robolectric:robolectric:$robolectricVersion") {
+        exclude group: 'com.google.auto.service', module: 'auto-service'
     }
-
-    testImplementation("org.robolectric:shadows-multidex:3.8") {
-        exclude group: 'com.google.guava', module: 'guava'
-    }
-
-
-    testImplementation('org.robolectric:shadows-support-v4:3.3.2') {
-        exclude group: 'com.google.guava', module: 'guava'
-    }
-
+    testImplementation "org.robolectric:shadows-multidex:$robolectricVersion"
+    testImplementation "org.robolectric:shadows-support-v4:3.1"
     testImplementation "org.robolectric:shadows-support-v4:3.3.2"
+
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.+') {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'junit', module: 'junit'
     }
 
     // PowerMock
-    def powerMockVersion = '1.7.1'
+    def powerMockVersion = '1.7.4'
     testImplementation "org.powermock:powermock-module-junit4:$powerMockVersion"
     testImplementation "org.powermock:powermock-module-junit4-rule:$powerMockVersion"
     testImplementation "org.powermock:powermock-api-mockito2:$powerMockVersion"
