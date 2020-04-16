@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,18 +24,17 @@ import org.smartregister.Context;
 import org.smartregister.growthmonitoring.BaseUnitTest;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.R;
-import org.smartregister.growthmonitoring.domain.Height;
-import org.smartregister.growthmonitoring.domain.Weight;
+import org.smartregister.growthmonitoring.domain.HeightWrapper;
+import org.smartregister.growthmonitoring.domain.WeightWrapper;
 import org.smartregister.growthmonitoring.util.AppProperties;
 import org.smartregister.repository.Repository;
 
-import java.util.List;
-
 /**
- * Created by ndegwamartin on 2019-06-03.
+ * Created by ndegwamartin on 2020-04-15.
  */
+
 @PrepareForTest({GrowthMonitoringLibrary.class})
-public class GrowthDialogFragmentTest extends BaseUnitTest {
+public class RecordGrowthDialogFragmentTest extends BaseUnitTest {
 
     @Rule
     public PowerMockRule rule = new PowerMockRule();
@@ -81,76 +81,13 @@ public class GrowthDialogFragmentTest extends BaseUnitTest {
         PowerMockito.when(appProperties.getPropertyBoolean(AppProperties.KEY.MONITOR_GROWTH)).thenReturn(true);
     }
 
-
-    @Test
-    public void testGrowthDialogFragmentInstantiatesValidInstance() {
-        List<Weight> weightArrayList = getWeights();
-        List<Height> heightArrayList = getHeights();
-
-        GrowthDialogFragment dialogFragment = GrowthDialogFragment.newInstance(dummydetails(), weightArrayList, heightArrayList);
-        Assert.assertNotNull(dialogFragment);
-
-    }
-
-    @Test
-    public void testSortHeightsOrdersItemsCorrectly() {
-
-        GrowthDialogFragment growthDialogFragment = GrowthDialogFragment.newInstance(dummydetails(), getWeights(), getHeights());
-        List<Height> unsortedHeights = growthDialogFragment.getHeights();
-
-        Assert.assertNotNull(unsortedHeights);
-
-        //Verify prior order
-        Assert.assertEquals(Float.valueOf("30.4"), unsortedHeights.get(0).getCm());
-        Assert.assertEquals(Float.valueOf("10.0"), unsortedHeights.get(1).getCm());
-        Assert.assertEquals(Float.valueOf("50.2"), unsortedHeights.get(2).getCm());
-        Assert.assertEquals(Float.valueOf("40.3"), unsortedHeights.get(3).getCm());
-
-        growthDialogFragment.sortHeights();
-
-        List<Height> sortedHeights = growthDialogFragment.getHeights();
-        Assert.assertNotNull(unsortedHeights);
-
-        //Verify sorted order
-        Assert.assertEquals(Float.valueOf("50.2"), sortedHeights.get(0).getCm());
-        Assert.assertEquals(Float.valueOf("40.3"), sortedHeights.get(1).getCm());
-        Assert.assertEquals(Float.valueOf("30.4"), sortedHeights.get(2).getCm());
-        Assert.assertEquals(Float.valueOf("10.0"), sortedHeights.get(3).getCm());
-    }
-
-    @Test
-    public void testSortWeightsOrdersItemsCorrectly() {
-
-        GrowthDialogFragment growthDialogFragment = GrowthDialogFragment.newInstance(dummydetails(), getWeights(), getHeights());
-        Assert.assertNotNull(growthDialogFragment);
-
-
-        List<Weight> unsortedWeights = growthDialogFragment.getWeights();
-
-        Assert.assertNotNull(unsortedWeights);
-
-        //Verify prior order
-        Assert.assertEquals(Float.valueOf("3.4"), unsortedWeights.get(0).getKg());
-        Assert.assertEquals(Float.valueOf("5.2"), unsortedWeights.get(1).getKg());
-
-        growthDialogFragment.sortWeights();
-
-        List<Weight> sortedWeights = growthDialogFragment.getWeights();
-        Assert.assertNotNull(unsortedWeights);
-
-        //Verify sorted order
-        Assert.assertEquals(Float.valueOf("5.2"), sortedWeights.get(0).getKg());
-        Assert.assertEquals(Float.valueOf("3.4"), sortedWeights.get(1).getKg());
-    }
-
-
     @Test
     public void assertSetUpViewInvokesSetFilterTouchesWhenObscuredForDialogViewSetWithTrueParam() {
 
         Mockito.doReturn(layoutInflater).when(activity).getLayoutInflater();
-        Mockito.doReturn(dialogView).when(layoutInflater).inflate(R.layout.growth_dialog_view, viewGroup, false);
+        Mockito.doReturn(dialogView).when(layoutInflater).inflate(R.layout.record_growth_dialog_view, viewGroup, false);
 
-        GrowthDialogFragment fragment = Mockito.spy(GrowthDialogFragment.newInstance(dummydetails(), getWeights(), getHeights()));
+        RecordGrowthDialogFragment fragment = Mockito.spy(RecordGrowthDialogFragment.newInstance(new LocalDate().minusYears(2).toDate(), new WeightWrapper(), new HeightWrapper()));
 
         Mockito.doReturn(dialog).when(fragment).getDialog();
         Mockito.doReturn(window).when(dialog).getWindow();
@@ -167,5 +104,4 @@ public class GrowthDialogFragmentTest extends BaseUnitTest {
         Mockito.verify(view).setFilterTouchesWhenObscured(true);
 
     }
-
 }

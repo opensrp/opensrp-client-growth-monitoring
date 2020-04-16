@@ -209,11 +209,12 @@ public class EditGrowthDialogFragment extends DialogFragment {
     @NotNull
     private ViewGroup setUpViews(LayoutInflater inflater, ViewGroup container) {
         ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.edit_growth_dialog_view, container, false);
+        dialogView.setFilterTouchesWhenObscured(true);
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         editWeight = dialogView.findViewById(R.id.edit_weight);
         editHeight = dialogView.findViewById(R.id.edit_height);
-        earlierDatePicker = dialogView.findViewById(isNumericDatePicker ? R.id.earlier_date_picker_numeric :R.id.earlier_date_picker);
+        earlierDatePicker = dialogView.findViewById(isNumericDatePicker ? R.id.earlier_date_picker_numeric : R.id.earlier_date_picker);
         nameView = dialogView.findViewById(R.id.child_name);
         numberView = dialogView.findViewById(R.id.child_zeir_id);
         ageView = dialogView.findViewById(R.id.child_age);

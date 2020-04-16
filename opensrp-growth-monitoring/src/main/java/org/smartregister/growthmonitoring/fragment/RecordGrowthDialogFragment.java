@@ -216,6 +216,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
     private ViewGroup setUpViews(LayoutInflater inflater, ViewGroup container) {
 
         ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.record_growth_dialog_view, container, false);
+        dialogView.setFilterTouchesWhenObscured(true);
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         editWeight = dialogView.findViewById(R.id.edit_weight);
