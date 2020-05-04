@@ -1,4 +1,4 @@
-package org.smartregister.growthmonitoring.utils;
+package org.smartregister.growthmonitoring.util;
 
 import android.os.Build;
 
@@ -13,8 +13,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.smartregister.growthmonitoring.BuildConfig;
-import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
-import org.smartregister.growthmonitoring.util.GrowthMonitoringUtils;
 
 import java.util.Calendar;
 import java.util.Date;
