@@ -31,6 +31,7 @@ import org.smartregister.growthmonitoring.domain.HeightWrapper;
 import org.smartregister.growthmonitoring.domain.WeightWrapper;
 import org.smartregister.growthmonitoring.listener.GrowthMonitoringActionListener;
 import org.smartregister.growthmonitoring.util.AppProperties;
+import org.smartregister.growthmonitoring.util.GrowthMonitoringUtils;
 import org.smartregister.growthmonitoring.util.ImageUtils;
 import org.smartregister.util.DatePickerUtils;
 import org.smartregister.util.OpenSRPImageLoader;
@@ -150,10 +151,13 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         setWeight();
         setHeight();
 
-        earlierDatePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
         if (dateOfBirth != null) {
-            earlierDatePicker.setMinDate(dateOfBirth.getTime());
+            long dobTime = GrowthMonitoringUtils.cleanTimestamp(dateOfBirth.getTime());
+            earlierDatePicker.setMinDate(dobTime);
         }
+
+        long today = GrowthMonitoringUtils.cleanTimestamp(Calendar.getInstance().getTimeInMillis());
+        earlierDatePicker.setMaxDate(today);
 
         nameView.setText(weightWrapper.getPatientName());
 
