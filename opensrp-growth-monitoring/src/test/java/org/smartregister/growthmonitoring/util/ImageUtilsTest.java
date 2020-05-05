@@ -1,4 +1,4 @@
-package org.smartregister.growthmonitoring.utils;
+package org.smartregister.growthmonitoring.util;
 
 import org.junit.Assert;
 import org.junit.Before;

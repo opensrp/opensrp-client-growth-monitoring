@@ -8,6 +8,7 @@ import android.view.ViewTreeObserver;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.joda.time.LocalDate;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.domain.WeightZScore;
 import org.smartregister.growthmonitoring.listener.ViewMeasureListener;
@@ -114,10 +115,11 @@ public class GrowthMonitoringUtils {
 
     /**
      * Parse CSV file and build query String for persisting values in the DB
-     * @param gender Gender for which the chart values belong to
+     *
+     * @param gender              Gender for which the chart values belong to
      * @param context
-     * @param filename CSV file name
-     * @param tableName Table where values will be stored
+     * @param filename            CSV file name
+     * @param tableName           Table where values will be stored
      * @param csvHeadingColumnMap CSV Headings map
      * @return Query String
      */
@@ -130,7 +132,7 @@ public class GrowthMonitoringUtils {
 
                 HashMap<Integer, Boolean> columnStatus = new HashMap<>();
 
-                   queryString = new StringBuilder("INSERT INTO `" + tableName + "` ( `" + GrowthMonitoringConstants.ColumnHeaders.COLUMN_SEX + "`");
+                queryString = new StringBuilder("INSERT INTO `" + tableName + "` ( `" + GrowthMonitoringConstants.ColumnHeaders.COLUMN_SEX + "`");
                 for (CSVRecord record : csvParser) {
                     if (csvParser.getCurrentLineNumber() == 2) {// The second line
                         queryString.append(")\n VALUES (\"").append(gender.name()).append("\"");
@@ -161,5 +163,12 @@ public class GrowthMonitoringUtils {
             Timber.e(e, "GrowthMonitoringUtils --> Dump CSV");
         }
         return null;
+    }
+
+    /**
+     * This methods cleans a timestamp generated from date string to set value to a consistent time portion at the start of day
+     */
+    public static long cleanTimestamp(long rawTimestamp) {
+        return new LocalDate(rawTimestamp).toDateTimeAtStartOfDay().toDate().getTime();
     }
 }
