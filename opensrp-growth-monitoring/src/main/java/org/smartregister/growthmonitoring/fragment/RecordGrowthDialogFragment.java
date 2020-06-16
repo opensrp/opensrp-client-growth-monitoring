@@ -257,7 +257,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         growthTakenToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveGrowthRecord();
+                saveGrowthRecord(true);
 
             }
         });
@@ -267,13 +267,13 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveGrowthRecord();
+                saveGrowthRecord(false);
 
             }
         });
     }
 
-    private void saveGrowthRecord() {
+    private void saveGrowthRecord(boolean isToday) {
         String weightString = editWeight.getText().toString();
         if (StringUtils.isBlank(weightString) || Float.valueOf(weightString) <= 0f) {
             Toast.makeText(getActivity(), R.string.weight_is_required, Toast.LENGTH_LONG).show();
@@ -287,9 +287,9 @@ public class RecordGrowthDialogFragment extends DialogFragment {
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
-        weightWrapper.setUpdatedWeightDate(new DateTime(calendar.getTime()), false);
+        weightWrapper.setUpdatedWeightDate(new DateTime(calendar.getTime()), isToday);
         if (monitorGrowth) {
-            heightWrapper.setUpdatedHeightDate(new DateTime(calendar.getTime()), false);
+            heightWrapper.setUpdatedHeightDate(new DateTime(calendar.getTime()), isToday);
         }
 
         Float weight = Float.valueOf(weightString);
