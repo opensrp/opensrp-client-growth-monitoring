@@ -19,8 +19,10 @@
     <string name="record_height">Record Height</string>
     <string name="weight_for_age">Weight-for-Age %1$s</string>
     <string name="height_for_age">Height-for-Age %1$s</string>
+    <string name="weight_for_height">Weight-for-Height %1$s</string>
     <string name="previous_weights">PREVIOUS WEIGHTS</string>
     <string name="previous_heights">PREVIOUS HEIGHTS</string>
+    <string name="previous_weight_heights">PREVIOUS WEIGHTS/HEIGHTS</string>
 
     <string name="months">Months</string>
     <string name="kg">kg</string>

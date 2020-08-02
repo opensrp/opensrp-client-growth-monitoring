@@ -1,7 +1,6 @@
 package org.smartregister.growthmonitoring.repository;
 
 import android.database.Cursor;
-import android.util.Log;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
