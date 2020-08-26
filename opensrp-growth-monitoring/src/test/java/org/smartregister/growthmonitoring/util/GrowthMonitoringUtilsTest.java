@@ -12,7 +12,6 @@ import org.opensrp.api.constants.Gender;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
-import org.smartregister.growthmonitoring.BuildConfig;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -20,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.O_MR1)
+@Config(sdk = Build.VERSION_CODES.O_MR1)
 public class GrowthMonitoringUtilsTest {
 
     @Before

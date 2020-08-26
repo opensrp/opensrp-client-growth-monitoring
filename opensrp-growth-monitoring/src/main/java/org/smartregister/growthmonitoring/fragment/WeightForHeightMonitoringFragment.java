@@ -172,7 +172,7 @@ public class WeightForHeightMonitoringFragment extends Fragment {
             return;
         }
 
-        if(weightHeights.isEmpty()) {
+        if (weightHeights.isEmpty()) {
             for (Weight weight : weights) {
                 for (Height height : heights) {
                     if (currentHeight.getDate() != null && currentHeight.getDate().before(height.getDate())) {

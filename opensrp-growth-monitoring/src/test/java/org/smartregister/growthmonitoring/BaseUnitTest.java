@@ -10,6 +10,7 @@ import org.robolectric.annotation.Config;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.growthmonitoring.domain.Height;
 import org.smartregister.growthmonitoring.domain.Weight;
+import org.smartregister.growthmonitoring.shadows.CustomFontTextViewShadow;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.O_MR1)
+@Config(sdk = Build.VERSION_CODES.O_MR1, application = TestApplication.class, shadows = {CustomFontTextViewShadow.class})
 @PowerMockIgnore({"android.*",
         "androidx.*",
         "com.android.internal.policy.*",

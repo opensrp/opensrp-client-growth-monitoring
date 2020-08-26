@@ -32,6 +32,7 @@ android {
         versionName project.VERSION_NAME
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
     }
 
     buildTypes {
@@ -88,12 +89,12 @@ allprojects {
 
 dependencies {
 
-    implementation('org.smartregister:opensrp-client-core:1.10.1-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-core:1.15.4-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
     }
 
-    implementation('org.smartregister:opensrp-client-native-form:1.7.32-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-native-form:1.14.1-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'recyclerview-v7'
         exclude group: 'com.google.code.gson', module: 'gson'
@@ -103,32 +104,31 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:28.0.0'
 
     implementation group: 'org.apache.commons', name: 'commons-csv', version: '1.4'
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.mcxiaoke.volley:library:1.0.19'
     implementation 'com.github.lecho:hellocharts-android:v1.5.8'
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
 
 
-    def robolectricVersion = '3.8'
+    def robolectricVersion = '4.3.1'
     testImplementation("org.robolectric:robolectric:$robolectricVersion") {
         exclude group: 'com.google.auto.service', module: 'auto-service'
     }
     testImplementation "org.robolectric:shadows-multidex:$robolectricVersion"
-    testImplementation "org.robolectric:shadows-support-v4:3.1"
     testImplementation "org.robolectric:shadows-support-v4:3.3.2"
 
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.+') {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2') {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'junit', module: 'junit'
     }
 
     // PowerMock
-    def powerMockVersion = '1.7.4'
+    def powerMockVersion = '2.0.7'
     testImplementation "org.powermock:powermock-module-junit4:$powerMockVersion"
     testImplementation "org.powermock:powermock-module-junit4-rule:$powerMockVersion"
     testImplementation "org.powermock:powermock-api-mockito2:$powerMockVersion"
-    testImplementation("org.powermock:powermock-classloading-xstream:$powerMockVersion")
+    testImplementation "org.powermock:powermock-classloading-xstream:$powerMockVersion"
     testImplementation 'org.apache.maven:maven-ant-tasks:2.1.3'
     testImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.2.3'
 
@@ -159,5 +159,4 @@ coveralls {
     jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/merged.xml"
 }
 
-
-//apply from: '../maven.gradle'
+apply from: '../maven.gradle'
