@@ -58,7 +58,7 @@ The app is easy to use and has five important screens
 
      ![Record Weight Screenshot](https://user-images.githubusercontent.com/31766075/30361164-1c9a2d64-985e-11e7-8852-099b6d55f577.png)
      ![Record Past Weight Screenshot](https://user-images.githubusercontent.com/31766075/30361167-1ca12718-985e-11e7-9863-bb4a89efa134.png)
-     - **Weight Graph Button** which displays a dialog with the age respective z-scores over the patients lifetime on a graph. The specific values are also displayed below the graph with the patient's age respective age.
+     - **Weight Graph Button** which displays a dialog with the patient's *weight-for-age*, *height-for-age* and *weight-for-height* z-scores plotted in a line graph, (depending on the provided app configurations in the properties file). The specific values are also displayed below the graph. See below screenshot for a *weigh-for-age* graph. <br>
      ![Weight Graph Screenshot](https://user-images.githubusercontent.com/31766075/30361166-1ca12f92-985e-11e7-97b7-2ab3ed8bebe6.png)
 
 
@@ -70,6 +70,14 @@ The app is easy to use and has five important screens
 
         ![Edit Weight Screenshot](https://user-images.githubusercontent.com/31766075/30361163-1c99caf4-985e-11e7-8e3e-f985dff40a7a.png)
 
+## Configuring charts
+By default the library displays the **Weight-For-Age** graph but for the other 2 charts, that is the **Height-For-Age** and **Weight-For-Height** charts, you MUST
+provide configurations in the `app.properties` file. Use the following configs to achieve this:
+
+```
+monitor.height=true
+monitor.weight.for.height=true
+```
 
 # Developer Documentation
 

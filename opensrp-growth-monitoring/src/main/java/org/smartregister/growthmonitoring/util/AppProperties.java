@@ -9,5 +9,6 @@ public class AppProperties extends NativeFormsProperties {
 
     public static class KEY {
         public static final String MONITOR_GROWTH = "monitor.height";
+        public static final String MONITOR_WEIGHT_FOR_HEIGHT = "monitor.weight.for.height";
     }
 }

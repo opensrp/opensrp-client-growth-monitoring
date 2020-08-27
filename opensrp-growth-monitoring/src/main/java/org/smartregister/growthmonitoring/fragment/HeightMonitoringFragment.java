@@ -40,9 +40,9 @@ import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.view.LineChartView;
+import timber.log.Timber;
 
 public class HeightMonitoringFragment extends Fragment {
-    public static final String TAG = HeightMonitoringFragment.class.getName();
     private List<Height> heights;
     private Calendar maxRecordingDate = null;
     private Calendar minRecordingDate = null;
@@ -73,7 +73,7 @@ public class HeightMonitoringFragment extends Fragment {
             refreshGrowthChart(heightTabView, getGender(), dob);
             refreshPreviousHeightsTable(heightTabView, getGender(), dob);
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
 
         return heightTabView;

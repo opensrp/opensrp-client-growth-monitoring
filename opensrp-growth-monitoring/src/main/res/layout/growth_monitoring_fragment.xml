@@ -14,22 +14,22 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <lecho.lib.hellocharts.view.LineChartView
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:id="@+id/growth_chart"
             android:layout_width="match_parent"
             android:layout_height="@dimen/growth_chart_height"
-            android:layout_margin="10dp" />
-
-        <View
-            android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/client_list_header_dark_grey" />
+            android:layout_marginTop="10dp"
+            android:background="@color/client_list_header_dark_grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>
     <!-- Weight table section -->
     <android.support.constraint.ConstraintLayout
@@ -61,8 +61,8 @@
                     android:layout_height="wrap_content">
 
                     <org.smartregister.view.customcontrols.CustomFontTextView
-                        style="@style/CustomFontTextViewStyle.ClientList.Light"
                         android:id="@+id/growth_table_header"
+                        style="@style/CustomFontTextViewStyle.ClientList.Light"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -104,6 +104,7 @@
                         android:layout_height="match_parent">
 
                         <org.smartregister.view.customcontrols.CustomFontTextView
+                            android:id="@+id/column_one_metric"
                             style="@style/CustomFontTextViewStyle.ClientList.Medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -118,6 +119,7 @@
                             android:textStyle="bold" />
 
                         <org.smartregister.view.customcontrols.CustomFontTextView
+                            android:id="@+id/metric_label"
                             style="@style/CustomFontTextViewStyle.ClientList.Medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -129,10 +131,10 @@
                             android:text="@string/weight"
                             android:textColor="@color/client_list_grey"
                             android:textSize="@dimen/record_weight_tv_text_size"
-                            android:id="@+id/metric_label"
                             android:textStyle="bold" />
 
                         <org.smartregister.view.customcontrols.CustomFontTextView
+                            android:id="@+id/column_three_metric"
                             style="@style/CustomFontTextViewStyle.ClientList.Medium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

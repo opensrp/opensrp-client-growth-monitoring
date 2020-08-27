@@ -241,6 +241,14 @@ public class GrowthDialogFragment extends DialogFragment {
                     HeightMonitoringFragment.createInstance(dobString, gender, getHeights()));
         }
 
+        AppProperties appProperties = GrowthMonitoringLibrary.getInstance().getAppProperties();
+
+        if (appProperties.hasProperty(AppProperties.KEY.MONITOR_WEIGHT_FOR_HEIGHT) &&
+                appProperties.getPropertyBoolean(AppProperties.KEY.MONITOR_WEIGHT_FOR_HEIGHT)) {
+            adapter.addFragment(String.format(getString(R.string.weight_for_height), getString(genderStringRes).toUpperCase()),
+                    WeightForHeightMonitoringFragment.createInstance(gender, dobString, getWeights(), getHeights()));
+        }
+
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 

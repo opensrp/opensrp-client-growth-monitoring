@@ -40,9 +40,9 @@ import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.view.LineChartView;
+import timber.log.Timber;
 
 public class WeightMonitoringFragment extends Fragment {
-    private static final String TAG = WeightMonitoringFragment.class.getName();
     private List<Weight> weights;
     private Calendar maxWeighingDate = null;
     private Calendar minWeighingDate = null;
@@ -71,7 +71,7 @@ public class WeightMonitoringFragment extends Fragment {
             refreshGrowthChart(weightTabView, getGender(), dob);
             refreshPreviousWeightsTable(weightTabView, getGender(), dob);
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(Log.getStackTraceString(e));
         }
 
         return weightTabView;
