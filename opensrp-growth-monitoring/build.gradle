@@ -31,7 +31,7 @@ android {
         versionCode Integer.parseInt(project.VERSION_CODE)
         versionName project.VERSION_NAME
         multiDexEnabled true
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
     buildTypes {
@@ -106,18 +106,18 @@ dependencies {
         exclude group: 'com.google.code.gson', module: 'gson'
     }
 
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
 
     implementation group: 'org.apache.commons', name: 'commons-csv', version: '1.4'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.mcxiaoke.volley:library:1.0.19'
     implementation 'com.github.lecho:hellocharts-android:v1.5.8'
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
 
 
-    def robolectricVersion = '3.8'
+    def robolectricVersion = '4.1'
     testImplementation("org.robolectric:robolectric:$robolectricVersion") {
         exclude group: 'com.google.auto.service', module: 'auto-service'
     }
@@ -125,13 +125,13 @@ dependencies {
     testImplementation "org.robolectric:shadows-support-v4:3.1"
     testImplementation "org.robolectric:shadows-support-v4:3.3.2"
 
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.+') {
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0') {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'junit', module: 'junit'
     }
 
     // PowerMock
-    def powerMockVersion = '1.7.4'
+    def powerMockVersion = '2.0.7'
     testImplementation "org.powermock:powermock-module-junit4:$powerMockVersion"
     testImplementation "org.powermock:powermock-module-junit4-rule:$powerMockVersion"
     testImplementation "org.powermock:powermock-api-mockito2:$powerMockVersion"
@@ -155,11 +155,11 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
     def debugTree = fileTree(dir: "$project.buildDir/intermediates/classes/debug", excludes: fileFilter)
     def mainSrc = "$project.projectDir/src/main/java"
 
-    sourceDirectories = files([mainSrc])
-    classDirectories = files([debugTree])
-    executionData = fileTree(dir: project.buildDir, includes: [
+    sourceDirectories.setFrom(([mainSrc]))
+    classDirectories.setFrom(files([debugTree]))
+    executionData.setFrom(fileTree(dir: project.buildDir, includes: [
             'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
-    ])
+    ]))
 }
 
 coveralls {
