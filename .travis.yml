@@ -53,7 +53,7 @@ script:
   - travis_wait ./gradlew :opensrp-growth-monitoring:coveralls --stacktrace
 
 after_failure:
-  - pandoc opensrp-child/build/reports/tests/index.html -t plain
+  - pandoc opensrp-growth-monitoring/build/reports/tests/index.html -t plain
 
 notifications:
   slack:

@@ -116,13 +116,12 @@ dependencies {
 
     testImplementation 'junit:junit:4.13'
 
-
     def robolectricVersion = '4.1'
     testImplementation("org.robolectric:robolectric:$robolectricVersion") {
         exclude group: 'com.google.auto.service', module: 'auto-service'
+        exclude group: 'com.android.support'
     }
     testImplementation "org.robolectric:shadows-multidex:$robolectricVersion"
-    testImplementation "org.robolectric:shadows-support-v4:3.1"
     testImplementation "org.robolectric:shadows-support-v4:3.3.2"
 
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0') {
@@ -151,8 +150,8 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
     getReports().getXml().setDestination(file("${buildDir}/reports/jacoco/jacocoRootReport/merged.xml"))
     getReports().getHtml().setDestination(file("${buildDir}/reports/jacoco/jacocoRootReport/html"))
 
-    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*', '**/*$ViewBinder*.*']
-    def debugTree = fileTree(dir: "$project.buildDir/intermediates/classes/debug", excludes: fileFilter)
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*', 'androidx/**/*.*', '**/*$ViewBinder*.*']
+    def debugTree = fileTree(dir: "$project.buildDir/intermediates/javac/debug/classes", excludes: fileFilter)
     def mainSrc = "$project.projectDir/src/main/java"
 
     sourceDirectories.setFrom(([mainSrc]))
