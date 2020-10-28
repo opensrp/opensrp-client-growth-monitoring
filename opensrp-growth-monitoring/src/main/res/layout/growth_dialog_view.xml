@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="20dp"
     android:background="@android:color/white">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/child_profile_info_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/client_profile_pic_dialog_height"
@@ -84,7 +84,7 @@
                 android:textSize="@dimen/child_details_tv_text_size" />
 
         </LinearLayout>
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <!-- Growth tabs section -->
     <LinearLayout
         android:id="@+id/tabs_layout"
@@ -102,12 +102,12 @@
             android:layout_height="1dp"
             android:background="@color/client_list_header_dark_grey" />
 
-        <android.support.design.widget.TabLayout
+        <com.google.android.material.tabs.TabLayout
             android:id="@+id/growth_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <android.support.v4.view.ViewPager
+        <androidx.viewpager.widget.ViewPager
             android:id="@+id/growth_view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -142,4 +142,4 @@
             android:textColor="@color/client_list_grey"
             android:textSize="@dimen/record_weight_btn_text_size" />
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

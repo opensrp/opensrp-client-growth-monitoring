@@ -1,6 +1,6 @@
 package org.smartregister.growthmonitoring;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.smartregister.Context;
 import org.smartregister.growthmonitoring.repository.HeightRepository;

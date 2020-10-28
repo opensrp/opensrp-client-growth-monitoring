@@ -118,6 +118,4 @@ public class WeightWrapper implements Serializable {
     public void setDob(String dob) {
         this.dob = dob;
     }
-
-
 }

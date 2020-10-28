@@ -1,5 +1,7 @@
 package org.smartregister.growthmonitoring;
 
+import android.os.Build;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,7 +19,7 @@ import org.smartregister.repository.Repository;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = {27})
+@Config(sdk = {Build.VERSION_CODES.P})
 public class GrowthMonitoringLibraryTest {
 
     @Rule

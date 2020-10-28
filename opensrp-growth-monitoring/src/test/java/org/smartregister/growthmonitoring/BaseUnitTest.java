@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = Build.VERSION_CODES.O_MR1, application = TestApplication.class, shadows = {CustomFontTextViewShadow.class})
+@Config(sdk = Build.VERSION_CODES.P, application = TestApplication.class, shadows = {CustomFontTextViewShadow.class})
 @PowerMockIgnore({"android.*",
         "androidx.*",
         "com.android.internal.policy.*",

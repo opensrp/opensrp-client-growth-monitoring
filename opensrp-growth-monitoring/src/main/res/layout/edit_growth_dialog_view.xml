@@ -5,7 +5,7 @@
     android:background="@drawable/dialog_shape"
     android:orientation="vertical">
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/edit_layout_scroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -256,7 +256,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@color/client_list_header_dark_grey" />
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/button_layout"

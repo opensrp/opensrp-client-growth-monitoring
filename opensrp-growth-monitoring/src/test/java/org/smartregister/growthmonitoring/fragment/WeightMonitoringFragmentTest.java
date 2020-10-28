@@ -1,7 +1,7 @@
 package org.smartregister.growthmonitoring.fragment;
 
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.FragmentActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentActivity;
 import android.view.View;
 
 import org.junit.Assert;
