@@ -21,6 +21,7 @@ public class WeightWrapper implements Serializable {
     private DateTime updatedWeightDate;
     private boolean today;
     private String dob;
+    private Integer outOfCatchment;
 
     public String getId() {
         return id;
@@ -119,5 +120,11 @@ public class WeightWrapper implements Serializable {
         this.dob = dob;
     }
 
+    public Integer getOutOfCatchment() {
+        return outOfCatchment;
+    }
 
+    public void setOutOfCatchment(Integer outOfCatchment) {
+        this.outOfCatchment = outOfCatchment;
+    }
 }
