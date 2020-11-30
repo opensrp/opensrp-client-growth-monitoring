@@ -1,8 +1,11 @@
 package org.smartregister.growthmonitoring;
 
+import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
+import org.smartregister.SyncConfiguration;
+import org.smartregister.SyncFilter;
 import org.smartregister.repository.Repository;
 import org.smartregister.view.activity.DrishtiApplication;
 
@@ -17,7 +20,9 @@ public class TestApplication extends DrishtiApplication {
         mInstance = this;
         context = Context.getInstance();
         context.updateApplicationContext(getApplicationContext());
-        CoreLibrary.init(context);
+        SyncConfiguration syncConfiguration = Mockito.mock(SyncConfiguration.class);
+        Mockito.doReturn(SyncFilter.LOCATION).when(syncConfiguration).getEncryptionParam();
+        CoreLibrary.init(context, syncConfiguration);
         GrowthMonitoringLibrary.init(context, repository, 0, 0);
         setTheme(R.style.Theme_AppCompat);
     }
