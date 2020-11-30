@@ -4,10 +4,11 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$androidToolsBuildGradle"
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.3'
+        classpath "gradle.plugin.org.kt3k.gradle.plugin:coveralls-gradle-plugin:$coverallsVersion"
     }
 }
 
