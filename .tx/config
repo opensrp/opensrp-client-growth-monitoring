@@ -4,5 +4,5 @@ host = https://www.transifex.com
 [opensrp-client-growth-monitoring.strings-xml--master]
 file_filter = opensrp-growth-monitoring/src/main/res/values-<lang>/strings.xml
 source_file = opensrp-growth-monitoring/src/main/res/values/strings.xml
-source_lang = en
+source_lang = en_US
 type = ANDROID
