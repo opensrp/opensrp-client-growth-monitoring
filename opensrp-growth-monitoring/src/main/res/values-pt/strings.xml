@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="Last_five_weights">ÚLTIMOS CINCO PESOS</string>
+    <string name="Last_five_heights">ÚLTIMAS CINCO ALTURAS</string>
+    <string name="see_all">Ver tudo</string>
+    <string name="edit">Editar</string>
+
+    <string name="app_name">abre-monitoramento-crescimento</string>
+    <string name="action_settings">Configurações</string>
+    <string name="label_zeir">DI</string>
+    <string name="age">Idade</string>
+
+    <string name="edit_growth_data">Editar dados de crescimento</string>
+    <string name="record_growth_with_nl">Gravar \ Crescimento</string>
+    <string name="record_growth">Gravar Crescimento</string>
+    <string name="record_growth_notification">Não se esqueça de registar o crescimento da criança</string>
+    <string name="record_weight">Registo do Peso</string>
+    <string name="record_height">Altura do Registo</string>
+    <string name="weight_for_age">Peso-para-Idade %1$s</string>
+    <string name="height_for_age">Altura-para-Idade %1$s</string>
+    <string name="weight_for_height">Peso-para-Altura %1$s</string>
+    <string name="previous_weights">PESOS ANTERIORES</string>
+    <string name="previous_heights">ALTURAS ANTERIORES</string>
+    <string name="previous_weight_heights">PESOS / ALTURAS ANTERIORES</string>
+
+    <string name="months">Meses</string>
+    <string name="kg">Kg</string>
+    <string name="cm">cm</string>
+    <string name="girls">Meninas</string>
+    <string name="boys">Meninos</string>
+    <string name="btn_layout_weight">2</string>
+
+    <string name="weight">Peso</string>
+    <string name="height">Altura</string>
+    <string name="done">Completo</string>
+    <string name="z_score">pontuação-Z</string>
+
+    <string name="date_recorded">Data Gravada %1$s</string>
+    <string name="change_date_recorded">Mudança de data registada</string>
+    <string name="cancel">Cancelar</string>
+    <string name="save_changes">Salvar alterações</string>
+    <string name="service_date">Data de serviço</string>
+    <string name="edit_weight">Editar Peso</string>
+    <string name="edit_height">Editar Altura</string>
+    <string name="edit_date">Editar Data</string>
+    <string name="delete_record">Apagar Peso</string>
+    <string name="growth_taken_today">Crescimento obtido hoje</string>
+    <string name="growth_taken_earlier">Crescimento obtido anteriormente</string>
+    <string name="catchment_area">Área de captação</string>
+    <string name="user_image">Imagem do usuário</string>
+    <string name="weight_is_required">O peso do paciente não pode estar vazio.</string>
+
+</resources>
