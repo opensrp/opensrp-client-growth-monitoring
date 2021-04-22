@@ -126,11 +126,11 @@ public class HeightRepository extends GrowthRepository {
 
             AllSharedPreferences allSharedPreferences = GrowthMonitoringLibrary.getInstance().context().allSharedPreferences();
             String providerId = allSharedPreferences.fetchRegisteredANM();
-            height.setTeam(allSharedPreferences.fetchDefaultTeam(providerId));
-            height.setTeamId(allSharedPreferences.fetchDefaultTeamId(providerId));
-            height.setLocationId(allSharedPreferences.fetchDefaultLocalityId(providerId));
-            height.setChildLocationId(getChildLocationId(height.getLocationId(), allSharedPreferences));
-
+            height.setAnmId(StringUtils.isNotBlank(height.getAnmId()) ? height.getAnmId() : providerId);
+            height.setTeam(StringUtils.isNotBlank(height.getTeam()) ? height.getTeam() : allSharedPreferences.fetchDefaultTeam(providerId));
+            height.setTeamId(StringUtils.isNotBlank(height.getTeamId()) ? height.getTeamId() : allSharedPreferences.fetchDefaultTeamId(providerId));
+            height.setLocationId(StringUtils.isNotBlank(height.getLocationId()) ? height.getLocationId() : allSharedPreferences.fetchDefaultLocalityId(providerId));
+            height.setChildLocationId(StringUtils.isNotBlank(height.getChildLocationId()) ? height.getChildLocationId() : getChildLocationId(height.getLocationId(), allSharedPreferences));
 
             if (StringUtils.isBlank(height.getSyncStatus())) {
                 height.setSyncStatus(TYPE_Unsynced);
@@ -139,17 +139,16 @@ public class HeightRepository extends GrowthRepository {
                 height.setFormSubmissionId(generateRandomUUIDString());
             }
 
-
             if (height.getUpdatedAt() == null) {
                 height.setUpdatedAt(Calendar.getInstance().getTimeInMillis());
             }
 
             SQLiteDatabase database = getWritableDatabase();
             if (height.getId() == null) {
-                Height sameheight = findUnique(database, height);
-                if (sameheight != null) {
-                    height.setUpdatedAt(sameheight.getUpdatedAt());
-                    height.setId(sameheight.getId());
+                Height sameHeight = findUnique(database, height);
+                if (sameHeight != null) {
+                    height.setUpdatedAt(sameHeight.getUpdatedAt());
+                    height.setId(sameHeight.getId());
                     update(database, height);
                 } else {
                     if (height.getCreatedAt() == null) {
@@ -158,7 +157,7 @@ public class HeightRepository extends GrowthRepository {
                     height.setId(database.insert(HEIGHT_TABLE_NAME, null, createValuesFor(height)));
                 }
             } else {
-                height.setSyncStatus(TYPE_Unsynced);
+
                 update(database, height);
             }
         } catch (Exception e) {

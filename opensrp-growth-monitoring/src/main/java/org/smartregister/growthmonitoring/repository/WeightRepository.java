@@ -125,14 +125,17 @@ public class WeightRepository extends GrowthRepository {
 
             AllSharedPreferences allSharedPreferences = GrowthMonitoringLibrary.getInstance().context().allSharedPreferences();
             String providerId = allSharedPreferences.fetchRegisteredANM();
-            weight.setTeam(allSharedPreferences.fetchDefaultTeam(providerId));
-            weight.setTeamId(allSharedPreferences.fetchDefaultTeamId(providerId));
-            weight.setLocationId(allSharedPreferences.fetchDefaultLocalityId(providerId));
-            weight.setChildLocationId(getChildLocationId(weight.getLocationId(), allSharedPreferences));
+
+            weight.setAnmId(StringUtils.isNotBlank(weight.getAnmId()) ? weight.getAnmId() : providerId);
+            weight.setTeam(StringUtils.isNotBlank(weight.getTeam()) ? weight.getTeam() : allSharedPreferences.fetchDefaultTeam(providerId));
+            weight.setTeamId(StringUtils.isNotBlank(weight.getTeamId()) ? weight.getTeamId() : allSharedPreferences.fetchDefaultTeamId(providerId));
+            weight.setLocationId(StringUtils.isNotBlank(weight.getLocationId()) ? weight.getLocationId() : allSharedPreferences.fetchDefaultLocalityId(providerId));
+            weight.setChildLocationId(StringUtils.isNotBlank(weight.getChildLocationId()) ? weight.getChildLocationId() : getChildLocationId(weight.getLocationId(), allSharedPreferences));
 
             if (StringUtils.isBlank(weight.getSyncStatus())) {
                 weight.setSyncStatus(TYPE_Unsynced);
             }
+
             if (StringUtils.isBlank(weight.getFormSubmissionId())) {
                 weight.setFormSubmissionId(generateRandomUUIDString());
             }
@@ -156,7 +159,7 @@ public class WeightRepository extends GrowthRepository {
                     weight.setId(database.insert(WEIGHT_TABLE_NAME, null, createValuesFor(weight)));
                 }
             } else {
-                weight.setSyncStatus(TYPE_Unsynced);
+
                 update(database, weight);
             }
         } catch (Exception e) {
