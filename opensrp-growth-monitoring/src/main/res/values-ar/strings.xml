@@ -1,41 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="Last_five_weights">الاوزان 5 الاخيرة</string>
+    <string name="Last_five_weights">آخر خمسة قياسات وزن</string>
+    <string name="Last_five_heights">آخر خمسة قياسات طول</string>
     <string name="see_all">اظهار الكل</string>
-    <string name="edit">تحرير</string>
+    <string name="edit">تعديل</string>
+
     <string name="app_name">نظام التسجيل الذكي المفتوح-مراقبة-النمو</string>
     <string name="action_settings">الإعدادات</string>
     <string name="label_zeir">رقم الهوية</string>
     <string name="age">العمر</string>
-    <string name="edit_growth_data">تحرير بيانات الوزن</string>
-    <string name="record_weight_with_nl">سجل\n وزن</string>
-    <string name="record_growth"> سجل الوزن</string>
-    <string name="record_growth_notification">لا تنس تسجيل وزن الطفل</string>
-    <string name="weight_for_age">الوزن بالنسبة للعمر 1%1$s</string>
+
+    <string name="edit_growth_data">تعديل بيانات النمو</string>
+    <string name="record_growth_with_nl">سجل النمو</string>
+    <string name="record_growth">سجل النمو</string>
+    <string name="record_growth_notification">لا تنس تسجيل نمو الطفل.</string>
+    <string name="record_weight">سجل الوزن</string>
+    <string name="record_height">سجل قياس الطول</string>
+    <string name="weight_for_age">الوزن بالنسبة للعمر %1$s</string>
+    <string name="height_for_age">الوزن بالنسبة للعمر %1$s</string>
+    <string name="weight_for_height">الوزن مقابل قياس الطول 1%1$s</string>
     <string name="previous_weights">الأوزان السابقة</string>
+    <string name="previous_heights">قياسات الطول السابقة</string>
+    <string name="previous_weight_heights">قياسات الوزن بالنسبة للطول</string>
+
     <string name="months">الشهور</string>
-    <string name="unit">كلغ</string>
+    <string name="kg">كغ</string>
+    <string name="cm">صم</string>
     <string name="girls">الفتيات</string>
     <string name="boys">ألاولاد</string>
     <string name="btn_layout_weight">2</string>
-    <string name="growthMonitoring">الوزن</string>
-    <string name="done">كامل</string>
-    <string name="z_score">القيمة المعيارية</string>
-    <string name="cancel">إلغاء</string>
-    <string name="save_changes">حفظ</string>
-    <string name="service_date">تاريخ الخدمة</string>
-    <string name="edit_weight">تعديل الوزن</string>
-    <string name="growth_taken_today">الوزن مأخوذ اليوم</string>
-    <string name="growth_taken_earlier">الوزن ماخوذ سابقا</string>
-    <string name="catchment_area">منطقة التغطية</string>
-    <string name="record_weight">تسجيل الوزن</string>
-    <string name="kg">كلغ</string>
-    <string name="weight">وزن</string>
-    <string name="date_recorded">التاريخ المسجل</string>
-    <string name="change_date_recorded">تغيير التاريخ المسجل</string>
-    <string name="edit_date">تعديل التاريخ</string>
-    <string name="delete_record">حذف السجل</string>`
 
+    <string name="weight">الوزن</string>
+    <string name="height">قياس الطول</string>
+    <string name="done">كامل</string>
+    <string name="z_score"> Z-Score</string>
+
+    <string name="date_recorded">تاريخ التسجيل %1$s</string>
+    <string name="change_date_recorded">تغيير تاريخ التسجيل</string>
+    <string name="cancel">إلغاء</string>
+    <string name="save_changes">حفظ التغييرات</string>
+    <string name="service_date">تاريخ الخدمة</string>
+    <string name="edit_weight">تحرير الوزن</string>
+    <string name="edit_height">تعديل بيانات الوزن</string>
+    <string name="edit_date">تعديل التاريخ</string>
+    <string name="delete_record">حذف الوزن</string>
+    <string name="growth_taken_today">قياسات النمو المسجلة هذا اليوم</string>
+    <string name="growth_taken_earlier">قياسات النمو المسجلة سابقا</string>
+    <string name="catchment_area">منطقة التغطية</string>
+    <string name="user_image">صورة المستخدم</string>
+    <string name="weight_is_required">لا يمكن أن يكون وزن الطفل فارغًا.</string>
 
 </resources>
