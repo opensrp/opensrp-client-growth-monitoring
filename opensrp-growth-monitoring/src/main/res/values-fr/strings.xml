@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="Last_five_weights">CINQ DERNIERS POIDS</string>
+    <string name="Last_five_weights">CINQ DERNIÈRES PESÉES</string>
     <string name="Last_five_heights">CINQ DERNIERES TAILLES</string>
     <string name="see_all">Voir tout</string>
     <string name="edit">Editer</string>
@@ -19,8 +19,10 @@
     <string name="record_height">Enregistrer la taille</string>
     <string name="weight_for_age">Poids-pour-age %1$s</string>
     <string name="height_for_age">Taille-pour-age %1$s</string>
+    <string name="weight_for_height">Poids-pour-taille %1$s</string>
     <string name="previous_weights">POIDS PRÉCEDENTS</string>
     <string name="previous_heights">TAILLES PRÉCÉDENTES</string>
+    <string name="previous_weight_heights">MESURES DES POIDS/TAILLES PRÉCÉDENTES</string>
 
     <string name="months">Mois</string>
     <string name="kg">kg</string>
@@ -39,14 +41,14 @@
     <string name="cancel">Annuler</string>
     <string name="save_changes">Sauvegarder les changements</string>
     <string name="service_date">Date du service</string>
-    <string name="edit_weight">Editer le poids</string>
-    <string name="edit_height">Editer la taille</string>
+    <string name="edit_weight">Modifier poids</string>
+    <string name="edit_height">Modifier taille</string>
     <string name="edit_date">Editer la date</string>
     <string name="delete_record">Supprimer l\'enregistrement</string>
     <string name="growth_taken_today">Croissance enregistrée aujourd\'hui</string>
     <string name="growth_taken_earlier">Croissance enregistrée plus tôt</string>
     <string name="catchment_area">Zone de captage</string>
     <string name="user_image">Image utilisateur</string>
-    <string name="weight_is_required">Le poids du patient ne peut pas être vide</string>
+    <string name="weight_is_required">Le poids du patient ne peut pas être vide.</string>
 
 </resources>
