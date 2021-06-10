@@ -19,8 +19,10 @@
     <string name="record_height">Enregistrer la taille</string>
     <string name="weight_for_age">Poids-pour-age %1$s</string>
     <string name="height_for_age">Taille-pour-age %1$s</string>
+    <string name="weight_for_height">Poids-pour-taille %1$s</string>
     <string name="previous_weights">POIDS PRÉCEDENTS</string>
     <string name="previous_heights">TAILLES PRÉCÉDENTES</string>
+    <string name="previous_weight_heights">MESURES DES POIDS/TAILLES PRÉCÉDENTES</string>
 
     <string name="months">Mois</string>
     <string name="kg">kg</string>
@@ -34,7 +36,7 @@
     <string name="done">Complété</string>
     <string name="z_score">Score-Z</string>
 
-    <string name="date_recorded">Date enregistré</string>
+    <string name="date_recorded">Date enregistré 1%1$s</string>
     <string name="change_date_recorded">Changer la data enregistrée</string>
     <string name="cancel">Annuler</string>
     <string name="save_changes">Sauvegarder les changements</string>
