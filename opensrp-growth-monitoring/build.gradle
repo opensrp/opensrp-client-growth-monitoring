@@ -100,6 +100,7 @@ dependencies {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
         exclude group: 'com.ibm.fhir', module: 'fhir-model'
+        exclude group: 'com.ibm.fhir', module: 'fhir-path'
     }
 
     implementation('org.smartregister:opensrp-client-native-form:2.0.6-SNAPSHOT@aar') {
@@ -107,6 +108,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'recyclerview-v7'
         exclude group: 'com.google.code.gson', module: 'gson'
         exclude group: 'com.ibm.fhir', module: 'fhir-model'
+        exclude group: 'com.ibm.fhir', module: 'fhir-path'
     }
 
     implementation 'com.google.android.material:material:1.0.0'
@@ -142,6 +144,7 @@ dependencies {
     testImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.2.3'
 
     testImplementation 'com.ibm.fhir:fhir-model:4.7.0'
+    testImplementation 'com.ibm.fhir:fhir-path:4.7.0'
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
