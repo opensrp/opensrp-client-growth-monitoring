@@ -99,12 +99,14 @@ dependencies {
     implementation('org.smartregister:opensrp-client-core:4.3.2-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
+        exclude group: 'com.ibm.fhir', module: 'fhir-model'
     }
 
     implementation('org.smartregister:opensrp-client-native-form:2.0.6-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'recyclerview-v7'
         exclude group: 'com.google.code.gson', module: 'gson'
+        exclude group: 'com.ibm.fhir', module: 'fhir-model'
     }
 
     implementation 'com.google.android.material:material:1.0.0'
@@ -139,6 +141,7 @@ dependencies {
     testImplementation 'org.apache.maven:maven-ant-tasks:2.1.3'
     testImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.2.3'
 
+    testImplementation 'com.ibm.fhir:fhir-model:4.7.0'
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
