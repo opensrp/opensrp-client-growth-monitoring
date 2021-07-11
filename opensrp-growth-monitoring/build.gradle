@@ -87,6 +87,7 @@ allprojects {
 }
 
 dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation('org.smartregister:opensrp-client-core:1.6.35-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
