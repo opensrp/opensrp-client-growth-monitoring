@@ -122,7 +122,7 @@ public class WeightRepository extends BaseRepository {
                     weight.setId(database.insert(WEIGHT_TABLE_NAME, null, createValuesFor(weight)));
                 }
             } else {
-                if(!weight.getSyncStatus().equalsIgnoreCase(TYPE_Synced)){
+                if(weight.getSyncStatus() !=null && !weight.getSyncStatus().equalsIgnoreCase(TYPE_Synced)){
                     weight.setSyncStatus(TYPE_Unsynced);
                 }
                 update(database, weight);

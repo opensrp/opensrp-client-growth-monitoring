@@ -3,7 +3,9 @@
     <color name="z_score_0">#227532</color>
     <color name="z_score_2">#b1312c</color>
     <color name="z_score_3">#222539</color>
-
+    <color name="sam">#FFC107</color>
+    <color name="mam">#F44336</color>
+    <color name="normal">#222539</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="client_list_grey">#737373</color>

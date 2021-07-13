@@ -86,7 +86,8 @@ allprojects {
 }
 
 dependencies {
-    implementation('org.smartregister:opensrp-client-core:1.3.5-SNAPSHOT@aar') {
+    //https://bitbucket.org/mpowersocial/opensrp-core-1.3.5-old/src/dev/
+    implementation('org.smartregister:opensrp-client-core:1.3.5-old-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
     }

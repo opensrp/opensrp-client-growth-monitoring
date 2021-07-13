@@ -10,11 +10,16 @@
     <string name="record_weight_notification">"Don't forget to record child's weight"</string>
     <string name="weight_for_age">Weight-for-age %1$s</string>
     <string name="previous_weights">PREVIOUS WEIGHTS</string>
-
+    <string name="previous_heights">PREVIOUS HEIGHTS</string>
+    <string name="previous_muac">PREVIOUS MUACs</string>
+    <string name="height">Height</string>
     <string name="months">Months</string>
+    <string name="muac">Muac</string>
     <string name="kg">Kg</string>
+    <string name="cm">Cm</string>
     <string name="girls">Girls</string>
     <string name="boys">Boys</string>
     <string name="btn_layout_weight">2</string>
-
+    <string name="z_score"> Z-score</string>
+    <string name="muac_status">Muac status</string>
 </resources>

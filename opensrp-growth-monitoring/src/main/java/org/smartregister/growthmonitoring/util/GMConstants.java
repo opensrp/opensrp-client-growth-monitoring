@@ -12,7 +12,7 @@ public class GMConstants {
 
     public static final String CHILD_TABLE_NAME = "ec_child";
     public static final String MOTHER_TABLE_NAME = "ec_mother";
-
+    public static final int GRAPH_MONTHS_TIMELINE = 12;
     public static final int WEIGHT_SYNC_TIME = BuildConfig.WEIGHT_SYNC_TIME;
 
     public static final class JsonForm {

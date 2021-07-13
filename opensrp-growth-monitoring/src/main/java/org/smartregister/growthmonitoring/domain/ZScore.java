@@ -53,6 +53,26 @@ public class ZScore {
             return R.color.z_score_3;
         }
     }
+    public static int getMuacColor(final double cm) {
+        double absScore = Math.abs(cm);
+        if (absScore >= 12.5) {
+            return R.color.z_score_0;
+        } else if (absScore >= 11.5) {
+            return R.color.sam;
+        } else {
+            return R.color.mam;
+        }
+    }
+    public static String getMuacText(final double cm) {
+        double absScore = Math.abs(cm);
+        if (absScore >= 12.5) {
+            return "NORMAL";
+        } else if (absScore >= 11.5) {
+            return "SAM";
+        } else {
+            return "MAM";
+        }
+    }
 
     public static double roundOff(double value) {
         int scale = (int) Math.pow(10, 1);

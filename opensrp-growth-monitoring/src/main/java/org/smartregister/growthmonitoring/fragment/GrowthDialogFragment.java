@@ -563,7 +563,7 @@ public class GrowthDialogFragment extends DialogFragment {
         });
     }
 
-    private static void standardiseCalendarDate(Calendar calendarDate) {
+    public static void standardiseCalendarDate(Calendar calendarDate) {
         calendarDate.set(Calendar.HOUR_OF_DAY, 0);
         calendarDate.set(Calendar.MINUTE, 0);
         calendarDate.set(Calendar.SECOND, 0);
