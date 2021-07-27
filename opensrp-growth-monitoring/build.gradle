@@ -90,6 +90,7 @@ allprojects {
     repositories {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
+        maven { url 'https://nexus.pentaho.org/content/groups/omni/' }
         mavenLocal()
     }
 }
