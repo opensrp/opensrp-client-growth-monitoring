@@ -117,7 +117,7 @@ dependencies {
     implementation group: 'org.apache.commons', name: 'commons-csv', version: '1.4'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.mcxiaoke.volley:library:1.0.19'
-    implementation 'com.github.lecho:hellocharts-android:v1.5.8'
+    implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
 
     testImplementation 'junit:junit:4.13'
 
