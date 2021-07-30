@@ -331,11 +331,19 @@ public class GrowthDialogFragment extends DialogFragment {
             List<Line> lines = new ArrayList<>();
             for (int z = -3; z <= 3; z++) {
                 if (z != 1 && z != -1) {
-                    Line curLine = getZScoreLine(gender, minAge, maxAge, z,
-                            getActivity().getResources().getColor(ZScore.getZScoreColor(z)));
+                    Line curLine;
+                    if(z == 0.0 || z== 0){
+                         curLine = getZScoreLine(gender, minAge, maxAge, -1.0,
+                                getActivity().getResources().getColor(ZScore.getZScoreColor(-1.0)));
+                    }else{
+                        curLine = getZScoreLine(gender, minAge, maxAge, z,
+                                getActivity().getResources().getColor(ZScore.getZScoreColor(z)));
+                    }
+
                     if (z == -3) {
                         curLine.setPathEffect(new DashPathEffect(new float[]{10, 20}, 0));
                     }
+
                     lines.add(curLine);
                 }
             }
@@ -352,7 +360,6 @@ public class GrowthDialogFragment extends DialogFragment {
 
             LineChartData data = new LineChartData();
             data.setLines(lines);
-
             Axis bottomAxis = new Axis(bottomAxisValues);
             bottomAxis.setHasLines(true);
             bottomAxis.setHasTiltedLabels(false);
@@ -528,7 +535,7 @@ public class GrowthDialogFragment extends DialogFragment {
         line.setColor(color);
         line.setHasPoints(false);
         line.setHasLabels(true);
-        line.setStrokeWidth(2);
+        line.setStrokeWidth(4);
         return line;
     }
 

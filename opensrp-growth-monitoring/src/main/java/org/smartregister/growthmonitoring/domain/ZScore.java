@@ -1,5 +1,7 @@
 package org.smartregister.growthmonitoring.domain;
 
+import android.util.Log;
+
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.R;
@@ -43,13 +45,34 @@ public class ZScore {
         this.sd3 = sd3;
     }
 
-    public static int getZScoreColor(final double zScore) {
-        double absScore = Math.abs(zScore);
-        if (absScore < 2.0) {
-            return R.color.z_score_0;
-        } else if (absScore >= 2.0 && absScore < 3.0) {
-            return R.color.z_score_2;
-        } else {
+//    public static int getZScoreColor(final double zScore) {
+//        double absScore = Math.abs(zScore);
+//        if (absScore < 2.0) {
+//            return R.color.z_score_0;
+//        } else if (absScore >= 2.0 && absScore < 3.0) {
+//            return R.color.z_score_2;
+//        } else {
+//            return R.color.z_score_3;
+//        }
+//    }
+    public static int getZScoreColor(final double absScore) {
+        //double absScore = Math.abs(zScore);
+
+        if (absScore <= -3.0) {
+            Log.v("ZSCORE","zscore:"+absScore+":color:red");
+            return R.color.red;
+        } else if (absScore <= -2.0 && absScore > -3.0) {
+            Log.v("ZSCORE","zscore:"+absScore+":color:dark_yellow");
+            return R.color.dark_yellow;
+        }else if (absScore <= -1.0 && absScore > -2.0) {
+            Log.v("ZSCORE","zscore:"+absScore+":color:yellow");
+            return R.color.yellow;
+        }else if (absScore <=2) {
+            Log.v("ZSCORE","zscore:"+absScore+":color:green");
+            return R.color.green;
+        }
+        else {
+            Log.v("ZSCORE","zscore:"+absScore+":color:black");
             return R.color.z_score_3;
         }
     }
@@ -58,9 +81,9 @@ public class ZScore {
         if (absScore >= 12.5) {
             return R.color.z_score_0;
         } else if (absScore >= 11.5) {
-            return R.color.sam;
-        } else {
             return R.color.mam;
+        } else {
+            return R.color.sam;
         }
     }
     public static String getMuacText(final double cm) {
@@ -68,9 +91,9 @@ public class ZScore {
         if (absScore >= 12.5) {
             return "NORMAL";
         } else if (absScore >= 11.5) {
-            return "SAM";
-        } else {
             return "MAM";
+        } else {
+            return "SAM";
         }
     }
 

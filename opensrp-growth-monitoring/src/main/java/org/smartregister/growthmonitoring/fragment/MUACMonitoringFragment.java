@@ -135,16 +135,16 @@ public class MUACMonitoringFragment extends DialogFragment {
             double minAge = ZScore.getAgeInMonths(dob, minHeighingDate.getTime());
             double maxAge = minAge + GMConstants.GRAPH_MONTHS_TIMELINE;
             List<Line> lines = new ArrayList<>();
-            for (int z = -3; z <= 3; z++) {
-                if (z != 1 && z != -1) {
-                    Line curLine = getZScoreLine(gender, minAge, maxAge, z,
-                            getActivity().getResources().getColor(ZScore.getZScoreColor(z)));
-                    if (z == -3) {
-                        curLine.setPathEffect(new DashPathEffect(new float[] {10, 20}, 0));
-                    }
-                    lines.add(curLine);
-                }
-            }
+//            for (int z = 1; z <= 100; z++) {
+//                if (z != 1) {
+//                    Line curLine = getZScoreLine(gender, minAge, maxAge, z,
+//                            getActivity().getResources().getColor(ZScore.getMuacColor(z)));
+//                    if (z == -3) {
+//                        curLine.setPathEffect(new DashPathEffect(new float[] {10, 20}, 0));
+//                    }
+//                    lines.add(curLine);
+//                }
+//            }
 
             lines.add(getTodayLine(gender, dob, minAge, maxAge));
             lines.add(getPersonHeightLine(gender, dob));
