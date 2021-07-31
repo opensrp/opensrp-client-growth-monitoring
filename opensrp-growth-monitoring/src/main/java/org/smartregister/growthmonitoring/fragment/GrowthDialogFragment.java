@@ -291,14 +291,14 @@ public class GrowthDialogFragment extends DialogFragment {
             zScoreTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     getResources().getDimension(R.dimen.weight_table_contents_text_size));
             zScoreTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-            if (weight.getDate().compareTo(maxWeighingDate.getTime()) > 0) {
-                zScoreTextView.setText("");
-            } else {
+//            if (weight.getDate().compareTo(maxWeighingDate.getTime()) > 0) {
+//                zScoreTextView.setText("");
+//            } else {
                 double zScore = ZScore.calculate(gender, dob, weight.getDate(), weight.getKg());
                 zScore = ZScore.roundOff(zScore);
                 zScoreTextView.setTextColor(getResources().getColor(ZScore.getZScoreColor(zScore)));
                 zScoreTextView.setText(String.valueOf(zScore));
-            }
+           // }
             curRow.addView(zScoreTextView);
             tableLayout.addView(curRow);
         }

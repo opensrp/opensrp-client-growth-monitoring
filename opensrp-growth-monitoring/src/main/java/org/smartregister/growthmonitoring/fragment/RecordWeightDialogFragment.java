@@ -90,10 +90,10 @@ public class RecordWeightDialogFragment extends DialogFragment {
         ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.record_weight_dialog_view, container, false);
 
         final EditText editWeight = (EditText) dialogView.findViewById(R.id.edit_weight);
-        if (tag.getWeight() != null) {
-            editWeight.setText(tag.getWeight().toString());
-            editWeight.setSelection(editWeight.getText().length());
-        }
+//        if (tag.getWeight() != null) {
+//            editWeight.setText(tag.getWeight().toString());
+//            editWeight.setSelection(editWeight.getText().length());
+//        }
         //formatEditWeightView(editWeight, "");
 
         final DatePicker earlierDatePicker = (DatePicker) dialogView.findViewById(R.id.earlier_date_picker);
