@@ -55,7 +55,6 @@ public class HeightRepository extends BaseRepository {
     private static final String SYNC_STATUS_INDEX = "CREATE INDEX " + HEIGHT_TABLE_NAME + "_" + SYNC_STATUS + "_index ON " + HEIGHT_TABLE_NAME + "(" + SYNC_STATUS + " COLLATE NOCASE);";
     private static final String UPDATED_AT_INDEX = "CREATE INDEX " + HEIGHT_TABLE_NAME + "_" + UPDATED_AT_COLUMN + "_index ON " + HEIGHT_TABLE_NAME + "(" + UPDATED_AT_COLUMN + ");";
 
-
     public HeightRepository(Repository repository) {
         super(repository);
     }

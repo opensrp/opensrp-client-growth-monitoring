@@ -13,10 +13,15 @@ import org.opensrp.api.constants.Gender;
 import org.smartregister.commonregistry.CommonPersonObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
+import org.smartregister.growthmonitoring.domain.Height;
+import org.smartregister.growthmonitoring.domain.HeightZScore;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.domain.ZScore;
+import org.smartregister.growthmonitoring.repository.HeightZScoreRepository;
 import org.smartregister.growthmonitoring.repository.ZScoreRepository;
 import org.smartregister.growthmonitoring.util.GMConstants;
+import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
+import org.smartregister.growthmonitoring.util.GrowthMonitoringUtils;
 import org.smartregister.util.FileUtilities;
 import org.smartregister.util.Utils;
 
@@ -44,6 +49,7 @@ public class ZScoreRefreshIntentService extends IntentService {
     private static final String ZSCORE_MALE_FILE = "zscores_male.csv";
     private static final String ZSCORE_FEMALE_FILE = "zscores_female.csv";
     private static final Map<String, String> CSV_HEADING_SQL_COLUMN_MAP;
+    private static final Map<String, String> HEIGHT_CSV_HEADING_SQL_COLUMN_MAP;
 
     static {
         CSV_HEADING_SQL_COLUMN_MAP = new HashMap<>();
@@ -58,6 +64,8 @@ public class ZScoreRefreshIntentService extends IntentService {
         CSV_HEADING_SQL_COLUMN_MAP.put("SD1", ZScoreRepository.COLUMN_SD1);
         CSV_HEADING_SQL_COLUMN_MAP.put("SD2", ZScoreRepository.COLUMN_SD2);
         CSV_HEADING_SQL_COLUMN_MAP.put("SD3", ZScoreRepository.COLUMN_SD3);
+        HEIGHT_CSV_HEADING_SQL_COLUMN_MAP = CSV_HEADING_SQL_COLUMN_MAP;
+        HEIGHT_CSV_HEADING_SQL_COLUMN_MAP.put("SD", GrowthMonitoringConstants.ColumnHeaders.COLUMN_SD);
     }
 
     public ZScoreRefreshIntentService() {
@@ -78,14 +86,83 @@ public class ZScoreRefreshIntentService extends IntentService {
         // Dump CSV to file
         dumpCsv(Gender.MALE, false);
         dumpCsv(Gender.FEMALE, false);
-
+        dumpHeightCsv(Gender.MALE, false);
+        dumpHeightCsv(Gender.FEMALE, false);
         calculateChildZScores();
+        calculateChildHeightZScores();
 
         //FIXME split-growth-monitoring:Calling hia2Service after calculating zscore
         //Intent hia2Intent = new Intent(GrowthMonitoringLibrary.getInstance(), HIA2IntentService.class);
         //startService(hia2Intent);
     }
+    private void dumpHeightCsv(Gender gender, boolean force) {
+        try {
+            List<HeightZScore> existingScores =
+                    GrowthMonitoringLibrary.getInstance().heightZScoreRepository().findByGender(gender);
+            if (force || existingScores.size() == 0) {
+                String filename = null;
+                if (gender.equals(Gender.FEMALE)) {
+                    filename = "height_z_scores_female.csv";
+                } else if (gender.equals(Gender.MALE)) {
+                    filename = "height_z_scores_male.csv";
+                }
+                if (filename != null) {
+                    String query = GrowthMonitoringUtils.getDumpCsvQuery(gender, this, filename, HeightZScoreRepository.TABLE_NAME, HEIGHT_CSV_HEADING_SQL_COLUMN_MAP);
+                    if (query != null) {
+                        boolean result = GrowthMonitoringLibrary.getInstance().heightZScoreRepository().runRawQuery(query);
+                    }
+                }
+            }
+        } catch (Exception e) {
 
+        }
+    }
+    private void calculateChildHeightZScores() {
+        try {
+            HashMap<String, CommonPersonObjectClient> children = new HashMap<>();
+            List<Height> heightsWithoutZScores = GrowthMonitoringLibrary.getInstance().getHeightRepository().findWithNoZScore();
+            for (Height curHeight : heightsWithoutZScores) {
+                if (!TextUtils.isEmpty(curHeight.getBaseEntityId())) {
+                    if (!children.containsKey(curHeight.getBaseEntityId())) {
+                        CommonPersonObjectClient childDetails = getChildDetails(curHeight.getBaseEntityId());
+                        children.put(curHeight.getBaseEntityId(), childDetails);
+                    }
+
+                    CommonPersonObjectClient curChild = children.get(curHeight.getBaseEntityId());
+
+                    if (curChild != null) {
+                        Gender gender = Gender.UNKNOWN;
+                        String genderString = Utils.getValue(curChild.getColumnmaps(), "gender", false);
+                        if (genderString != null && genderString.equalsIgnoreCase("female")) {
+                            gender = Gender.FEMALE;
+                        } else if (genderString != null && genderString.equalsIgnoreCase("male")) {
+                            gender = Gender.MALE;
+                        }
+
+                        Date dob = null;
+                        String dobString = Utils.getValue(curChild.getColumnmaps(), "dob", false);
+                        if (!TextUtils.isEmpty(dobString)) {
+                            DateTime dateTime = new DateTime(dobString);
+                            dob = dateTime.toDate();
+                        }
+
+                        if (gender != Gender.UNKNOWN && dob != null) {
+                            GrowthMonitoringLibrary.getInstance().getHeightRepository().add(dob, gender, curHeight);
+                        } else {
+                            Log.w(TAG, "Could not get the date of birth or gender for child with base entity id " +
+                                    curHeight.getBaseEntityId());
+                        }
+                    } else {
+                        Log.w(TAG, "Could not get the details for child with base entity id " + curHeight.getBaseEntityId());
+                    }
+                } else {
+                    Log.w(TAG, "Current weight with id " + curHeight.getId() + " has no base entity id");
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
+    }
     private void fetchCSV(Gender gender) {
         String urlString = null;
         if (gender.equals(Gender.FEMALE)) {

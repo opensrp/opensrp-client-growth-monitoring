@@ -109,24 +109,29 @@ public class WeightRepository extends BaseRepository {
             }
 
             SQLiteDatabase database = getRepository().getWritableDatabase();
-            if (weight.getId() == null) {
-                Weight sameWeight = findUnique(database, weight);
-                if (sameWeight != null) {
-                    weight.setUpdatedAt(sameWeight.getUpdatedAt());
-                    weight.setId(sameWeight.getId());
-                    update(database, weight);
-                } else {
-                    if (weight.getCreatedAt() == null) {
-                        weight.setCreatedAt(new Date());
-                    }
-                    weight.setId(database.insert(WEIGHT_TABLE_NAME, null, createValuesFor(weight)));
-                }
-            } else {
-                if(weight.getSyncStatus() !=null && !weight.getSyncStatus().equalsIgnoreCase(TYPE_Synced)){
-                    weight.setSyncStatus(TYPE_Unsynced);
-                }
-                update(database, weight);
+            if (weight.getCreatedAt() == null) {
+                weight.setCreatedAt(new Date());
             }
+            weight.setId(database.insert(WEIGHT_TABLE_NAME, null, createValuesFor(weight)));
+
+//            if (weight.getId() == null) {
+//                Weight sameWeight = findUnique(database, weight);
+//                if (sameWeight != null) {
+//                    weight.setUpdatedAt(sameWeight.getUpdatedAt());
+//                    weight.setId(sameWeight.getId());
+//                    update(database, weight);
+//                } else {
+//                    if (weight.getCreatedAt() == null) {
+//                        weight.setCreatedAt(new Date());
+//                    }
+//                    weight.setId(database.insert(WEIGHT_TABLE_NAME, null, createValuesFor(weight)));
+//                }
+//            } else {
+//                if(weight.getSyncStatus() !=null && !weight.getSyncStatus().equalsIgnoreCase(TYPE_Synced)){
+//                    weight.setSyncStatus(TYPE_Unsynced);
+//                }
+//                update(database, weight);
+//            }
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }

@@ -130,21 +130,24 @@ public class MUACMonitoringFragment extends DialogFragment {
             return;
         }
 
-        if (gender != Gender.UNKNOWN && dob != null && minHeighingDate != null) {
+        if (gender != Gender.UNKNOWN && dob != null) {
             LineChartView growthChart = parent.findViewById(R.id.height_growth_chart);
             double minAge = ZScore.getAgeInMonths(dob, minHeighingDate.getTime());
             double maxAge = minAge + GMConstants.GRAPH_MONTHS_TIMELINE;
             List<Line> lines = new ArrayList<>();
-//            for (int z = 1; z <= 100; z++) {
-//                if (z != 1) {
-//                    Line curLine = getZScoreLine(gender, minAge, maxAge, z,
-//                            getActivity().getResources().getColor(ZScore.getMuacColor(z)));
-//                    if (z == -3) {
-//                        curLine.setPathEffect(new DashPathEffect(new float[] {10, 20}, 0));
-//                    }
-//                    lines.add(curLine);
-//                }
-//            }
+                    Line green = getZScoreLine(minAge, maxAge, 12.5,
+                            getActivity().getResources().getColor(ZScore.getMuacColor(12.5)));
+
+                    lines.add(green);
+                Line yellow = getZScoreLine(minAge, maxAge, 11.5,
+                        getActivity().getResources().getColor(ZScore.getMuacColor(11.5)));
+
+                lines.add(yellow);
+                Line red = getZScoreLine(minAge, maxAge, 11.4,
+                        getActivity().getResources().getColor(ZScore.getMuacColor(11.4)));
+                red.setPathEffect(new DashPathEffect(new float[]{10, 20}, 0));
+                lines.add(red);
+
 
             lines.add(getTodayLine(gender, dob, minAge, maxAge));
             lines.add(getPersonHeightLine(gender, dob));
@@ -212,14 +215,12 @@ public class MUACMonitoringFragment extends DialogFragment {
         });
     }
 
-    private Line getZScoreLine(Gender gender, double startAgeInMonths, double endAgeInMonths, double z, int color) {
+    private Line getZScoreLine(double startAgeInMonths, double endAgeInMonths, double cm, int color) {
         List<PointValue> values = new ArrayList<>();
         while (startAgeInMonths <= endAgeInMonths) {
-            Double height = ZScore.reverse(gender, startAgeInMonths, z);
 
-            if (height != null) {
-                values.add(new PointValue((float) startAgeInMonths, (float) height.doubleValue()));
-            }
+                values.add(new PointValue((float) startAgeInMonths, (float) cm));
+
 
             startAgeInMonths++;
         }
@@ -228,7 +229,7 @@ public class MUACMonitoringFragment extends DialogFragment {
         line.setColor(color);
         line.setHasPoints(false);
         line.setHasLabels(true);
-        line.setStrokeWidth(2);
+        line.setStrokeWidth(4);
         return line;
     }
 

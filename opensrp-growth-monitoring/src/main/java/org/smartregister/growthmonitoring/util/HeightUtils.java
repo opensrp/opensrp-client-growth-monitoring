@@ -13,7 +13,7 @@ import android.widget.TextView;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.domain.Height;
-import org.smartregister.growthmonitoring.domain.ZScore;
+import org.smartregister.growthmonitoring.domain.HeightZScore;
 import org.smartregister.growthmonitoring.listener.ViewMeasureListener;
 import org.smartregister.util.DateUtil;
 
@@ -62,14 +62,17 @@ public class HeightUtils {
             zScoreTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     context.getResources().getDimension(R.dimen.weight_table_contents_text_size));
             zScoreTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-            if (height.getDate().compareTo(maxHeighingDate.getTime()) > 0) {
-                zScoreTextView.setText("");
-            } else {
-                double zScore = ZScore.calculate(gender, dob, height.getDate(), height.getCm());
-                zScore = ZScore.roundOff(zScore);
-                zScoreTextView.setTextColor(context.getResources().getColor(ZScore.getZScoreColor(zScore)));
+//            if (height.getDate().compareTo(maxHeighingDate.getTime()) > 0) {
+//                zScoreTextView.setText("");
+//            } else {
+                double zScore = HeightZScore.calculate(gender, dob, height.getDate(), height.getCm());
+                zScore = HeightZScore.roundOff(zScore);
+                if(zScore == 0.0 || zScore == 0){
+                    zScore = HeightZScore.roundOff(height.getZScore());
+                }
+                zScoreTextView.setTextColor(context.getResources().getColor(HeightZScore.getZScoreColor(zScore)));
                 zScoreTextView.setText(String.valueOf(zScore));
-            }
+            //}
             curRow.addView(zScoreTextView);
             tableLayout.addView(curRow);
         }
