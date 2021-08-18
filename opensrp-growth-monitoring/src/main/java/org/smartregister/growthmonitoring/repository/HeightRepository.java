@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.domain.Height;
+import org.smartregister.growthmonitoring.domain.HeightZScore;
 import org.smartregister.growthmonitoring.domain.ZScore;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.BaseRepository;
@@ -92,7 +93,8 @@ public class HeightRepository extends BaseRepository {
      * @param height
      */
     public void add(Date dateOfBirth, Gender gender, Height height) {
-        height.setZScore(ZScore.calculate(gender, dateOfBirth, height.getDate(), height.getCm()));
+
+        height.setZScore(HeightZScore.calculate(gender, dateOfBirth, height.getDate(), height.getCm()));
         add(height);
     }
 
