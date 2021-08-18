@@ -6,7 +6,11 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
+import android.text.Editable;
 import android.text.Selection;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.domain.WeightWrapper;
+import org.smartregister.growthmonitoring.domain.ZScore;
 import org.smartregister.growthmonitoring.listener.WeightActionListener;
 import org.smartregister.growthmonitoring.util.ImageUtils;
 import org.smartregister.util.DatePickerUtils;
@@ -90,6 +95,28 @@ public class RecordWeightDialogFragment extends DialogFragment {
         ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.record_weight_dialog_view, container, false);
 
         final EditText editWeight = (EditText) dialogView.findViewById(R.id.edit_weight);
+        editWeight.setTextColor(getResources().getColor(R.color.white));
+        editWeight.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String text = editable.toString();
+                if(!TextUtils.isEmpty(text)){
+                    int color = ZScore.getMuacColor(Double.parseDouble(text));
+                    editWeight.setBackgroundColor(ContextCompat.getColor(editWeight.getContext(),color));
+                }
+
+            }
+        });
 //        if (tag.getWeight() != null) {
 //            editWeight.setText(tag.getWeight().toString());
 //            editWeight.setSelection(editWeight.getText().length());

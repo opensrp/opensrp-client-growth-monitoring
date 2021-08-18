@@ -79,6 +79,16 @@ public class ZScore {
             return R.color.z_score_3;
         }
     }
+    public static int getWeightColor(final double kg,Date dob) {
+        double absScore = kg;
+        if (absScore >= 12.5) {
+            return R.color.z_score_0;
+        } else if (absScore >= 11.5) {
+            return R.color.mam;
+        } else {
+            return R.color.sam;
+        }
+    }
     public static int getMuacColor(final double cm) {
         double absScore = Math.abs(cm);
         if (absScore >= 12.5) {
@@ -97,6 +107,27 @@ public class ZScore {
             return "MAM";
         } else {
             return "SAM";
+        }
+    }
+    public static String getZScoreText(final double absScore) {
+        //double absScore = Math.abs(zScore);
+
+        if (absScore <= -3.0) {
+            Log.v("ZSCORE","zscore:"+absScore+":color:red");
+            return "SAM";
+        } else if (absScore <= -2.0 && absScore > -3.0) {
+            Log.v("ZSCORE","zscore:"+absScore+":color:dark_yellow");
+            return "DARK YELLOW";
+        }else if (absScore <= -1.0 && absScore > -2.0) {
+            Log.v("ZSCORE","zscore:"+absScore+":color:yellow");
+            return "MAM";
+        }else if (absScore <=2) {
+            Log.v("ZSCORE","zscore:"+absScore+":color:green");
+            return "NORMAL";
+        }
+        else {
+            Log.v("ZSCORE","zscore:"+absScore+":color:black");
+            return "PEM";
         }
     }
 

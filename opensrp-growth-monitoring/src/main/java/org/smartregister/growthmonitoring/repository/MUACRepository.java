@@ -331,6 +331,24 @@ public class MUACRepository extends BaseRepository {
         }
         return height;
     }
+    public List<MUAC> getMaximum12(String entityId) {
+        List<MUAC> heights = null;
+        Cursor cursor = null;
+        try {
+            cursor = getRepository().getReadableDatabase()
+                    .query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE,
+                            new String[] {entityId}, null, null, null, "12");
+            heights = readAllheights(cursor);
+        } catch (Exception e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return heights;
+    }
 
     public List<MUAC> findByEntityId(String entityId) {
         List<MUAC> heights = null;

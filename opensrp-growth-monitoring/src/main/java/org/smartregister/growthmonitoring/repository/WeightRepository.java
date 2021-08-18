@@ -114,24 +114,24 @@ public class WeightRepository extends BaseRepository {
             }
             weight.setId(database.insert(WEIGHT_TABLE_NAME, null, createValuesFor(weight)));
 
-//            if (weight.getId() == null) {
-//                Weight sameWeight = findUnique(database, weight);
-//                if (sameWeight != null) {
-//                    weight.setUpdatedAt(sameWeight.getUpdatedAt());
-//                    weight.setId(sameWeight.getId());
-//                    update(database, weight);
-//                } else {
-//                    if (weight.getCreatedAt() == null) {
-//                        weight.setCreatedAt(new Date());
-//                    }
-//                    weight.setId(database.insert(WEIGHT_TABLE_NAME, null, createValuesFor(weight)));
-//                }
-//            } else {
-//                if(weight.getSyncStatus() !=null && !weight.getSyncStatus().equalsIgnoreCase(TYPE_Synced)){
-//                    weight.setSyncStatus(TYPE_Unsynced);
-//                }
-//                update(database, weight);
-//            }
+            if (weight.getId() == null) {
+                Weight sameWeight = findUnique(database, weight);
+                if (sameWeight != null) {
+                    weight.setUpdatedAt(sameWeight.getUpdatedAt());
+                    weight.setId(sameWeight.getId());
+                    update(database, weight);
+                } else {
+                    if (weight.getCreatedAt() == null) {
+                        weight.setCreatedAt(new Date());
+                    }
+                    weight.setId(database.insert(WEIGHT_TABLE_NAME, null, createValuesFor(weight)));
+                }
+            } else {
+                if(weight.getSyncStatus() !=null && !weight.getSyncStatus().equalsIgnoreCase(TYPE_Synced)){
+                    weight.setSyncStatus(TYPE_Unsynced);
+                }
+                update(database, weight);
+            }
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
@@ -197,6 +197,22 @@ public class WeightRepository extends BaseRepository {
             }
         }
         return weight;
+    }
+    public List<Weight> getMaximum12(String entityId) {
+        List<Weight> weights = null;
+        Cursor cursor = null;
+        try {
+            cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE, new String[]{entityId}, null, null, null, "12");
+            weights = readAllWeights(cursor);
+        } catch (Exception e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return weights;
     }
 
     public List<Weight> findByEntityId(String entityId) {
