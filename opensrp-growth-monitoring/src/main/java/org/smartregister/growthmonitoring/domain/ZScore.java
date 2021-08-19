@@ -130,6 +130,20 @@ public class ZScore {
             return "PEM";
         }
     }
+
+    public static int getPEMStatusColor(String status) {
+        if (status.equals("SAM")) {
+            return R.color.sam;
+        } else if (status.equals("MAM")) {
+            return R.color.mam;
+        }
+        else if (status.equals("NORMAL")) {
+            return R.color.z_score_0;
+        } else {
+            return R.color.z_score_3;
+        }
+    }
+
     public static String getPEMStatus(double weightKg, double heightCM){
         double bmi = (weightKg * 1000)/(heightCM * heightCM);
         if(bmi< 16){
@@ -137,9 +151,9 @@ public class ZScore {
         }else if(bmi>=16 && bmi <=16.9){
             return "MAM";
         }else if(bmi>=17 && bmi <=18.4){
-            return "Mild Malnutrition";
+            return "MILD";
         }else if(bmi>=18.5 && bmi <=20){
-            return "Marginal";
+            return "MAR";
         }else {
             return "NORMAL";
         }
