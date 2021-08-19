@@ -127,7 +127,7 @@ public class ZScore {
         }
         else {
             Log.v("ZSCORE","zscore:"+absScore+":color:black");
-            return "PEM";
+            return "OVER WEIGHT";
         }
     }
 
