@@ -87,17 +87,7 @@ public class MUACRepository extends BaseRepository {
         }
     }
 
-    /**
-     * This method sets the height's z-score, before adding it to the database
-     *
-     * @param dateOfBirth
-     * @param gender
-     * @param height
-     */
-    public void add(Date dateOfBirth, Gender gender, MUAC height) {
-        height.setZScore(ZScore.calculate(gender, dateOfBirth, height.getDate(), height.getCm()));
-        add(height);
-    }
+
 
     public void add(MUAC height) {
         try {
