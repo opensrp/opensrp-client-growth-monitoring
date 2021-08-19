@@ -130,6 +130,21 @@ public class ZScore {
             return "PEM";
         }
     }
+    public static String getPEMStatus(double weightKg, double heightCM){
+        double bmi = (weightKg * 1000)/(heightCM * heightCM);
+        if(bmi< 16){
+            return "SAM";
+        }else if(bmi>=16 && bmi <=16.9){
+            return "MAM";
+        }else if(bmi>=17 && bmi <=18.4){
+            return "Mild Malnutrition";
+        }else if(bmi>=18.5 && bmi <=20){
+            return "Marginal";
+        }else {
+            return "NORMAL";
+        }
+
+    }
 
     public static double roundOff(double value) {
         int scale = (int) Math.pow(10, 1);
