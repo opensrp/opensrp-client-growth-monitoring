@@ -132,15 +132,15 @@ public class ZScore {
     }
 
     public static int getPEMStatusColor(String status) {
-        if (status.equals("SAM")) {
-            return R.color.sam;
-        } else if (status.equals("MAM")) {
-            return R.color.mam;
-        }
-        else if (status.equals("NORMAL")) {
-            return R.color.z_score_0;
-        } else {
-            return R.color.z_score_3;
+        switch (status) {
+            case "SAM":
+                return R.color.sam;
+            case "MAM":
+                return R.color.mam;
+            case "NORMAL":
+                return R.color.z_score_0;
+            default:
+                return R.color.z_score_3;
         }
     }
 
