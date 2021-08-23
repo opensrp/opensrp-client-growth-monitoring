@@ -16,19 +16,20 @@ import java.util.List;
 
 public class ZScore {
     public static double MAX_REPRESENTED_AGE = 60d;
-    private  Gender gender;
+    private Gender gender;
     protected int month;
     private double l;
-    private  double m;
-    private  double s;
-    private  double sd3Neg;
-    private  double sd2Neg;
-    private  double sd1Neg;
-    private  double sd0;
-    private  double sd1;
-    private  double sd2;
-    private  double sd3;
-    public ZScore(){
+    private double m;
+    private double s;
+    private double sd3Neg;
+    private double sd2Neg;
+    private double sd1Neg;
+    private double sd0;
+    private double sd1;
+    private double sd2;
+    private double sd3;
+
+    public ZScore() {
 
     }
 
@@ -48,7 +49,7 @@ public class ZScore {
         this.sd3 = sd3;
     }
 
-//    public static int getZScoreColor(final double zScore) {
+    //    public static int getZScoreColor(final double zScore) {
 //        double absScore = Math.abs(zScore);
 //        if (absScore < 2.0) {
 //            return R.color.z_score_0;
@@ -62,24 +63,24 @@ public class ZScore {
         //double absScore = Math.abs(zScore);
 
         if (absScore <= -3.0) {
-            Log.v("ZSCORE","zscore:"+absScore+":color:red");
+            Log.v("ZSCORE", "zscore:" + absScore + ":color:red");
             return R.color.red;
         } else if (absScore <= -2.0 && absScore > -3.0) {
-            Log.v("ZSCORE","zscore:"+absScore+":color:dark_yellow");
+            Log.v("ZSCORE", "zscore:" + absScore + ":color:dark_yellow");
             return R.color.dark_yellow;
-        }else if (absScore <= -1.0 && absScore > -2.0) {
-            Log.v("ZSCORE","zscore:"+absScore+":color:yellow");
+        } else if (absScore <= -1.0 && absScore > -2.0) {
+            Log.v("ZSCORE", "zscore:" + absScore + ":color:yellow");
             return R.color.yellow;
-        }else if (absScore <=2) {
-            Log.v("ZSCORE","zscore:"+absScore+":color:green");
+        } else if (absScore <= 2) {
+            Log.v("ZSCORE", "zscore:" + absScore + ":color:green");
             return R.color.green;
-        }
-        else {
-            Log.v("ZSCORE","zscore:"+absScore+":color:black");
+        } else {
+            Log.v("ZSCORE", "zscore:" + absScore + ":color:black");
             return R.color.z_score_3;
         }
     }
-    public static int getWeightColor(final double kg,Date dob) {
+
+    public static int getWeightColor(final double kg, Date dob) {
         double absScore = kg;
         if (absScore >= 12.5) {
             return R.color.z_score_0;
@@ -89,6 +90,7 @@ public class ZScore {
             return R.color.sam;
         }
     }
+
     public static int getMuacColor(final double cm) {
         double absScore = Math.abs(cm);
         if (absScore >= 12.5) {
@@ -99,6 +101,7 @@ public class ZScore {
             return R.color.sam;
         }
     }
+
     public static String getMuacText(final double cm) {
         double absScore = Math.abs(cm);
         if (absScore >= 12.5) {
@@ -109,25 +112,37 @@ public class ZScore {
             return "SAM";
         }
     }
+
     public static String getZScoreText(final double absScore) {
         //double absScore = Math.abs(zScore);
 
         if (absScore <= -3.0) {
-            Log.v("ZSCORE","zscore:"+absScore+":color:red");
+            Log.v("ZSCORE", "zscore:" + absScore + ":color:red");
             return "SAM";
         } else if (absScore <= -2.0 && absScore > -3.0) {
-            Log.v("ZSCORE","zscore:"+absScore+":color:dark_yellow");
+            Log.v("ZSCORE", "zscore:" + absScore + ":color:dark_yellow");
             return "DARK YELLOW";
-        }else if (absScore <= -1.0 && absScore > -2.0) {
-            Log.v("ZSCORE","zscore:"+absScore+":color:yellow");
+        } else if (absScore <= -1.0 && absScore > -2.0) {
+            Log.v("ZSCORE", "zscore:" + absScore + ":color:yellow");
             return "MAM";
-        }else if (absScore <=2) {
-            Log.v("ZSCORE","zscore:"+absScore+":color:green");
+        } else if (absScore <= 2) {
+            Log.v("ZSCORE", "zscore:" + absScore + ":color:green");
             return "NORMAL";
-        }
-        else {
-            Log.v("ZSCORE","zscore:"+absScore+":color:black");
+        } else {
+            Log.v("ZSCORE", "zscore:" + absScore + ":color:red");
             return "OVER WEIGHT";
+        }
+    }
+
+    public static int getZscoreColorByText(String text) {
+        if (text.contains("OVER WEIGHT") | text.contains("SAM")) {
+            return R.color.sam;
+        } else if (text.contains("DARK YELLOW")) {
+            return R.color.dark_yellow;
+        } else if (text.contains("MAM")) {
+            return R.color.yellow;
+        } else {
+            return R.color.z_score_0;
         }
     }
 
@@ -144,17 +159,17 @@ public class ZScore {
         }
     }
 
-    public static String getPEMStatus(double weightKg, double heightCM){
-        double bmi = (weightKg * 1000)/(heightCM * heightCM);
-        if(bmi< 16){
+    public static String getPEMStatus(double weightKg, double heightCM) {
+        double bmi = (weightKg * 1000) / (heightCM * heightCM);
+        if (bmi < 16) {
             return "SAM";
-        }else if(bmi>=16 && bmi <=16.9){
+        } else if (bmi >= 16 && bmi <= 16.9) {
             return "MAM";
-        }else if(bmi>=17 && bmi <=18.4){
+        } else if (bmi >= 17 && bmi <= 18.4) {
             return "MILD";
-        }else if(bmi>=18.5 && bmi <=20){
+        } else if (bmi >= 18.5 && bmi <= 20) {
             return "MAR";
-        }else {
+        } else {
             return "NORMAL";
         }
 
