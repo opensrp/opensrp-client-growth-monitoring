@@ -25,6 +25,15 @@ public class MUAC {
     private Long updatedAt;
     private Double zScore;
     private Date createdAt;
+    private String edemaValue;
+
+    public void setEdemaValue(String edemaValue) {
+        this.edemaValue = edemaValue;
+    }
+
+    public String getEdemaValue() {
+        return edemaValue;
+    }
 
     public MUAC() {
     }

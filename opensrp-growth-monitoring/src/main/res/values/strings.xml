@@ -1,4 +1,9 @@
 <resources>
+    <string-array name="edema_value">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+
     <string name="app_name">opensrp-growth-monitoring</string>
     <string name="action_settings">Settings</string>
     <string name="label_zeir">ZEIR</string>
@@ -22,4 +27,7 @@
     <string name="btn_layout_weight">2</string>
     <string name="z_score"> Z-score</string>
     <string name="muac_status">Muac status</string>
+    <string name="presence_of_edema">Presence of Edema</string>
+    <string name="record_muac">Record MUAC</string>
+    <string name="muac_taken_today">MUAC taken today</string>
 </resources>

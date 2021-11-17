@@ -43,15 +43,16 @@ public class MUACRepository extends BaseRepository {
     public static final String CREATED_AT = "created_at";
     public static final String TEAM_ID = "team_id";
     public static final String TEAM = "team";
+    public static final String EDEMA_VALUE = "edema_value";
     public static final String[] HEIGHT_TABLE_COLUMNS = {
             ID_COLUMN, BASE_ENTITY_ID, PROGRAM_CLIENT_ID, CM, DATE, ANMID, LOCATIONID, CHILD_LOCATION_ID, TEAM, TEAM_ID,
-            SYNC_STATUS, UPDATED_AT_COLUMN, EVENT_ID, FORMSUBMISSION_ID, Z_SCORE, OUT_OF_AREA, CREATED_AT};
+            SYNC_STATUS, UPDATED_AT_COLUMN, EVENT_ID, FORMSUBMISSION_ID, Z_SCORE, OUT_OF_AREA, CREATED_AT,EDEMA_VALUE};
 
     private static final String TAG = MUACRepository.class.getCanonicalName();
     private static final String HEIGHT_SQL = "CREATE TABLE muac_tbl (_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
             "base_entity_id VARCHAR NOT NULL,program_client_id VARCHAR NULL,cm REAL NOT NULL,date DATETIME NOT NULL,anmid " +
             "VARCHAR NULL,location_id VARCHAR NULL,sync_status VARCHAR,updated_at INTEGER NULL,child_location_id VARCHAR,team_id VARCHAR,team VARCHAR,created_at DATETIME NULL " +
-            ",z_score REAL NOT NULL DEFAULT " + DEFAULT_Z_SCORE+",out_of_area VARCHAR,formSubmissionId VARCHAR,event_id VARCHAR)";
+            ",z_score REAL NOT NULL DEFAULT " + DEFAULT_Z_SCORE+",out_of_area VARCHAR,formSubmissionId VARCHAR,event_id VARCHAR,edema_value VARCHAR)";
 
     private static final String BASE_ENTITY_ID_INDEX = "CREATE INDEX " + HEIGHT_TABLE_NAME + "_" + BASE_ENTITY_ID + "_index ON " + HEIGHT_TABLE_NAME + "(" + BASE_ENTITY_ID + " COLLATE NOCASE);";
     private static final String SYNC_STATUS_INDEX = "CREATE INDEX " + HEIGHT_TABLE_NAME + "_" + SYNC_STATUS + "_index ON " + HEIGHT_TABLE_NAME + "(" + SYNC_STATUS + " COLLATE NOCASE);";
@@ -89,50 +90,50 @@ public class MUACRepository extends BaseRepository {
 
 
 
-    public void add(MUAC height) {
+    public void add(MUAC muac) {
         try {
-            if (height == null) {
+            if (muac == null) {
                 return;
             }
 
             AllSharedPreferences allSharedPreferences = GrowthMonitoringLibrary.getInstance().context()
                     .allSharedPreferences();
             String providerId = allSharedPreferences.fetchRegisteredANM();
-            height.setTeam(allSharedPreferences.fetchDefaultTeam(providerId));
-            height.setTeamId(allSharedPreferences.fetchDefaultTeamId(providerId));
-            height.setLocationId(allSharedPreferences.fetchDefaultLocalityId(providerId));
+            muac.setTeam(allSharedPreferences.fetchDefaultTeam(providerId));
+            muac.setTeamId(allSharedPreferences.fetchDefaultTeamId(providerId));
+            muac.setLocationId(allSharedPreferences.fetchDefaultLocalityId(providerId));
 
 
-            if (StringUtils.isBlank(height.getSyncStatus())) {
-                height.setSyncStatus(TYPE_Unsynced);
+            if (StringUtils.isBlank(muac.getSyncStatus())) {
+                muac.setSyncStatus(TYPE_Unsynced);
             }
-            if (StringUtils.isBlank(height.getFormSubmissionId())) {
-                height.setFormSubmissionId(generateRandomUUIDString());
+            if (StringUtils.isBlank(muac.getFormSubmissionId())) {
+                muac.setFormSubmissionId(generateRandomUUIDString());
             }
 
 
-            if (height.getUpdatedAt() == null) {
-                height.setUpdatedAt(Calendar.getInstance().getTimeInMillis());
+            if (muac.getUpdatedAt() == null) {
+                muac.setUpdatedAt(Calendar.getInstance().getTimeInMillis());
             }
 
             SQLiteDatabase database = getRepository().getWritableDatabase();
-            if (height.getId() == null) {
-                MUAC sameheight = findUnique(database, height);
+            if (muac.getId() == null) {
+                MUAC sameheight = findUnique(database, muac);
                 if (sameheight != null) {
-                    height.setUpdatedAt(sameheight.getUpdatedAt());
-                    height.setId(sameheight.getId());
-                    update(database, height);
+                    muac.setUpdatedAt(sameheight.getUpdatedAt());
+                    muac.setId(sameheight.getId());
+                    update(database, muac);
                 } else {
-                    if (height.getCreatedAt() == null) {
-                        height.setCreatedAt(new Date());
+                    if (muac.getCreatedAt() == null) {
+                        muac.setCreatedAt(new Date());
                     }
-                    height.setId(database.insert(HEIGHT_TABLE_NAME, null, createValuesFor(height)));
+                    muac.setId(database.insert(HEIGHT_TABLE_NAME, null, createValuesFor(muac)));
                 }
             } else {
-                if(height.getSyncStatus()!=null && !height.getSyncStatus().equalsIgnoreCase(TYPE_Synced)){
-                    height.setSyncStatus(TYPE_Unsynced);
+                if(muac.getSyncStatus()!=null && !muac.getSyncStatus().equalsIgnoreCase(TYPE_Synced)){
+                    muac.setSyncStatus(TYPE_Unsynced);
                 }
-                update(database, height);
+                update(database, muac);
             }
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));
@@ -218,6 +219,7 @@ public class MUACRepository extends BaseRepository {
         values.put(Z_SCORE, String.valueOf(height.getZScore() == null ? DEFAULT_Z_SCORE : height.getZScore()));
         values.put(CREATED_AT,
                 height.getCreatedAt() != null ? EventClientRepository.dateFormat.format(height.getCreatedAt()) : null);
+        values.put(EDEMA_VALUE,height.getEdemaValue());
         return values;
     }
 
@@ -259,7 +261,7 @@ public class MUACRepository extends BaseRepository {
                     height.setTeam(cursor.getString(cursor.getColumnIndex(TEAM)));
                     height.setTeamId(cursor.getString(cursor.getColumnIndex(TEAM_ID)));
                     height.setChildLocationId(cursor.getString(cursor.getColumnIndex(CHILD_LOCATION_ID)));
-
+                    height.setEdemaValue(cursor.getString(cursor.getColumnIndex(EDEMA_VALUE)));
                     heights.add(height);
 
                     cursor.moveToNext();

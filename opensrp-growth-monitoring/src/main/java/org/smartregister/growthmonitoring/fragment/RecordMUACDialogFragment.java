@@ -18,11 +18,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -49,6 +52,7 @@ public class RecordMUACDialogFragment extends DialogFragment {
     private MUACWrapper muacWrapper;
     private MUACActionListener muacActionListener;
     private Date dateOfBirth;
+    private Spinner edemaMuacSpinner;
 
     public static RecordMUACDialogFragment newInstance(Date dateOfBirth, MUACWrapper heightWrapper) {
 
@@ -117,7 +121,9 @@ public class RecordMUACDialogFragment extends DialogFragment {
     public void onViewCreated(View dialogView, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(dialogView, savedInstanceState);
         final EditText editHeight = dialogView.findViewById(R.id.edit_height);
-        ((TextView)dialogView.findViewById(R.id.record_height)).setText("Record MUAC");
+        ((TextView)dialogView.findViewById(R.id.record_height)).setText(R.string.record_muac);
+        dialogView.findViewById(R.id.edema_layout).setVisibility(View.VISIBLE);
+        edemaMuacSpinner = dialogView.findViewById(R.id.edema_spinner);
         editHeight.setTextColor(getResources().getColor(R.color.white));
         editHeight.addTextChangedListener(new TextWatcher() {
             @Override
@@ -145,6 +151,7 @@ public class RecordMUACDialogFragment extends DialogFragment {
         if (dateOfBirth != null) {
             earlierDatePicker.setMinDate(dateOfBirth.getTime());
         }
+
         final Button set = dialogView.findViewById(R.id.set);
         set.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,13 +174,15 @@ public class RecordMUACDialogFragment extends DialogFragment {
 
                 Float height = Float.valueOf(heightString);
                 muacWrapper.setHeight(height);
+                String edemaValue = edemaMuacSpinner.getSelectedItem().toString();
+                if(!TextUtils.isEmpty(edemaValue)) muacWrapper.setEdemaValue(edemaValue);
 
                 muacActionListener.onMUACTaken(muacWrapper);
 
             }
         });
         final Button weightTakenToday = dialogView.findViewById(R.id.height_taken_today);
-        weightTakenToday.setText("MUAC taken today");
+        weightTakenToday.setText(R.string.muac_taken_today);
         weightTakenToday.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -189,6 +198,9 @@ public class RecordMUACDialogFragment extends DialogFragment {
                 muacWrapper.setUpdatedHeightDate(new DateTime(calendar.getTime()), true);
                 Float height = Float.valueOf(heightString);
                 muacWrapper.setHeight(height);
+                String edemaValue = edemaMuacSpinner.getSelectedItem().toString();
+                if(!TextUtils.isEmpty(edemaValue)) muacWrapper.setEdemaValue(edemaValue);
+
                 muacActionListener.onMUACTaken(muacWrapper);
 
             }

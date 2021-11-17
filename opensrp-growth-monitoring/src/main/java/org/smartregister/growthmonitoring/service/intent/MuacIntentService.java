@@ -58,9 +58,19 @@ public class MuacIntentService extends IntentService {
                     zScoreObject.put(GMConstants.JsonForm.OPENMRS_DATA_TYPE, "calculation");
                     zScoreObject.put(GMConstants.JsonForm.VALUE, ZScore.getMuacText( weight.getCm()));
 
+                    //edema
+                    JSONObject edemaJsonObject = new JSONObject();
+                    edemaJsonObject.put(GMConstants.JsonForm.KEY, "edema_value");
+                    edemaJsonObject.put(GMConstants.JsonForm.OPENMRS_ENTITY, "concept");
+                    edemaJsonObject.put(GMConstants.JsonForm.OPENMRS_ENTITY_ID, "edema_value");
+                    edemaJsonObject.put(GMConstants.JsonForm.OPENMRS_ENTITY_PARENT, "");
+                    edemaJsonObject.put(GMConstants.JsonForm.OPENMRS_DATA_TYPE, "text");
+                    edemaJsonObject.put(GMConstants.JsonForm.VALUE, weight.getEdemaValue());
+
                     JSONArray jsonArray = new JSONArray();
                     jsonArray.put(jsonObject);
                     jsonArray.put(zScoreObject);
+                    jsonArray.put(edemaJsonObject);
 
                     JsonFormUtils.createMuacEvent(getApplicationContext(), weight, EVENT_TYPE, ENTITY_TYPE, jsonArray);
                     if (weight.getBaseEntityId() == null || weight.getBaseEntityId().isEmpty()) {

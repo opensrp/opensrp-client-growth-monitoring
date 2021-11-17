@@ -1,10 +1,12 @@
 buildscript {
     repositories {
         mavenCentral()
+        google()
     }
 
     dependencies {
         classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.11.0"
+        classpath 'com.android.tools.build:gradle:3.2.1'
     }
 }
 
@@ -66,6 +68,10 @@ apply plugin: 'io.codearte.nexus-staging'
 
 buildDashboard {
     reports.html.setDestination(file("build/"))
+}
+
+repositories {
+    google()
 }
 
 test.reports.html.enabled = false

@@ -21,6 +21,15 @@ public class MUACWrapper implements Serializable {
     private DateTime updatedHeightDate;
     private boolean today;
     private String dob;
+    private String edemaValue;
+
+    public void setEdemaValue(String edemaValue) {
+        this.edemaValue = edemaValue;
+    }
+
+    public String getEdemaValue() {
+        return edemaValue;
+    }
 
     public String getId() {
         return id;
