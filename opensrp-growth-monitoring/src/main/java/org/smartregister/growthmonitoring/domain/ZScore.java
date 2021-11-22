@@ -129,7 +129,7 @@ public class ZScore {
             Log.v("ZSCORE", "zscore:" + absScore + ":color:green");
             return "NORMAL";
         } else {
-            Log.v("ZSCORE", "zscore:" + absScore + ":color:red");
+            Log.v("ZSCORE", "zscore:" + absScore + ":color:black");
             return "OVER WEIGHT";
         }
     }

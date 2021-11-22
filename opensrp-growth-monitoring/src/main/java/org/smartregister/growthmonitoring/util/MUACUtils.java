@@ -23,8 +23,8 @@ import java.util.Date;
 import java.util.List;
 
 public class MUACUtils {
-    public static void refreshPreviousMuacTable(Context context, TableLayout tableLayout, Gender gender, Date dob, List<MUAC> heightList) {
-        for (MUAC height : heightList) {
+    public static void refreshPreviousMuacTable(Context context, TableLayout tableLayout, Gender gender, Date dob, List<MUAC> meacList) {
+        for (MUAC muac : meacList) {
             TableRow dividerRow = new TableRow(tableLayout.getContext());
             View divider = new View(context);
             TableRow.LayoutParams params = (TableRow.LayoutParams) divider.getLayoutParams();
@@ -43,7 +43,7 @@ public class MUACUtils {
             ageTextView.setHeight(context.getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
             ageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     context.getResources().getDimension(R.dimen.weight_table_contents_text_size));
-            ageTextView.setText(DateUtil.getDuration(height.getDate().getTime() - dob.getTime()));
+            ageTextView.setText(DateUtil.getDuration(muac.getDate().getTime() - dob.getTime()));
             ageTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
             ageTextView.setTextColor(context.getResources().getColor(R.color.client_list_grey));
             curRow.addView(ageTextView);
@@ -54,7 +54,7 @@ public class MUACUtils {
                     context.getResources().getDimension(R.dimen.weight_table_contents_text_size));
             HeightTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
             HeightTextView.setText(
-                    String.format("%s %s", String.valueOf(height.getCm()), context.getString(R.string.cm)));
+                    String.format("%s %s", String.valueOf(muac.getCm()), context.getString(R.string.cm)));
             HeightTextView.setTextColor(context.getResources().getColor(R.color.client_list_grey));
             curRow.addView(HeightTextView);
 
@@ -63,8 +63,9 @@ public class MUACUtils {
             zScoreTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     context.getResources().getDimension(R.dimen.weight_table_contents_text_size));
             zScoreTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-            zScoreTextView.setTextColor(context.getResources().getColor(ZScore.getMuacColor( height.getCm())));
-            zScoreTextView.setText(String.valueOf(ZScore.getMuacText(height.getCm())));
+            zScoreTextView.setTextColor(context.getResources().getColor(ZScore.getMuacColor( muac.getCm())));
+            zScoreTextView.setText(String.valueOf(ZScore.getMuacText(muac.getCm())));
+            zScoreTextView.setText(zScoreTextView.getText()+" Edema: "+muac.getEdemaValue());
 
             curRow.addView(zScoreTextView);
             tableLayout.addView(curRow);

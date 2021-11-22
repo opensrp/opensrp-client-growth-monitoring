@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.domain.Height;
 import org.smartregister.growthmonitoring.domain.Weight;
+import org.smartregister.growthmonitoring.domain.ZScore;
 import org.smartregister.growthmonitoring.repository.HeightRepository;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.util.GMConstants;
@@ -56,6 +57,15 @@ public class HeightIntentService extends IntentService {
                     zScoreObject.put(GMConstants.JsonForm.OPENMRS_ENTITY_PARENT, "");
                     zScoreObject.put(GMConstants.JsonForm.OPENMRS_DATA_TYPE, "calculation");
                     zScoreObject.put(GMConstants.JsonForm.VALUE, weight.getZScore());
+                    //level
+                    String level = ZScore.getZScoreText(weight.getZScore());
+                    JSONObject levelObject = new JSONObject();
+                    levelObject.put(GMConstants.JsonForm.KEY, "height_level");
+                    levelObject.put(GMConstants.JsonForm.OPENMRS_ENTITY, "concept");
+                    levelObject.put(GMConstants.JsonForm.OPENMRS_ENTITY_ID, "height_level");
+                    levelObject.put(GMConstants.JsonForm.OPENMRS_ENTITY_PARENT, "");
+                    levelObject.put(GMConstants.JsonForm.OPENMRS_DATA_TYPE, "calculation");
+                    levelObject.put(GMConstants.JsonForm.VALUE, level);
 
                     JSONArray jsonArray = new JSONArray();
                     jsonArray.put(jsonObject);
