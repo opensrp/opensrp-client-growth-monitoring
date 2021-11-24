@@ -70,7 +70,7 @@ public class HeightIntentService extends IntentService {
                     JSONArray jsonArray = new JSONArray();
                     jsonArray.put(jsonObject);
                     jsonArray.put(zScoreObject);
-
+                    jsonArray.put(levelObject);
                     JsonFormUtils.createHeightEvent(getApplicationContext(), weight, EVENT_TYPE, ENTITY_TYPE, jsonArray);
                     if (weight.getBaseEntityId() == null || weight.getBaseEntityId().isEmpty()) {
                         JsonFormUtils.createHeightEvent(getApplicationContext(), weight, EVENT_TYPE_OUT_OF_CATCHMENT, ENTITY_TYPE, jsonArray);

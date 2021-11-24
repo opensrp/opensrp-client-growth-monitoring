@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class WeightIntentService extends IntentService {
     private static final String TAG = WeightIntentService.class.getCanonicalName();
-    public static final String EVENT_TYPE = "Growth Monitoring";
+    public static final String EVENT_TYPE = "Weight Monitoring";
     public static final String EVENT_TYPE_OUT_OF_CATCHMENT = "Out of Area Service - Growth Monitoring";
     public static final String ENTITY_TYPE = "weight";
     private WeightRepository weightRepository;
@@ -68,7 +68,7 @@ public class WeightIntentService extends IntentService {
                     JSONArray jsonArray = new JSONArray();
                     jsonArray.put(jsonObject);
                     jsonArray.put(zScoreObject);
-
+                    jsonArray.put(levelObject);
                     JsonFormUtils.createWeightEvent(getApplicationContext(), weight, EVENT_TYPE, ENTITY_TYPE, jsonArray);
                     if (weight.getBaseEntityId() == null || weight.getBaseEntityId().isEmpty()) {
                         JsonFormUtils.createWeightEvent(getApplicationContext(), weight, EVENT_TYPE_OUT_OF_CATCHMENT, ENTITY_TYPE, jsonArray);
