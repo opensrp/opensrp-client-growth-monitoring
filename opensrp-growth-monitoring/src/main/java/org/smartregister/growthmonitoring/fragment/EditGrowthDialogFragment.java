@@ -258,9 +258,10 @@ public class EditGrowthDialogFragment extends DialogFragment {
                 String heightString = null;
                 if (monitorGrowth) {
                     heightString = editHeight.getText().toString();
-                    if (StringUtils.isBlank(heightString) || Float.parseFloat(heightString) <= 0f || Float.parseFloat(heightString) > 100f)
+                    if (StringUtils.isBlank(heightString) || Float.parseFloat(heightString) <= 0f || Float.parseFloat(heightString) > 100f) {
                         Toast.makeText(getActivity(), R.string.height_is_required, Toast.LENGTH_LONG).show();
-                    return;
+                        return;
+                    }
                 }
                 dismiss();
 

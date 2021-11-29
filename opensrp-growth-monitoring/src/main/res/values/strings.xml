@@ -50,6 +50,6 @@
     <string name="catchment_area">Catchment Area</string>
     <string name="user_image">User Image</string>
     <string name="weight_is_required">The patient weight cannot be empty.</string>
-    <string name="height_is_required">"Child height should be less than 0cm and not above 100 cms. "</string>
+    <string name="height_is_required">"Child height should not be less than 0cm and not above 100 cms."</string>
 
 </resources>
