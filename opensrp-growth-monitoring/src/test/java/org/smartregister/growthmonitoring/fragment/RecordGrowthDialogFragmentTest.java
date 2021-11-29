@@ -2,12 +2,18 @@ package org.smartregister.growthmonitoring.fragment;
 
 import android.app.Dialog;
 import androidx.fragment.app.FragmentActivity;
+
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,6 +32,7 @@ import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.domain.HeightWrapper;
 import org.smartregister.growthmonitoring.domain.WeightWrapper;
+import org.smartregister.growthmonitoring.listener.GrowthMonitoringActionListener;
 import org.smartregister.growthmonitoring.util.AppProperties;
 import org.smartregister.repository.Repository;
 
@@ -33,7 +40,7 @@ import org.smartregister.repository.Repository;
  * Created by ndegwamartin on 2020-04-15.
  */
 
-@PrepareForTest({GrowthMonitoringLibrary.class})
+@PrepareForTest({GrowthMonitoringLibrary.class, Toast.class})
 public class RecordGrowthDialogFragmentTest extends BaseUnitTest {
 
     @Rule
@@ -103,5 +110,54 @@ public class RecordGrowthDialogFragmentTest extends BaseUnitTest {
 
         Mockito.verify(view).setFilterTouchesWhenObscured(true);
 
+    }
+    
+    @Test
+    public void testSaveGrowthRecord() {
+        RecordGrowthDialogFragment fragment = Mockito.spy(RecordGrowthDialogFragment.newInstance(new LocalDate().minusYears(2).toDate(), new WeightWrapper(), new HeightWrapper()));
+        ReflectionHelpers.setStaticField(RecordGrowthDialogFragment.class, "monitorGrowth", true);
+        Mockito.doReturn(activity).when(fragment).getActivity();
+
+        PowerMockito.mockStatic(Toast.class);
+        Toast toast = Mockito.mock(Toast.class);
+        Mockito.when(Toast.makeText(activity, R.string.weight_is_required, Toast.LENGTH_LONG)).thenReturn(toast);
+        Mockito.when(Toast.makeText(activity, R.string.height_is_required, Toast.LENGTH_LONG)).thenReturn(toast);
+        Mockito.doNothing().when(toast).show();
+
+        EditText weight = Mockito.mock(EditText.class);
+        Editable editable = Mockito.mock(Editable.class);
+        Mockito.doReturn(editable).when(weight).getText();
+        ReflectionHelpers.setField(fragment, "editWeight", weight);
+        ReflectionHelpers.setField(fragment, "editHeight", weight);
+
+        DatePicker datePicker = Mockito.mock(DatePicker.class);
+        Mockito.doReturn(1).when(datePicker).getDayOfMonth();
+        Mockito.doReturn(1).when(datePicker).getMonth();
+        Mockito.doReturn(1).when(datePicker).getYear();
+        ReflectionHelpers.setField(fragment, "earlierDatePicker", datePicker);
+
+        WeightWrapper weightWrapper = Mockito.mock(WeightWrapper.class);
+        ReflectionHelpers.setField(fragment, "weightWrapper", weightWrapper);
+        Mockito.doNothing().when(weightWrapper).setUpdatedWeightDate(Mockito.<DateTime>any(), Mockito.anyBoolean());
+
+        HeightWrapper heightWrapper = Mockito.mock(HeightWrapper.class);
+        ReflectionHelpers.setField(fragment, "heightWrapper", heightWrapper);
+        Mockito.doNothing().when(heightWrapper).setUpdatedHeightDate(Mockito.<DateTime>any(), Mockito.anyBoolean());
+
+        Mockito.doNothing().when(fragment).dismiss();
+
+        GrowthMonitoringActionListener growthMonitoringActionListener = Mockito.mock(GrowthMonitoringActionListener.class);
+        ReflectionHelpers.setField(fragment, "GrowthMonitoringActionListener", growthMonitoringActionListener);
+        Mockito.doNothing().when(growthMonitoringActionListener).onGrowthRecorded(Mockito.<WeightWrapper>any(), Mockito.<HeightWrapper>any());
+
+        Mockito.doReturn("0").when(editable).toString();
+        ReflectionHelpers.callInstanceMethod(RecordGrowthDialogFragment.class, fragment, "saveGrowthRecord", ReflectionHelpers.ClassParameter.from(boolean.class, true));
+
+        Mockito.verify(fragment, Mockito.never()).dismiss();
+
+        Mockito.doReturn("2").when(editable).toString();
+        ReflectionHelpers.callInstanceMethod(RecordGrowthDialogFragment.class, fragment, "saveGrowthRecord", ReflectionHelpers.ClassParameter.from(boolean.class, true));
+
+        Mockito.verify(fragment).dismiss();
     }
 }
