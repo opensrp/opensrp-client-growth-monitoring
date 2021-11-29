@@ -294,7 +294,7 @@ public class RecordGrowthDialogFragment extends DialogFragment {
             String heightString = editHeight.getText().toString();
             if (!heightString.isEmpty()) {
                 float height = Float.parseFloat(heightString);
-                if (height <= 0f || height > 1000f) {
+                if (height <= 0f || height > 100f) {
                     Toast.makeText(getActivity(), R.string.height_is_required, Toast.LENGTH_LONG).show();
                     return;
                 }
