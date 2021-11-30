@@ -68,7 +68,7 @@ public class GrowthMonitoringUtilsTest {
     public void assertCleanTimestampSetsConsistentTimePortion() {
 
         LocalDateTime localDateTime = new LocalDateTime().plusHours(3).plusMinutes(5);
-        LocalDateTime localDateTime2 = new LocalDateTime().plusHours(7).minusMinutes(2);
+        LocalDateTime localDateTime2 = new LocalDateTime().plusHours(4).minusMinutes(2);
 
         Assert.assertNotEquals(localDateTime.toDate().getTime(), localDateTime2.toDate().getTime());
 

@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.fragment.app.DialogFragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -279,7 +281,6 @@ public class RecordGrowthDialogFragment extends DialogFragment {
             Toast.makeText(getActivity(), R.string.weight_is_required, Toast.LENGTH_LONG).show();
             return;
         }
-        dismiss();
 
         int day = earlierDatePicker.getDayOfMonth();
         int month = earlierDatePicker.getMonth();
@@ -290,20 +291,23 @@ public class RecordGrowthDialogFragment extends DialogFragment {
         weightWrapper.setUpdatedWeightDate(new DateTime(calendar.getTime()), isToday);
         if (monitorGrowth) {
             heightWrapper.setUpdatedHeightDate(new DateTime(calendar.getTime()), isToday);
-        }
-
-        Float weight = Float.valueOf(weightString);
-        weightWrapper.setWeight(weight);
-
-        if (monitorGrowth) {
             String heightString = editHeight.getText().toString();
             if (!heightString.isEmpty()) {
-                Float height = Float.valueOf(heightString);
+                float height = Float.parseFloat(heightString);
+                if (height <= 0f || height > 100f) {
+                    Toast.makeText(getActivity(), R.string.height_is_required, Toast.LENGTH_LONG).show();
+                    return;
+                }
                 heightWrapper.setHeight(height);
             } else {
                 heightWrapper = null;
             }
         }
+        dismiss();
+
+
+        Float weight = Float.valueOf(weightString);
+        weightWrapper.setWeight(weight);
 
         GrowthMonitoringActionListener.onGrowthRecorded(weightWrapper, heightWrapper);
     }
