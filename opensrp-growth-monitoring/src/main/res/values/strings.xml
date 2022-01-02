@@ -1,7 +1,8 @@
 <resources>
     <string-array name="edema_value">
-        <item>Yes</item>
         <item>No</item>
+        <item>Yes</item>
+
     </string-array>
 
     <string name="app_name">opensrp-growth-monitoring</string>
