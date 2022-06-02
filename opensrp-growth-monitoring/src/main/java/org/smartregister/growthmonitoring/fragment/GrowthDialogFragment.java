@@ -296,7 +296,9 @@ public class GrowthDialogFragment extends DialogFragment {
 //            } else {
                 double zScore = ZScore.calculate(gender, dob, weight.getDate(), weight.getKg());
                 zScore = ZScore.roundOff(zScore);
-                zScoreTextView.setTextColor(getResources().getColor(ZScore.getZScoreColor(zScore)));
+                int color = ZScore.getZScoreColor(zScore);
+                Log.v("WEIGHT_DIALOG","value>>color:"+color+":zScore:"+zScore);
+                zScoreTextView.setTextColor(getResources().getColor(color));
                 zScoreTextView.setText(String.valueOf(zScore));
            // }
             curRow.addView(zScoreTextView);

@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.domain.WeightWrapper;
 import org.smartregister.growthmonitoring.domain.ZScore;
@@ -111,7 +113,19 @@ public class RecordWeightDialogFragment extends DialogFragment {
             public void afterTextChanged(Editable editable) {
                 String text = editable.toString();
                 if(!TextUtils.isEmpty(text)){
-                    int color = ZScore.getMuacColor(Double.parseDouble(text));
+                    Gender gender = Gender.MALE;
+                    if (tag.getGender() != null && tag.getGender().equalsIgnoreCase("female")) {
+                        gender = Gender.FEMALE;
+                    } else if (tag.getGender() != null && tag.getGender().equalsIgnoreCase("male")) {
+                        gender = Gender.MALE;
+                    }
+                    double d = Double.parseDouble(text);
+                    Log.v("WEIGHT_DIALOG","zScore>>"+text);
+                    double zScore = ZScore.calculate(gender, dateOfBirth, new Date(), d);
+                    zScore = ZScore.roundOff(zScore);
+                    int color = ZScore.getZScoreColor(zScore);
+                    Log.v("WEIGHT_DIALOG","value>>"+text+":zScore:"+zScore+":color:>>"+color);
+
                     editWeight.setBackgroundColor(ContextCompat.getColor(editWeight.getContext(),color));
                 }
 

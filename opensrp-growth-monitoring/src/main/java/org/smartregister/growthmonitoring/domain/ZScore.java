@@ -76,7 +76,7 @@ public class ZScore {
             return R.color.green;
         } else {
             Log.v("ZSCORE", "zscore:" + absScore + ":color:black");
-            return R.color.z_score_3;
+            return android.R.color.holo_purple;
         }
     }
 
@@ -208,7 +208,7 @@ public class ZScore {
         }
     }
 
-    public static Double calculate(Gender gender, Date dateOfBirth, Date weighingDate, double weight) {
+    public static double calculate(Gender gender, Date dateOfBirth, Date weighingDate, double weight) {
         if (dateOfBirth != null && gender != null && weighingDate != null) {
             int ageInMonths = (int) Math.round(getAgeInMonths(dateOfBirth, weighingDate));
             List<ZScore> zScores = GrowthMonitoringLibrary.getInstance().zScoreRepository().findByGender(gender);
@@ -222,11 +222,11 @@ public class ZScore {
             }
 
             if (zScoreToUse != null) {
-                return new Double(zScoreToUse.getZ(weight));
+                return zScoreToUse.getZ(weight);
             }
         }
 
-        return null;
+        return 0;
     }
 
     /**
@@ -250,7 +250,7 @@ public class ZScore {
         }
 
         if (zScoreToUse != null) {
-            return new Double(zScoreToUse.getX(z));
+            return zScoreToUse.getX(z);
         }
 
         return null;

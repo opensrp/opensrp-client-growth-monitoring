@@ -35,7 +35,7 @@ public class HeightZScore extends ZScore {
         return (double) Math.round(value * scale) / scale;
     }
 
-    public static Double calculate(Gender gender, Date dateOfBirth, Date heightDate, double weight) {
+    public static double calculate(Gender gender, Date dateOfBirth, Date heightDate, double weight) {
         try {
             if (dateOfBirth != null && gender != null && heightDate != null) {
                 int ageInMonths = (int) Math.round(getAgeInMonths(dateOfBirth, heightDate));
@@ -57,7 +57,7 @@ public class HeightZScore extends ZScore {
 
             return 0.0;
         } catch (Exception e) {
-            return null;
+            return 0.0;
         }
     }
 

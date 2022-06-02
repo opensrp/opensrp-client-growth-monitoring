@@ -6,7 +6,12 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
+import android.text.Editable;
 import android.text.Selection;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +26,11 @@ import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.R;
 import org.smartregister.growthmonitoring.domain.HeightWrapper;
+import org.smartregister.growthmonitoring.domain.HeightZScore;
+import org.smartregister.growthmonitoring.domain.ZScore;
 import org.smartregister.growthmonitoring.listener.HeightActionListener;
 import org.smartregister.growthmonitoring.util.ImageUtils;
 import org.smartregister.util.DatePickerUtils;
@@ -127,11 +135,40 @@ public class RecordHeightDialogFragment extends DialogFragment {
 
 
         final EditText editHeight = dialogView.findViewById(R.id.edit_height);
-//        if (heightWrapper.getHeight() != null) {
-//            editHeight.setText(heightWrapper.getHeight().toString());
-//            editHeight.setSelection(editHeight.getText().length());
-//        }
+        editHeight.setTextColor(getResources().getColor(R.color.white));
+        editHeight.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String text = editable.toString();
+                if(!TextUtils.isEmpty(text)){
+                    Gender gender = Gender.MALE;
+                    if (heightWrapper.getGender() != null && heightWrapper.getGender().equalsIgnoreCase("female")) {
+                        gender = Gender.FEMALE;
+                    } else if (heightWrapper.getGender() != null && heightWrapper.getGender().equalsIgnoreCase("male")) {
+                        gender = Gender.MALE;
+                    }
+                    double d = Double.parseDouble(text);
+                    Log.v("WEIGHT_DIALOG","zScore>>"+text);
+                    double zScore = HeightZScore.calculate(gender, dateOfBirth, new Date(), d);
+                    zScore = HeightZScore.roundOff(zScore);
+                    int color = HeightZScore.getZScoreColor(zScore);
+                    Log.v("WEIGHT_DIALOG","value>>"+text+":zScore:"+zScore+":color:>>"+color);
+
+                    editHeight.setBackgroundColor(ContextCompat.getColor(editHeight.getContext(),color));
+                }
+
+            }
+        });
         final DatePicker earlierDatePicker = dialogView.findViewById(R.id.earlier_date_picker);
         earlierDatePicker.setMaxDate(Calendar.getInstance().getTimeInMillis());
         if (dateOfBirth != null) {
