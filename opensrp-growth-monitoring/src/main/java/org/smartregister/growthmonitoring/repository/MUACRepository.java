@@ -229,7 +229,7 @@ public class MUACRepository extends BaseRepository {
             if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
                     Double zScore = cursor.getDouble(cursor.getColumnIndex(Z_SCORE));
-                    if (zScore != null && zScore.equals(new Double(DEFAULT_Z_SCORE))) {
+                    if (zScore.equals(DEFAULT_Z_SCORE)) {
                         zScore = null;
                     }
 
@@ -329,7 +329,7 @@ public class MUACRepository extends BaseRepository {
         try {
             cursor = getRepository().getReadableDatabase()
                     .query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE,
-                            new String[] {entityId}, null, null, null, "12");
+                            new String[] {entityId}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", "12");
             heights = readAllheights(cursor);
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));
@@ -348,7 +348,7 @@ public class MUACRepository extends BaseRepository {
         try {
             cursor = getRepository().getReadableDatabase()
                     .query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE,
-                            new String[] {entityId}, null, null, null, null);
+                            new String[] {entityId}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
             heights = readAllheights(cursor);
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));

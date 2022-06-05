@@ -202,7 +202,7 @@ public class WeightRepository extends BaseRepository {
         List<Weight> weights = null;
         Cursor cursor = null;
         try {
-            cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE, new String[]{entityId}, null, null, null, "12");
+            cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE, new String[]{entityId}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", "12");
             weights = readAllWeights(cursor);
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));
@@ -219,7 +219,7 @@ public class WeightRepository extends BaseRepository {
         List<Weight> weights = null;
         Cursor cursor = null;
         try {
-            cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE, new String[]{entityId}, null, null, null, null);
+            cursor = getRepository().getReadableDatabase().query(WEIGHT_TABLE_NAME, WEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE, new String[]{entityId}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
             weights = readAllWeights(cursor);
         } catch (Exception e) {
             Log.e(TAG, Log.getStackTraceString(e));
