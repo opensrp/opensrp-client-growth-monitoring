@@ -22,7 +22,6 @@ configure(allprojects) { project ->
     buildscript {
         repositories {
             google()
-            jcenter()
             mavenCentral()
             maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
             mavenLocal()
@@ -41,7 +40,6 @@ allprojects {
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         maven { url 'https://dl.bintray.com/ibm-watson-health/ibm-fhir-server-releases'}
         google()
-        jcenter()
     }
 }
 
