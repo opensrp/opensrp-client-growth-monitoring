@@ -1,19 +1,17 @@
 buildscript {
     repositories {
         google()
-        jcenter()
         mavenCentral()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url 'https://jitpack.io' }
-        maven { url "http://repo.maven.apache.org/maven2" }
-        maven { url "http://cloudant.github.io/cloudant-sync-eap/repository" }
+        maven { url "https://repo.maven.apache.org/maven2" }
         mavenLocal()
     }
 
     dependencies {
-        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.11.0"
+        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.30.0"
         classpath 'org.smartregister:gradle-jarjar-plugin:1.0.0-SNAPSHOT'
-        classpath "com.android.tools.build:gradle:4.0.1"
+        classpath "com.android.tools.build:gradle:4.2.2"
     }
 }
 
@@ -38,9 +36,8 @@ allprojects {
         mavenLocal()
         mavenCentral()
         maven { url 'https://jitpack.io' }
-        maven { url "http://acra.googlecode.com/svn/repository/releases" }
+        maven { url "https://acra.googlecode.com/svn/repository/releases" }
         maven { url "https://repo.maven.apache.org/maven2" }
-        maven { url "http://cloudant.github.io/cloudant-sync-eap/repository" }
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         maven { url 'https://dl.bintray.com/ibm-watson-health/ibm-fhir-server-releases'}
         google()
@@ -54,12 +51,11 @@ subprojects {
 
     group = 'org.smartregister'
 
-    ext.androidToolsBuildGradle = '4.0.1'
-    ext.androidBuildToolsVersion = '29.0.2'
-    ext.coverallsVersion = "2.10.2"
+    ext.androidToolsBuildGradle = '4.2.2'
+    ext.androidBuildToolsVersion = '30.0.2'
     ext.androidMinSdkVersion = 18
-    ext.androidCompileSdkVersion = 28
-    ext.androidTargetSdkVersion = 28
+    ext.androidCompileSdkVersion = 31
+    ext.androidTargetSdkVersion = 31
 
     ext.androidAnnotationsVersion = '3.0.1'
     ext.androidAnnotationsAPIVersion = '3.0.1'

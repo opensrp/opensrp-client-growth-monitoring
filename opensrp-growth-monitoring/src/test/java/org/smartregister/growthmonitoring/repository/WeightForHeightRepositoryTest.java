@@ -44,10 +44,10 @@ public class WeightForHeightRepositoryTest extends BaseUnitTest {
         weightForHeightRepository.findZScoreVariables("1", 60);
         Mockito.verify(sqliteDatabase, Mockito.times(1)).query(
                 ArgumentMatchers.eq(WeightForHeightRepository.TABLE_NAME),
-                ArgumentMatchers.isNull(String[].class),
+                ArgumentMatchers.isNull(),
                 ArgumentMatchers.eq(GrowthMonitoringConstants.ColumnHeaders.COLUMN_SEX + " = ? AND " + GrowthMonitoringConstants.ColumnHeaders.HEIGHT + " = ? "),
                 ArgumentMatchers.eq(new String[]{"1", "60.0"}),
-                ArgumentMatchers.isNull(String.class), ArgumentMatchers.isNull(String.class), ArgumentMatchers.isNull(String.class), ArgumentMatchers.isNull(String.class));
+                ArgumentMatchers.isNull(), ArgumentMatchers.isNull(), ArgumentMatchers.isNull(), ArgumentMatchers.isNull());
     }
 
     @Test
@@ -66,10 +66,10 @@ public class WeightForHeightRepositoryTest extends BaseUnitTest {
 
         Mockito.doReturn(matrixCursor).when(sqliteDatabase).query(
                 ArgumentMatchers.eq(WeightForHeightRepository.TABLE_NAME),
-                ArgumentMatchers.isNull(String[].class),
+                ArgumentMatchers.isNull(),
                 ArgumentMatchers.eq(GrowthMonitoringConstants.ColumnHeaders.COLUMN_SEX + " = ? AND " + GrowthMonitoringConstants.ColumnHeaders.HEIGHT + " = ? "),
                 ArgumentMatchers.eq(new String[]{"1", "60.0"}),
-                ArgumentMatchers.isNull(String.class), ArgumentMatchers.isNull(String.class), ArgumentMatchers.isNull(String.class), ArgumentMatchers.isNull(String.class)
+                ArgumentMatchers.isNull(), ArgumentMatchers.isNull(), ArgumentMatchers.isNull(), ArgumentMatchers.isNull()
         );
 
         List<ZScore> zScoreValues = weightForHeightRepository.findZScoreVariables("1", 60);

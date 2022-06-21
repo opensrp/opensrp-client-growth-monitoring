@@ -1,8 +1,6 @@
 package org.smartregister.growthmonitoring.fragment;
 
 import android.app.Dialog;
-import androidx.fragment.app.FragmentActivity;
-
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +9,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Toast;
+
+import androidx.fragment.app.FragmentActivity;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,6 +25,8 @@ import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
+import org.robolectric.Robolectric;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
 import org.smartregister.growthmonitoring.BaseUnitTest;
@@ -40,7 +42,7 @@ import org.smartregister.repository.Repository;
  * Created by ndegwamartin on 2020-04-15.
  */
 
-@PrepareForTest({GrowthMonitoringLibrary.class, Toast.class})
+@PrepareForTest({GrowthMonitoringLibrary.class})
 public class RecordGrowthDialogFragmentTest extends BaseUnitTest {
 
     @Rule
@@ -64,7 +66,6 @@ public class RecordGrowthDialogFragmentTest extends BaseUnitTest {
     @Mock
     private ViewGroup viewGroup;
 
-    @Mock
     private FragmentActivity activity;
 
     @Mock
@@ -81,6 +82,8 @@ public class RecordGrowthDialogFragmentTest extends BaseUnitTest {
         MockitoAnnotations.initMocks(this);
         GrowthMonitoringLibrary.init(context, repository, 0, 0);
 
+        activity = Mockito.spy(Robolectric.buildActivity(FragmentActivity.class).create().get());
+
         PowerMockito.mockStatic(GrowthMonitoringLibrary.class);
         PowerMockito.when(GrowthMonitoringLibrary.getInstance()).thenReturn(growthMonitoringLibrary);
         PowerMockito.when(growthMonitoringLibrary.getAppProperties()).thenReturn(appProperties);
@@ -88,6 +91,10 @@ public class RecordGrowthDialogFragmentTest extends BaseUnitTest {
         PowerMockito.when(appProperties.getPropertyBoolean(AppProperties.KEY.MONITOR_GROWTH)).thenReturn(true);
     }
 
+    @After
+    public void tearDown() {
+        activity.finish();
+    }
     @Test
     public void assertSetUpViewInvokesSetFilterTouchesWhenObscuredForDialogViewSetWithTrueParam() {
 
@@ -111,18 +118,13 @@ public class RecordGrowthDialogFragmentTest extends BaseUnitTest {
         Mockito.verify(view).setFilterTouchesWhenObscured(true);
 
     }
-    
+
     @Test
     public void testSaveGrowthRecord() {
         RecordGrowthDialogFragment fragment = Mockito.spy(RecordGrowthDialogFragment.newInstance(new LocalDate().minusYears(2).toDate(), new WeightWrapper(), new HeightWrapper()));
         ReflectionHelpers.setStaticField(RecordGrowthDialogFragment.class, "monitorGrowth", true);
         Mockito.doReturn(activity).when(fragment).getActivity();
 
-        PowerMockito.mockStatic(Toast.class);
-        Toast toast = Mockito.mock(Toast.class);
-        Mockito.when(Toast.makeText(activity, R.string.weight_is_required, Toast.LENGTH_LONG)).thenReturn(toast);
-        Mockito.when(Toast.makeText(activity, R.string.height_is_required, Toast.LENGTH_LONG)).thenReturn(toast);
-        Mockito.doNothing().when(toast).show();
 
         EditText weight = Mockito.mock(EditText.class);
         Editable editable = Mockito.mock(Editable.class);
