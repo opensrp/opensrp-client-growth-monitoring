@@ -13,6 +13,7 @@ allprojects {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         mavenLocal()
+        mavenCentral()
     }
 }
 
@@ -100,6 +101,6 @@ dependencies {
 
     implementation project(":opensrp-growth-monitoring")
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.6.1'
+    runtimeOnly 'com.google.android.material:material:1.6.1'
 
 }

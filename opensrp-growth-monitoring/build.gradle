@@ -91,6 +91,7 @@ allprojects {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         mavenLocal()
+        google()
     }
 }
 
@@ -109,9 +110,11 @@ dependencies {
         exclude group: 'com.google.code.gson', module: 'gson'
         exclude group: 'com.ibm.fhir', module: 'fhir-model'
         exclude group: 'com.ibm.fhir', module: 'fhir-path'
+        exclude group: 'io.ona.rdt-capture', module: 'lib'
+        exclude group: 'io.ona.CircleProgressbar', module: 'lib'
     }
 
-    implementation 'com.google.android.material:material:1.6.1'
+    runtimeOnly 'com.google.android.material:material:1.6.1'
 
     implementation group: 'org.apache.commons', name: 'commons-csv', version: '1.4'
     implementation 'com.google.code.gson:gson:2.9.0'
