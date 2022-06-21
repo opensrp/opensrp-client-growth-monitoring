@@ -26,7 +26,6 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.Robolectric;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
 import org.smartregister.growthmonitoring.BaseUnitTest;
@@ -95,6 +94,7 @@ public class RecordGrowthDialogFragmentTest extends BaseUnitTest {
     public void tearDown() {
         activity.finish();
     }
+
     @Test
     public void assertSetUpViewInvokesSetFilterTouchesWhenObscuredForDialogViewSetWithTrueParam() {
 
