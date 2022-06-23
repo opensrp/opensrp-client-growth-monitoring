@@ -101,6 +101,5 @@ dependencies {
 
     implementation project(":opensrp-growth-monitoring")
     implementation 'androidx.cardview:cardview:1.0.0'
-    runtimeOnly 'com.google.android.material:material:1.0.0'
 
 }

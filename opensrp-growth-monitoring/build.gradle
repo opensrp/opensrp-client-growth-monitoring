@@ -97,6 +97,8 @@ allprojects {
 
 dependencies {
 
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     implementation('org.smartregister:opensrp-client-core:6.0.0-ALPHA-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
@@ -113,7 +115,7 @@ dependencies {
         exclude group: 'io.ona.rdt-capture', module: 'lib'
     }
 
-    runtimeOnly 'com.google.android.material:material:1.6.1'
+    runtimeOnly name: 'material-1.6.1', ext: 'aar'
 
     implementation group: 'org.apache.commons', name: 'commons-csv', version: '1.4'
     implementation 'com.google.code.gson:gson:2.9.0'
