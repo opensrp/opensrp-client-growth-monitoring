@@ -44,7 +44,7 @@ android {
 
         debug {
             buildConfigField "int", "GROWTH_MONITORING_SYNC_TIME", '15'
-            testCoverageEnabled true
+            testCoverageEnabled false //Weird bug fix : https://github.com/vanniktech/gradle-android-junit-jacoco-plugin/issues/183
         }
     }
 
@@ -83,6 +83,7 @@ android {
 
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
 }
 
 
