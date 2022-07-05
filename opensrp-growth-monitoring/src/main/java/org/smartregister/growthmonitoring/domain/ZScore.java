@@ -135,9 +135,12 @@ public class ZScore {
     }
 
     public static int getZscoreColorByText(String text) {
-        if (text.contains("OVER WEIGHT") | text.contains("SAM")) {
+        if (text.contains("SAM")) {
             return R.color.sam;
-        } else if (text.contains("DARK YELLOW")) {
+        }else if (text.contains("OVER WEIGHT")) {
+            return android.R.color.holo_purple;
+        }
+        else if (text.contains("DARK YELLOW")) {
             return R.color.dark_yellow;
         } else if (text.contains("MAM")) {
             return R.color.yellow;
@@ -150,6 +153,8 @@ public class ZScore {
         switch (status) {
             case "SAM":
                 return R.color.sam;
+            case "OVER WEIGHT":
+                return android.R.color.holo_purple;
             case "MAM":
                 return R.color.mam;
             case "NORMAL":
