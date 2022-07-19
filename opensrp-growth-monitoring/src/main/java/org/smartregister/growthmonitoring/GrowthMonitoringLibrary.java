@@ -47,7 +47,7 @@ public class GrowthMonitoringLibrary {
     }
 
     /**
-     * This init is deprecated, use {@link #init(Context context, Repository repository, int applicationVersion, int databaseVersion, GrowthMonitoringConfig growthMonitoringConfig)} instead which adds application version name.
+     * This init method is deprecated, use {@link #init(Context context, Repository repository, int applicationVersion, int databaseVersion, GrowthMonitoringConfig growthMonitoringConfig)} instead which adds application version name.
      */
     @Deprecated
     public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion, GrowthMonitoringConfig growthMonitoringConfig) {
@@ -88,6 +88,13 @@ public class GrowthMonitoringLibrary {
         return instance;
     }
 
+    /**
+     * Public method to clear the instance/destroy useful for testing
+     */
+    public static void destroy() {
+        instance = null;
+    }
+
     public WeightRepository weightRepository() {
         if (weightRepository == null) {
             weightRepository = new WeightRepository();
@@ -105,7 +112,6 @@ public class GrowthMonitoringLibrary {
         }
         return heightRepository;
     }
-
 
     public WeightZScoreRepository weightZScoreRepository() {
         if (weightZScoreRepository == null) {
@@ -180,13 +186,6 @@ public class GrowthMonitoringLibrary {
 
     public void setGrowthMonitoringSyncTime(int growthMonitoringSyncTime, @NonNull TimeUnit timeUnit) {
         this.growthMonitoringSyncTime = timeUnit.toMinutes(growthMonitoringSyncTime);
-    }
-
-    /**
-     * Public method to clear the instance/destroy useful for testing
-     */
-    public static void destroy() {
-        instance = null;
     }
 
 }
