@@ -98,14 +98,14 @@ allprojects {
 
 dependencies {
 
-    implementation('org.smartregister:opensrp-client-core:6.0.0-BETA2-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-core:6.0.0-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
         exclude group: 'com.ibm.fhir', module: 'fhir-model'
         exclude group: 'com.ibm.fhir', module: 'fhir-path'
     }
 
-    implementation('org.smartregister:opensrp-client-native-form:3.0.0-BETA-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-native-form:3.1.1-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'recyclerview-v7'
         exclude group: 'com.google.code.gson', module: 'gson'
@@ -141,7 +141,7 @@ dependencies {
     testImplementation "org.powermock:powermock-api-mockito2:$powerMockVersion"
     testImplementation("org.powermock:powermock-classloading-xstream:$powerMockVersion")
     testImplementation 'org.apache.maven:maven-ant-tasks:2.1.3'
-    testImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
+    testImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.1'
 
     testImplementation 'com.ibm.fhir:fhir-model:4.7.1'
     testImplementation 'com.ibm.fhir:fhir-path:4.7.1'
