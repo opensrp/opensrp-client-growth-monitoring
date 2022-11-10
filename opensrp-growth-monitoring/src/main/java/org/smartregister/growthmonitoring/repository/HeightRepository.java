@@ -102,7 +102,7 @@ public class HeightRepository extends GrowthRepository {
                     FORMSUBMISSION_ID + " ) " + " WHERE " + CREATED_AT + " is null ";
             database.execSQL(sql);
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
     }
 
@@ -161,7 +161,7 @@ public class HeightRepository extends GrowthRepository {
                 update(database, height);
             }
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
     }
 
@@ -198,7 +198,7 @@ public class HeightRepository extends GrowthRepository {
                 return heightList.get(0);
             }
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
 
         return null;
@@ -220,7 +220,7 @@ public class HeightRepository extends GrowthRepository {
             String idSelection = ID_COLUMN + " = ?";
             db.update(HEIGHT_TABLE_NAME, createValuesFor(height), idSelection, new String[]{height.getId().toString()});
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
     }
 
@@ -263,7 +263,7 @@ public class HeightRepository extends GrowthRepository {
                         try {
                             createdAt = EventClientRepository.dateFormat.parse(dateCreatedString);
                         } catch (ParseException e) {
-                            Timber.e(Log.getStackTraceString(e));
+                            Timber.e(e);
                         }
                     }
 
@@ -272,7 +272,7 @@ public class HeightRepository extends GrowthRepository {
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            Timber.e(e));
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -319,7 +319,7 @@ public class HeightRepository extends GrowthRepository {
                     new String[]{time.toString(), TYPE_Unsynced}, null, null, null, null);
             heights = readAllHeights(cursor);
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -341,7 +341,7 @@ public class HeightRepository extends GrowthRepository {
                 height = heights.get(0);
             }
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -359,7 +359,7 @@ public class HeightRepository extends GrowthRepository {
                             new String[]{entityId}, null, null, null, null);
             heights = readAllHeights(cursor);
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -378,7 +378,7 @@ public class HeightRepository extends GrowthRepository {
                             null, null);
             result = readAllHeights(cursor);
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -400,7 +400,7 @@ public class HeightRepository extends GrowthRepository {
                 height = heights.get(0);
             }
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -418,7 +418,7 @@ public class HeightRepository extends GrowthRepository {
                             new String[]{entityId}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
             heightList = readAllHeights(cursor);
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -433,7 +433,7 @@ public class HeightRepository extends GrowthRepository {
                     .delete(HEIGHT_TABLE_NAME, ID_COLUMN + " = ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? ",
                             new String[]{id, TYPE_Unsynced});
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
     }
 
@@ -444,7 +444,7 @@ public class HeightRepository extends GrowthRepository {
             getWritableDatabase()
                     .update(HEIGHT_TABLE_NAME, values, ID_COLUMN + " = ?", new String[]{caseId.toString()});
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
     }
 }

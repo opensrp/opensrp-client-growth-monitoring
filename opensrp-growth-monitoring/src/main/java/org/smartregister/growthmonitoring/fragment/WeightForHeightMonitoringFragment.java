@@ -93,7 +93,7 @@ public class WeightForHeightMonitoringFragment extends Fragment {
                 refreshGrowthChart(weightHeightTableView);
                 refreshPreviousWeightHeightsTable(weightHeightTableView);
             } catch (Exception e) {
-                Timber.e(Log.getStackTraceString(e));
+                Timber.e(e);
             }
         }
         return weightHeightTableView;
