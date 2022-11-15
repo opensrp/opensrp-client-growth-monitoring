@@ -13,7 +13,6 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.util.ReflectionHelpers;
 import org.smartregister.Context;
 import org.smartregister.repository.Repository;
 
@@ -26,12 +25,12 @@ public class GrowthMonitoringLibraryTest {
 
     @Before
     public void setUp() throws Exception {
-        GrowthMonitoringLibrary.init(Mockito.mock(Context.class), Mockito.mock(Repository.class), 1, 1);
+        GrowthMonitoringLibrary.init(Mockito.mock(Context.class), Mockito.mock(Repository.class), 1, "1.0.0", 1);
     }
 
     @After
     public void tearDown() {
-        ReflectionHelpers.setStaticField(GrowthMonitoringLibrary.class, "instance", null);
+        GrowthMonitoringLibrary.destroy();
     }
 
     @Test

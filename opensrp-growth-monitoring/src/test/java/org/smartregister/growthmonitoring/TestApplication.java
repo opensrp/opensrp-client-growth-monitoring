@@ -23,7 +23,7 @@ public class TestApplication extends DrishtiApplication {
         SyncConfiguration syncConfiguration = Mockito.mock(SyncConfiguration.class);
         Mockito.doReturn(SyncFilter.LOCATION).when(syncConfiguration).getEncryptionParam();
         CoreLibrary.init(context, syncConfiguration);
-        GrowthMonitoringLibrary.init(context, repository, 0, 0);
+        GrowthMonitoringLibrary.init(context, repository, 0, "1.0.0", 0);
         setTheme(R.style.Theme_AppCompat);
     }
 

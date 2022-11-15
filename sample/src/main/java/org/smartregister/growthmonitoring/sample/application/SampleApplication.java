@@ -16,7 +16,7 @@ import org.smartregister.view.activity.DrishtiApplication;
 
 import java.util.ArrayList;
 
-import static org.smartregister.util.Log.logError;
+import timber.log.Timber;
 
 /**
  * Created by keyman on 27/07/2017.
@@ -50,8 +50,7 @@ public class SampleApplication extends DrishtiApplication {
         GrowthMonitoringConfig config = new GrowthMonitoringConfig();
         config.setFemaleWeightZScoreFile("zscores/custom_female_zscore_file.txt");
         config.setWeightForHeightZScoreFile("weight_for_height.csv");
-        GrowthMonitoringLibrary
-                .init(context, getRepository(), BuildConfig.VERSION_CODE, BuildConfig.DATABASE_VERSION, config);
+        GrowthMonitoringLibrary.init(context, getRepository(), BuildConfig.VERSION_CODE, BuildConfig.VERSION_NAME, BuildConfig.DATABASE_VERSION, config);
 
         startWeightForHeightIntentService();
         startZscoreRefreshService();
@@ -69,8 +68,7 @@ public class SampleApplication extends DrishtiApplication {
                 repository = new SampleRepository(getInstance().getApplicationContext(), context);
             }
         } catch (UnsatisfiedLinkError e) {
-            logError("Error on getRepository: " + e);
-
+            Timber.e(e, "Error on getRepository");
         }
         return repository;
     }

@@ -79,7 +79,7 @@ public class RecordGrowthDialogFragmentTest extends BaseUnitTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        GrowthMonitoringLibrary.init(context, repository, 0, 0);
+        GrowthMonitoringLibrary.init(context, repository, 0, "1.0.0", 0);
 
         activity = Mockito.spy(Robolectric.buildActivity(FragmentActivity.class).create().get());
 
