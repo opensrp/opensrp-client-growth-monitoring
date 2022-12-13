@@ -316,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements GrowthMonitoringA
             Weight weight = getWeight(dateTime);
             allWeights.add(weight);
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
         return allWeights;
     }
@@ -346,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements GrowthMonitoringA
             Height height = getHeight(dateTime);
             allHeights.add(height);
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
         return allHeights;
     }

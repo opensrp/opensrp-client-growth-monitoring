@@ -193,14 +193,14 @@ public class ZScoreRefreshIntentService extends IntentService {
                         if (gender != Gender.UNKNOWN && dob != null) {
                             GrowthMonitoringLibrary.getInstance().weightRepository().add(dob, gender, curWeight);
                         } else {
-                            Log.w(TAG, "Could not get the date of birth or gender for child with base entity id " +
+                            Timber.w(TAG, "Could not get the date of birth or gender for child with base entity id " +
                                     curWeight.getBaseEntityId());
                         }
                     } else {
-                        Log.w(TAG, "Could not get the details for child with base entity id " + curWeight.getBaseEntityId());
+                        Timber.w(TAG, "Could not get the details for child with base entity id " + curWeight.getBaseEntityId());
                     }
                 } else {
-                    Log.w(TAG, "Current weight with id " + curWeight.getId() + " has no base entity id");
+                    Timber.w(TAG, "Current weight with id " + curWeight.getId() + " has no base entity id");
                 }
             }
         } catch (Exception e) {
@@ -243,18 +243,18 @@ public class ZScoreRefreshIntentService extends IntentService {
                         if (gender != Gender.UNKNOWN && dob != null) {
                             GrowthMonitoringLibrary.getInstance().heightRepository().add(dob, gender, curHeight);
                         } else {
-                            Log.w(TAG, "Could not get the date of birth or gender for child with base entity id " +
+                            Timber.w(TAG, "Could not get the date of birth or gender for child with base entity id " +
                                     curHeight.getBaseEntityId());
                         }
                     } else {
-                        Log.w(TAG, "Could not get the details for child with base entity id " + curHeight.getBaseEntityId());
+                        Timber.w(TAG, "Could not get the details for child with base entity id " + curHeight.getBaseEntityId());
                     }
                 } else {
-                    Log.w(TAG, "Current weight with id " + curHeight.getId() + " has no base entity id");
+                    Timber.w(TAG, "Current weight with id " + curHeight.getId() + " has no base entity id");
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Timber.e(e);
         }
     }
 
@@ -317,13 +317,13 @@ public class ZScoreRefreshIntentService extends IntentService {
                     processResponse(urlConnection, gender);
                     break;
                 default:
-                    Log.e(TAG, "Response code " + responseCode + " returned for Z-Score fetch from " + urlString);
+                    Timber.e(TAG, "Response code " + responseCode + " returned for Z-Score fetch from " + urlString);
                     break;
             }
 
 
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
+            Timber.e(TAG, e.getMessage(), e);
         }
 
     }
@@ -352,14 +352,14 @@ public class ZScoreRefreshIntentService extends IntentService {
             }
             result = sb.toString();
         } catch (Exception e) {
-            Log.i(TAG, "Error reading InputStream");
+            Timber.i(TAG, "Error reading InputStream");
             result = null;
         } finally {
             if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
-                    Log.i(TAG, "Error closing InputStream");
+                    Timber.i(TAG, "Error closing InputStream");
                 }
             }
         }

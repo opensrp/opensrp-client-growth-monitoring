@@ -32,20 +32,25 @@ public class GrowthMonitoringLibrary {
     private EventClientRepository eventClientRepository;
     private int applicationVersion;
     private int databaseVersion;
+    private String applicationVersionName;
     private AppProperties appProperties;
 
     private long growthMonitoringSyncTime = -1;
 
-    private GrowthMonitoringLibrary(Context context, Repository repository, int applicationVersion, int databaseVersion) {
+    private GrowthMonitoringLibrary(Context context, Repository repository, int applicationVersion, String applicationVersionName, int databaseVersion) {
         this.repository = repository;
         this.context = context;
         this.applicationVersion = applicationVersion;
         this.databaseVersion = databaseVersion;
+        this.applicationVersionName = applicationVersionName;
         this.appProperties = GrowthMonitoringUtils.getProperties(this.context.applicationContext());
     }
 
-    public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion,
-                            GrowthMonitoringConfig growthMonitoringConfig) {
+    /**
+     * This init method is deprecated, use {@link #init(Context context, Repository repository, int applicationVersion, int databaseVersion, GrowthMonitoringConfig growthMonitoringConfig)} instead which adds application version name.
+     */
+    @Deprecated
+    public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion, GrowthMonitoringConfig growthMonitoringConfig) {
 
         init(context, repository, applicationVersion, databaseVersion);
 
@@ -53,9 +58,25 @@ public class GrowthMonitoringLibrary {
 
     }
 
+    public static void init(Context context, Repository repository, int applicationVersion, String applicationVersionName, int databaseVersion, GrowthMonitoringConfig growthMonitoringConfig) {
+
+        init(context, repository, applicationVersion, applicationVersionName, databaseVersion);
+
+        config = growthMonitoringConfig != null ? growthMonitoringConfig : config;
+
+    }
+
+    /**
+     * This init is deprecated, use {@link #init(Context, Repository, int, String, int)} instead which adds application version name.
+     */
+    @Deprecated
     public static void init(Context context, Repository repository, int applicationVersion, int databaseVersion) {
+        init(context, repository, applicationVersion, null, databaseVersion);
+    }
+
+    public static void init(Context context, Repository repository, int applicationVersion, String applicationVersionName, int databaseVersion) {
         if (instance == null) {
-            instance = new GrowthMonitoringLibrary(context, repository, applicationVersion, databaseVersion);
+            instance = new GrowthMonitoringLibrary(context, repository, applicationVersion, applicationVersionName, databaseVersion);
         }
     }
 
@@ -65,6 +86,13 @@ public class GrowthMonitoringLibrary {
                     ".init method in the onCreate method of your Application class ");
         }
         return instance;
+    }
+
+    /**
+     * Public method to clear the instance/destroy useful for testing
+     */
+    public static void destroy() {
+        instance = null;
     }
 
     public WeightRepository weightRepository() {
@@ -84,7 +112,6 @@ public class GrowthMonitoringLibrary {
         }
         return heightRepository;
     }
-
 
     public WeightZScoreRepository weightZScoreRepository() {
         if (weightZScoreRepository == null) {
@@ -129,6 +156,10 @@ public class GrowthMonitoringLibrary {
         return databaseVersion;
     }
 
+    public String getApplicationVersionName() {
+        return applicationVersionName;
+    }
+
     public GrowthMonitoringConfig getConfig() {
         return config;
     }
@@ -156,4 +187,5 @@ public class GrowthMonitoringLibrary {
     public void setGrowthMonitoringSyncTime(int growthMonitoringSyncTime, @NonNull TimeUnit timeUnit) {
         this.growthMonitoringSyncTime = timeUnit.toMinutes(growthMonitoringSyncTime);
     }
+
 }

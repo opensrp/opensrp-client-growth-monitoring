@@ -67,6 +67,7 @@ public abstract class BaseUnitTest {
         height.setAnmId("demo");
         height.setBaseEntityId(TEST_BASE_ENTITY_ID);
         height.setChildLocationId(TEST_STRING);
+        height.setLocationId(TEST_STRING);
         height.setCm(30.4f);
         heightArrayList.add(height);
 
@@ -118,6 +119,7 @@ public abstract class BaseUnitTest {
         weight.setAnmId("demo");
         weight.setBaseEntityId(TEST_BASE_ENTITY_ID);
         weight.setChildLocationId(TEST_STRING);
+        weight.setLocationId(TEST_STRING);
         weight.setKg(3.4f);
 
         weightArrayList.add(weight);

@@ -73,7 +73,7 @@ public class HeightMonitoringFragment extends Fragment {
             refreshGrowthChart(heightTabView, getGender(), dob);
             refreshPreviousHeightsTable(heightTabView, getGender(), dob);
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
 
         return heightTabView;

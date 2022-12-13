@@ -29,7 +29,7 @@ public abstract class GrowthRepository extends BaseRepository {
 
             return null;
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
             return null;
         }
     }

@@ -1,11 +1,10 @@
 buildscript {
     repositories {
         google()
-        jcenter()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$androidToolsBuildGradle"
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.3'
+        classpath 'org.apache.commons:commons-lang3:3.12.0'
     }
 }
 
@@ -14,6 +13,7 @@ allprojects {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         mavenLocal()
+        mavenCentral()
     }
 }
 
@@ -66,6 +66,8 @@ android {
         exclude 'LICENSE.txt'
         exclude 'META-INF/LICENSE.md'
         exclude 'META-INF/NOTICE.md'
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'androidsupportmultidexversion.txt'
     }
 
     lintOptions {
@@ -84,24 +86,22 @@ android {
 
 dependencies {
 
-    implementation('org.smartregister:opensrp-client-core:4.3.10-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-core:6.0.0-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.github.bmelnychuk', module: 'atv'
         exclude group: 'com.ibm.fhir', module: 'fhir-model'
     }
 
-    jarJar 'com.ibm.fhir:fhir-model:4.7.0'
+    jarJar 'com.ibm.fhir:fhir-model:4.7.1'
 
     implementation fileTree(dir: "./build/libs", include: ['*.jar'])
 
-    implementation('org.smartregister:opensrp-client-native-form:2.0.6-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-native-form:3.1.1-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
 
     implementation project(":opensrp-growth-monitoring")
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
 
 }

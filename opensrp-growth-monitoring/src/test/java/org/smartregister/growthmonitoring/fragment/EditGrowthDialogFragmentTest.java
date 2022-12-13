@@ -71,7 +71,7 @@ public class EditGrowthDialogFragmentTest extends BaseUnitTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        GrowthMonitoringLibrary.init(context, repository, 0, 0);
+        GrowthMonitoringLibrary.init(context, repository, 0, "1.0.0", 0);
 
         PowerMockito.mockStatic(GrowthMonitoringLibrary.class);
         PowerMockito.when(GrowthMonitoringLibrary.getInstance()).thenReturn(growthMonitoringLibrary);

@@ -101,7 +101,7 @@ public class WeightRepository extends GrowthRepository {
                     FORMSUBMISSION_ID + " ) " + " WHERE " + CREATED_AT + " is null ";
             database.execSQL(sql);
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
     }
 
@@ -163,7 +163,7 @@ public class WeightRepository extends GrowthRepository {
                 update(database, weight);
             }
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
     }
 
@@ -199,7 +199,7 @@ public class WeightRepository extends GrowthRepository {
                 return weightList.get(0);
             }
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
 
         return null;
@@ -228,7 +228,7 @@ public class WeightRepository extends GrowthRepository {
             }
 
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
 
         return null;
@@ -250,7 +250,7 @@ public class WeightRepository extends GrowthRepository {
             String idSelection = ID_COLUMN + " = ?";
             db.update(WEIGHT_TABLE_NAME, createValuesFor(weight), idSelection, new String[]{weight.getId().toString()});
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
     }
 
@@ -293,7 +293,7 @@ public class WeightRepository extends GrowthRepository {
                         try {
                             createdAt = EventClientRepository.dateFormat.parse(dateCreatedString);
                         } catch (ParseException e) {
-                            Timber.e(Log.getStackTraceString(e));
+                            Timber.e(e);
                         }
                     }
 
@@ -349,7 +349,7 @@ public class WeightRepository extends GrowthRepository {
                     new String[]{Long.toString(time), TYPE_Unsynced}, null, null, null, null);
             weights = readAllWeights(cursor);
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -371,7 +371,7 @@ public class WeightRepository extends GrowthRepository {
                 weight = weights.get(0);
             }
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -389,7 +389,7 @@ public class WeightRepository extends GrowthRepository {
                             new String[]{entityId}, null, null, null, null);
             weights = readAllWeights(cursor);
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -408,7 +408,7 @@ public class WeightRepository extends GrowthRepository {
                             null, null);
             result = readAllWeights(cursor);
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -430,7 +430,7 @@ public class WeightRepository extends GrowthRepository {
                 weight = weights.get(0);
             }
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -448,7 +448,7 @@ public class WeightRepository extends GrowthRepository {
                             new String[]{entityid}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", null);
             weightList = readAllWeights(cursor);
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -463,7 +463,7 @@ public class WeightRepository extends GrowthRepository {
                     .delete(WEIGHT_TABLE_NAME, ID_COLUMN + " = ? " + COLLATE_NOCASE + " AND " + SYNC_STATUS + " = ? ",
                             new String[]{id, TYPE_Unsynced});
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
     }
 
@@ -474,7 +474,7 @@ public class WeightRepository extends GrowthRepository {
             getWritableDatabase()
                     .update(WEIGHT_TABLE_NAME, values, ID_COLUMN + " = ?", new String[]{caseId.toString()});
         } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
+            Timber.e(e);
         }
     }
 }

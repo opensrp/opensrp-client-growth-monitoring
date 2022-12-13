@@ -16,6 +16,8 @@ import org.smartregister.repository.EventClientRepository;
 import org.smartregister.growthmonitoring.sample.BuildConfig;
 import org.smartregister.repository.Repository;
 
+import timber.log.Timber;
+
 /**
  * Created by keyman on 28/07/2017.
  */
@@ -64,7 +66,7 @@ public class SampleRepository extends Repository {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(SampleRepository.class.getName(),
+        Timber.w(SampleRepository.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
 
@@ -119,7 +121,7 @@ public class SampleRepository extends Repository {
             }
             return readableDatabase;
         } catch (Exception e) {
-            Log.e(TAG, "Database Error. " + e.getMessage());
+            Timber.e(TAG, "Database Error. " + e.getMessage());
             return null;
         }
 
@@ -145,7 +147,7 @@ public class SampleRepository extends Repository {
             db.execSQL(WeightRepository.ALTER_ADD_Z_SCORE_COLUMN);
             db.execSQL(HeightRepository.ALTER_ADD_Z_SCORE_COLUMN);
         } catch (Exception e) {
-            Log.e(TAG, "upgradeToVersion2 " + e.getMessage());
+            Timber.e(TAG, "upgradeToVersion2 " + e.getMessage());
         }
     }
 
@@ -160,7 +162,7 @@ public class SampleRepository extends Repository {
             WeightRepository.migrateCreatedAt(db);
             HeightRepository.migrateCreatedAt(db);
         } catch (Exception e) {
-            Log.e(TAG, "upgradeToVersion3 " + e.getMessage());
+            Timber.e(TAG, "upgradeToVersion3 " + e.getMessage());
         }
 
     }
@@ -175,7 +177,7 @@ public class SampleRepository extends Repository {
             db.execSQL(HeightRepository.UPDATE_TABLE_ADD_TEAM_ID_COL);
             db.execSQL(HeightRepository.UPDATE_TABLE_ADD_CHILD_LOCATION_ID_COL);
         } catch (Exception e) {
-            Log.e(TAG, "upgradeToVersion4 " + Log.getStackTraceString(e));
+            Timber.e(e, "upgradeToVersion4");
         }
     }
 
