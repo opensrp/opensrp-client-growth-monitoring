@@ -31,4 +31,11 @@
     <string name="presence_of_edema">Presence of Edema</string>
     <string name="record_muac">Record MUAC</string>
     <string name="muac_taken_today">MUAC taken today</string>
+    <string name="weight_taken_today">Weight taken today</string>
+    <string name="weight_taken_earlier">Weight taken earlier</string>
+    <string name="cancel">Cancel</string>
+    <string name="set">Set</string>
+    <string name="record_height">Record Height</string>
+    <string name="height_taken_today">Height taken today</string>
+    <string name="height_taken_earlier">Height taken earlier</string>
 </resources>

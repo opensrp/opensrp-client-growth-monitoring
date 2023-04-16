@@ -22,7 +22,7 @@ import java.util.List;
 
 public class WeightRepository extends BaseRepository {
     private static final String TAG = WeightRepository.class.getCanonicalName();
-    private static final String WEIGHT_SQL = "CREATE TABLE weights (_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,base_entity_id VARCHAR NOT NULL,program_client_id VARCHAR NULL,kg REAL NOT NULL,date DATETIME NOT NULL,anmid VARCHAR NULL,location_id VARCHAR NULL,sync_status VARCHAR,updated_at INTEGER NULL)";
+
     public static final String WEIGHT_TABLE_NAME = "weights";
     public static final String ID_COLUMN = "_id";
     public static final String BASE_ENTITY_ID = "base_entity_id";
@@ -48,24 +48,15 @@ public class WeightRepository extends BaseRepository {
     public static final String[] WEIGHT_TABLE_COLUMNS = {
             ID_COLUMN, BASE_ENTITY_ID, PROGRAM_CLIENT_ID, KG, DATE, ANMID, LOCATIONID, CHILD_LOCATION_ID, TEAM, TEAM_ID,
             SYNC_STATUS, UPDATED_AT_COLUMN, EVENT_ID, FORMSUBMISSION_ID, Z_SCORE, OUT_OF_AREA, CREATED_AT};
-
+    private static final String WEIGHT_SQL = "CREATE TABLE weights (_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,base_entity_id VARCHAR NOT NULL,program_client_id VARCHAR NULL,kg REAL NOT NULL," +
+            "date DATETIME NOT NULL,anmid VARCHAR NULL,location_id VARCHAR NULL,sync_status VARCHAR,event_id VARCHAR,formSubmissionId VARCHAR,out_of_area VARCHAR" +
+            ",updated_at INTEGER NULL,z_score REAL NOT NULL DEFAULT 999999.0,created_at DATETIME NULL,team VARCHAR,team_id VARCHAR,child_location_id VARCHAR)";
     private static final String BASE_ENTITY_ID_INDEX = "CREATE INDEX " + WEIGHT_TABLE_NAME + "_" + BASE_ENTITY_ID + "_index ON " + WEIGHT_TABLE_NAME + "(" + BASE_ENTITY_ID + " COLLATE NOCASE);";
     private static final String SYNC_STATUS_INDEX = "CREATE INDEX " + WEIGHT_TABLE_NAME + "_" + SYNC_STATUS + "_index ON " + WEIGHT_TABLE_NAME + "(" + SYNC_STATUS + " COLLATE NOCASE);";
     private static final String UPDATED_AT_INDEX = "CREATE INDEX " + WEIGHT_TABLE_NAME + "_" + UPDATED_AT_COLUMN + "_index ON " + WEIGHT_TABLE_NAME + "(" + UPDATED_AT_COLUMN + ");";
-    public static final String UPDATE_TABLE_ADD_EVENT_ID_COL = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + EVENT_ID + " VARCHAR;";
     public static final String EVENT_ID_INDEX = "CREATE INDEX " + WEIGHT_TABLE_NAME + "_" + EVENT_ID + "_index ON " + WEIGHT_TABLE_NAME + "(" + EVENT_ID + " COLLATE NOCASE);";
-    public static final String UPDATE_TABLE_ADD_FORMSUBMISSION_ID_COL = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + FORMSUBMISSION_ID + " VARCHAR;";
     public static final String FORMSUBMISSION_INDEX = "CREATE INDEX " + WEIGHT_TABLE_NAME + "_" + FORMSUBMISSION_ID + "_index ON " + WEIGHT_TABLE_NAME + "(" + FORMSUBMISSION_ID + " COLLATE NOCASE);";
-    public static final String UPDATE_TABLE_ADD_OUT_OF_AREA_COL = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + OUT_OF_AREA + " VARCHAR;";
     public static final String UPDATE_TABLE_ADD_OUT_OF_AREA_COL_INDEX = "CREATE INDEX " + WEIGHT_TABLE_NAME + "_" + OUT_OF_AREA + "_index ON " + WEIGHT_TABLE_NAME + "(" + OUT_OF_AREA + " COLLATE NOCASE);";
-
-    public static final String ALTER_ADD_Z_SCORE_COLUMN = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + Z_SCORE + " REAL NOT NULL DEFAULT " + String.valueOf(DEFAULT_Z_SCORE);
-    public static final String ALTER_ADD_CREATED_AT_COLUMN = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + CREATED_AT + " DATETIME NULL ";
-
-    public static final String UPDATE_TABLE_ADD_TEAM_COL = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + TEAM + " VARCHAR;";
-    public static final String UPDATE_TABLE_ADD_TEAM_ID_COL = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + TEAM_ID + " VARCHAR;";
-
-    public static final String UPDATE_TABLE_ADD_CHILD_LOCATION_ID_COL = "ALTER TABLE " + WEIGHT_TABLE_NAME + " ADD COLUMN " + CHILD_LOCATION_ID + " VARCHAR;";
 
 
     public WeightRepository(Repository repository) {

@@ -39,12 +39,8 @@ public class SampleRepository extends Repository {
         EventClientRepository.createTable(database, EventClientRepository.Table.obs, EventClientRepository.obs_column.values());
 
         WeightRepository.createTable(database);
-        database.execSQL(WeightRepository.UPDATE_TABLE_ADD_EVENT_ID_COL);
         database.execSQL(WeightRepository.EVENT_ID_INDEX);
-        database.execSQL(WeightRepository.UPDATE_TABLE_ADD_FORMSUBMISSION_ID_COL);
         database.execSQL(WeightRepository.FORMSUBMISSION_INDEX);
-
-        database.execSQL(WeightRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL);
         database.execSQL(WeightRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL_INDEX);
 
         EventClientRepository.createTable(database, EventClientRepository.Table.path_reports, EventClientRepository.report_column.values());
@@ -81,7 +77,6 @@ public class SampleRepository extends Repository {
     private void upgradeToVersion2(SQLiteDatabase db) {
         try {
             ZScoreRepository.createTable(db);
-            db.execSQL(WeightRepository.ALTER_ADD_Z_SCORE_COLUMN);
         } catch (Exception e) {
             Log.e(TAG, "upgradeToVersion2 " + e.getMessage());
         }
@@ -92,7 +87,6 @@ public class SampleRepository extends Repository {
             Column[] columns = {EventClientRepository.event_column.formSubmissionId};
             EventClientRepository.createIndex(db, EventClientRepository.Table.event, columns);
 
-            db.execSQL(WeightRepository.ALTER_ADD_CREATED_AT_COLUMN);
             WeightRepository.migrateCreatedAt(db);
         } catch (Exception e) {
             Log.e(TAG, "upgradeToVersion3 " + e.getMessage());
@@ -102,9 +96,6 @@ public class SampleRepository extends Repository {
 
     private void upgradeToVersion4(SQLiteDatabase db) {
         try {
-            db.execSQL(WeightRepository.UPDATE_TABLE_ADD_TEAM_COL);
-            db.execSQL(WeightRepository.UPDATE_TABLE_ADD_TEAM_ID_COL);
-            db.execSQL(WeightRepository.UPDATE_TABLE_ADD_CHILD_LOCATION_ID_COL);
         } catch (Exception e) {
             Log.e(TAG, "upgradeToVersion4 " + Log.getStackTraceString(e));
         }
