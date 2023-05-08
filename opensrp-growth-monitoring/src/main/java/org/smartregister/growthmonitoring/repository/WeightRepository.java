@@ -4,9 +4,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.google.common.base.Splitter;
+
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.domain.ZScore;
@@ -18,7 +21,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WeightRepository extends BaseRepository {
     private static final String TAG = WeightRepository.class.getCanonicalName();
@@ -147,7 +152,35 @@ public class WeightRepository extends BaseRepository {
             Log.e(TAG, Log.getStackTraceString(e));
         }
     }
+    public HashMap<String,String> getAddressIdentifier(String baseEntityId, String eventType){
+        Cursor cursor = null;
+        cursor = getReadableDatabase().query("event", null,
+                " baseEntityId= ? AND eventType = ? ", new String[] {baseEntityId, eventType},
+                null, null, null, null);
+        Log.v("vaccine","getAddressIdentifier>>baseEntityId:"+baseEntityId+":eventType:"+eventType);
+        try{
+            if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
+                String jsonStr = cursor.getString(cursor.getColumnIndex("json"));
+                Log.v("vaccine","jsonStr>>"+jsonStr);
+                JSONObject clientJson = new JSONObject(jsonStr);
+                String addessJson = clientJson.getString("identifiers");
 
+                Log.v("vaccine","addessJson>>"+addessJson);
+                addessJson = addessJson.replace("{","").replace("}","").replace("\"","");
+                Map<String,String> properties = Splitter.on(",")
+                        .withKeyValueSeparator(":")
+                        .split(addessJson);
+                return new HashMap<>(properties);
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
+
+        if(cursor!=null) cursor.close();
+        return new HashMap<>();
+    }
     public List<Weight> findUnSyncedBeforeTime(int hours) {
         List<Weight> weights = new ArrayList<>();
         Cursor cursor = null;

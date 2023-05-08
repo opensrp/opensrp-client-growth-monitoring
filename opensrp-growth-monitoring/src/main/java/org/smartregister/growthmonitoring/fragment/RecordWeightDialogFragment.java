@@ -111,23 +111,28 @@ public class RecordWeightDialogFragment extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String text = editable.toString();
-                if(!TextUtils.isEmpty(text)){
-                    Gender gender = Gender.MALE;
-                    if (tag.getGender() != null && tag.getGender().equalsIgnoreCase("female")) {
-                        gender = Gender.FEMALE;
-                    } else if (tag.getGender() != null && tag.getGender().equalsIgnoreCase("male")) {
-                        gender = Gender.MALE;
-                    }
-                    double d = Double.parseDouble(text);
-                    Log.v("WEIGHT_DIALOG","zScore>>"+text);
-                    double zScore = ZScore.calculate(gender, dateOfBirth, new Date(), d);
-                    zScore = ZScore.roundOff(zScore);
-                    int color = ZScore.getZScoreColor(zScore);
-                    Log.v("WEIGHT_DIALOG","value>>"+text+":zScore:"+zScore+":color:>>"+color);
+                try{
+                    String text = editable.toString();
+                    if(!TextUtils.isEmpty(text)){
+                        Gender gender = Gender.MALE;
+                        if (tag.getGender() != null && tag.getGender().equalsIgnoreCase("female")) {
+                            gender = Gender.FEMALE;
+                        } else if (tag.getGender() != null && tag.getGender().equalsIgnoreCase("male")) {
+                            gender = Gender.MALE;
+                        }
+                        double d = Double.parseDouble(text);
+                        Log.v("WEIGHT_DIALOG","zScore>>"+text);
+                        double zScore = ZScore.calculate(gender, dateOfBirth, new Date(), d);
+                        zScore = ZScore.roundOff(zScore);
+                        int color = ZScore.getZScoreColor(zScore);
+                        Log.v("WEIGHT_DIALOG","value>>"+text+":zScore:"+zScore+":color:>>"+color);
 
-                    editWeight.setBackgroundColor(ContextCompat.getColor(editWeight.getContext(),color));
+                        editWeight.setBackgroundColor(ContextCompat.getColor(editWeight.getContext(),color));
+                    }
+                }catch (NumberFormatException np){
+
                 }
+
 
             }
         });

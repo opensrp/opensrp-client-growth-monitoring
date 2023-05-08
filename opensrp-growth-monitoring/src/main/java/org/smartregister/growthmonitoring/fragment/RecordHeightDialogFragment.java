@@ -149,23 +149,28 @@ public class RecordHeightDialogFragment extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String text = editable.toString();
-                if(!TextUtils.isEmpty(text)){
-                    Gender gender = Gender.MALE;
-                    if (heightWrapper.getGender() != null && heightWrapper.getGender().equalsIgnoreCase("female")) {
-                        gender = Gender.FEMALE;
-                    } else if (heightWrapper.getGender() != null && heightWrapper.getGender().equalsIgnoreCase("male")) {
-                        gender = Gender.MALE;
-                    }
-                    double d = Double.parseDouble(text);
-                    Log.v("WEIGHT_DIALOG","zScore>>"+text);
-                    double zScore = HeightZScore.calculate(gender, dateOfBirth, new Date(), d);
-                    zScore = HeightZScore.roundOff(zScore);
-                    int color = HeightZScore.getZScoreColor(zScore);
-                    Log.v("WEIGHT_DIALOG","value>>"+text+":zScore:"+zScore+":color:>>"+color);
+                try{
+                    String text = editable.toString();
+                    if(!TextUtils.isEmpty(text)){
+                        Gender gender = Gender.MALE;
+                        if (heightWrapper.getGender() != null && heightWrapper.getGender().equalsIgnoreCase("female")) {
+                            gender = Gender.FEMALE;
+                        } else if (heightWrapper.getGender() != null && heightWrapper.getGender().equalsIgnoreCase("male")) {
+                            gender = Gender.MALE;
+                        }
+                        double d = Double.parseDouble(text);
+                        Log.v("WEIGHT_DIALOG","zScore>>"+text);
+                        double zScore = HeightZScore.calculate(gender, dateOfBirth, new Date(), d);
+                        zScore = HeightZScore.roundOff(zScore);
+                        int color = HeightZScore.getZScoreColor(zScore);
+                        Log.v("WEIGHT_DIALOG","value>>"+text+":zScore:"+zScore+":color:>>"+color);
 
-                    editHeight.setBackgroundColor(ContextCompat.getColor(editHeight.getContext(),color));
+                        editHeight.setBackgroundColor(ContextCompat.getColor(editHeight.getContext(),color));
+                    }
+                }catch (NumberFormatException e){
+
                 }
+
 
             }
         });
