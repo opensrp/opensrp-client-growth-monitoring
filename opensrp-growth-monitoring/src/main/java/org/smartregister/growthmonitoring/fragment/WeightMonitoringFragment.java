@@ -230,8 +230,6 @@ public class WeightMonitoringFragment extends Fragment {
             params.span = 3;
             divider.setLayoutParams(params);
             divider.setBackgroundColor(getResources().getColor(R.color.client_list_header_dark_grey));
-            dividerRow.addView(divider);
-            tableLayout.addView(dividerRow);
 
             TableRow curRow = new TableRow(weightTabView.getContext());
 
@@ -242,7 +240,6 @@ public class WeightMonitoringFragment extends Fragment {
             ageTextView.setText(DateUtil.getDuration(weight.getDate().getTime() - dob.getTime()));
             ageTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
             ageTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
-            curRow.addView(ageTextView);
 
             TextView weightTextView = new TextView(weightTabView.getContext());
             weightTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
@@ -251,7 +248,6 @@ public class WeightMonitoringFragment extends Fragment {
             weightTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
             weightTextView.setText(String.format("%s %s", String.valueOf(weight.getKg()), getString(R.string.kg)));
             weightTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
-            curRow.addView(weightTextView);
 
             TextView zScoreTextView = new TextView(weightTabView.getContext());
             zScoreTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
@@ -266,22 +262,26 @@ public class WeightMonitoringFragment extends Fragment {
                 zScoreTextView.setTextColor(getResources().getColor(WeightZScore.getZScoreColor(zScore)));
                 zScoreTextView.setText(String.valueOf(zScore));
             }
-            curRow.addView(zScoreTextView);
-            tableLayout.addView(curRow);
+            requireActivity().runOnUiThread(() -> {
+                dividerRow.addView(divider);
+                tableLayout.addView(dividerRow);
+                curRow.addView(ageTextView);
+                curRow.addView(weightTextView);
+
+                curRow.addView(zScoreTextView);
+                tableLayout.addView(curRow);
+            });
         }
 
         //Now set the expand button if items are too many
         final ScrollView weightsTableScrollView = weightTabView.findViewById(R.id.growth_scroll_view);
-        GrowthMonitoringUtils.getHeight(weightsTableScrollView, new ViewMeasureListener() {
-            @Override
-            public void onCompletedMeasuring(int height) {
-                int childHeight = weightsTableScrollView.getChildAt(0).getMeasuredHeight();
-                ImageButton scrollButton = weightTabView.findViewById(R.id.scroll_button);
-                if (childHeight > height) {
-                    scrollButton.setVisibility(View.VISIBLE);
-                } else {
-                    scrollButton.setVisibility(View.GONE);
-                }
+        GrowthMonitoringUtils.getHeight(weightsTableScrollView, height -> {
+            int childHeight = weightsTableScrollView.getChildAt(0).getMeasuredHeight();
+            ImageButton scrollButton = weightTabView.findViewById(R.id.scroll_button);
+            if (childHeight > height) {
+                scrollButton.setVisibility(View.VISIBLE);
+            } else {
+                scrollButton.setVisibility(View.GONE);
             }
         });
     }
