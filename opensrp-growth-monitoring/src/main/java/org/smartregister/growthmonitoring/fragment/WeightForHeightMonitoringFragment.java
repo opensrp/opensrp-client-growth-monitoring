@@ -151,8 +151,6 @@ public class WeightForHeightMonitoringFragment extends Fragment {
             params.span = 3;
             divider.setLayoutParams(params);
             divider.setBackgroundColor(getResources().getColor(R.color.client_list_header_dark_grey));
-            dividerRow.addView(divider);
-            tableLayout.addView(dividerRow);
 
             TableRow curRow = new TableRow(weightHeightTableView.getContext());
 
@@ -163,7 +161,6 @@ public class WeightForHeightMonitoringFragment extends Fragment {
             weightTextView.setText(String.format("%s %s", String.valueOf(weightHeight.getWeight().getKg()), getString(R.string.kg)));
             weightTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             weightTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
-            curRow.addView(weightTextView);
 
             TextView heightTextView = new TextView(weightHeightTableView.getContext());
             heightTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
@@ -172,7 +169,6 @@ public class WeightForHeightMonitoringFragment extends Fragment {
             heightTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             heightTextView.setText(String.format("%s %s", String.valueOf(weightHeight.getHeight().getCm()), getString(R.string.cm)));
             heightTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
-            curRow.addView(heightTextView);
 
             TextView zScoreTextView = new TextView(weightHeightTableView.getContext());
             zScoreTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
@@ -184,8 +180,15 @@ public class WeightForHeightMonitoringFragment extends Fragment {
             zScoreTextView.setTextColor(getResources().getColor(HeightZScore.getZScoreColor(zScore)));
             zScoreTextView.setText(String.valueOf(zScore));
 
-            curRow.addView(zScoreTextView);
-            tableLayout.addView(curRow);
+            requireActivity().runOnUiThread(() -> {
+                dividerRow.addView(divider);
+                tableLayout.addView(dividerRow);
+                curRow.addView(weightTextView);
+                curRow.addView(heightTextView);
+
+                curRow.addView(zScoreTextView);
+                tableLayout.addView(curRow);
+            });
         }
 
         //Now set the expand button if items are too many

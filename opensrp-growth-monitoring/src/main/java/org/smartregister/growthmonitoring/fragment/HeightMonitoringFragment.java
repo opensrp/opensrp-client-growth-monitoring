@@ -233,8 +233,6 @@ public class HeightMonitoringFragment extends Fragment {
             params.span = 3;
             divider.setLayoutParams(params);
             divider.setBackgroundColor(getResources().getColor(R.color.client_list_header_dark_grey));
-            dividerRow.addView(divider);
-            tableLayout.addView(dividerRow);
 
             TableRow curRow = new TableRow(heightTabView.getContext());
 
@@ -245,7 +243,6 @@ public class HeightMonitoringFragment extends Fragment {
             ageTextView.setText(DateUtil.getDuration(height.getDate().getTime() - dob.getTime()));
             ageTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             ageTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
-            curRow.addView(ageTextView);
 
             TextView heightTextView = new TextView(heightTabView.getContext());
             heightTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
@@ -254,7 +251,6 @@ public class HeightMonitoringFragment extends Fragment {
             heightTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             heightTextView.setText(String.format("%s %s", String.valueOf(height.getCm()), getString(R.string.cm)));
             heightTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
-            curRow.addView(heightTextView);
 
             TextView zScoreTextView = new TextView(heightTabView.getContext());
             zScoreTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
@@ -269,8 +265,16 @@ public class HeightMonitoringFragment extends Fragment {
                 zScoreTextView.setTextColor(getResources().getColor(HeightZScore.getZScoreColor(zScore)));
                 zScoreTextView.setText(String.valueOf(zScore));
             }
-            curRow.addView(zScoreTextView);
-            tableLayout.addView(curRow);
+
+            requireActivity().runOnUiThread(() -> {
+                dividerRow.addView(divider);
+                tableLayout.addView(dividerRow);
+                curRow.addView(ageTextView);
+                curRow.addView(heightTextView);
+
+                curRow.addView(zScoreTextView);
+                tableLayout.addView(curRow);
+            });
         }
 
         //Now set the expand button if items are too many
