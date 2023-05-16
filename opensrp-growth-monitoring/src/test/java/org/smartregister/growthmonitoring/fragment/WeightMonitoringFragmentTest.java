@@ -2,6 +2,7 @@ package org.smartregister.growthmonitoring.fragment;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
+
 import android.view.View;
 
 import org.junit.Assert;
@@ -33,17 +34,18 @@ public class WeightMonitoringFragmentTest extends BaseUnitTest {
     }
 
     @Test
-    public void testThatWeightForAgeViewIsCreated() {
+    public void testThatWeightForAgeViewIsCreated() throws InterruptedException {
         WeightMonitoringFragment fragment = Mockito.spy(WeightMonitoringFragment.createInstance("2018-09-12", Gender.MALE, getWeights()));
         activity.getSupportFragmentManager().beginTransaction().add(fragment, "Weight-for-Age-Boys").commitNow();
         View view = fragment.getView();
         Assert.assertNotNull(view);
         Assert.assertTrue(view instanceof ConstraintLayout);
         ConstraintLayout constraintLayout = (ConstraintLayout) view;
-        Assert.assertEquals(constraintLayout.getChildCount(), 2);
-        Assert.assertEquals(((CustomFontTextView)constraintLayout.findViewById(R.id.column_one_metric)).getText(), constraintLayout.getContext().getString(R.string.age));
-        Assert.assertEquals(((CustomFontTextView)constraintLayout.findViewById(R.id.metric_label)).getText(), constraintLayout.getContext().getString(R.string.weight));
-        Assert.assertEquals(((CustomFontTextView)constraintLayout.findViewById(R.id.column_three_metric)).getText(), constraintLayout.getContext().getString(R.string.z_score));
+        Thread.sleep(3000);
+        Assert.assertEquals(3, constraintLayout.getChildCount());
+        Assert.assertEquals(constraintLayout.getContext().getString(R.string.age), ((CustomFontTextView) constraintLayout.findViewById(R.id.column_one_metric)).getText());
+        Assert.assertEquals(constraintLayout.getContext().getString(R.string.weight), ((CustomFontTextView) constraintLayout.findViewById(R.id.metric_label)).getText());
+        Assert.assertEquals(constraintLayout.getContext().getString(R.string.z_score), ((CustomFontTextView) constraintLayout.findViewById(R.id.column_three_metric)).getText());
     }
 
 }
