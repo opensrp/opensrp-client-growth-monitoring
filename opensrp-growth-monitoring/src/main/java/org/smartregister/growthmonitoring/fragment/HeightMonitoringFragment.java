@@ -2,7 +2,11 @@ package org.smartregister.growthmonitoring.fragment;
 
 import android.graphics.DashPathEffect;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -10,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -49,6 +54,9 @@ public class HeightMonitoringFragment extends Fragment {
     private boolean isExpanded = false;
     private String dobString;
     private Gender gender;
+    private LinearLayout progressBar;
+    private ConstraintLayout chartLayout;
+    private ConstraintLayout tableLayout;
 
     public static HeightMonitoringFragment createInstance(String dobString, Gender gender, List<Height> heights) {
         HeightMonitoringFragment heightMonitoringFragment = new HeightMonitoringFragment();
@@ -60,23 +68,51 @@ public class HeightMonitoringFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final ViewGroup heightTabView = (ViewGroup) inflater.inflate(R.layout.growth_monitoring_fragment, container, false);
-        heightTabView.setFilterTouchesWhenObscured(true);
-        final ImageButton scrollButton = heightTabView.findViewById(R.id.scroll_button);
-        CustomFontTextView textMetricLabel = heightTabView.findViewById(R.id.metric_label);
-        textMetricLabel.setText(getActivity().getString(R.string.height));
+        return inflater.inflate(R.layout.growth_monitoring_fragment, container, false);
+    }
 
-        Date dob = getDate();
-        scrollButtonClickAction(heightTabView, scrollButton);
+    @Override
+    public void onViewCreated(@NonNull View heightTabView, @androidx.annotation.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(heightTabView, savedInstanceState);
+        initViews(heightTabView);
+        showLoader();
+        new Thread(() -> {
+            try {
+                heightTabView.setFilterTouchesWhenObscured(true);
+                final ImageButton scrollButton = heightTabView.findViewById(R.id.scroll_button);
+                CustomFontTextView textMetricLabel = heightTabView.findViewById(R.id.metric_label);
+                textMetricLabel.setText(requireActivity().getString(R.string.height));
 
-        try {
-            refreshGrowthChart(heightTabView, getGender(), dob);
-            refreshPreviousHeightsTable(heightTabView, getGender(), dob);
-        } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
-        }
+                Date dob = getDate();
+                scrollButtonClickAction((ViewGroup) heightTabView, scrollButton);
 
-        return heightTabView;
+                refreshGrowthChart(heightTabView, getGender(), dob);
+                refreshPreviousHeightsTable(heightTabView, getGender(), dob);
+            } catch (Exception e) {
+                Timber.e(Log.getStackTraceString(e));
+            }
+            if (isVisible())
+                requireActivity().runOnUiThread(this::hideLoader);
+        }).start();
+
+    }
+
+    private void initViews(View view) {
+        progressBar = view.findViewById(R.id.progress_chart);
+        chartLayout = view.findViewById(R.id.growth_chart_layout);
+        tableLayout = view.findViewById(R.id.growth_dialog_table_layout);
+    }
+
+    private void hideLoader() {
+        progressBar.setVisibility(View.GONE);
+        chartLayout.setVisibility(View.VISIBLE);
+        tableLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showLoader() {
+        progressBar.setVisibility(View.VISIBLE);
+        chartLayout.setVisibility(View.GONE);
+        tableLayout.setVisibility(View.GONE);
     }
 
     @Nullable

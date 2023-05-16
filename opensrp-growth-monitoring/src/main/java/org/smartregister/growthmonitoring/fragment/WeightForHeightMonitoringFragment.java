@@ -2,7 +2,12 @@ package org.smartregister.growthmonitoring.fragment;
 
 import android.graphics.DashPathEffect;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -10,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -53,6 +59,9 @@ public class WeightForHeightMonitoringFragment extends Fragment {
     private Date dob;
     private List<WeightHeight> weightHeights;
     private Height currentHeight;
+    private LinearLayout progressBar;
+    private ConstraintLayout chartLayout;
+    private ConstraintLayout tableLayout;
 
     public static WeightForHeightMonitoringFragment createInstance(Gender gender, String dobString, List<Weight> weights, List<Height> heights) {
         WeightForHeightMonitoringFragment weightMonitoringFragment = new WeightForHeightMonitoringFragment();
@@ -80,23 +89,52 @@ public class WeightForHeightMonitoringFragment extends Fragment {
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View weightHeightTableView = inflater.inflate(R.layout.growth_monitoring_fragment, container, false);
-        weightHeightTableView.setFilterTouchesWhenObscured(true);
-        if (getActivity() != null) {
-            final ImageButton scrollButton = weightHeightTableView.findViewById(R.id.scroll_button);
-            CustomFontTextView weightMetric = weightHeightTableView.findViewById(R.id.column_one_metric);
-            weightMetric.setText(getActivity().getString(R.string.weight));
-            CustomFontTextView heightMetric = weightHeightTableView.findViewById(R.id.metric_label);
-            heightMetric.setText(getActivity().getString(R.string.height));
-            scrollButtonClickAction(weightHeightTableView, scrollButton);
+        return inflater.inflate(R.layout.growth_monitoring_fragment, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View weightHeightTableView, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(weightHeightTableView, savedInstanceState);
+        initViews(weightHeightTableView);
+        showLoader();
+        new Thread(() -> {
             try {
+                weightHeightTableView.setFilterTouchesWhenObscured(true);
+                final ImageButton scrollButton = weightHeightTableView.findViewById(R.id.scroll_button);
+                scrollButtonClickAction(weightHeightTableView, scrollButton);
+
                 refreshGrowthChart(weightHeightTableView);
                 refreshPreviousWeightHeightsTable(weightHeightTableView);
+
             } catch (Exception e) {
                 Timber.e(Log.getStackTraceString(e));
             }
-        }
-        return weightHeightTableView;
+            if (isVisible())
+                requireActivity().runOnUiThread(this::hideLoader);
+        }).start();
+    }
+
+    private void initViews(View view) {
+        progressBar = view.findViewById(R.id.progress_chart);
+        chartLayout = view.findViewById(R.id.growth_chart_layout);
+        tableLayout = view.findViewById(R.id.growth_dialog_table_layout);
+
+        CustomFontTextView weightMetric = view.findViewById(R.id.column_one_metric);
+        weightMetric.setText(requireActivity().getString(R.string.weight));
+        CustomFontTextView heightMetric = view.findViewById(R.id.metric_label);
+        heightMetric.setText(requireActivity().getString(R.string.height));
+    }
+
+    private void hideLoader() {
+        progressBar.setVisibility(View.GONE);
+        chartLayout.setVisibility(View.VISIBLE);
+        tableLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showLoader() {
+        progressBar.setVisibility(View.VISIBLE);
+        chartLayout.setVisibility(View.GONE);
+        tableLayout.setVisibility(View.GONE);
     }
 
     private void refreshPreviousWeightHeightsTable(View weightHeightTableView) {
