@@ -4,6 +4,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/progress_chart"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:indeterminate="true"
+            android:visibility="visible" />
+
+        <org.smartregister.view.customcontrols.CustomFontTextView
+            android:id="@+id/progress_desc"
+            style="@style/CustomFontTextViewStyle.ClientList.Light"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:gravity="center_vertical"
+            android:text="@string/loading_chart"
+            android:textColor="@color/black"
+            android:textSize="@dimen/label_text_size" />
+
+    </LinearLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/growth_chart_layout"
         android:layout_width="match_parent"
