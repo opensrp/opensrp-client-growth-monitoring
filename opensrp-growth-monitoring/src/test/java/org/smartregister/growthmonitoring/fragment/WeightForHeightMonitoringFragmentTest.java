@@ -8,6 +8,7 @@ import android.view.View;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.opensrp.api.constants.Gender;
 import org.robolectric.Robolectric;
@@ -31,7 +32,8 @@ public class WeightForHeightMonitoringFragmentTest extends BaseUnitTest {
 
     @Test
     public void testThatWeightForHeightViewIsCreated() throws InterruptedException {
-        WeightForHeightMonitoringFragment fragment = WeightForHeightMonitoringFragment.createInstance(Gender.MALE, "2018-09-12", getWeights(), getHeights());
+        WeightForHeightMonitoringFragment fragment = Mockito.spy(WeightForHeightMonitoringFragment.createInstance(Gender.MALE, "2018-09-12", getWeights(), getHeights()));
+        Mockito.doReturn(true).when(fragment).isVisible();
         activity.getSupportFragmentManager().beginTransaction().add(fragment, "Weight-for-Height-Boys").commitNow();
         View view = fragment.getView();
         Assert.assertNotNull(view);
