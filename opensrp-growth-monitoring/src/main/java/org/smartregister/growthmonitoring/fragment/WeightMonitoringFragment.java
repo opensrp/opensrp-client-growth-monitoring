@@ -2,6 +2,9 @@ package org.smartregister.growthmonitoring.fragment;
 
 import android.graphics.DashPathEffect;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.util.TypedValue;
@@ -10,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -49,6 +53,9 @@ public class WeightMonitoringFragment extends Fragment {
     private boolean isExpanded = false;
     private String dobString;
     private Gender gender;
+    private LinearLayout progressBar;
+    private ConstraintLayout chartLayout;
+    private ConstraintLayout tableLayout;
 
     public static WeightMonitoringFragment createInstance(String dobString, Gender gender, List<Weight> weights) {
         WeightMonitoringFragment weightMonitoringFragment = new WeightMonitoringFragment();
@@ -60,21 +67,48 @@ public class WeightMonitoringFragment extends Fragment {
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View weightTabView = inflater.inflate(R.layout.growth_monitoring_fragment, container, false);
-        weightTabView.setFilterTouchesWhenObscured(true);
-        final ImageButton scrollButton = weightTabView.findViewById(R.id.scroll_button);
-        CustomFontTextView textMetricLabel = weightTabView.findViewById(R.id.metric_label);
-        textMetricLabel.setText(getActivity().getString(R.string.weight));
-        Date dob = getDate();
-        scrollButtonClickAction(weightTabView, scrollButton);
-        try {
-            refreshGrowthChart(weightTabView, getGender(), dob);
-            refreshPreviousWeightsTable(weightTabView, getGender(), dob);
-        } catch (Exception e) {
-            Timber.e(Log.getStackTraceString(e));
-        }
+        return inflater.inflate(R.layout.growth_monitoring_fragment, container, false);
+    }
 
-        return weightTabView;
+    @Override
+    public void onViewCreated(@NonNull View weightTabView, @androidx.annotation.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(weightTabView, savedInstanceState);
+        initViews(weightTabView);
+        showLoader();
+        new Thread(() -> {
+            try {
+                weightTabView.setFilterTouchesWhenObscured(true);
+                final ImageButton scrollButton = weightTabView.findViewById(R.id.scroll_button);
+                CustomFontTextView textMetricLabel = weightTabView.findViewById(R.id.metric_label);
+                textMetricLabel.setText(requireActivity().getString(R.string.weight));
+                Date dob = getDate();
+                scrollButtonClickAction(weightTabView, scrollButton);
+                refreshGrowthChart(weightTabView, getGender(), dob);
+                refreshPreviousWeightsTable(weightTabView, getGender(), dob);
+            } catch (Exception e) {
+                Timber.e(Log.getStackTraceString(e));
+            }
+            if (isVisible())
+                requireActivity().runOnUiThread(this::hideLoader);
+        }).start();
+    }
+
+    private void initViews(View weightTabView) {
+        progressBar = weightTabView.findViewById(R.id.progress_chart);
+        chartLayout = weightTabView.findViewById(R.id.growth_chart_layout);
+        tableLayout = weightTabView.findViewById(R.id.growth_dialog_table_layout);
+    }
+
+    private void hideLoader() {
+        progressBar.setVisibility(View.GONE);
+        chartLayout.setVisibility(View.VISIBLE);
+        tableLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showLoader() {
+        progressBar.setVisibility(View.VISIBLE);
+        chartLayout.setVisibility(View.GONE);
+        tableLayout.setVisibility(View.GONE);
     }
 
     @Nullable
@@ -119,9 +153,9 @@ public class WeightMonitoringFragment extends Fragment {
             double maxAge = minAge + GrowthMonitoringConstants.GRAPH_MONTHS_TIMELINE;
             List<Line> lines = new ArrayList<>();
             for (int z = -3; z <= 3; z++) {
-                if (z != 1 && z != -1) {
+                if (z != 1 && z != -1 && isVisible()) {
                     Line curLine = getZScoreLine(gender, minAge, maxAge, z,
-                            getActivity().getResources().getColor(WeightZScore.getZScoreColor(z)));
+                            requireActivity().getResources().getColor(WeightZScore.getZScoreColor(z)));
                     if (z == -3) {
                         curLine.setPathEffect(new DashPathEffect(new float[]{10, 20}, 0));
                     }
@@ -196,8 +230,6 @@ public class WeightMonitoringFragment extends Fragment {
             params.span = 3;
             divider.setLayoutParams(params);
             divider.setBackgroundColor(getResources().getColor(R.color.client_list_header_dark_grey));
-            dividerRow.addView(divider);
-            tableLayout.addView(dividerRow);
 
             TableRow curRow = new TableRow(weightTabView.getContext());
 
@@ -208,7 +240,6 @@ public class WeightMonitoringFragment extends Fragment {
             ageTextView.setText(DateUtil.getDuration(weight.getDate().getTime() - dob.getTime()));
             ageTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
             ageTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
-            curRow.addView(ageTextView);
 
             TextView weightTextView = new TextView(weightTabView.getContext());
             weightTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
@@ -217,7 +248,6 @@ public class WeightMonitoringFragment extends Fragment {
             weightTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
             weightTextView.setText(String.format("%s %s", String.valueOf(weight.getKg()), getString(R.string.kg)));
             weightTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
-            curRow.addView(weightTextView);
 
             TextView zScoreTextView = new TextView(weightTabView.getContext());
             zScoreTextView.setHeight(getResources().getDimensionPixelSize(R.dimen.table_contents_text_height));
@@ -232,22 +262,26 @@ public class WeightMonitoringFragment extends Fragment {
                 zScoreTextView.setTextColor(getResources().getColor(WeightZScore.getZScoreColor(zScore)));
                 zScoreTextView.setText(String.valueOf(zScore));
             }
-            curRow.addView(zScoreTextView);
-            tableLayout.addView(curRow);
+            requireActivity().runOnUiThread(() -> {
+                dividerRow.addView(divider);
+                tableLayout.addView(dividerRow);
+                curRow.addView(ageTextView);
+                curRow.addView(weightTextView);
+
+                curRow.addView(zScoreTextView);
+                tableLayout.addView(curRow);
+            });
         }
 
         //Now set the expand button if items are too many
         final ScrollView weightsTableScrollView = weightTabView.findViewById(R.id.growth_scroll_view);
-        GrowthMonitoringUtils.getHeight(weightsTableScrollView, new ViewMeasureListener() {
-            @Override
-            public void onCompletedMeasuring(int height) {
-                int childHeight = weightsTableScrollView.getChildAt(0).getMeasuredHeight();
-                ImageButton scrollButton = weightTabView.findViewById(R.id.scroll_button);
-                if (childHeight > height) {
-                    scrollButton.setVisibility(View.VISIBLE);
-                } else {
-                    scrollButton.setVisibility(View.GONE);
-                }
+        GrowthMonitoringUtils.getHeight(weightsTableScrollView, height -> {
+            int childHeight = weightsTableScrollView.getChildAt(0).getMeasuredHeight();
+            ImageButton scrollButton = weightTabView.findViewById(R.id.scroll_button);
+            if (childHeight > height) {
+                scrollButton.setVisibility(View.VISIBLE);
+            } else {
+                scrollButton.setVisibility(View.GONE);
             }
         });
     }
