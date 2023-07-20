@@ -26,6 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -249,13 +250,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/done_btn_layout_margin"
-                android:background="@drawable/record_weight_earlier_bg"
-                android:paddingBottom="@dimen/weight_graph_btn_padding"
-                android:paddingTop="@dimen/weight_graph_btn_padding"
-                android:text="Done"
+                android:background="@drawable/record_weight_today_bg"
+                android:padding="5dp"
+                android:text="@string/cancel"
                 android:textAllCaps="false"
                 android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@color/client_list_grey"
                 android:textSize="@dimen/record_weight_btn_text_size" />
 
         </LinearLayout>

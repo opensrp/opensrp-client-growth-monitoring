@@ -349,6 +349,24 @@ public class HeightRepository extends BaseRepository {
 
         return heights;
     }
+    public Height getMaximum(String entityId) {
+        List<Height> heights = null;
+        Cursor cursor = null;
+        try {
+            cursor = getRepository().getReadableDatabase()
+                    .query(HEIGHT_TABLE_NAME, HEIGHT_TABLE_COLUMNS, BASE_ENTITY_ID + " = ? " + COLLATE_NOCASE,
+                            new String[] {entityId}, null, null, UPDATED_AT_COLUMN + COLLATE_NOCASE + " DESC", "1");
+            heights = readAllheights(cursor);
+        } catch (Exception e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return heights!=null&&heights.size()>0?heights.get(0):null;
+    }
 
     public List<Height> findByEntityId(String entityId) {
         List<Height> heights = null;

@@ -3,37 +3,27 @@ package org.smartregister.growthmonitoring.fragment;
 import android.app.DialogFragment;
 import android.graphics.DashPathEffect;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.opensrp.api.constants.Gender;
 import org.smartregister.growthmonitoring.R;
-import org.smartregister.growthmonitoring.domain.Height;
 import org.smartregister.growthmonitoring.domain.MUAC;
 import org.smartregister.growthmonitoring.domain.ZScore;
 import org.smartregister.growthmonitoring.listener.ViewMeasureListener;
 import org.smartregister.growthmonitoring.util.GMConstants;
 import org.smartregister.growthmonitoring.util.GrowthMonitoringUtils;
 import org.smartregister.growthmonitoring.util.MUACUtils;
-import org.smartregister.util.DateUtil;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Line;
@@ -72,7 +62,13 @@ public class MUACMonitoringFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final ViewGroup heightTabView = (ViewGroup) inflater.inflate(R.layout.muac_monitoring_fragment, container, false);
         final ImageButton scrollButton = heightTabView.findViewById(R.id.scroll_button);
-
+        Button done = (Button) heightTabView.findViewById(R.id.done);
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
         Date dob = null;
         if (StringUtils.isNotBlank(getDobString())) {
             DateTime dateTime = new DateTime(getDobString());
