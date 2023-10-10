@@ -1,5 +1,8 @@
 package org.smartregister.growthmonitoring.fragment;
 
+import static org.smartregister.growthmonitoring.util.GMConstants.MAX_HEIGHT;
+import static org.smartregister.growthmonitoring.util.GMConstants.MAX_WEIGHT;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -152,6 +155,10 @@ public class RecordHeightDialogFragment extends DialogFragment {
                 try{
                     String text = editable.toString();
                     if(!TextUtils.isEmpty(text)){
+                        if(Integer.parseInt(text)>MAX_HEIGHT){
+                            editHeight.setError("Exceed height limit");
+                            return;
+                        }
                         Gender gender = Gender.MALE;
                         if (heightWrapper.getGender() != null && heightWrapper.getGender().equalsIgnoreCase("female")) {
                             gender = Gender.FEMALE;

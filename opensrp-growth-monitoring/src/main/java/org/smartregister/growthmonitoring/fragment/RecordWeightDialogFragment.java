@@ -1,5 +1,7 @@
 package org.smartregister.growthmonitoring.fragment;
 
+import static org.smartregister.growthmonitoring.util.GMConstants.MAX_WEIGHT;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -114,6 +116,10 @@ public class RecordWeightDialogFragment extends DialogFragment {
                 try{
                     String text = editable.toString();
                     if(!TextUtils.isEmpty(text)){
+                        if(Integer.parseInt(text)>MAX_WEIGHT){
+                            editWeight.setError("Exceed weight limit");
+                            return;
+                        }
                         Gender gender = Gender.MALE;
                         if (tag.getGender() != null && tag.getGender().equalsIgnoreCase("female")) {
                             gender = Gender.FEMALE;
