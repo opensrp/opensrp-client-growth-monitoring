@@ -1,7 +1,7 @@
 package org.smartregister.growthmonitoring.fragment;
 
-import static org.smartregister.growthmonitoring.util.GMConstants.MAX_HEIGHT;
-import static org.smartregister.growthmonitoring.util.GMConstants.MAX_WEIGHT;
+import static org.smartregister.growthmonitoring.BuildConfig.MAX_HEIGHT;
+import static org.smartregister.growthmonitoring.BuildConfig.MIN_HEIGHT;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -159,6 +159,10 @@ public class RecordHeightDialogFragment extends DialogFragment {
                             editHeight.setError("Exceed height limit");
                             return;
                         }
+                        if(Integer.parseInt(text)<MIN_HEIGHT){
+                            editHeight.setError("Less height limit");
+                            return;
+                        }
                         Gender gender = Gender.MALE;
                         if (heightWrapper.getGender() != null && heightWrapper.getGender().equalsIgnoreCase("female")) {
                             gender = Gender.FEMALE;
@@ -229,6 +233,14 @@ public class RecordHeightDialogFragment extends DialogFragment {
                 if (StringUtils.isBlank(heightString) || Float.valueOf(heightString) <= 0f) {
                     return;
                 }
+                if(Integer.parseInt(heightString)>MAX_HEIGHT){
+                    editHeight.setError("Exceed height limit");
+                    return;
+                }
+                if(Integer.parseInt(heightString)<MIN_HEIGHT){
+                    editHeight.setError("Less height limit");
+                    return;
+                }
 
                 dismiss();
 
@@ -255,6 +267,14 @@ public class RecordHeightDialogFragment extends DialogFragment {
 
                 String heightString = editHeight.getText().toString();
                 if (StringUtils.isBlank(heightString) || Float.valueOf(heightString) <= 0f) {
+                    return;
+                }
+                if(Integer.parseInt(heightString)>MAX_HEIGHT){
+                    editHeight.setError("Exceed height limit");
+                    return;
+                }
+                if(Integer.parseInt(heightString)<MIN_HEIGHT){
+                    editHeight.setError("Less height limit");
                     return;
                 }
 

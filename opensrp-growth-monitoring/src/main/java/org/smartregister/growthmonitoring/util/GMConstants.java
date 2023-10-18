@@ -14,8 +14,6 @@ public class GMConstants {
     public static final String MOTHER_TABLE_NAME = "ec_mother";
     public static final int GRAPH_MONTHS_TIMELINE = 12;
     public static final int WEIGHT_SYNC_TIME = BuildConfig.WEIGHT_SYNC_TIME;
-    public static final int MAX_WEIGHT = BuildConfig.MAX_WEIGHT;
-    public static final int MAX_HEIGHT= BuildConfig.MAX_HEIGHT;
     public static final class JsonForm {
         public static final String OPENMRS_ENTITY = "openmrs_entity";
         public static final String OPENMRS_ENTITY_ID = "openmrs_entity_id";

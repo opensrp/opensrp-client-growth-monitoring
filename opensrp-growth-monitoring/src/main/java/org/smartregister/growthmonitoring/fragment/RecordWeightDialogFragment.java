@@ -1,6 +1,7 @@
 package org.smartregister.growthmonitoring.fragment;
 
-import static org.smartregister.growthmonitoring.util.GMConstants.MAX_WEIGHT;
+import static org.smartregister.growthmonitoring.BuildConfig.MAX_WEIGHT;
+import static org.smartregister.growthmonitoring.BuildConfig.MIN_WEIGHT;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -120,6 +121,10 @@ public class RecordWeightDialogFragment extends DialogFragment {
                             editWeight.setError("Exceed weight limit");
                             return;
                         }
+                        if(Integer.parseInt(text)<MIN_WEIGHT){
+                            editWeight.setError("Less weight limit");
+                            return;
+                        }
                         Gender gender = Gender.MALE;
                         if (tag.getGender() != null && tag.getGender().equalsIgnoreCase("female")) {
                             gender = Gender.FEMALE;
@@ -195,7 +200,14 @@ public class RecordWeightDialogFragment extends DialogFragment {
                 if (StringUtils.isBlank(weightString) || Float.valueOf(weightString) <= 0f) {
                     return;
                 }
-
+                if(Integer.parseInt(weightString)>MAX_WEIGHT){
+                    editWeight.setError("Exceed weight limit");
+                    return;
+                }
+                if(Integer.parseInt(weightString)<MIN_WEIGHT){
+                    editWeight.setError("Less weight limit");
+                    return;
+                }
                 dismiss();
 
                 int day = earlierDatePicker.getDayOfMonth();
@@ -218,8 +230,17 @@ public class RecordWeightDialogFragment extends DialogFragment {
         weightTakenToday.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 String weightString = editWeight.getText().toString();
                 if (StringUtils.isBlank(weightString) || Float.valueOf(weightString) <= 0f) {
+                    return;
+                }
+                if(Integer.parseInt(weightString)>MAX_WEIGHT){
+                    editWeight.setError("Exceed weight limit");
+                    return;
+                }
+                if(Integer.parseInt(weightString)<MIN_WEIGHT){
+                    editWeight.setError("Less weight limit");
                     return;
                 }
 
