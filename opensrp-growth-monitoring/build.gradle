@@ -40,17 +40,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "int", "WEIGHT_SYNC_TIME", '12'
             buildConfigField "int", "MAX_WEIGHT", '60'
-            buildConfigField "int", "MAX_HEIGHT", '10'
+            buildConfigField "int", "MAX_HEIGHT", '160'
             buildConfigField "int", "MIN_WEIGHT", '1'
-            buildConfigField "int", "MIN_HEIGHT", '160'
+            buildConfigField "int", "MIN_HEIGHT", '10'
         }
 
         debug {
             buildConfigField "int", "WEIGHT_SYNC_TIME", '0'
             buildConfigField "int", "MAX_WEIGHT", '60'
-            buildConfigField "int", "MAX_HEIGHT", '10'
+            buildConfigField "int", "MAX_HEIGHT", '160'
             buildConfigField "int", "MIN_WEIGHT", '1'
-            buildConfigField "int", "MIN_HEIGHT", '160'
+            buildConfigField "int", "MIN_HEIGHT", '10'
             testCoverageEnabled true
         }
     }

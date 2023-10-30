@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -161,6 +162,7 @@ public class RecordHeightDialogFragment extends DialogFragment {
                         }
                         if(Integer.parseInt(text)<MIN_HEIGHT){
                             editHeight.setError("Less height limit");
+                            editHeight.setBackgroundColor(ContextCompat.getColor(editHeight.getContext(), R.color.red));
                             return;
                         }
                         Gender gender = Gender.MALE;
