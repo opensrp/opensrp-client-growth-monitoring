@@ -64,10 +64,10 @@ public class HeightZScore extends ZScore {
             return "SAM";
         } else if (absScore <= -2.0 && absScore > -3.0) {
             Log.v("ZSCORE", "zscore:" + absScore + ":color:dark_yellow");
-            return "DARK YELLOW";
+            return "MAM";
         } else if (absScore <= -1.0 && absScore > -2.0) {
             Log.v("ZSCORE", "zscore:" + absScore + ":color:yellow");
-            return "MAM";
+            return "LMAL";
         } else if (absScore <= 2) {
             Log.v("ZSCORE", "zscore:" + absScore + ":color:green");
             return "NORMAL";

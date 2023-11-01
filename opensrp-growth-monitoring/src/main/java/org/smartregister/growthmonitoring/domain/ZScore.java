@@ -121,10 +121,10 @@ public class ZScore {
             return "SAM";
         } else if (absScore <= -2.0 && absScore > -3.0) {
             Log.v("ZSCORE", "zscore:" + absScore + ":color:dark_yellow");
-            return "DARK YELLOW";
+            return "MAM";
         } else if (absScore <= -1.0 && absScore > -2.0) {
             Log.v("ZSCORE", "zscore:" + absScore + ":color:yellow");
-            return "MAM";
+            return "LMAL";//low malnutrition
         } else if (absScore <= 2) {
             Log.v("ZSCORE", "zscore:" + absScore + ":color:green");
             return "NORMAL";
@@ -140,9 +140,9 @@ public class ZScore {
         }else if (text.contains("OVER WEIGHT")) {
             return android.R.color.holo_purple;
         }
-        else if (text.contains("DARK YELLOW")) {
+        else if (text.contains("MAM")) {
             return R.color.dark_yellow;
-        } else if (text.contains("MAM")) {
+        } else if (text.contains("LMAL")) {
             return R.color.yellow;
         } else {
             return R.color.z_score_0;
