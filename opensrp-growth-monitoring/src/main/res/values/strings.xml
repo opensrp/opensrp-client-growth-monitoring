@@ -38,4 +38,10 @@
     <string name="record_height">Record Height</string>
     <string name="height_taken_today">Height taken today</string>
     <string name="height_taken_earlier">Height taken earlier</string>
+    <string name="muac_max_msg">Exceed MUAC limit</string>
+    <string name="muac_limit_msg">Exceeding MUAC limit</string>
+    <string name="height_max_msg">Exceed height limit</string>
+    <string name="height_min_msg">Less height limit</string>
+    <string name="weight_max_msg">Exceed weight limit</string>
+    <string name="weight_less_msg">Less weight limit</string>
 </resources>

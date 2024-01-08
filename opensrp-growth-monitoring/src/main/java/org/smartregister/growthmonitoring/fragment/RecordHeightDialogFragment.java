@@ -156,12 +156,12 @@ public class RecordHeightDialogFragment extends DialogFragment {
                 try{
                     String text = editable.toString();
                     if(!TextUtils.isEmpty(text)){
-                        if(Integer.parseInt(text)>MAX_HEIGHT){
-                            editHeight.setError("Exceed height limit");
+                        if(Float.parseFloat(text)>MAX_HEIGHT){
+                            editHeight.setError(getString(R.string.height_max_msg));
                             return;
                         }
-                        if(Integer.parseInt(text)<MIN_HEIGHT){
-                            editHeight.setError("Less height limit");
+                        if(Float.parseFloat(text)<MIN_HEIGHT){
+                            editHeight.setError(getString(R.string.height_min_msg));
                             editHeight.setBackgroundColor(ContextCompat.getColor(editHeight.getContext(), R.color.red));
                             return;
                         }
@@ -235,12 +235,12 @@ public class RecordHeightDialogFragment extends DialogFragment {
                 if (StringUtils.isBlank(heightString) || Float.valueOf(heightString) <= 0f) {
                     return;
                 }
-                if(Integer.parseInt(heightString)>MAX_HEIGHT){
-                    editHeight.setError("Exceed height limit");
+                if(Float.parseFloat(heightString)>MAX_HEIGHT){
+                    editHeight.setError(getString(R.string.height_max_msg));
                     return;
                 }
-                if(Integer.parseInt(heightString)<MIN_HEIGHT){
-                    editHeight.setError("Less height limit");
+                if(Float.parseFloat(heightString)<MIN_HEIGHT){
+                    editHeight.setError(getString(R.string.height_min_msg));
                     return;
                 }
 
@@ -271,12 +271,12 @@ public class RecordHeightDialogFragment extends DialogFragment {
                 if (StringUtils.isBlank(heightString) || Float.valueOf(heightString) <= 0f) {
                     return;
                 }
-                if(Integer.parseInt(heightString)>MAX_HEIGHT){
-                    editHeight.setError("Exceed height limit");
+                if(Float.parseFloat(heightString)>MAX_HEIGHT){
+                    editHeight.setError(getString(R.string.height_max_msg));
                     return;
                 }
-                if(Integer.parseInt(heightString)<MIN_HEIGHT){
-                    editHeight.setError("Less height limit");
+                if(Float.parseFloat(heightString)<MIN_HEIGHT){
+                    editHeight.setError(getString(R.string.height_min_msg));
                     return;
                 }
 

@@ -117,12 +117,12 @@ public class RecordWeightDialogFragment extends DialogFragment {
                 try{
                     String text = editable.toString();
                     if(!TextUtils.isEmpty(text)){
-                        if(Integer.parseInt(text)>MAX_WEIGHT){
-                            editWeight.setError("Exceed weight limit");
+                        if(Float.parseFloat(text)>MAX_WEIGHT){
+                            editWeight.setError(getString(R.string.weight_max_msg));
                             return;
                         }
-                        if(Integer.parseInt(text)<MIN_WEIGHT){
-                            editWeight.setError("Less weight limit");
+                        if(Float.parseFloat(text)<MIN_WEIGHT){
+                            editWeight.setError(getString(R.string.weight_less_msg));
                             return;
                         }
                         Gender gender = Gender.MALE;
@@ -200,12 +200,12 @@ public class RecordWeightDialogFragment extends DialogFragment {
                 if (StringUtils.isBlank(weightString) || Float.valueOf(weightString) <= 0f) {
                     return;
                 }
-                if(Integer.parseInt(weightString)>MAX_WEIGHT){
-                    editWeight.setError("Exceed weight limit");
+                if(Float.parseFloat(weightString)>MAX_WEIGHT){
+                    editWeight.setError(getString(R.string.weight_max_msg));
                     return;
                 }
-                if(Integer.parseInt(weightString)<MIN_WEIGHT){
-                    editWeight.setError("Less weight limit");
+                if(Float.parseFloat(weightString)<MIN_WEIGHT){
+                    editWeight.setError(getString(R.string.weight_less_msg));
                     return;
                 }
                 dismiss();
@@ -235,12 +235,12 @@ public class RecordWeightDialogFragment extends DialogFragment {
                 if (StringUtils.isBlank(weightString) || Float.valueOf(weightString) <= 0f) {
                     return;
                 }
-                if(Integer.parseInt(weightString)>MAX_WEIGHT){
-                    editWeight.setError("Exceed weight limit");
+                if(Float.parseFloat(weightString)>MAX_WEIGHT){
+                    editWeight.setError(getString(R.string.weight_max_msg));
                     return;
                 }
-                if(Integer.parseInt(weightString)<MIN_WEIGHT){
-                    editWeight.setError("Less weight limit");
+                if(Float.parseFloat(weightString)<MIN_WEIGHT){
+                    editWeight.setError(getString(R.string.weight_less_msg));
                     return;
                 }
 

@@ -1,5 +1,9 @@
 package org.smartregister.growthmonitoring.fragment;
 
+import static org.smartregister.growthmonitoring.BuildConfig.LIMIT_MUAC;
+import static org.smartregister.growthmonitoring.BuildConfig.MAX_HEIGHT;
+import static org.smartregister.growthmonitoring.BuildConfig.MAX_MUAC;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -140,6 +144,13 @@ public class RecordMUACDialogFragment extends DialogFragment {
             public void afterTextChanged(Editable editable) {
                 String text = editable.toString();
                 if(!TextUtils.isEmpty(text)){
+                    if(Float.parseFloat(text)>MAX_MUAC){
+                        editHeight.setError(getString(R.string.muac_max_msg));
+                        return;
+                    }
+                    if(Float.parseFloat(text)>LIMIT_MUAC){
+                        editHeight.setError(getString(R.string.muac_limit_msg));
+                    }
                     int color = ZScore.getMuacColor(Double.parseDouble(text));
                     editHeight.setBackgroundColor(ContextCompat.getColor(editHeight.getContext(),color));
                 }
@@ -161,7 +172,13 @@ public class RecordMUACDialogFragment extends DialogFragment {
                 if (StringUtils.isBlank(heightString) || Float.valueOf(heightString) <= 0f) {
                     return;
                 }
-
+                if(Float.parseFloat(heightString)>MAX_MUAC){
+                    editHeight.setError(getString(R.string.muac_max_msg));
+                    return;
+                }
+                if(Float.parseFloat(heightString)>LIMIT_MUAC){
+                    editHeight.setError(getString(R.string.muac_limit_msg));
+                }
                 dismiss();
 
                 int day = earlierDatePicker.getDayOfMonth();
@@ -191,7 +208,13 @@ public class RecordMUACDialogFragment extends DialogFragment {
                 if (StringUtils.isBlank(heightString) || Float.valueOf(heightString) <= 0f) {
                     return;
                 }
-
+                if(Float.parseFloat(heightString)>MAX_MUAC){
+                    editHeight.setError(getString(R.string.muac_max_msg));
+                    return;
+                }
+                if(Float.parseFloat(heightString)>LIMIT_MUAC){
+                    editHeight.setError(getString(R.string.muac_limit_msg));
+                }
                 dismiss();
 
                 Calendar calendar = Calendar.getInstance();
