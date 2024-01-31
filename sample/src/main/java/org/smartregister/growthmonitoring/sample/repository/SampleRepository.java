@@ -7,6 +7,7 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.smartregister.AllConstants;
 import org.smartregister.domain.db.Column;
+import org.smartregister.growthmonitoring.repository.WeightForHeightRepository;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.repository.ZScoreRepository;
 import org.smartregister.growthmonitoring.sample.BuildConfig;
@@ -44,6 +45,7 @@ public class SampleRepository extends Repository {
         database.execSQL(WeightRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL_INDEX);
 
         EventClientRepository.createTable(database, EventClientRepository.Table.path_reports, EventClientRepository.report_column.values());
+        WeightForHeightRepository.createTable(database);
 
         onUpgrade(database, 1, BuildConfig.DATABASE_VERSION);
 

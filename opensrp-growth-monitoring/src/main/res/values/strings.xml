@@ -44,4 +44,6 @@
     <string name="height_min_msg">Less height limit</string>
     <string name="weight_max_msg">Exceed weight limit</string>
     <string name="weight_less_msg">Less weight limit</string>
+    <string name="previous_weight_heights">PREVIOUS WEIGHTS/HEIGHTS</string>
+    <string name="weight">Weight</string>
 </resources>

@@ -8,6 +8,7 @@ import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.growthmonitoring.repository.ZScoreRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Repository;
+import org.smartregister.growthmonitoring.repository.WeightForHeightRepository;
 
 /**
  * Created by koros on 2/3/16.
@@ -22,6 +23,7 @@ public class GrowthMonitoringLibrary {
     private MUACRepository muacRepository;
     private ZScoreRepository zScoreRepository;
     private HeightZScoreRepository heightZScoreRepository;
+    private WeightForHeightRepository weightForHeightRepository;
     private EventClientRepository eventClientRepository;
     private int applicationVersion;
     private int databaseVersion;
@@ -65,6 +67,12 @@ public class GrowthMonitoringLibrary {
         }
 
         return heightZScoreRepository;
+    }
+    public WeightForHeightRepository weightForHeightRepository() {
+        if (weightForHeightRepository == null) {
+            weightForHeightRepository = new WeightForHeightRepository(getRepository());
+        }
+        return weightForHeightRepository;
     }
     public HeightRepository getHeightRepository() {
         if (heightRepository == null) {

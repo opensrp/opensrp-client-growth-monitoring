@@ -16,6 +16,7 @@
     <dimen name="scroll_btn_dimen">20dp</dimen>
     <dimen name="weight_table_column_min_width">80dp</dimen>
     <dimen name="done_btn_layout_margin">10dp</dimen>
-
+    <dimen name="table_divider_height">1dp</dimen>
+    <dimen name="table_contents_text_size">14sp</dimen>
     <item name="btn_layout_weight" format="integer" type="dimen">2</item>
 </resources>
