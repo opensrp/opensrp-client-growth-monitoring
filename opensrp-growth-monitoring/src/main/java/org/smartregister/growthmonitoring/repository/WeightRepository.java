@@ -155,7 +155,7 @@ public class WeightRepository extends BaseRepository {
     public HashMap<String,String> getAddressIdentifier(String baseEntityId, String eventType){
         Cursor cursor = null;
         cursor = getReadableDatabase().query("event", null,
-                " baseEntityId= ? AND eventType = ? ", new String[] {baseEntityId, eventType},
+                " baseEntityId= ? AND eventType = ? or eventType = 'OOC Member Registration'", new String[] {baseEntityId, eventType},
                 null, null, null, null);
         Log.v("vaccine","getAddressIdentifier>>baseEntityId:"+baseEntityId+":eventType:"+eventType);
         try{
