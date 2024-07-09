@@ -152,12 +152,11 @@ public class WeightRepository extends BaseRepository {
             Log.e(TAG, Log.getStackTraceString(e));
         }
     }
-    public HashMap<String,String> getAddressIdentifier(String baseEntityId, String eventType){
+    public HashMap<String,String> getAddressIdentifier(String baseEntityId){
         Cursor cursor = null;
         cursor = getReadableDatabase().query("event", null,
-                " baseEntityId= ? AND eventType = ? or eventType = 'OOC Member Registration'", new String[] {baseEntityId, eventType},
+                " baseEntityId= ? AND eventType in (?,?,?,?,?)", new String[] {baseEntityId,"Update Child Registration","Child Registration","Family Member Registration","OOC Member Registration","Update Family Member Registration"},
                 null, null, null, null);
-        Log.v("vaccine","getAddressIdentifier>>baseEntityId:"+baseEntityId+":eventType:"+eventType);
         try{
             if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
                 String jsonStr = cursor.getString(cursor.getColumnIndex("json"));

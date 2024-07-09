@@ -34,7 +34,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                     .withEntityType(entityType)
                     .withFormSubmissionId(weight.getFormSubmissionId() == null ? generateRandomUUIDString() : weight.getFormSubmissionId())
                     .withDateCreated(new Date());
-            Map<String,String> identifiers  = GrowthMonitoringLibrary.getInstance().weightRepository().getAddressIdentifier(weight.getBaseEntityId(),"Child Registration");
+            Map<String,String> identifiers  = GrowthMonitoringLibrary.getInstance().weightRepository().getAddressIdentifier(weight.getBaseEntityId());
             event.setIdentifiers(identifiers);
             event.setTeam(weight.getTeam());
             event.setTeamId(weight.getTeamId());
@@ -85,7 +85,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                     .withEntityType(entityType)
                     .withFormSubmissionId(weight.getFormSubmissionId() == null ? generateRandomUUIDString() : weight.getFormSubmissionId())
                     .withDateCreated(new Date());
-            Map<String,String> identifiers  = GrowthMonitoringLibrary.getInstance().weightRepository().getAddressIdentifier(weight.getBaseEntityId(),"Child Registration");
+            Map<String,String> identifiers  = GrowthMonitoringLibrary.getInstance().weightRepository().getAddressIdentifier(weight.getBaseEntityId());
             event.setIdentifiers(identifiers);
             event.setTeam(weight.getTeam());
             event.setTeamId(weight.getTeamId());
@@ -136,7 +136,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                     .withEntityType(entityType)
                     .withFormSubmissionId(weight.getFormSubmissionId() == null ? generateRandomUUIDString() : weight.getFormSubmissionId())
                     .withDateCreated(new Date());
-            Map<String,String> identifiers  = GrowthMonitoringLibrary.getInstance().weightRepository().getAddressIdentifier(weight.getBaseEntityId(),"Child Registration");
+            Map<String,String> identifiers  = GrowthMonitoringLibrary.getInstance().weightRepository().getAddressIdentifier(weight.getBaseEntityId());
             event.setIdentifiers(identifiers);
             event.setTeam(weight.getTeam());
             event.setTeamId(weight.getTeamId());
